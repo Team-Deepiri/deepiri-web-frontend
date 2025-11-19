@@ -13,7 +13,7 @@ process.env.FORCE_COLOR = '1'; // Enable colors in terminal
 import('vite').then(async ({ createServer }) => {
   try {
     const server = await createServer({
-      configFile: './vite.config.js',
+      configFile: './vite.config.ts',
       server: {
         // Force immediate HMR updates
         hmr: {

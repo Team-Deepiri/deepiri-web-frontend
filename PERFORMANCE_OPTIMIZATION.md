@@ -198,7 +198,7 @@ export const trackWebVitals = (onPerfEntry) => {
   }
 };
 
-// In main.jsx
+// In main.tsx
 trackWebVitals((metric) => {
   console.log(metric);
   // Send to analytics service
