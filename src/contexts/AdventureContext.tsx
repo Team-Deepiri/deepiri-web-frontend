@@ -2,17 +2,13 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useAuth } from './AuthContext';
 import { adventureApi } from '../api/adventureApi';
 import toast from 'react-hot-toast';
+import type { AppLocationLatLng } from '../types/common';
 
 interface Adventure {
   _id: string;
   name?: string;
   title?: string;
   [key: string]: any;
-}
-
-interface Location {
-  lat: number;
-  lng: number;
 }
 
 interface AdventureData {
@@ -27,14 +23,15 @@ interface AdventureContextType {
   currentAdventure: Adventure | null;
   adventureHistory: Adventure[];
   loading: boolean;
-  userLocation: Location | null;
+  userLocation: AppLocationLatLng | null;
+  setUserLocation: (location: AppLocationLatLng | null) => void;
   generateAdventure: (adventureData: AdventureData) => Promise<{ success: boolean; adventure?: Adventure; message?: string }>;
   startAdventure: (adventureId: string) => Promise<{ success: boolean; adventure?: Adventure; message?: string }>;
   completeAdventure: (adventureId: string, feedback?: string | null) => Promise<{ success: boolean; adventure?: Adventure; message?: string }>;
   updateAdventureStep: (adventureId: string, stepIndex: number, action: string) => Promise<{ success: boolean; adventure?: Adventure; message?: string }>;
   getAdventure: (adventureId: string) => Promise<{ success: boolean; adventure?: Adventure; message?: string }>;
   shareAdventure: (adventureId: string, shareData: any) => Promise<{ success: boolean; message?: string }>;
-  getAdventureRecommendations: (location: Location, limit?: number) => Promise<{ success: boolean; recommendations?: any; message?: string }>;
+  getAdventureRecommendations: (location: AppLocationLatLng, limit?: number) => Promise<{ success: boolean; recommendations?: any; message?: string }>;
   getAdventureAnalytics: (timeRange?: string) => Promise<{ success: boolean; analytics?: any; message?: string }>;
   loadAdventureHistory: () => Promise<void>;
   setCurrentAdventure: (adventure: Adventure | null) => void;
@@ -58,7 +55,7 @@ export const AdventureProvider: React.FC<AdventureProviderProps> = ({ children }
   const [currentAdventure, setCurrentAdventure] = useState<Adventure | null>(null);
   const [adventureHistory, setAdventureHistory] = useState<Adventure[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [userLocation, setUserLocation] = useState<Location | null>(null);
+  const [userLocation, setUserLocation] = useState<AppLocationLatLng | null>(null);
   const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
@@ -72,7 +69,7 @@ export const AdventureProvider: React.FC<AdventureProviderProps> = ({ children }
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const location: Location = {
+          const location: AppLocationLatLng = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
@@ -130,7 +127,7 @@ export const AdventureProvider: React.FC<AdventureProviderProps> = ({ children }
       setLoading(true);
       
       const requestData = {
-        location: userLocation,
+        location: userLocation || undefined,
         interests: adventureData.interests,
         duration: adventureData.duration,
         maxDistance: adventureData.maxDistance,
@@ -254,7 +251,7 @@ export const AdventureProvider: React.FC<AdventureProviderProps> = ({ children }
     }
   };
 
-  const getAdventureRecommendations = async (location: Location, limit: number = 5): Promise<{ success: boolean; recommendations?: any; message?: string }> => {
+  const getAdventureRecommendations = async (location: AppLocationLatLng, limit: number = 5): Promise<{ success: boolean; recommendations?: any; message?: string }> => {
     try {
       const response = await adventureApi.getAdventureRecommendations(location, limit);
       
@@ -289,6 +286,7 @@ export const AdventureProvider: React.FC<AdventureProviderProps> = ({ children }
     adventureHistory,
     loading,
     userLocation,
+    setUserLocation,
     generateAdventure,
     startAdventure,
     completeAdventure,

@@ -65,7 +65,7 @@ class Logger {
     return null;
   }
 
-  private log(level: LogLevel, message: string, context: Record<string, any> = {}): void {
+  public log(level: LogLevel, message: string, context: Record<string, any> = {}): void {
     if (!this.shouldLog(level)) return;
 
     const logEntry = this.formatMessage(level, message, context);

@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -11,6 +11,10 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps && \
     npm cache clean --force && \
     rm -rf /tmp/* /var/tmp/*
+
+# Copy TypeScript type definition files FIRST (critical for build)
+COPY src/vite-env.d.ts ./src/
+COPY src/declarations.d.ts ./src/
 
 # Copy source code
 COPY . .

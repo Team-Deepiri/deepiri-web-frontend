@@ -46,14 +46,18 @@ const PythonTools: React.FC = () => {
 
   const fetchWeather = async (): Promise<void> => {
     setLoading((p) => ({ ...p, weather: true }));
-    const res = await pythonApi.getWeather({ latitude: coords.latitude, longitude: coords.longitude });
+    const res = await pythonApi.getWeather({ latitude: Number(coords.latitude), longitude: Number(coords.longitude) });
     if (res.success) setWeather(res.data);
     setLoading((p) => ({ ...p, weather: false }));
   };
 
   const fetchDirections = async (): Promise<void> => {
     setLoading((p) => ({ ...p, directions: true }));
-    const res = await pythonApi.getDirections(directionsForm);
+    const res = await pythonApi.getDirections({
+      origin: directionsForm.origin,
+      destination: directionsForm.destination,
+      mode: directionsForm.mode as 'driving' | 'walking' | 'bicycling' | 'transit'
+    });
     if (res.success) setDirections(res.data);
     setLoading((p) => ({ ...p, directions: false }));
   };
@@ -61,8 +65,8 @@ const PythonTools: React.FC = () => {
   const fetchAdventure = async (): Promise<void> => {
     setLoading((p) => ({ ...p, adventure: true }));
     const res = await pythonApi.getAdventureData({
-      latitude: adventureForm.latitude,
-      longitude: adventureForm.longitude,
+      latitude: Number(adventureForm.latitude),
+      longitude: Number(adventureForm.longitude),
       radius: adventureForm.radius,
       interests: adventureForm.interests.split(',').map((s) => s.trim()).filter(Boolean)
     });

@@ -1,12 +1,15 @@
 import axiosInstance from './axiosInstance';
 import { AxiosError } from 'axios';
+import type { ApiResponse, AxiosErrorResponse } from '../types/common';
 
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: any;
-}
+// Helper to extract error message from axios error
+const getErrorMessage = (error: unknown, defaultMessage: string): string => {
+  if (error instanceof Error) {
+    const axiosError = error as AxiosError<AxiosErrorResponse>;
+    return axiosError.response?.data?.message || axiosError.message || defaultMessage;
+  }
+  return defaultMessage;
+};
 
 interface WeatherParams {
   latitude: number;
@@ -37,10 +40,9 @@ export const pythonApi = {
       });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return {
         success: false,
-        message: axiosError.response?.data?.message || 'Failed to fetch weather',
+        message: getErrorMessage(error, 'Failed to fetch weather'),
         error
       };
     }
@@ -56,10 +58,9 @@ export const pythonApi = {
       });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return {
         success: false,
-        message: axiosError.response?.data?.message || 'Failed to fetch directions',
+        message: getErrorMessage(error, 'Failed to fetch directions'),
         error
       };
     }
@@ -78,10 +79,9 @@ export const pythonApi = {
       });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return {
         success: false,
-        message: axiosError.response?.data?.message || 'Failed to fetch adventure data',
+        message: getErrorMessage(error, 'Failed to fetch adventure data'),
         error
       };
     }

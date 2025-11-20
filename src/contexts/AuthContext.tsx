@@ -155,9 +155,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (nameOrData: string | object, email?: string, password?: string): Promise<{ success: boolean; message?: string }> => {
     try {
       setLoading(true);
-      const payload = typeof nameOrData === 'object'
-        ? nameOrData
-        : { name: nameOrData, email, password };
+      const payload = typeof nameOrData === 'object' && nameOrData !== null && 'email' in nameOrData && 'password' in nameOrData
+        ? nameOrData as { email: string; password: string; name?: string; [key: string]: any }
+        : { name: typeof nameOrData === 'string' ? nameOrData : '', email: email || '', password: password || '' };
       const response = await authApi.register(payload);
       
       if (response.success) {

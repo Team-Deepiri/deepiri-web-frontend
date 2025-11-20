@@ -47,11 +47,11 @@ interface FormData {
   name: string;
   email: string;
   preferences: {
-    nightlife: string;
-    music: string;
-    food: string;
-    social: string;
-    solo: string;
+    nightlife?: string;
+    music?: string;
+    food?: string;
+    social?: string;
+    solo?: string;
   };
 }
 

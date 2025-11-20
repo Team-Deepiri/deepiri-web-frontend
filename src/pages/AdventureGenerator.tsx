@@ -6,11 +6,7 @@ import { useAdventure } from '../contexts/AdventureContext';
 import { adventureApi } from '../api/adventureApi';
 import { externalApi } from '../api/externalApi';
 import toast from 'react-hot-toast';
-
-interface Location {
-  latitude: number;
-  longitude: number;
-}
+import type { AppLocation, AppLocationLatLng } from '../types/common';
 
 interface Weather {
   temperature?: number;
@@ -61,11 +57,16 @@ const AdventureGenerator: React.FC = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position: GeolocationPosition) => {
-            const location: Location = {
+            const location: AppLocation = {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude
             };
-            setUserLocation(location);
+            // Convert to AppLocationLatLng for context
+            const locationForContext: AppLocationLatLng = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            setUserLocation(locationForContext);
             setLocationPermission('granted');
             loadWeatherData(location);
           },
@@ -82,7 +83,7 @@ const AdventureGenerator: React.FC = () => {
     }
   };
 
-  const loadWeatherData = async (location: Location): Promise<void> => {
+  const loadWeatherData = async (location: AppLocation): Promise<void> => {
     try {
       const weatherResponse = await externalApi.getCurrentWeather(location);
       if (weatherResponse.success) {

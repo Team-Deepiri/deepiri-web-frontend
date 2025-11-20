@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { Socket, io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 import toast from 'react-hot-toast';
+/// <reference path="../types/react-hot-toast.d.ts" />
 
 interface SocketContextType {
   socket: Socket | null;
@@ -87,7 +88,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       newSocket.on('event_updated', (data: { name: string }) => {
-        toast.info(`Event "${data.name}" has been updated`);
+        toast(`Event "${data.name}" has been updated`);
       });
 
       newSocket.on('event_cancelled', (data: { name: string }) => {
@@ -95,11 +96,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       newSocket.on('user_joined', (data: any) => {
-        toast.info('Someone joined the event');
+        toast('Someone joined the event');
       });
 
       newSocket.on('user_left', (data: any) => {
-        toast.info('Someone left the event');
+        toast('Someone left the event');
       });
 
       // General notifications

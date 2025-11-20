@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMultiplayer } from '../hooks/useMultiplayer';
+import multiplayerService from '../services/multiplayerService';
 import './MultiplayerCollaboration.css';
 
 interface Collaborator {
@@ -217,13 +218,12 @@ const MultiplayerCollaboration: React.FC<MultiplayerCollaborationProps> = ({
     };
 
     // Subscribe to multiplayer events
-    const multiplayer = require('../services/multiplayerService').default;
-    multiplayer.on('duel:invitation', handleInvitation);
-    multiplayer.on('duel:started', handleDuelStart);
+    multiplayerService.on('duel:invitation', handleInvitation);
+    multiplayerService.on('duel:started', handleDuelStart);
 
     return () => {
-      multiplayer.off('duel:invitation', handleInvitation);
-      multiplayer.off('duel:started', handleDuelStart);
+      multiplayerService.off('duel:invitation', handleInvitation);
+      multiplayerService.off('duel:started', handleDuelStart);
     };
   }, []);
 

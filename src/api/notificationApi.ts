@@ -1,12 +1,15 @@
 import axiosInstance from './axiosInstance';
 import { AxiosError } from 'axios';
+import type { ApiResponse, AxiosErrorResponse } from '../types/common';
 
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: any;
-}
+// Helper to extract error message from axios error
+const getErrorMessage = (error: unknown, defaultMessage: string): string => {
+  if (error instanceof Error) {
+    const axiosError = error as AxiosError<AxiosErrorResponse>;
+    return axiosError.response?.data?.message || axiosError.message || defaultMessage;
+  }
+  return defaultMessage;
+};
 
 interface NotificationSettings {
   [key: string]: any;
@@ -19,10 +22,9 @@ export const notificationApi = {
       const response = await axiosInstance.get('/notifications');
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get notifications',
+        message: getErrorMessage(error, 'Failed to get notifications'),
         error 
       };
     }
@@ -34,10 +36,9 @@ export const notificationApi = {
       const response = await axiosInstance.patch(`/notifications/${notificationId}/read`);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to mark notification as read',
+        message: getErrorMessage(error, 'Failed to mark notification as read'),
         error 
       };
     }
@@ -49,10 +50,9 @@ export const notificationApi = {
       const response = await axiosInstance.patch('/notifications/mark-all-read');
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to mark all notifications as read',
+        message: getErrorMessage(error, 'Failed to mark all notifications as read'),
         error 
       };
     }
@@ -64,10 +64,9 @@ export const notificationApi = {
       const response = await axiosInstance.delete(`/notifications/${notificationId}`);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to delete notification',
+        message: getErrorMessage(error, 'Failed to delete notification'),
         error 
       };
     }
@@ -79,10 +78,9 @@ export const notificationApi = {
       const response = await axiosInstance.get('/notifications/settings');
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get notification settings',
+        message: getErrorMessage(error, 'Failed to get notification settings'),
         error 
       };
     }
@@ -94,10 +92,9 @@ export const notificationApi = {
       const response = await axiosInstance.patch('/notifications/settings', settings);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to update notification settings',
+        message: getErrorMessage(error, 'Failed to update notification settings'),
         error 
       };
     }

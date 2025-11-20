@@ -45,11 +45,10 @@ export const mockEvent = {
 
 interface TestWrapperProps {
   children: React.ReactNode;
-  initialAuth?: any;
 }
 
 // Test wrapper with all providers
-export const TestWrapper: React.FC<TestWrapperProps> = ({ children, initialAuth = null }) => {
+export const TestWrapper: React.FC<TestWrapperProps> = ({ children }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -60,7 +59,7 @@ export const TestWrapper: React.FC<TestWrapperProps> = ({ children, initialAuth 
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider initialAuth={initialAuth}>
+        <AuthProvider>
           <SocketProvider>
             <AdventureProvider>
               {children}
@@ -75,17 +74,15 @@ export const TestWrapper: React.FC<TestWrapperProps> = ({ children, initialAuth 
 // Custom render function with providers
 export const renderWithProviders = (
   ui: React.ReactElement,
-  options: RenderOptions & { initialAuth?: any } = {}
+  options: RenderOptions = {}
 ) => {
-  const { initialAuth, ...renderOptions } = options;
-  
   return render(ui, {
     wrapper: ({ children }) => (
-      <TestWrapper initialAuth={initialAuth}>
+      <TestWrapper>
         {children}
       </TestWrapper>
     ),
-    ...renderOptions
+    ...options
   });
 };
 

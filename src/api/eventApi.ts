@@ -1,5 +1,6 @@
 import axiosInstance from './axiosInstance';
 import { AxiosError } from 'axios';
+import type { ApiResponse, AxiosErrorResponse } from '../types/common';
 
 interface EventData {
   title?: string;
@@ -14,12 +15,14 @@ interface EventData {
   [key: string]: any;
 }
 
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: any;
-}
+// Helper to extract error message from axios error
+const getErrorMessage = (error: unknown, defaultMessage: string): string => {
+  if (error instanceof Error) {
+    const axiosError = error as AxiosError<AxiosErrorResponse>;
+    return axiosError.response?.data?.message || axiosError.message || defaultMessage;
+  }
+  return defaultMessage;
+};
 
 export const eventApi = {
   // Create a new event
@@ -28,10 +31,9 @@ export const eventApi = {
       const response = await axiosInstance.post('/events', eventData);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to create event',
+        message: getErrorMessage(error, 'Failed to create event'),
         error 
       };
     }
@@ -43,10 +45,9 @@ export const eventApi = {
       const response = await axiosInstance.get(`/events/${eventId}`);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get event',
+        message: getErrorMessage(error, 'Failed to get event'),
         error 
       };
     }
@@ -64,10 +65,9 @@ export const eventApi = {
       const response = await axiosInstance.get('/events/nearby', { params });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get nearby events',
+        message: getErrorMessage(error, 'Failed to get nearby events'),
         error 
       };
     }
@@ -79,10 +79,9 @@ export const eventApi = {
       const response = await axiosInstance.get('/events/user');
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get user events',
+        message: getErrorMessage(error, 'Failed to get user events'),
         error 
       };
     }
@@ -94,10 +93,9 @@ export const eventApi = {
       const response = await axiosInstance.post(`/events/${eventId}/rsvp`);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to RSVP to event',
+        message: getErrorMessage(error, 'Failed to RSVP to event'),
         error 
       };
     }
@@ -109,10 +107,9 @@ export const eventApi = {
       const response = await axiosInstance.post(`/events/${eventId}/cancel-rsvp`);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to cancel RSVP',
+        message: getErrorMessage(error, 'Failed to cancel RSVP'),
         error 
       };
     }
@@ -124,10 +121,9 @@ export const eventApi = {
       const response = await axiosInstance.patch(`/events/${eventId}`, eventData);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to update event',
+        message: getErrorMessage(error, 'Failed to update event'),
         error 
       };
     }
@@ -139,10 +135,9 @@ export const eventApi = {
       const response = await axiosInstance.delete(`/events/${eventId}`);
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to delete event',
+        message: getErrorMessage(error, 'Failed to delete event'),
         error 
       };
     }

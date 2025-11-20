@@ -5,12 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useAdventure } from '../contexts/AdventureContext';
 import { eventApi } from '../api/eventApi';
 import toast from 'react-hot-toast';
-
-interface Location {
-  address: string;
-  latitude: number;
-  longitude: number;
-}
+import type { AppLocation } from '../types/common';
+/// <reference path="../types/react-hot-toast.d.ts" />
 
 interface FormData {
   name: string;
@@ -19,7 +15,7 @@ interface FormData {
   startTime: string;
   endTime: string;
   maxParticipants: number;
-  location: Location;
+  location: AppLocation & { address: string };
 }
 
 const CreateEvent: React.FC = () => {
@@ -46,12 +42,14 @@ const CreateEvent: React.FC = () => {
   useEffect(() => {
     // Set default location if available
     if (userLocation) {
+      const lat = 'latitude' in userLocation ? userLocation.latitude : userLocation.lat;
+      const lng = 'longitude' in userLocation ? userLocation.longitude : userLocation.lng;
       setFormData(prev => ({
         ...prev,
         location: {
           ...prev.location,
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude
+          latitude: lat as number,
+          longitude: lng as number
         }
       }));
     }
@@ -92,7 +90,7 @@ const CreateEvent: React.FC = () => {
     try {
       // In a real app, you'd use a geocoding service like Google Maps Geocoding API
       // For now, we'll use a mock response
-      toast.info('Location search feature coming soon!');
+      toast('Location search feature coming soon!');
     } catch (error) {
       console.error('Location search error:', error);
       toast.error('Failed to search location');
@@ -277,7 +275,7 @@ const CreateEvent: React.FC = () => {
               </div>
               {userLocation && (
                 <p className="text-sm text-gray-600 mt-2">
-                  Current location: {userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}
+                  Current location: {('latitude' in userLocation ? (userLocation.latitude as number) : (userLocation.lat as number)).toFixed(4)}, {('longitude' in userLocation ? (userLocation.longitude as number) : (userLocation.lng as number)).toFixed(4)}
                 </p>
               )}
             </div>

@@ -38,10 +38,7 @@ interface AdventureData {
   [key: string]: any;
 }
 
-interface Location {
-  lat: number;
-  lng: number;
-}
+import type { AppLocationLatLng } from '../types/common';
 
 interface AdventureResponse {
   success?: boolean;
@@ -127,7 +124,7 @@ export const adventureApi = {
     }
   },
 
-  getAdventureRecommendations: async (location: Location, limit: number = 5): Promise<AdventureResponse> => {
+  getAdventureRecommendations: async (location: AppLocationLatLng, limit: number = 5): Promise<AdventureResponse> => {
     try {
       const params = {
         lat: location.lat,

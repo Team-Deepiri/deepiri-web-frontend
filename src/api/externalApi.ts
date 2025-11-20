@@ -1,17 +1,15 @@
 import axiosInstance from './axiosInstance';
 import { AxiosError } from 'axios';
+import type { ApiResponse, AxiosErrorResponse, AppLocation } from '../types/common';
 
-interface Location {
-  latitude: number;
-  longitude: number;
-}
-
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: any;
-}
+// Helper to extract error message from axios error
+const getErrorMessage = (error: unknown, defaultMessage: string): string => {
+  if (error instanceof Error) {
+    const axiosError = error as AxiosError<AxiosErrorResponse>;
+    return axiosError.response?.data?.message || axiosError.message || defaultMessage;
+  }
+  return defaultMessage;
+};
 
 export const externalApi = {
   cyrexMessage: async (content: string, sessionId: string | null = null): Promise<any> => {
@@ -29,7 +27,7 @@ export const externalApi = {
     }
   },
   // Get current weather for location
-  getCurrentWeather: async (location: Location): Promise<ApiResponse> => {
+  getCurrentWeather: async (location: AppLocation): Promise<ApiResponse> => {
     try {
       const params = {
         latitude: location.latitude,
@@ -38,17 +36,16 @@ export const externalApi = {
       const response = await axiosInstance.get('/external/weather', { params });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get weather data',
+        message: getErrorMessage(error, 'Failed to get weather data'),
         error 
       };
     }
   },
 
   // Get nearby events from external sources
-  getNearbyEvents: async (location: Location, radius: number = 5000, interests: string[] = []): Promise<ApiResponse> => {
+  getNearbyEvents: async (location: AppLocation, radius: number = 5000, interests: string[] = []): Promise<ApiResponse> => {
     try {
       const params = {
         latitude: location.latitude,
@@ -59,17 +56,16 @@ export const externalApi = {
       const response = await axiosInstance.get('/external/events/nearby', { params });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get external events',
+        message: getErrorMessage(error, 'Failed to get external events'),
         error 
       };
     }
   },
 
   // Get travel directions
-  getDirections: async (origin: Location, destination: Location, mode: string = 'walking'): Promise<ApiResponse> => {
+  getDirections: async (origin: AppLocation, destination: AppLocation, mode: string = 'walking'): Promise<ApiResponse> => {
     try {
       const params = {
         origin: `${origin.latitude},${origin.longitude}`,
@@ -79,10 +75,9 @@ export const externalApi = {
       const response = await axiosInstance.get('/external/directions', { params });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to get directions',
+        message: getErrorMessage(error, 'Failed to get directions'),
         error 
       };
     }
@@ -95,10 +90,9 @@ export const externalApi = {
       const response = await axiosInstance.get('/external/geocode', { params });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to geocode address',
+        message: getErrorMessage(error, 'Failed to geocode address'),
         error 
       };
     }
@@ -111,10 +105,9 @@ export const externalApi = {
       const response = await axiosInstance.get('/external/reverse-geocode', { params });
       return { success: true, data: response.data };
     } catch (error) {
-      const axiosError = error as AxiosError;
       return { 
         success: false, 
-        message: axiosError.response?.data?.message || 'Failed to reverse geocode',
+        message: getErrorMessage(error, 'Failed to reverse geocode'),
         error 
       };
     }

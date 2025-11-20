@@ -6,6 +6,7 @@ import { useAdventure } from '../contexts/AdventureContext';
 import { eventApi } from '../api/eventApi';
 import { externalApi } from '../api/externalApi';
 import toast from 'react-hot-toast';
+import type { AppLocation } from '../types/common';
 
 interface Event {
   _id?: string;
@@ -45,9 +46,13 @@ const Events: React.FC = () => {
       setLoading(true);
       
       // Load both user-created events and external events
+      const locationForApi: AppLocation | null = userLocation ? {
+        latitude: ('latitude' in userLocation ? userLocation.latitude : userLocation.lat) as number,
+        longitude: ('longitude' in userLocation ? userLocation.longitude : userLocation.lng) as number
+      } : null;
       const [userEventsResponse, externalEventsResponse] = await Promise.all([
         eventApi.getUserEvents(),
-        userLocation ? externalApi.getNearbyEvents(userLocation, 10000) : Promise.resolve({ success: false, data: [] })
+        locationForApi ? externalApi.getNearbyEvents(locationForApi, 10000) : Promise.resolve({ success: false, data: [] })
       ]);
 
       let allEvents: Event[] = [];

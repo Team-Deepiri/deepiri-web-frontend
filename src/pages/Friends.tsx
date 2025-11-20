@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { userApi } from '../api/userApi';
 import toast from 'react-hot-toast';
+/// <reference path="../types/react-hot-toast.d.ts" />
 
 interface User {
   _id: string;
@@ -32,7 +33,7 @@ const Friends: React.FC = () => {
       
       const [friendsResponse, usersResponse] = await Promise.all([
         userApi.getFriends(),
-        userApi.getAllUsers()
+        userApi.searchUsers('', 100)
       ]);
 
       if (friendsResponse.success || friendsResponse.data) {
@@ -262,7 +263,7 @@ const Friends: React.FC = () => {
                     <button
                       onClick={() => {
                         // Navigate to friend's profile or start a shared adventure
-                        toast.info('Feature coming soon!');
+                        toast('Feature coming soon!');
                       }}
                       className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
                     >

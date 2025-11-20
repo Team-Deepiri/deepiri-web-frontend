@@ -8,6 +8,7 @@ import { adventureApi } from '../api/adventureApi';
 import { externalApi } from '../api/externalApi';
 import InventoryWidget from '../components/InventoryWidget';
 import toast from 'react-hot-toast';
+import type { AppLocation } from '../types/common';
 
 interface Adventure {
   _id: string;
@@ -78,7 +79,13 @@ const Dashboard: React.FC = () => {
       // Load weather if location is available
       if (userLocation) {
         try {
-          const weatherResponse = await externalApi.getCurrentWeather(userLocation);
+          const lat = 'latitude' in userLocation ? userLocation.latitude : userLocation.lat;
+          const lng = 'longitude' in userLocation ? userLocation.longitude : userLocation.lng;
+          const locationForApi: AppLocation = {
+            latitude: lat as number,
+            longitude: lng as number
+          };
+          const weatherResponse = await externalApi.getCurrentWeather(locationForApi);
           if (weatherResponse.success) {
             setWeather(weatherResponse.data);
           }
@@ -90,7 +97,13 @@ const Dashboard: React.FC = () => {
       // Load nearby events
       if (userLocation) {
         try {
-          const eventsResponse = await externalApi.getNearbyEvents(userLocation, 5000);
+          const lat = 'latitude' in userLocation ? userLocation.latitude : userLocation.lat;
+          const lng = 'longitude' in userLocation ? userLocation.longitude : userLocation.lng;
+          const locationForApi: AppLocation = {
+            latitude: lat as number,
+            longitude: lng as number
+          };
+          const eventsResponse = await externalApi.getNearbyEvents(locationForApi, 5000);
           if (eventsResponse.success) {
             setNearbyEvents((eventsResponse.data || []).slice(0, 3));
           }

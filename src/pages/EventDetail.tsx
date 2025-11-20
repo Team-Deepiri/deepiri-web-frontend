@@ -52,7 +52,7 @@ const EventDetail: React.FC = () => {
     
     try {
       setLoading(true);
-      const response = await eventApi.getEvent(id);
+      const response = await eventApi.getEventById(id);
       if (response.success || response.data) {
         setEvent(response.data || response);
       } else {

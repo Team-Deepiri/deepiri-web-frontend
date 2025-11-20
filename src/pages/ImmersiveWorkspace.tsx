@@ -10,7 +10,7 @@ import './ImmersiveWorkspace.css';
  */
 const ImmersiveWorkspace: React.FC = () => {
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('cyber_code_space');
-  const [collaborationMode, setCollaborationMode] = useState<string>('collaboration');
+  const [collaborationMode, setCollaborationMode] = useState<'collaboration' | 'duel' | 'team'>('collaboration');
   const [roomId, setRoomId] = useState<string | null>(null);
   const { getAvailableEnvironments, setEnvironment, setWeather, setTimeOfDay } = useVirtualEnvironment();
   
@@ -47,7 +47,7 @@ const ImmersiveWorkspace: React.FC = () => {
           </select>
           <select
             value={collaborationMode}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => setCollaborationMode(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setCollaborationMode(e.target.value as 'collaboration' | 'duel' | 'team')}
             className="mode-select"
           >
             <option value="collaboration">Collaboration</option>

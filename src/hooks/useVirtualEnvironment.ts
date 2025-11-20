@@ -3,7 +3,13 @@ import virtualEnvironmentService from '../services/virtualEnvironmentService';
 
 interface Environment {
   id: string;
-  name: string;
+  config: {
+    name: string;
+    [key: string]: any;
+  };
+  weather: string;
+  timeOfDay: string;
+  customizations: Record<string, any>;
   [key: string]: any;
 }
 
@@ -19,9 +25,14 @@ export function useVirtualEnvironment() {
     virtualEnvironmentService.getCurrentEnvironment()
   );
 
-  const setEnvironment = useCallback((environmentId: string, options: EnvironmentOptions = {}): Environment => {
+  const setEnvironment = useCallback((environmentId: string, options: EnvironmentOptions = {}): Environment | null => {
     const env = virtualEnvironmentService.setEnvironment(environmentId, options);
-    setCurrentEnvironmentState(env);
+    if (env) {
+      setCurrentEnvironmentState(env);
+    } else {
+      // If setEnvironment returns null, keep current environment
+      setCurrentEnvironmentState(virtualEnvironmentService.getCurrentEnvironment());
+    }
     return env;
   }, []);
 
@@ -35,7 +46,7 @@ export function useVirtualEnvironment() {
     setCurrentEnvironmentState(virtualEnvironmentService.getCurrentEnvironment());
   }, []);
 
-  const getAvailableEnvironments = useCallback((): Environment[] => {
+  const getAvailableEnvironments = useCallback((): Array<{ id: string; name: string; [key: string]: any }> => {
     return virtualEnvironmentService.getAvailableEnvironments();
   }, []);
 
@@ -44,7 +55,8 @@ export function useVirtualEnvironment() {
   }, []);
 
   const getThemeColors = useCallback((): Record<string, string> => {
-    return virtualEnvironmentService.getThemeColors();
+    const colors = virtualEnvironmentService.getThemeColors();
+    return colors as unknown as Record<string, string>;
   }, []);
 
   return {
