@@ -32,6 +32,12 @@ import Challenges from './pages/Challenges';
 import GamificationDashboard from './pages/GamificationDashboard';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import Notifications from './pages/Notifications';
+import Objectives from './pages/Objectives';
+import Odysseys from './pages/Odysseys';
+import Seasons from './pages/Seasons';
+import Progress from './pages/Progress';
+import Boosts from './pages/Boosts';
+import Streaks from './pages/Streaks';
 import AgentChat from './pages/AgentChat';
 import ProductivityChat from './pages/ProductivityChat';
 import PythonTools from './pages/PythonTools';
@@ -150,6 +156,36 @@ const App: React.FC = () => {
                       <Route path="/gamification" element={
                         <ProtectedRoute>
                           <GamificationDashboard />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/objectives" element={
+                        <ProtectedRoute>
+                          <Objectives />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/odysseys" element={
+                        <ProtectedRoute>
+                          <Odysseys />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/seasons" element={
+                        <ProtectedRoute>
+                          <Seasons />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/progress" element={
+                        <ProtectedRoute>
+                          <Progress />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/boosts" element={
+                        <ProtectedRoute>
+                          <Boosts />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/streaks" element={
+                        <ProtectedRoute>
+                          <Streaks />
                         </ProtectedRoute>
                       } />
                       <Route path="/analytics" element={
