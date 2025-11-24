@@ -131,7 +131,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.login(email, password);
       
       if (response.success) {
-        const { user, token } = response.data;
+        // authApi.login already returns response.data, so user and token are at the top level
+        const { user, token } = response;
         setUser(user);
         setToken(token);
         localStorage.setItem('token', token);
@@ -161,7 +162,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.register(payload);
       
       if (response.success) {
-        const { user, token } = response.data;
+        // authApi.register already returns response.data, so user and token are at the top level
+        const { user, token } = response;
         setUser(user);
         setToken(token);
         localStorage.setItem('token', token);
@@ -173,10 +175,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         toast.error(response.message || 'Registration failed');
         return { success: false, message: response.message };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
-      toast.error('Registration failed. Please try again.');
-      return { success: false, message: 'Registration failed. Please try again.' };
+      
+      // Extract the specific error message from the backend response
+      // authApi.register throws axiosError.response?.data, which could be:
+      // - { error: 'User already exists' } from 409 response
+      // - { error: 'Email, password, and name are required' } from 400 response
+      // - Or the full axios error object
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (error?.error) {
+        // Backend returned { error: 'message' }
+        errorMessage = error.error;
+      } else if (error?.response?.data?.error) {
+        // Axios error with response data
+        errorMessage = error.response.data.error;
+      } else if (error?.response?.data?.message) {
+        // Axios error with message field
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        // Direct error message
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        // Error is just a string
+        errorMessage = error;
+      }
+      
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
     } finally {
       setLoading(false);
     }
