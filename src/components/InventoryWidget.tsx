@@ -103,9 +103,9 @@ const InventoryWidget: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="text-2xl">🎒</div>
+          <div className="text-2xl"></div>
           <div>
-            <h3 className="text-xl font-bold text-white">My Inventory</h3>
+            <h3 className="text-xl font-bold text-white"> Inventory</h3>
             <p className="text-gray-400 text-sm">Adventure collection</p>
           </div>
         </div>
