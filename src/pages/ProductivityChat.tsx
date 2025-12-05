@@ -35,7 +35,7 @@ const ProductivityChat: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5100/api';
   const AI_SERVICE_URL = import.meta.env.VITE_CYREX_URL || 'http://localhost:8000';
 
   useEffect(() => {

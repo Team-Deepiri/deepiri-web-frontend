@@ -57,7 +57,7 @@ class MultiplayerService {
       return;
     }
 
-    const serverUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const serverUrl = import.meta.env.VITE_API_URL || 'http://localhost:5100';
     this.socket = io(serverUrl, {
       auth: { token, userId },
       transports: ['websocket', 'polling']

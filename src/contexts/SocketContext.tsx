@@ -35,7 +35,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user) {
       // Extract base URL without /api suffix for Socket.IO
-      const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
+      const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5100/api').replace('/api', '');
       const newSocket = io(baseUrl, {
         auth: {
           userId: user._id
