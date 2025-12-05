@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, Variants } from 'framer-motion';
-import { useAuth } from '../contexts/AuthContext';
+import logo from "../assets/logo.png";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, Variants } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
 
 const Home: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>(
+    { x: 0, y: 0 }
+  );
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent): void => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const containerVariants: Variants = {
@@ -22,9 +25,9 @@ const Home: React.FC = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
-    }
+        delayChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants: Variants = {
@@ -34,16 +37,25 @@ const Home: React.FC = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Centered Logo */}
+      <div className="flex justify-center mt-10 mb-10 relative z-30">
+        <img
+          src={logo}
+          alt="Deepiri Logo"
+          className="w-56 h-auto drop-shadow-2xl"
+        />
+      </div>
+
       {/* Animated Background */}
       <div className="fixed inset-0 animated-bg opacity-90" />
-      
+
       {/* Floating Particles */}
       <div className="fixed inset-0 pointer-events-none">
         {[...Array(20)].map((_, i) => (
@@ -69,7 +81,7 @@ const Home: React.FC = () => {
 
       {/* Mouse Follower */}
       <motion.div
-        className="fixed w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full pointer-events-none z-10 mix-blend-difference"
+        className="fixed w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full pointer-events-none z-30 mix-blend-difference"
         animate={{
           x: mousePosition.x - 12,
           y: mousePosition.y - 12,
@@ -77,10 +89,11 @@ const Home: React.FC = () => {
         transition={{
           type: "spring",
           stiffness: 500,
-          damping: 28
+          damping: 28,
         }}
       />
 
+      {/* Main Content */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -91,27 +104,32 @@ const Home: React.FC = () => {
         <section className="relative min-vh-100 d-flex align-items-center justify-content-center px-3">
           <div className="container text-center">
             <motion.div variants={itemVariants} className="mb-8">
-              <motion.h1 
-                className="display-title mb-3" style={{ fontSize: 'clamp(42px, 6vw, 88px)' }}
+              <motion.h1
+                className="display-title mb-3"
+                style={{ fontSize: "clamp(42px, 6vw, 88px)" }}
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 1, ease: "easeOut" }}
               >
                 <span className="gradient-text">Deepiri</span>
                 <br />
-                <span className="gradient-text-secondary">Productivity Playground</span>
+                <span className="gradient-text-secondary">
+                  Productivity Playground
+                </span>
               </motion.h1>
-              
-              <motion.p 
-                className="subtitle mb-4 mx-auto" style={{ maxWidth: 900, fontSize: 'clamp(16px, 2.2vw, 24px)' }}
+
+              <motion.p
+                className="subtitle mb-4 mx-auto"
+                style={{ maxWidth: 900, fontSize: "clamp(16px, 2.2vw, 24px)" }}
                 variants={itemVariants}
               >
-                Your AI-powered digital productivity playground. Gamify your tasks, 
-                earn rewards, and boost your productivity with adaptive challenges.
+                Your AI-powered digital productivity playground. Gamify your
+                tasks, earn rewards, and boost your productivity with adaptive
+                challenges.
               </motion.p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mb-4"
             >
@@ -153,29 +171,31 @@ const Home: React.FC = () => {
             </motion.div>
 
             {/* Floating Feature Cards */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="row row-cols-1 row-cols-md-3 g-4 container-narrow mx-auto"
             >
               {[
                 {
-                  icon: '🤖',
-                  title: 'AI-Powered',
-                  description: 'Adaptive challenges generated by advanced AI',
-                  gradient: 'from-blue-500 to-purple-500'
+                  icon: "🤖",
+                  title: "AI-Powered",
+                  description: "Adaptive challenges generated by advanced AI",
+                  gradient: "from-blue-500 to-purple-500",
                 },
                 {
-                  icon: '⚡',
-                  title: 'Gamified Tasks',
-                  description: 'Turn boring tasks into engaging mini-games and challenges',
-                  gradient: 'from-green-500 to-blue-500'
+                  icon: "⚡",
+                  title: "Gamified Tasks",
+                  description:
+                    "Turn boring tasks into engaging mini-games and challenges",
+                  gradient: "from-green-500 to-blue-500",
                 },
                 {
-                  icon: '👥',
-                  title: 'Social Productivity',
-                  description: 'Compete with friends and share achievements',
-                  gradient: 'from-pink-500 to-red-500'
-                }
+                  icon: "👥",
+                  title: "Social Productivity",
+                  description:
+                    "Compete with friends and share achievements",
+                  gradient: "from-pink-500 to-red-500",
+                },
               ].map((feature, index) => (
                 <motion.div
                   key={index}
@@ -184,17 +204,28 @@ const Home: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <motion.div 
-                    className={`text-6xl mb-4 float`}
+                  <motion.div
+                    className="text-6xl mb-4 float"
                     style={{ animationDelay: `${index * 0.5}s` }}
                   >
                     {feature.icon}
                   </motion.div>
-                  <h3 className="text-2xl font-black mb-4 gradient-text" style={{ fontFamily: 'Poppins, sans-serif' }}>{feature.title}</h3>
-                  <p className="text-gray-300 leading-relaxed font-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>{feature.description}</p>
-                  
-                  {/* Hover Effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`} />
+                  <h3
+                    className="text-2xl font-black mb-4 gradient-text"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p
+                    className="text-gray-300 leading-relaxed font-medium"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    {feature.description}
+                  </p>
+
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
+                  />
                 </motion.div>
               ))}
             </motion.div>
@@ -204,18 +235,16 @@ const Home: React.FC = () => {
         {/* Features Section */}
         <section className="py-5 relative">
           <div className="container px-3">
-            <motion.div
-              variants={itemVariants}
-              className="text-center mb-20"
-            >
+            <motion.div variants={itemVariants} className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-bold mb-8">
                 <span className="gradient-text-accent">Why Choose</span>
                 <br />
                 <span className="gradient-text-secondary">Deepiri?</span>
               </h2>
               <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-                Experience the future of productivity with gamification, AI-powered challenges, 
-                real-time progress tracking, and a vibrant community of achievers.
+                Experience the future of productivity with gamification,
+                AI-powered challenges, real-time progress tracking, and a
+                vibrant community of achievers.
               </p>
             </motion.div>
 
@@ -223,25 +252,29 @@ const Home: React.FC = () => {
               <motion.div variants={itemVariants} className="col-lg-6">
                 {[
                   {
-                    icon: '🎯',
-                    title: 'Task Gamification',
-                    description: 'Convert your tasks into engaging mini-games, quizzes, and challenges that make productivity fun.'
+                    icon: "🎯",
+                    title: "Task Gamification",
+                    description:
+                      "Convert your tasks into engaging mini-games, quizzes, and challenges that make productivity fun.",
                   },
                   {
-                    icon: '⚡',
-                    title: 'Real-Time Progress',
-                    description: 'Track your efficiency, streaks, and achievements in real-time with instant feedback.'
+                    icon: "⚡",
+                    title: "Real-Time Progress",
+                    description:
+                      "Track your efficiency, streaks, and achievements in real-time with instant feedback.",
                   },
                   {
-                    icon: '🎨',
-                    title: 'Adaptive AI Challenges',
-                    description: 'AI analyzes your behavior and generates personalized challenges optimized for your workflow.'
+                    icon: "🎨",
+                    title: "Adaptive AI Challenges",
+                    description:
+                      "AI analyzes your behavior and generates personalized challenges optimized for your workflow.",
                   },
                   {
-                    icon: '🏆',
-                    title: 'Rewards & Progression',
-                    description: 'Earn points, badges, climb leaderboards, and unlock achievements as you complete tasks.'
-                  }
+                    icon: "🏆",
+                    title: "Rewards & Progression",
+                    description:
+                      "Earn points, badges, climb leaderboards, and unlock achievements as you complete tasks.",
+                  },
                 ].map((feature, index) => (
                   <motion.div
                     key={index}
@@ -253,49 +286,44 @@ const Home: React.FC = () => {
                       {feature.icon}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2 gradient-text">{feature.title}</h3>
-                      <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                      <h3 className="text-xl font-bold mb-2 gradient-text">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
               </motion.div>
 
-              <motion.div 
-                variants={itemVariants}
-                className="col-lg-6"
-              >
+              <motion.div variants={itemVariants} className="col-lg-6">
                 <div className="card-modern p-8 float">
                   <div className="text-center">
                     <div className="text-8xl mb-4">🗺️</div>
-                    <h3 className="text-2xl font-bold mb-4 gradient-text">Interactive Map</h3>
+                    <h3 className="text-2xl font-bold mb-4 gradient-text">
+                      Interactive Map
+                    </h3>
                     <p className="text-gray-300 mb-6">
-                      Explore your adventure route with our interactive 3D map interface
+                      Explore your adventure route with our interactive 3D map
+                      interface
                     </p>
                     <div className="row g-3">
-                      <div className="col-6">
-                        <div className="card-modern p-4 text-center">
-                        <div className="text-2xl mb-2">📍</div>
-                        <div className="text-sm font-semibold">Locations</div>
+                      {[
+                        { icon: "📍", label: "Locations" },
+                        { icon: "⏰", label: "Timeline" },
+                        { icon: "🌤️", label: "Weather" },
+                        { icon: "👥", label: "Friends" },
+                      ].map((item, index) => (
+                        <div className="col-6" key={index}>
+                          <div className="card-modern p-4 text-center">
+                            <div className="text-2xl mb-2">{item.icon}</div>
+                            <div className="text-sm font-semibold">
+                              {item.label}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="card-modern p-4 text-center">
-                        <div className="text-2xl mb-2">⏰</div>
-                        <div className="text-sm font-semibold">Timeline</div>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="card-modern p-4 text-center">
-                        <div className="text-2xl mb-2">🌤️</div>
-                        <div className="text-sm font-semibold">Weather</div>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="card-modern p-4 text-center">
-                        <div className="text-2xl mb-2">👥</div>
-                        <div className="text-sm font-semibold">Friends</div>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -314,10 +342,11 @@ const Home: React.FC = () => {
                 <span className="gradient-text-secondary">Explore?</span>
               </h2>
               <p className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-                Join thousands of users who are already boosting their productivity 
-                with AI-powered gamification and achieving their goals faster.
+                Join thousands of users who are already boosting their
+                productivity with AI-powered gamification and achieving their
+                goals faster.
               </p>
-              
+
               {!isAuthenticated && (
                 <motion.div
                   variants={itemVariants}
