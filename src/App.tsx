@@ -8,7 +8,7 @@ import { SocketProvider } from './contexts/SocketContext';
 import { AdventureProvider } from './contexts/AdventureContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
-import SidebarNav from './components/SidebarNav';
+import SidebarNav from "./components/SidebarNav.tsx";
 import './components/SidebarNav.css';
 import Footer from './components/Footer';
 import HMRStatus from './components/HMRStatus';
@@ -94,16 +94,17 @@ const App: React.FC = () => {
                   <SidebarNav />
 
                   {/* MAIN CONTENT AREA */}
-                  <div className="app-main relative z-10">
-                    <main className={isAuthRoute ? 'pt-8 pb-8' : 'pt-10 pb-10'}>
-                      <div className="site-container">
-                        <Routes>
-                          {/* Public Routes */}
-                          <Route path="/" element={<Home />} />
-                          <Route path="/home" element={<Home />} />
-                          <Route path="/login" element={<Login />} />
-                          <Route path="/register" element={<Register />} />
-                          <Route path="/contact" element={<Contact />} />
+                  <div className="app-main relative z-10 main-content">
+                   <main className={isAuthRoute ? 'pt-8 pb-8' : 'pt-10 pb-10'}>
+                    <div className="site-container">
+                     <Routes>
+                      {/* Public Routes */}
+                     <Route path="/" element={<Home />} />
+                     <Route path="/home" element={<Home />} />
+                     <Route path="/login" element={<Login />} />
+                     <Route path="/register" element={<Register />} />
+                     <Route path="/contact" element={<Contact />} />
+
 
                           {/* Protected Routes */}
                           <Route

@@ -44,15 +44,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Centered Logo */}
-      <div className="flex justify-center mt-10 mb-10 relative z-30">
-        <img
-          src={logo}
-          alt="Deepiri Logo"
-          className="w-56 h-auto drop-shadow-2xl"
-        />
-      </div>
-
       {/* Animated Background */}
       <div className="fixed inset-0 animated-bg opacity-90" />
 
@@ -101,8 +92,17 @@ const Home: React.FC = () => {
         className="relative z-20"
       >
         {/* Hero Section */}
-        <section className="relative min-vh-100 d-flex align-items-center justify-content-center px-3">
-          <div className="container text-center">
+        <section className="relative min-h-[calc(100vh-5rem)] flex justify-center px-3 pt-16">
+          <div className="max-w-5xl w-full mx-auto text-center">
+            {/* Centered Logo */}
+            <div className="flex justify-center mt-4 mb-10">
+              <img
+                src={logo}
+                alt="Deepiri Logo"
+                className="w-56 h-auto drop-shadow-2xl mx-auto"
+              />
+            </div>
+
             <motion.div variants={itemVariants} className="mb-8">
               <motion.h1
                 className="display-title mb-3"
@@ -373,4 +373,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
