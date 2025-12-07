@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, Variants } from 'framer-motion';
-import { useAuth } from '../contexts/AuthContext';
+import logo from "../assets/logo.png";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, Variants } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
 
 const Home: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>(
+    { x: 0, y: 0 }
+  );
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent): void => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const containerVariants: Variants = {
@@ -22,9 +25,9 @@ const Home: React.FC = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
-    }
+        delayChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants: Variants = {
@@ -34,16 +37,16 @@ const Home: React.FC = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 animated-bg opacity-90" />
-      
+
       {/* Floating Particles */}
       <div className="fixed inset-0 pointer-events-none">
         {[...Array(15)].map((_, i) => (
@@ -78,10 +81,11 @@ const Home: React.FC = () => {
         transition={{
           type: "spring",
           stiffness: 500,
-          damping: 28
+          damping: 28,
         }}
       />
 
+      {/* Main Content */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -89,30 +93,43 @@ const Home: React.FC = () => {
         className="relative z-20"
       >
         {/* Hero Section */}
-        <section className="relative min-vh-100 d-flex align-items-center justify-content-center px-3">
-          <div className="container text-center">
+        <section className="relative min-h-[calc(100vh-5rem)] flex justify-center px-3 pt-16">
+          <div className="max-w-5xl w-full mx-auto text-center">
+            {/* Centered Logo */}
+            <div className="flex justify-center mt-4 mb-10">
+              <img
+                src={logo}
+                alt="Deepiri Logo"
+                className="w-56 h-auto drop-shadow-2xl mx-auto"
+              />
+            </div>
+
             <motion.div variants={itemVariants} className="mb-8">
-              <motion.h1 
-                className="display-title mb-3" style={{ fontSize: 'clamp(42px, 6vw, 88px)' }}
+              <motion.h1
+                className="display-title mb-3"
+                style={{ fontSize: "clamp(42px, 6vw, 88px)" }}
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 1, ease: "easeOut" }}
               >
                 <span className="gradient-text">Deepiri</span>
                 <br />
-                <span className="gradient-text-secondary">Productivity Playground</span>
+                <span className="gradient-text-secondary">
+                  Productivity Playground
+                </span>
               </motion.h1>
               
               <motion.p 
                 className="subtitle mb-4 mx-auto" style={{ maxWidth: 900, fontSize: 'clamp(16px, 2.2vw, 24px)', color: '#cbd5e1' }}
                 variants={itemVariants}
               >
-                Your AI-powered digital productivity playground. Gamify your tasks, 
-                earn rewards, and boost your productivity with adaptive challenges.
+                Your AI-powered digital productivity playground. Gamify your
+                tasks, earn rewards, and boost your productivity with adaptive
+                challenges.
               </motion.p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mb-4"
             >
@@ -152,7 +169,7 @@ const Home: React.FC = () => {
             </motion.div>
 
             {/* Floating Feature Cards */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="row row-cols-1 row-cols-md-3 g-4 container-narrow mx-auto"
             >
@@ -243,10 +260,7 @@ const Home: React.FC = () => {
         {/* Features Section */}
         <section className="py-5 relative">
           <div className="container px-3">
-            <motion.div
-              variants={itemVariants}
-              className="text-center mb-20"
-            >
+            <motion.div variants={itemVariants} className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-bold mb-8">
                 <span className="gradient-text-accent">Why Choose</span>
                 <br />
@@ -292,10 +306,7 @@ const Home: React.FC = () => {
                 ))}
               </motion.div>
 
-              <motion.div 
-                variants={itemVariants}
-                className="col-lg-6"
-              >
+              <motion.div variants={itemVariants} className="col-lg-6">
                 <div className="card-modern p-8 float">
                   <div className="text-center">
                     <h3 className="text-2xl font-bold mb-4 gradient-text">Interactive Map</h3>
@@ -344,7 +355,7 @@ const Home: React.FC = () => {
                 Join thousands of users who are already boosting their productivity 
                 with AI-powered gamification and achieving their goals faster.
               </p>
-              
+
               {!isAuthenticated && (
                 <motion.div
                   variants={itemVariants}
@@ -370,4 +381,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
