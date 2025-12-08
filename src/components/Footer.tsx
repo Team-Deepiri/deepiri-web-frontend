@@ -38,48 +38,17 @@ const Footer: React.FC = () => {
         <div className="row g-4 row-cols-1 row-cols-md-4">
           {/* Brand */}
           <motion.div variants={itemVariants} className="col-md-6">
-            <div className="flex items-center space-x-3 mb-6">
-              <motion.div
-                className="text-4xl"
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              >
-                🗺️
-              </motion.div>
+            <div className="mb-8">
               <div>
-                <span className="text-2xl font-bold gradient-text">Deepiri</span>
+                <span className="text-4xl font-bold gradient-text">Deepiri</span>
                 <br />
-                <span className="text-sm gradient-text-secondary font-medium">Productivity Playground</span>
+                <span className="text-xl gradient-text-secondary font-medium">Productivity Playground</span>
               </div>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
               Your AI-powered digital productivity playground. Gamify your tasks, 
               earn rewards, and boost your productivity with adaptive challenges.
             </p>
-            <div className="flex space-x-4">
-              {[
-                { icon: '📧', label: 'Email', href: 'mailto:hello@deepiri.com' },
-                { icon: '📘', label: 'Facebook', href: '#' },
-                { icon: '🐦', label: 'Twitter', href: '#' },
-                { icon: '📷', label: 'Instagram', href: '#' },
-                { icon: '💼', label: 'LinkedIn', href: '#' }
-              ].map((social, index) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  className="w-12 h-12 glass rounded-xl flex items-center justify-center text-xl hover:scale-110 transition-all duration-300 group"
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <span className="group-hover:scale-110 transition-transform duration-300">
-                    {social.icon}
-                  </span>
-                </motion.a>
-              ))}
-            </div>
           </motion.div>
 
           {/* Quick Links */}
@@ -87,11 +56,11 @@ const Footer: React.FC = () => {
             <h3 className="text-xl font-black mb-6 gradient-text" style={{ fontFamily: 'Poppins, sans-serif' }}>Quick Links</h3>
             <ul className="space-y-3">
               {[
-                { to: '/adventure/generate', label: 'Generate Adventure', icon: '✨' },
-                { to: '/events', label: 'Browse Events', icon: '🎉' },
-                { to: '/friends', label: 'Find Friends', icon: '👥' },
-                { to: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
-                { to: '/agent', label: 'AI Assistant', icon: '🤖' }
+                { to: '/adventure/generate', label: 'Generate Adventure' },
+                { to: '/events', label: 'Browse Events' },
+                { to: '/friends', label: 'Find Friends' },
+                { to: '/leaderboard', label: 'Leaderboard' },
+                { to: '/agent', label: 'AI Assistant' }
               ].map((link, index) => (
                 <motion.li
                   key={link.to}
@@ -101,12 +70,15 @@ const Footer: React.FC = () => {
                 >
                   <Link 
                     to={link.to} 
-                    className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+                    className="font-black no-underline transition-colors duration-300 group"
+                    style={{ 
+                      fontFamily: 'Poppins, sans-serif',
+                      color: '#4f46e5'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#6366f1'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#4f46e5'}
                   >
-                    <span className="text-sm group-hover:scale-110 transition-transform duration-300">
-                      {link.icon}
-                    </span>
-                    <span className="font-black" style={{ fontFamily: 'Poppins, sans-serif' }}>{link.label}</span>
+                    {link.label}
                   </Link>
                 </motion.li>
               ))}
@@ -118,11 +90,11 @@ const Footer: React.FC = () => {
             <h3 className="text-xl font-black mb-6 gradient-text-secondary" style={{ fontFamily: 'Poppins, sans-serif' }}>Support</h3>
             <ul className="space-y-3">
               {[
-                { label: 'Help Center', icon: '❓', href: '#' },
-                { label: 'Contact Us', icon: '📞', href: '#' },
-                { label: 'Privacy Policy', icon: '🔒', href: '#' },
-                { label: 'Terms of Service', icon: '📋', href: '#' },
-                { label: 'Bug Reports', icon: '🐛', href: '#' }
+                { label: 'Help Center', href: '#' },
+                { label: 'Contact Us', href: '#' },
+                { label: 'Privacy Policy', href: '#' },
+                { label: 'Terms of Service', href: '#' },
+                { label: 'Bug Reports', href: '#' }
               ].map((item, index) => (
                 <motion.li
                   key={item.label}
@@ -132,12 +104,15 @@ const Footer: React.FC = () => {
                 >
                   <a 
                     href={item.href} 
-                    className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+                    className="font-black no-underline transition-colors duration-300 group"
+                    style={{ 
+                      fontFamily: 'Poppins, sans-serif',
+                      color: '#4f46e5'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#6366f1'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#4f46e5'}
                   >
-                    <span className="text-sm group-hover:scale-110 transition-transform duration-300">
-                      {item.icon}
-                    </span>
-                    <span className="font-black" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.label}</span>
+                    {item.label}
                   </a>
                 </motion.li>
               ))}
@@ -168,7 +143,6 @@ const Footer: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="mr-2">📧</span>
                 Subscribe
               </motion.button>
             </div>
@@ -198,9 +172,9 @@ const Footer: React.FC = () => {
             </div>
             
             <div className="d-flex align-items-center gap-3 small text-gray-400">
-              <span>🌍 Available worldwide</span>
-              <span>🔒 Secure & Private</span>
-              <span>⚡ Lightning Fast</span>
+              <span>Available worldwide</span>
+              <span>Secure & Private</span>
+              <span>Lightning Fast</span>
             </div>
           </div>
         </motion.div>

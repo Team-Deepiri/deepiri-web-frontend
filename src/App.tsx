@@ -8,7 +8,8 @@ import { SocketProvider } from './contexts/SocketContext';
 import { AdventureProvider } from './contexts/AdventureContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
-import Navbar from './components/Navbar';
+import SidebarNav from "./components/SidebarNav.tsx";
+import './components/SidebarNav.css';
 import Footer from './components/Footer';
 import HMRStatus from './components/HMRStatus';
 import { setupGlobalErrorHandling, setupPerformanceMonitoring } from './utils/logger';
@@ -43,6 +44,7 @@ import ProductivityChat from './pages/ProductivityChat';
 import PythonTools from './pages/PythonTools';
 import UserInventory from './pages/UserInventory';
 import ImmersiveWorkspace from './pages/ImmersiveWorkspace';
+import Contact from './pages/Contact';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -58,7 +60,7 @@ const App: React.FC = () => {
   const location = useLocation();
   const pathname = location?.pathname || '/';
   const isAuthRoute = pathname === '/login' || pathname === '/register';
-  
+
   useEffect(() => {
     // Setup global error handling and performance monitoring
     setupGlobalErrorHandling();
@@ -72,190 +74,284 @@ const App: React.FC = () => {
           <WebPushProvider>
             <SocketProvider>
               <AdventureProvider>
-              <div className="min-h-screen relative overflow-hidden bg-gray-900">
-                {/* Animated Background Layer */}
-                <div className="fixed inset-0 animated-bg opacity-30" />
-                {/* Subtle pattern overlay */}
-                <div className="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10" />
-                {/* Gradient Orbs */}
-                <div className="fixed top-[-4rem] left-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" />
-                <div className="fixed top-[10%] right-1/5 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
-                <div className="fixed bottom-[-4rem] left-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" style={{ animationDelay: '4s' }} />
-                
-                <Navbar />
-                <main className={`${isAuthRoute ? 'pt-0 pb-0' : 'pt-20 pb-20'} relative z-10`}>
-                  <div className="site-container">
-                    <Routes>
+                <div className="app-shell relative overflow-hidden bg-gray-900">
+                  {/* Animated Background Layer */}
+                  <div className="fixed inset-0 animated-bg opacity-30" />
+                  {/* Subtle pattern overlay */}
+                  <div className="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10" />
+                  {/* Gradient Orbs */}
+                  <div className="fixed top-[-4rem] left-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" />
+                  <div
+                    className="fixed top-[10%] right-1/5 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
+                    style={{ animationDelay: '2s' }}
+                  />
+                  <div
+                    className="fixed bottom-[-4rem] left-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
+                    style={{ animationDelay: '4s' }}
+                  />
+
+                  {/* LEFT SIDEBAR NAV */}
+                  <SidebarNav />
+
+                  {/* MAIN CONTENT AREA */}
+                  <div className="app-main relative z-10 main-content">
+                   <main className={isAuthRoute ? 'pt-8 pb-8' : 'pt-10 pb-10'}>
+                    <div className="site-container">
+                     <Routes>
                       {/* Public Routes */}
-                      <Route path="/" element={<Home />} />
-                      <Route path="/home" element={<Home />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      
-                      {/* Protected Routes */}
-                      <Route path="/dashboard" element={
-                        <ProtectedRoute>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/adventure/generate" element={
-                        <ProtectedRoute>
-                          <AdventureGenerator />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/adventure/:id" element={
-                        <ProtectedRoute>
-                          <AdventureDetail />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/adventures" element={
-                        <ProtectedRoute>
-                          <AdventureHistory />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/events" element={
-                        <ProtectedRoute>
-                          <Events />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/events/:id" element={
-                        <ProtectedRoute>
-                          <EventDetail />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/events/create" element={
-                        <ProtectedRoute>
-                          <CreateEvent />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/profile" element={
-                        <ProtectedRoute>
-                          <Profile />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/friends" element={
-                        <ProtectedRoute>
-                          <Friends />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/leaderboard" element={
-                        <ProtectedRoute>
-                          <Leaderboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/tasks" element={
-                        <ProtectedRoute>
-                          <TaskManagement />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/challenges" element={
-                        <ProtectedRoute>
-                          <Challenges />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/gamification" element={
-                        <ProtectedRoute>
-                          <GamificationDashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/objectives" element={
-                        <ProtectedRoute>
-                          <Objectives />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/odysseys" element={
-                        <ProtectedRoute>
-                          <Odysseys />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/seasons" element={
-                        <ProtectedRoute>
-                          <Seasons />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/progress" element={
-                        <ProtectedRoute>
-                          <Progress />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/boosts" element={
-                        <ProtectedRoute>
-                          <Boosts />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/streaks" element={
-                        <ProtectedRoute>
-                          <Streaks />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/analytics" element={
-                        <ProtectedRoute>
-                          <AnalyticsDashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/notifications" element={
-                        <ProtectedRoute>
-                          <Notifications />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/agent" element={
-                        <ProtectedRoute>
-                          <AgentChat />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/chat" element={
-                        <ProtectedRoute>
-                          <ProductivityChat />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/python-tools" element={
-                        <ProtectedRoute>
-                          <PythonTools />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/inventory" element={
-                        <ProtectedRoute>
-                          <UserInventory />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/workspace" element={
-                        <ProtectedRoute>
-                          <ImmersiveWorkspace />
-                        </ProtectedRoute>
-                      } />
-                    </Routes>
+                     <Route path="/" element={<Home />} />
+                     <Route path="/home" element={<Home />} />
+                     <Route path="/login" element={<Login />} />
+                     <Route path="/register" element={<Register />} />
+                     <Route path="/contact" element={<Contact />} />
+
+
+                          {/* Protected Routes */}
+                          <Route
+                            path="/dashboard"
+                            element={
+                              <ProtectedRoute>
+                                <Dashboard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/adventure/generate"
+                            element={
+                              <ProtectedRoute>
+                                <AdventureGenerator />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/adventure/:id"
+                            element={
+                              <ProtectedRoute>
+                                <AdventureDetail />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/adventures"
+                            element={
+                              <ProtectedRoute>
+                                <AdventureHistory />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/events"
+                            element={
+                              <ProtectedRoute>
+                                <Events />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/events/:id"
+                            element={
+                              <ProtectedRoute>
+                                <EventDetail />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/events/create"
+                            element={
+                              <ProtectedRoute>
+                                <CreateEvent />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/profile"
+                            element={
+                              <ProtectedRoute>
+                                <Profile />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/friends"
+                            element={
+                              <ProtectedRoute>
+                                <Friends />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/leaderboard"
+                            element={
+                              <ProtectedRoute>
+                                <Leaderboard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/tasks"
+                            element={
+                              <ProtectedRoute>
+                                <TaskManagement />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/challenges"
+                            element={
+                              <ProtectedRoute>
+                                <Challenges />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/gamification"
+                            element={
+                              <ProtectedRoute>
+                                <GamificationDashboard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/analytics"
+                            element={
+                              <ProtectedRoute>
+                                <AnalyticsDashboard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/notifications"
+                            element={
+                              <ProtectedRoute>
+                                <Notifications />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/objectives"
+                            element={
+                              <ProtectedRoute>
+                                <Objectives />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/odysseys"
+                            element={
+                              <ProtectedRoute>
+                                <Odysseys />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/seasons"
+                            element={
+                              <ProtectedRoute>
+                                <Seasons />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/progress"
+                            element={
+                              <ProtectedRoute>
+                                <Progress />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/boosts"
+                            element={
+                              <ProtectedRoute>
+                                <Boosts />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/streaks"
+                            element={
+                              <ProtectedRoute>
+                                <Streaks />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/agent"
+                            element={
+                              <ProtectedRoute>
+                                <AgentChat />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/chat"
+                            element={
+                              <ProtectedRoute>
+                                <ProductivityChat />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/python-tools"
+                            element={
+                              <ProtectedRoute>
+                                <PythonTools />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/inventory"
+                            element={
+                              <ProtectedRoute>
+                                <UserInventory />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/workspace"
+                            element={
+                              <ProtectedRoute>
+                                <ImmersiveWorkspace />
+                              </ProtectedRoute>
+                            }
+                          />
+                        </Routes>
+                      </div>
+                    </main>
+
+                    <Footer />
                   </div>
-                </main>
-                <Footer />
-                <Toaster
-                  position="top-right"
-                  toastOptions={{
-                    duration: 4000,
-                    style: {
-                      background: 'rgba(0, 0, 0, 0.8)',
-                      backdropFilter: 'blur(10px)',
-                      color: '#fff',
-                      border: '1px solid rgba(255, 255, 255, 0.2)',
-                      borderRadius: '12px',
-                    },
-                    success: {
-                      duration: 3000,
-                      iconTheme: {
-                        primary: '#10B981',
-                        secondary: '#fff',
+
+                  <Toaster
+                    position="top-right"
+                    toastOptions={{
+                      duration: 4000,
+                      style: {
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        backdropFilter: 'blur(10px)',
+                        color: '#fff',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderRadius: '12px',
                       },
-                    },
-                    error: {
-                      duration: 5000,
-                      iconTheme: {
-                        primary: '#EF4444',
-                        secondary: '#fff',
+                      success: {
+                        duration: 3000,
+                        iconTheme: {
+                          primary: '#10B981',
+                          secondary: '#fff',
+                        },
                       },
-                    },
-                  }}
-                />
-                <HMRStatus />
-              </div>
+                      error: {
+                        duration: 5000,
+                        iconTheme: {
+                          primary: '#EF4444',
+                          secondary: '#fff',
+                        },
+                      },
+                    }}
+                  />
+
+                  <HMRStatus />
+                </div>
               </AdventureProvider>
             </SocketProvider>
           </WebPushProvider>
@@ -266,3 +362,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

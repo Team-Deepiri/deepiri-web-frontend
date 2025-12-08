@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import logoIcon from '../assets/images/logo.png';
+import logoSquare from '../assets/images/logo_squared.png';
 
 const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -78,24 +79,20 @@ const Navbar: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Link to="/" className="flex items-center space-x-4 group">
+            <Link to="/" className="flex items-center group">
               <motion.div
-                className="relative flex items-center justify-center w-12 h-12 mt-1"
-                whileHover={{ scale: 1.1 }}
+                className="relative flex items-center justify-center"
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                style={{ height: '5rem', width: '5rem', backgroundColor: 'transparent' }}
               >
                 <img 
-                  src={logoIcon} 
+                  src={logoSquare} 
                   alt="Deepiri Logo" 
-                  className="w-10 h-10 object-contain filter drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
+                  className="h-full w-full object-contain filter drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
+                  style={{ maxHeight: '5rem', maxWidth: '5rem', backgroundColor: 'transparent' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
               </motion.div>
-              <div className="group-hover:translate-x-1 transition-transform duration-300">
-                <span className="text-3xl font-bold gradient-text tracking-wide">Deepiri</span>
-                <br />
-                <span className="text-lg gradient-text-secondary font-semibold tracking-widest">Productivity Playground</span>
-              </div>
             </Link>
           </motion.div>
 
@@ -208,16 +205,27 @@ const Navbar: React.FC = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-8 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 font-bold text-lg text-white hover:text-purple-300 no-underline"
+                  className="btn-modern px-8 py-3 text-lg font-bold no-underline rounded-2xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+                    color: 'white',
+                    boxShadow: '0 10px 15px -3px rgba(124, 58, 237, 0.3), 0 4px 6px -4px rgba(124, 58, 237, 0.3)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(124, 58, 237, 0.4), 0 8px 10px -6px rgba(124, 58, 237, 0.4)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(124, 58, 237, 0.3), 0 4px 6px -4px rgba(124, 58, 237, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
                 >
-                  <span className="text-xl mr-2">🔑</span>
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="btn-modern btn-primary px-8 py-3 text-lg font-bold glow no-underline"
+                  className="btn-modern btn-primary px-8 py-3 text-lg font-bold glow no-underline rounded-2xl"
                 >
-                  <span className="text-2xl mr-3">🌟</span>
                   Get Started
                 </Link>
               </>
@@ -319,21 +327,24 @@ const Navbar: React.FC = () => {
                   <>
                     <Link
                       to="/login"
-                      className="flex items-center space-x-3 px-4 py-3 hover:bg-white/10 transition-colors duration-200 group no-underline"
+                      className="btn-modern px-4 py-3 rounded-2xl font-bold text-lg text-white no-underline mx-4"
+                      style={{
+                        background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+                        boxShadow: '0 10px 15px -3px rgba(124, 58, 237, 0.3), 0 4px 6px -4px rgba(124, 58, 237, 0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <span className="text-2xl group-hover:scale-110 transition-transform duration-300">🔑</span>
-                      <span className="text-white group-hover:text-purple-300 transition-colors duration-300 font-semibold text-lg">
-                        Sign In
-                      </span>
+                      Sign In
                     </Link>
                     <Link
                       to="/register"
-                      className="flex items-center space-x-3 px-4 py-3 hover:bg-white/10 transition-colors duration-200 group mx-4 mt-2 btn-modern btn-primary justify-center no-underline"
+                      className="btn-modern btn-primary px-4 py-3 rounded-2xl font-bold text-lg no-underline mx-4 mt-2 justify-center"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <span className="text-2xl group-hover:scale-110 transition-transform duration-300">🌟</span>
-                      <span className="font-bold text-lg">Get Started</span>
+                      Get Started
                     </Link>
                   </>
                 )}
