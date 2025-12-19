@@ -1,51 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import "./SidebarNav.css";
+import logo from "../assets/images/logo.png";
 
 // Icons
 import { AiFillHome } from "react-icons/ai";
-import { FiInfo, FiStar, FiMail } from "react-icons/fi";
+import { FiInfo, FiMail } from "react-icons/fi";
 
 const SidebarNav: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const closeMenu = () => setMenuOpen(false);
 
-  const handleLinkClick = () => {
-    setMenuOpen(false);
-  };
+  // Close dropdown after navigation
+  useEffect(() => {
+    closeMenu();
+  }, [location.pathname]);
 
   return (
     <>
       {/* TOP NAVBAR */}
-      <nav className="sidebar-nav">
-        <button className="menu-toggle" onClick={toggleMenu}>
+      <nav className="sidebar-nav" aria-label="Top navigation">
+        <button
+          className="menu-toggle"
+          onClick={toggleMenu}
+          aria-expanded={menuOpen}
+          aria-controls="sidebar-links"
+        >
           ☰ Menu
         </button>
 
-        <div className="sidebar-title">Deepiri</div>
+        <div className="sidebar-brand">
+          <img className="sidebar-logo" src={logo} alt="Deepiri logo" />
+          <span className="sidebar-title">Deepiri</span>
+        </div>
       </nav>
 
       {/* DROPDOWN MENU */}
-      <div className={`sidebar-links ${menuOpen ? "open" : ""}`}>
-        <a href="/" onClick={handleLinkClick}>
+      <div
+        id="sidebar-links"
+        className={`sidebar-links ${menuOpen ? "open" : ""}`}
+      >
+        <NavLink to="/" end onClick={closeMenu}>
           <AiFillHome size={18} />
           Home
-        </a>
+        </NavLink>
 
-        <a href="/about" onClick={handleLinkClick}>
+        <NavLink to="/about" onClick={closeMenu}>
           <FiInfo size={18} />
           About
-        </a>
+        </NavLink>
 
-        <a href="/features" onClick={handleLinkClick}>
-          <FiStar size={18} />
-          Features
-        </a>
-
-        <a href="/contact" onClick={handleLinkClick}>
+        <NavLink to="/contact" onClick={closeMenu}>
           <FiMail size={18} />
           Contact
-        </a>
+        </NavLink>
       </div>
     </>
   );
