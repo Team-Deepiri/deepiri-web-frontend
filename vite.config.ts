@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import inspector from 'vite-plugin-react-inspector';
 
 export default defineConfig({
   plugins: [
+    inspector(), // Add inspector BEFORE react plugin for click-to-open in editor
     react({
       fastRefresh: true,
       include: "**/*.{jsx,tsx,js,ts}",
