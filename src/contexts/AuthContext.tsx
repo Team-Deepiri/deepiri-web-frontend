@@ -50,14 +50,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const initializeAuth = async (): Promise<void> => {
     try {
-      const storedToken = localStorage.getItem('token');
+      const storedToken = normalizeToken(localStorage.getItem('token'));
       const storedUser = localStorage.getItem('user');
       
       if (storedToken && storedUser) {
         try {
           const userData = JSON.parse(storedUser);
-          setUser(userData);
-          setToken(storedToken);
+          persistUser(userData);
+          persistToken(storedToken);
           console.log('✅ Session restored from localStorage');
         } catch (parseError) {
           console.warn('Invalid stored user data, clearing session');
@@ -75,10 +75,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const clearSession = (): void => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    persistUser(null);
+    persistToken(null);
     localStorage.removeItem('refreshToken');
   };
 
@@ -87,10 +85,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const res = await authApi.refreshToken();
       if (res.success) {
         const { user, token } = res.data;
-        setUser(user);
-        setToken(token);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        persistUser(user);
+        persistToken(token);
         return true;
       }
     } catch (error: any) {
@@ -105,8 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await authApi.verifyToken();
       if (response.success) {
-        setUser(response.data.user);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        persistUser(response.data.user);
         return true;
       } else {
         const refreshed = await tryRefresh();
@@ -133,10 +128,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success) {
         // authApi.login already returns response.data, so user and token are at the top level
         const { user, token } = response;
-        setUser(user);
-        setToken(token);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        persistUser(user);
+        persistToken(token);
         toast.success('Welcome back!');
         navigate('/home');
         return { success: true };
@@ -164,10 +157,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success) {
         // authApi.register already returns response.data, so user and token are at the top level
         const { user, token } = response;
-        setUser(user);
-        setToken(token);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        persistUser(user);
+        persistToken(token);
         toast.success('Account created successfully!');
         navigate('/home');
         return { success: true };
@@ -221,8 +212,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const updateUser = (updatedUser: User): void => {
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    persistUser(updatedUser);
   };
 
   const value: AuthContextType = {
