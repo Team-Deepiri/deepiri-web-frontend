@@ -76,7 +76,7 @@
     "esbuild": "^0.25.3",
     "jsdom": "^24.0.0",
     "msw": "^2.0.11",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.3",
     "vite": "^6.3.3",
     "vite-plugin-react-inspector": "^0.3.3",
     "vitest": "^4.0.9"
