@@ -13,8 +13,10 @@ const SidebarNav: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const onClick = () => setMenuOpen(false);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") setMenuOpen(false);
     };
 
     document.addEventListener("mousedown", onClick);
@@ -24,6 +26,10 @@ const SidebarNav: React.FC = () => {
       document.removeEventListener("keydown", onKey);
     };
   }, []);
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  const handleLinkClick = () => setMenuOpen(false);
 
   const handleLogout = () => {
     logout();
