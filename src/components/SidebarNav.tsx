@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
@@ -12,18 +12,37 @@ const SidebarNav: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleLinkClick = () => {
+    setMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
     };
 
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", onClick);
+      document.addEventListener("keydown", onKey);
+    }
+
     return () => {
       document.removeEventListener("mousedown", onClick);
       document.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [menuOpen]);
 
   const handleLogout = () => {
     logout();
@@ -44,7 +63,7 @@ const SidebarNav: React.FC = () => {
       </nav>
 
       {/* DROPDOWN MENU */}
-      <div className={`sidebar-links ${menuOpen ? "open" : ""}`}>
+      <div ref={sidebarRef} className={`sidebar-links ${menuOpen ? "open" : ""}`}>
         <a href="/" onClick={handleLinkClick}>
           <AiFillHome size={18} />
           Home
