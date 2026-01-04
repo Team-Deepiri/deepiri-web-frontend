@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-
-// ✅ Update path if your logo import differs
+import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/images/logo.png";
 
 type NavItem = {
@@ -12,20 +11,30 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
+  { label: "Features", to: "/features" },
   { label: "Contact", to: "/contact" },
-  { label: "Privacy Policy", to: "/privacy" },
-  { label: "Terms of Service", to: "/terms" },
 ];
 
 const SidebarNav: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 
   // Close menu when route changes
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close on outside click / escape
   useEffect(() => {
@@ -46,18 +55,75 @@ const SidebarNav: React.FC = () => {
     };
   }, []);
 
+  const handleSignOut = () => {
+    logout();
+    setOpen(false);
+  };
+
   return (
     <>
       {/* TOP NAVBAR (fixed) */}
-      <header className="deepiri-topnav">
+      <header className={`deepiri-topnav ${scrolled ? "scrolled" : ""}`}>
         <div className="deepiri-topnav__inner">
-          {/* LEFT: logo + name + hamburger */}
-          <div className="deepiri-topnav__left" ref={dropdownRef}>
-            <NavLink to="/" className="deepiri-brand" aria-label="Deepiri Home">
-              <img src={logo} alt="Deepiri" className="deepiri-brand__logo" />
-              <span className="deepiri-brand__name">Deepiri</span>
-            </NavLink>
+          {/* LEFT: logo + name */}
+          <NavLink to="/" className="deepiri-brand" aria-label="Deepiri Home">
+            <img src={logo} alt="Deepiri" className="deepiri-brand__logo" />
+            <span className="deepiri-brand__name">Deepiri</span>
+          </NavLink>
 
+          {/* CENTER: Desktop Navigation Links */}
+          <nav className="deepiri-topnav__center">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `deepiri-nav-link ${isActive ? "is-active" : ""}`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* RIGHT: Auth buttons + Mobile menu */}
+          <div className="deepiri-topnav__right" ref={dropdownRef}>
+            {/* Desktop Auth Buttons */}
+            <div className="deepiri-topnav__auth-desktop">
+              {isAuthenticated ? (
+                <>
+                  <NavLink
+                    to="/dashboard"
+                    className="deepiri-btn deepiri-btn--secondary"
+                  >
+                    Dashboard
+                  </NavLink>
+                  <button
+                    onClick={handleSignOut}
+                    className="deepiri-btn deepiri-btn--primary"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/login"
+                    className="deepiri-btn deepiri-btn--secondary"
+                  >
+                    Sign In
+                  </NavLink>
+                  <NavLink
+                    to="/register"
+                    className="deepiri-btn deepiri-btn--primary"
+                  >
+                    Get Started
+                  </NavLink>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
             <button
               type="button"
               className="deepiri-menu-btn"
@@ -65,10 +131,14 @@ const SidebarNav: React.FC = () => {
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
             >
-              <span className="deepiri-menu-btn__icon">☰</span>
+              <span className={`deepiri-menu-btn__icon ${open ? "open" : ""}`}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
             </button>
 
-            {/* Dropdown */}
+            {/* Mobile Dropdown */}
             {open && (
               <div className="deepiri-dropdown" role="menu">
                 {NAV_ITEMS.map((item) => (
@@ -79,21 +149,53 @@ const SidebarNav: React.FC = () => {
                       `deepiri-dropdown__item ${isActive ? "is-active" : ""}`
                     }
                     role="menuitem"
+                    onClick={() => setOpen(false)}
                   >
                     {item.label}
                   </NavLink>
                 ))}
+                <div className="deepiri-dropdown__divider"></div>
+                {isAuthenticated ? (
+                  <>
+                    <NavLink
+                      to="/dashboard"
+                      className="deepiri-dropdown__item"
+                      onClick={() => setOpen(false)}
+                    >
+                      Dashboard
+                    </NavLink>
+                    <button
+                      onClick={handleSignOut}
+                      className="deepiri-dropdown__item deepiri-dropdown__item--danger"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <NavLink
+                      to="/login"
+                      className="deepiri-dropdown__item"
+                      onClick={() => setOpen(false)}
+                    >
+                      Sign In
+                    </NavLink>
+                    <NavLink
+                      to="/register"
+                      className="deepiri-dropdown__item deepiri-dropdown__item--primary"
+                      onClick={() => setOpen(false)}
+                    >
+                      Get Started
+                    </NavLink>
+                  </>
+                )}
               </div>
             )}
           </div>
-
-          {/* RIGHT: optional quick actions / placeholder */}
-          <div className="deepiri-topnav__right">
-            {/* Keep empty for now, or add buttons later */}
-          </div>
         </div>
       </header>
-
+      {/* Spacer to prevent content from going under navbar */}
+      <div className="deepiri-topnav__spacer"></div>
     </>
   );
 };
