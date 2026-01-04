@@ -1,68 +1,69 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './contexts/AuthContext';
-import { WebPushProvider } from './contexts/WebPushContext';
-import { SocketProvider } from './contexts/SocketContext';
-import { AdventureProvider } from './contexts/AdventureContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import ErrorBoundary from './components/ErrorBoundary';
+import React, { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "./contexts/AuthContext";
+import { WebPushProvider } from "./contexts/WebPushContext";
+import { SocketProvider } from "./contexts/SocketContext";
+import { AdventureProvider } from "./contexts/AdventureContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 import SidebarNav from "./components/SidebarNav.tsx";
-import './components/SidebarNav.css';
-import Footer from './components/Footer';
-import HMRStatus from './components/HMRStatus';
-import { setupGlobalErrorHandling, setupPerformanceMonitoring } from './utils/logger';
+import "./components/SidebarNav.css";
+import Footer from "./components/Footer";
+import HMRStatus from "./components/HMRStatus";
+import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/logger";
 
 // Pages
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import AdventureGenerator from './pages/AdventureGenerator';
-import AdventureDetail from './pages/AdventureDetail';
-import AdventureHistory from './pages/AdventureHistory';
-import Events from './pages/Events';
-import EventDetail from './pages/EventDetail';
-import CreateEvent from './pages/CreateEvent';
-import Profile from './pages/Profile';
-import Friends from './pages/Friends';
-import Leaderboard from './pages/Leaderboard';
-import TaskManagement from './pages/TaskManagement';
-import Challenges from './pages/Challenges';
-import GamificationDashboard from './pages/GamificationDashboard';
-import AnalyticsDashboard from './pages/AnalyticsDashboard';
-import Notifications from './pages/Notifications';
-import Objectives from './pages/Objectives';
-import Odysseys from './pages/Odysseys';
-import Seasons from './pages/Seasons';
-import Progress from './pages/Progress';
-import Boosts from './pages/Boosts';
-import Streaks from './pages/Streaks';
-import AgentChat from './pages/AgentChat';
-import ProductivityChat from './pages/ProductivityChat';
-import PythonTools from './pages/PythonTools';
-import UserInventory from './pages/UserInventory';
-import ImmersiveWorkspace from './pages/ImmersiveWorkspace';
-import Contact from './pages/Contact';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import AdventureGenerator from "./pages/AdventureGenerator";
+import AdventureDetail from "./pages/AdventureDetail";
+import AdventureHistory from "./pages/AdventureHistory";
+import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
+import CreateEvent from "./pages/CreateEvent";
+import Profile from "./pages/Profile";
+import Friends from "./pages/Friends";
+import Leaderboard from "./pages/Leaderboard";
+import TaskManagement from "./pages/TaskManagement";
+import Challenges from "./pages/Challenges";
+import GamificationDashboard from "./pages/GamificationDashboard";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import Notifications from "./pages/Notifications";
+import Objectives from "./pages/Objectives";
+import Odysseys from "./pages/Odysseys";
+import Seasons from "./pages/Seasons";
+import Progress from "./pages/Progress";
+import Boosts from "./pages/Boosts";
+import Streaks from "./pages/Streaks";
+import AgentChat from "./pages/AgentChat";
+import ProductivityChat from "./pages/ProductivityChat";
+import PythonTools from "./pages/PythonTools";
+import UserInventory from "./pages/UserInventory";
+import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
+import Contact from "./pages/Contact";
 
-// Create a client
+// Public pages
+import About from "./pages/About";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+
+// React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
+    queries: { retry: 1, refetchOnWindowFocus: false },
   },
 });
 
 const App: React.FC = () => {
   const location = useLocation();
-  const pathname = location?.pathname || '/';
-  const isAuthRoute = pathname === '/login' || pathname === '/register';
+  const pathname = location?.pathname || "/";
+  const isAuthRoute = pathname === "/login" || pathname === "/register";
 
   useEffect(() => {
-    // Setup global error handling and performance monitoring
     setupGlobalErrorHandling();
     setupPerformanceMonitoring();
   }, []);
@@ -74,39 +75,40 @@ const App: React.FC = () => {
           <WebPushProvider>
             <SocketProvider>
               <AdventureProvider>
-                <div className="app-shell relative overflow-hidden bg-gray-900">
-                  {/* Animated Background Layer */}
+                <div className="app-shell">
+                  {/* Background layers */}
                   <div className="fixed inset-0 animated-bg opacity-30" />
-                  {/* Subtle pattern overlay */}
-                  <div className="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10" />
-                  {/* Gradient Orbs */}
+                  <div className="fixed inset-0 bg-pattern-overlay opacity-10" />
+
                   <div className="fixed top-[-4rem] left-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" />
                   <div
                     className="fixed top-[10%] right-1/5 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
-                    style={{ animationDelay: '2s' }}
+                    style={{ animationDelay: "2s" }}
                   />
                   <div
                     className="fixed bottom-[-4rem] left-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
-                    style={{ animationDelay: '4s' }}
+                    style={{ animationDelay: "4s" }}
                   />
 
-                  {/* LEFT SIDEBAR NAV */}
+                  {/* Sidebar */}
                   <SidebarNav />
 
-                  {/* MAIN CONTENT AREA */}
-                  <div className="app-main relative z-10 main-content">
-                   <main className={isAuthRoute ? 'pt-8 pb-8' : 'pt-10 pb-10'}>
-                    <div className="site-container">
-                     <Routes>
-                      {/* Public Routes */}
-                     <Route path="/" element={<Home />} />
-                     <Route path="/home" element={<Home />} />
-                     <Route path="/login" element={<Login />} />
-                     <Route path="/register" element={<Register />} />
-                     <Route path="/contact" element={<Contact />} />
+                  {/* Main area */}
+                  <div className="app-main">
+                    <main className={isAuthRoute ? "app-content auth" : "app-content"}>
+                      <div className="site-container">
+                        <Routes>
+                          {/* Public */}
+                          <Route path="/" element={<Home />} />
+                          <Route path="/home" element={<Home />} />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/register" element={<Register />} />
+                          <Route path="/contact" element={<Contact />} />
+                          <Route path="/about" element={<About />} />
+                          <Route path="/privacy" element={<Privacy />} />
+                          <Route path="/terms" element={<Terms />} />
 
-
-                          {/* Protected Routes */}
+                          {/* Protected */}
                           <Route
                             path="/dashboard"
                             element={
@@ -327,25 +329,19 @@ const App: React.FC = () => {
                     toastOptions={{
                       duration: 4000,
                       style: {
-                        background: 'rgba(0, 0, 0, 0.8)',
-                        backdropFilter: 'blur(10px)',
-                        color: '#fff',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '12px',
+                        background: "rgba(0, 0, 0, 0.8)",
+                        backdropFilter: "blur(10px)",
+                        color: "#fff",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "12px",
                       },
                       success: {
                         duration: 3000,
-                        iconTheme: {
-                          primary: '#10B981',
-                          secondary: '#fff',
-                        },
+                        iconTheme: { primary: "#10B981", secondary: "#fff" },
                       },
                       error: {
                         duration: 5000,
-                        iconTheme: {
-                          primary: '#EF4444',
-                          secondary: '#fff',
-                        },
+                        iconTheme: { primary: "#EF4444", secondary: "#fff" },
                       },
                     }}
                   />
@@ -362,4 +358,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
