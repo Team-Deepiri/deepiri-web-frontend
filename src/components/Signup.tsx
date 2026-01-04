@@ -64,10 +64,12 @@ const Signup: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          {/* Added htmlFor and id to fix Testing Library lookup */}
+          <label htmlFor="register-name" className="block text-sm font-medium text-gray-700 mb-1">
             Full Name
           </label>
           <input
+            id="register-name"
             type="text"
             name="name"
             value={formData.name}
@@ -79,10 +81,11 @@ const Signup: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="register-email" className="block text-sm font-medium text-gray-700 mb-1">
             Email Address
           </label>
           <input
+            id="register-email"
             type="email"
             name="email"
             value={formData.email}
@@ -94,10 +97,11 @@ const Signup: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="register-password" className="block text-sm font-medium text-gray-700 mb-1">
             Password
           </label>
           <input
+            id="register-password"
             type="password"
             name="password"
             value={formData.password}
@@ -109,10 +113,11 @@ const Signup: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="register-confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
             Confirm Password
           </label>
           <input
+            id="register-confirmPassword"
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
@@ -125,11 +130,12 @@ const Signup: React.FC = () => {
 
         <div className="flex items-center">
           <input
+            id="register-terms"
             type="checkbox"
             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             required
           />
-          <label className="ml-2 block text-sm text-gray-700">
+          <label htmlFor="register-terms" className="ml-2 block text-sm text-gray-700">
             I agree to the{' '}
             <a href="#" className="text-blue-600 hover:text-blue-700">
               Terms of Service
@@ -166,4 +172,3 @@ const Signup: React.FC = () => {
 };
 
 export default Signup;
-

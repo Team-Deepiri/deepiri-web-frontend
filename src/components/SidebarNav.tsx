@@ -13,11 +13,17 @@ const SidebarNav: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const toggleMenu = () => setMenuOpen((prev) => !prev);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
 
-  const handleLinkClick = () => {
-    setMenuOpen(false);
-  };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
 
   const handleLogout = () => {
     logout();
