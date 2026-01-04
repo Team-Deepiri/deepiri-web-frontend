@@ -1,38 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
+import "./SidebarNav.css";
 
-// ✅ Update path if your logo import differs
-import logo from "../assets/images/logo.png";
-
-type NavItem = {
-  label: string;
-  to: string;
-};
-
-const NAV_ITEMS: NavItem[] = [
-  { label: "Home", to: "/" },
-  { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
-  { label: "Privacy Policy", to: "/privacy" },
-  { label: "Terms of Service", to: "/terms" },
-];
+// Icons
+import { AiFillHome } from "react-icons/ai";
+import { FiInfo, FiStar, FiMail, FiLogOut } from "react-icons/fi";
 
 const SidebarNav: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const location = useLocation();
-
-  // Close menu when route changes
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
-
-  // Close on outside click / escape
-  useEffect(() => {
-    const onClick = (e: MouseEvent) => {
-      if (!dropdownRef.current) return;
-      if (!dropdownRef.current.contains(e.target as Node)) setOpen(false);
-    };
+  const { user, isAuthenticated, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -46,54 +25,61 @@ const SidebarNav: React.FC = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setMenuOpen(false);
+    toast.success('Logged out successfully');
+  };
+
   return (
     <>
-      {/* TOP NAVBAR (fixed) */}
-      <header className="deepiri-topnav">
-        <div className="deepiri-topnav__inner">
-          {/* LEFT: logo + name + hamburger */}
-          <div className="deepiri-topnav__left" ref={dropdownRef}>
-            <NavLink to="/" className="deepiri-brand" aria-label="Deepiri Home">
-              <img src={logo} alt="Deepiri" className="deepiri-brand__logo" />
-              <span className="deepiri-brand__name">Deepiri</span>
-            </NavLink>
+      {/* TOP NAVBAR */}
+      <nav className="sidebar-nav">
+        <button className="menu-toggle" onClick={toggleMenu}>
+          ☰ Menu
+        </button>
 
-            <button
-              type="button"
-              className="deepiri-menu-btn"
-              aria-label="Open navigation menu"
-              aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-            >
-              <span className="deepiri-menu-btn__icon">☰</span>
+        <div className="sidebar-title">Deepiri</div>
+      </nav>
+
+      {/* DROPDOWN MENU */}
+      <div className={`sidebar-links ${menuOpen ? "open" : ""}`}>
+        <a href="/" onClick={handleLinkClick}>
+          <AiFillHome size={18} />
+          Home
+        </a>
+
+        {isAuthenticated ? (
+          <>
+            <Link to="/dashboard" onClick={handleLinkClick}>
+              <AiFillHome size={18} />
+              Dashboard
+            </Link>
+            <button onClick={handleLogout} className="sidebar-logout-btn">
+              <FiLogOut size={18} />
+              Sign Out
             </button>
+          </>
+        ) : (
+          <>
+            <a href="/about" onClick={handleLinkClick}>
+              <FiInfo size={18} />
+              About
+            </a>
 
-            {/* Dropdown */}
-            {open && (
-              <div className="deepiri-dropdown" role="menu">
-                {NAV_ITEMS.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `deepiri-dropdown__item ${isActive ? "is-active" : ""}`
-                    }
-                    role="menuitem"
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </div>
-            )}
-          </div>
+            <a href="/features" onClick={handleLinkClick}>
+              <FiStar size={18} />
+              Features
+            </a>
 
-          {/* RIGHT: optional quick actions / placeholder */}
-          <div className="deepiri-topnav__right">
-            {/* Keep empty for now, or add buttons later */}
-          </div>
-        </div>
-      </header>
-
+            <a href="/contact" onClick={handleLinkClick}>
+              <FiMail size={18} />
+              Contact
+            </a>
+          </>
+        )}
+      </div>
     </>
   );
 };
