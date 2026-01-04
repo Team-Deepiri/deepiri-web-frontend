@@ -105,3 +105,26 @@
   color: #38bdf8;
   transform: translateX(5px);
 }
+
+/* Logout button styling */
+.sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  color: #e2e8f0;
+  background: none;
+  border: none;
+  font-size: var(--nav-link-size);
+  cursor: pointer;
+
+  transition: color 0.2s, transform 0.2s;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+}
+
+.sidebar-logout-btn:hover {
+  color: #ef4444;
+  transform: translateX(5px);
+}
