@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useAuth } from '../contexts/AuthContext';
-import { notificationApi } from '../api/notificationApi';
-import toast from 'react-hot-toast';
 
 interface Notification {
   _id: string;
@@ -15,65 +12,85 @@ interface Notification {
   [key: string]: any;
 }
 
+// Hardcoded notifications for demo
+const DEMO_NOTIFICATIONS: Notification[] = [
+  {
+    _id: '1',
+    title: 'New Adventure Available!',
+    message: 'A new adventure "Mountain Peak Challenge" has been added to your area. Check it out now!',
+    type: 'adventure_step',
+    read: false,
+    sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: '2',
+    title: 'Event Starting Soon',
+    message: 'The "City Explorer Challenge" event starts in 3 hours. Don\'t miss out!',
+    type: 'event_update',
+    read: false,
+    sentAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: '3',
+    title: 'Friend Request',
+    message: 'Sarah Johnson wants to connect with you and share adventures together.',
+    type: 'friend_request',
+    read: false,
+    sentAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: '4',
+    title: 'Achievement Unlocked! 🎉',
+    message: 'Congratulations! You\'ve earned the "Explorer Badge" for completing 10 adventures.',
+    type: 'achievement',
+    read: true,
+    sentAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: '5',
+    title: 'New Comment on Your Adventure',
+    message: 'Mike Chen commented on your "Sunset Trail" adventure post.',
+    type: 'social',
+    read: true,
+    sentAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: '6',
+    title: 'System Maintenance',
+    message: 'Scheduled maintenance will occur tonight from 2 AM - 4 AM EST. Some features may be unavailable.',
+    type: 'system',
+    read: true,
+    sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+
+];
+ 
 const Notifications: React.FC = () => {
-  const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>(DEMO_NOTIFICATIONS);
   const [loading, setLoading] = useState<boolean>(true);
-  const [filter, setFilter] = useState<string>('all'); // all, unread, read
+  const [filter, setFilter] = useState<string>('all');
 
   useEffect(() => {
-    loadNotifications();
+    // Simulate loading
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, []);
 
-  const loadNotifications = async (): Promise<void> => {
-    try {
-      setLoading(true);
-      const response = await notificationApi.getNotifications();
-      if (response.success || response.data) {
-        setNotifications(response.data || []);
-      } else {
-        toast.error('Failed to load notifications');
-      }
-    } catch (error) {
-      console.error('Failed to load notifications:', error);
-      toast.error('Failed to load notifications');
-    } finally {
-      setLoading(false);
-    }
+  const handleMarkAsRead = (notificationId: string): void => {
+    setNotifications(prev => 
+      prev.map(notif => 
+        notif._id === notificationId 
+          ? { ...notif, read: true }
+          : notif
+      )
+    );
   };
 
-  const handleMarkAsRead = async (notificationId: string): Promise<void> => {
-    try {
-      const response = await notificationApi.markAsRead(notificationId);
-      if (response.success) {
-        setNotifications(prev => 
-          prev.map(notif => 
-            notif._id === notificationId 
-              ? { ...notif, read: true }
-              : notif
-          )
-        );
-        toast.success('Notification marked as read');
-      }
-    } catch (error) {
-      console.error('Failed to mark notification as read:', error);
-      toast.error('Failed to mark notification as read');
-    }
-  };
-
-  const handleMarkAllAsRead = async (): Promise<void> => {
-    try {
-      const response = await notificationApi.markAllAsRead();
-      if (response.success) {
-        setNotifications(prev => 
-          prev.map(notif => ({ ...notif, read: true }))
-        );
-        toast.success('All notifications marked as read');
-      }
-    } catch (error) {
-      console.error('Failed to mark all notifications as read:', error);
-      toast.error('Failed to mark all notifications as read');
-    }
+  const handleMarkAllAsRead = (): void => {
+    setNotifications(prev => 
+      prev.map(notif => ({ ...notif, read: true }))
+    );
   };
 
   const getNotificationIcon = (type?: string): string => {
@@ -88,18 +105,7 @@ const Notifications: React.FC = () => {
     }
   };
 
-  const getNotificationColor = (type?: string): string => {
-    switch (type) {
-      case 'adventure_step': return 'bg-blue-100 text-blue-800';
-      case 'event_update': return 'bg-purple-100 text-purple-800';
-      case 'social': return 'bg-green-100 text-green-800';
-      case 'system': return 'bg-gray-100 text-gray-800';
-      case 'achievement': return 'bg-yellow-100 text-yellow-800';
-      case 'friend_request': return 'bg-pink-100 text-pink-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
+  
   const filteredNotifications = notifications.filter(notification => {
     if (filter === 'unread') return !notification.read;
     if (filter === 'read') return notification.read;
@@ -117,8 +123,8 @@ const Notifications: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-transparent pt-8">
+       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style={{ paddingTop: '120px' }}>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -127,17 +133,17 @@ const Notifications: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-white">
                 Notifications 🔔
               </h1>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-400 mt-2">
                 Stay updated with your adventure activities
               </p>
             </div>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
+                className="btn-modern btn-primary"
               >
                 Mark All as Read
               </button>
@@ -145,18 +151,24 @@ const Notifications: React.FC = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="text-2xl font-bold text-gray-900">{notifications.length}</div>
-              <div className="text-sm text-gray-600">Total</div>
+         <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr 1fr',
+            gap: '1rem',
+            marginBottom: '1.5rem',
+            width: '100%'
+          }}>
+            <div className="card-modern rounded-lg p-4 shadow-sm text-center">
+              <div className="text-2xl font-bold text-white">{notifications.length}</div>
+              <div className="text-sm text-gray-400">Total</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="text-2xl font-bold text-blue-600">{unreadCount}</div>
-              <div className="text-sm text-gray-600">Unread</div>
+            <div className="card-modern rounded-lg p-4 shadow-sm text-center">
+              <div className="text-2xl font-bold text-blue-400">{unreadCount}</div>
+              <div className="text-sm text-gray-400">Unread</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="text-2xl font-bold text-green-600">{notifications.length - unreadCount}</div>
-              <div className="text-sm text-gray-600">Read</div>
+            <div className="card-modern rounded-lg p-4 shadow-sm text-center">
+              <div className="text-2xl font-bold text-green-400">{notifications.length - unreadCount}</div>
+              <div className="text-sm text-gray-400">Read</div>
             </div>
           </div>
         </motion.div>
@@ -166,10 +178,10 @@ const Notifications: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-6 mb-8"
+          className="mb-8"
         >
-          <div className="flex items-center space-x-4">
-            <label className="text-sm font-medium text-gray-700">Filter:</label>
+          <div className="card-modern rounded-xl shadow-lg p-4 flex items-center space-x-4">
+            <label className="text-sm font-medium text-gray-300">Filter:</label>
             <div className="flex space-x-2">
               {[
                 { value: 'all', label: 'All' },
@@ -179,10 +191,10 @@ const Notifications: React.FC = () => {
                 <button
                   key={option.value}
                   onClick={() => setFilter(option.value)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                  className={`btn-modern btn-primary ${
                     filter === option.value
                       ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
                   {option.label}
@@ -197,7 +209,7 @@ const Notifications: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="space-y-4"
+          style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem'}}
         >
           {filteredNotifications.length > 0 ? (
             filteredNotifications.map((notification, index) => (
@@ -206,14 +218,14 @@ const Notifications: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`bg-white rounded-xl shadow-lg p-6 ${
+                className={`card-modern rounded-xl shadow-lg p-6 ${
                   !notification.read ? 'border-l-4 border-blue-500' : ''
                 } hover:shadow-xl transition-shadow duration-200`}
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${
-                      !notification.read ? 'bg-blue-100' : 'bg-gray-100'
+                      !notification.read ? 'bg-blue-900/50' : 'bg-gray-800/50'
                     }`}>
                       {getNotificationIcon(notification.type)}
                     </div>
@@ -223,17 +235,14 @@ const Notifications: React.FC = () => {
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center space-x-2 mb-2">
-                          <h3 className="text-lg font-semibold text-gray-900">
+                          <h3 className="text-lg font-semibold text-white">
                             {notification.title || 'Notification'}
                           </h3>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getNotificationColor(notification.type)}`}>
-                            {notification.type?.replace('_', ' ') || 'notification'}
-                          </span>
                           {!notification.read && (
                             <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
                           )}
                         </div>
-                        <p className="text-gray-700 mb-3">
+                        <p className="text-gray-300 mb-3">
                           {notification.message}
                         </p>
                         <p className="text-sm text-gray-500">
@@ -245,7 +254,7 @@ const Notifications: React.FC = () => {
                         {!notification.read && (
                           <button
                             onClick={() => handleMarkAsRead(notification._id)}
-                            className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
+                            className="btn-modern btn-primary"
                           >
                             Mark as Read
                           </button>
@@ -253,7 +262,7 @@ const Notifications: React.FC = () => {
                         {notification.actionUrl && (
                           <a
                             href={notification.actionUrl}
-                            className="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 text-sm font-medium"
+                            className="btn-modern btn-primary"
                           >
                             View
                           </a>
@@ -268,13 +277,13 @@ const Notifications: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-12 text-center"
+              className="card-modern rounded-xl shadow-lg p-12 text-center"
             >
               <div className="text-6xl mb-4">🔔</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2">
                 No notifications found
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-400">
                 {filter === 'unread' 
                   ? 'You have no unread notifications'
                   : filter === 'read'
@@ -291,17 +300,17 @@ const Notifications: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-white rounded-xl shadow-lg p-6 mt-8"
+          className="card-modern rounded-xl shadow-lg p-6 mt-8"
         >
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <h2 className="text-xl font-bold text-white mb-4">
             Notification Settings ⚙️
           </h2>
           <div className="text-center py-8">
             <div className="text-4xl mb-4">🚧</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-white mb-2">
               Coming Soon
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Customize your notification preferences and delivery methods.
             </p>
           </div>
@@ -312,4 +321,3 @@ const Notifications: React.FC = () => {
 };
 
 export default Notifications;
-
