@@ -222,9 +222,9 @@ const App: React.FC = () => {
                           <Route
                             path="/notifications"
                             element={
-                              <ProtectedRoute>
+                              
                                 <Notifications />
-                              </ProtectedRoute>
+                              
                             }
                           />
                           <Route

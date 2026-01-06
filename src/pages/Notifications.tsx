@@ -123,15 +123,15 @@ const Notifications: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-transparent pt-8">
-       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style={{ paddingTop: '120px' }}>
+    <div className="min-h-screen bg-transparent">
+       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mt-3"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white">
                 Notifications 🔔
@@ -143,65 +143,63 @@ const Notifications: React.FC = () => {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="btn-modern btn-primary"
+                className="btn-modern btn-primary mb-3"
               >
                 Mark All as Read
               </button>
             )}
           </div>
 
-          {/* Stats */}
-         <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gap: '1rem',
-            marginBottom: '1.5rem',
-            width: '100%'
-          }}>
-            <div className="card-modern rounded-lg p-4 shadow-sm text-center">
-              <div className="text-2xl font-bold text-white">{notifications.length}</div>
-              <div className="text-sm text-gray-400">Total</div>
-            </div>
-            <div className="card-modern rounded-lg p-4 shadow-sm text-center">
-              <div className="text-2xl font-bold text-blue-400">{unreadCount}</div>
-              <div className="text-sm text-gray-400">Unread</div>
-            </div>
-            <div className="card-modern rounded-lg p-4 shadow-sm text-center">
-              <div className="text-2xl font-bold text-green-400">{notifications.length - unreadCount}</div>
-              <div className="text-sm text-gray-400">Read</div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-8"
-        >
-          <div className="card-modern rounded-xl shadow-lg p-4 flex items-center space-x-4">
-            <label className="text-sm font-medium text-gray-300">Filter:</label>
-            <div className="flex space-x-2">
-              {[
-                { value: 'all', label: 'All' },
-                { value: 'unread', label: 'Unread' },
-                { value: 'read', label: 'Read' }
-              ].map((option) => (
+          {/* Stats & Filters Combined */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gap: '1rem',
+                marginBottom: '1.5rem',
+                width: '100%'
+              }}>
                 <button
-                  key={option.value}
-                  onClick={() => setFilter(option.value)}
-                  className={`btn-modern btn-primary ${
-                    filter === option.value
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  onClick={() => setFilter('all')}
+                  className={`card-modern rounded-lg p-4 shadow-sm text-center cursor-pointer ${
+                    filter === 'all'
+                      ? 'opacity-100'
+                      : 'opacity-50 hover:opacity-75'
                   }`}
                 >
-                  {option.label}
+                  <div className="text-white">{notifications.length}</div>
+                  <div className="text-sm text-white">Total</div>
                 </button>
-              ))}
-            </div>
-          </div>
+                
+                <button
+                  onClick={() => setFilter('unread')}
+                  className={`card-modern rounded-lg p-4 shadow-sm text-center cursor-pointer ${
+                    filter === 'unread'
+                      ? 'opacity-100'
+                      : 'opacity-50 hover:opacity-75'
+                  }`}
+                >
+                  <div className="text-white">{unreadCount}</div>
+                  <div className="text-sm text-white">Unread</div>
+                </button>
+                
+                <button
+                  onClick={() => setFilter('read')}
+                  className={`card-modern rounded-lg p-4 shadow-sm text-center cursor-pointer ${
+                    filter === 'read'
+                      ? 'opacity-100'
+                      : 'opacity-50 hover:opacity-75'
+                  }`}
+                >
+                  <div className="text-white">{notifications.length - unreadCount}</div>
+                  <div className="text-sm text-white">Read</div>
+                </button>
+              </div>
+            </motion.div>
         </motion.div>
 
         {/* Notifications List */}
@@ -212,6 +210,7 @@ const Notifications: React.FC = () => {
           style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem'}}
         >
           {filteredNotifications.length > 0 ? (
+            
             filteredNotifications.map((notification, index) => (
               <motion.div
                 key={notification._id}
@@ -273,6 +272,7 @@ const Notifications: React.FC = () => {
                 </div>
               </motion.div>
             ))
+            
           ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -297,10 +297,11 @@ const Notifications: React.FC = () => {
 
         {/* Notification Settings (Coming Soon) */}
         <motion.div
+        key={filter}
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0}}
           transition={{ delay: 0.6 }}
-          className="card-modern rounded-xl shadow-lg p-6 mt-8"
+          className="card-modern rounded-xl shadow-lg mt-3 mb-3 "
         >
           <h2 className="text-xl font-bold text-white mb-4">
             Notification Settings ⚙️
