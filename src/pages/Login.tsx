@@ -89,10 +89,12 @@ const Login: React.FC = () => {
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              {/* Linked label and input for testing/accessibility */}
+              <label htmlFor="login-email" className="block text-sm font-medium text-white mb-2">
                 Email Address
               </label>
               <input
+                id="login-email"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -104,10 +106,11 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              <label htmlFor="login-password" className="block text-sm font-medium text-white mb-2">
                 Password
               </label>
               <input
+                id="login-password"
                 type="password"
                 name="password"
                 value={formData.password}
@@ -121,10 +124,11 @@ const Login: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
+                  id="remember-me"
                   type="checkbox"
                   className="h-4 w-4 text-purple-500 bg-white/10 border-white/20 rounded focus:ring-purple-500"
                 />
-                <label className="ml-2 block text-sm text-gray-300">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
                   Remember me
                 </label>
               </div>
@@ -188,4 +192,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-

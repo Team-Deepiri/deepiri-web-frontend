@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi';
 import toast from 'react-hot-toast';
 
+// --- Interfaces ---
+
 interface User {
   _id: string;
   name: string;
@@ -21,6 +23,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
 }
 
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+// --- Context Setup ---
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = (): AuthContextType => {
@@ -31,99 +39,82 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+// --- Provider Component ---
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [token, setToken] = useState<string | null>(() => {
-    const storedToken = localStorage.getItem('token');
+    const storedToken = localStorage.getItem('token') as string | null;
     return storedToken && storedToken !== 'null' && storedToken !== 'undefined' ? storedToken : null;
   });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    initializeAuth();
-  }, []);
+  // --- INTERNAL HELPERS ---
 
-  const initializeAuth = async (): Promise<void> => {
-    try {
-      const storedToken = localStorage.getItem('token');
-      const storedUser = localStorage.getItem('user');
-      
-      if (storedToken && storedUser) {
-        try {
-          const userData = JSON.parse(storedUser);
-          setUser(userData);
-          setToken(storedToken);
-          console.log('✅ Session restored from localStorage');
-        } catch (parseError) {
-          console.warn('Invalid stored user data, clearing session');
-          clearSession();
-        }
-      } else {
-        console.log('ℹ️ No existing session found');
-      }
-    } catch (error) {
-      console.error('Error initializing auth:', error);
-      clearSession();
-    } finally {
-      setLoading(false);
+  const normalizeToken = (t: string | null | undefined): string | null => {
+    if (!t || t === 'null' || t === 'undefined') return null;
+    return t;
+  };
+
+  const persistUser = (userData: User | null) => {
+    setUser(userData);
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(userData));
+    } else {
+      localStorage.removeItem('user');
+    }
+  };
+
+  const persistToken = (newToken: string | null | undefined) => {
+    const normalized = normalizeToken(newToken);
+    setToken(normalized);
+    if (normalized) {
+      localStorage.setItem('token', normalized);
+    } else {
+      localStorage.removeItem('token');
     }
   };
 
   const clearSession = (): void => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    persistUser(null);
+    persistToken(null);
     localStorage.removeItem('refreshToken');
   };
 
-  const tryRefresh = async (): Promise<boolean> => {
-    try {
-      const res = await authApi.refreshToken();
-      if (res.success) {
-        const { user, token } = res.data;
-        setUser(user);
-        setToken(token);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        return true;
-      }
-    } catch (error: any) {
-      console.warn('Token refresh failed:', error.message);
-    }
-    return false;
-  };
+  // --- INITIALIZATION ---
 
-  const verifyToken = async (): Promise<boolean> => {
-    if (!token) return false;
-    
-    try {
-      const response = await authApi.verifyToken();
-      if (response.success) {
-        setUser(response.data.user);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        return true;
-      } else {
-        const refreshed = await tryRefresh();
-        if (!refreshed) {
-          clearSession();
+  useEffect(() => {
+    const initializeAuth = async (): Promise<void> => {
+      try {
+        const rawToken = localStorage.getItem('token') as string | null;
+        const rawUser = localStorage.getItem('user') as string | null;
+        
+        const storedToken = normalizeToken(rawToken);
+        
+        if (storedToken && rawUser) {
+          try {
+            const userData = JSON.parse(rawUser);
+            persistUser(userData);
+            persistToken(storedToken);
+            console.log('✅ Session restored');
+          } catch (parseError) {
+            console.warn('Invalid stored user data, clearing session');
+            clearSession();
+          }
         }
-        return refreshed;
-      }
-    } catch (error: any) {
-      console.warn('Token verification failed:', error.message);
-      const refreshed = await tryRefresh();
-      if (!refreshed) {
+      } catch (error) {
+        console.error('Error initializing auth:', error);
         clearSession();
+      } finally {
+        setLoading(false);
       }
-      return refreshed;
-    }
-  };
+    };
+
+    initializeAuth();
+  }, []);
+
+  // --- AUTH METHODS ---
 
   const login = async (email: string, password: string): Promise<{ success: boolean; message?: string }> => {
     try {
@@ -131,12 +122,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.login(email, password);
       
       if (response.success) {
-        // authApi.login already returns response.data, so user and token are at the top level
         const { user, token } = response;
-        setUser(user);
-        setToken(token);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        persistUser(user);
+        persistToken(token);
         toast.success('Welcome back!');
         navigate('/home');
         return { success: true };
@@ -144,10 +132,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         toast.error(response.message || 'Login failed');
         return { success: false, message: response.message };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
       toast.error('Login failed. Please try again.');
-      return { success: false, message: 'Login failed. Please try again.' };
+      return { success: false, message: 'Login failed.' };
     } finally {
       setLoading(false);
     }
@@ -156,18 +144,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (nameOrData: string | object, email?: string, password?: string): Promise<{ success: boolean; message?: string }> => {
     try {
       setLoading(true);
-      const payload = typeof nameOrData === 'object' && nameOrData !== null && 'email' in nameOrData && 'password' in nameOrData
-        ? nameOrData as { email: string; password: string; name?: string; [key: string]: any }
-        : { name: typeof nameOrData === 'string' ? nameOrData : '', email: email || '', password: password || '' };
+      const payload = typeof nameOrData === 'object' && nameOrData !== null 
+        ? (nameOrData as any)
+        : { name: nameOrData as string, email: email || '', password: password || '' };
+
       const response = await authApi.register(payload);
       
       if (response.success) {
-        // authApi.register already returns response.data, so user and token are at the top level
         const { user, token } = response;
-        setUser(user);
-        setToken(token);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        persistUser(user);
+        persistToken(token);
         toast.success('Account created successfully!');
         navigate('/home');
         return { success: true };
@@ -177,31 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error('Registration error:', error);
-      
-      // Extract the specific error message from the backend response
-      // authApi.register throws axiosError.response?.data, which could be:
-      // - { error: 'User already exists' } from 409 response
-      // - { error: 'Email, password, and name are required' } from 400 response
-      // - Or the full axios error object
-      let errorMessage = 'Registration failed. Please try again.';
-      
-      if (error?.error) {
-        // Backend returned { error: 'message' }
-        errorMessage = error.error;
-      } else if (error?.response?.data?.error) {
-        // Axios error with response data
-        errorMessage = error.response.data.error;
-      } else if (error?.response?.data?.message) {
-        // Axios error with message field
-        errorMessage = error.response.data.message;
-      } else if (error?.message) {
-        // Direct error message
-        errorMessage = error.message;
-      } else if (typeof error === 'string') {
-        // Error is just a string
-        errorMessage = error;
-      }
-      
+      const errorMessage = error?.error || error?.response?.data?.error || 'Registration failed.';
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     } finally {
@@ -210,19 +172,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = (): void => {
+    const wasLoggedIn = !!user;
     clearSession();
-    const currentPath = window.location.pathname;
-    if (!['/login', '/register', '/'].includes(currentPath)) {
+    if (!['/login', '/register', '/'].includes(window.location.pathname)) {
       navigate('/');
     }
-    if (user) {
+    if (wasLoggedIn) {
       toast.success('Logged out successfully');
     }
   };
 
   const updateUser = (updatedUser: User): void => {
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    persistUser(updatedUser);
   };
 
   const value: AuthContextType = {
@@ -242,4 +203,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
