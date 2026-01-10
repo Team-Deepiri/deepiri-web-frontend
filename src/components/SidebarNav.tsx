@@ -22,10 +22,13 @@ const SidebarNav: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated, logout } = useAuth();
 
-  // Close menu when route changes
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleLinkClick = () => {
+    setMenuOpen(false);
+  };
 
   // Handle scroll effect
   useEffect(() => {
@@ -39,21 +42,32 @@ const SidebarNav: React.FC = () => {
   // Close on outside click / escape
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (!dropdownRef.current) return;
-      if (!dropdownRef.current.contains(e.target as Node)) setOpen(false);
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
     };
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") setMenuOpen(false);
     };
 
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
+    if (menuOpen) {
+      document.addEventListener("mousedown", onClick);
+      document.addEventListener("keydown", onKey);
+    }
+
     return () => {
       document.removeEventListener("mousedown", onClick);
       document.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [menuOpen]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setMenuOpen(false);
+    toast.success('Logged out successfully');
+  };
 
   const handleSignOut = () => {
     logout();
@@ -137,6 +151,18 @@ const SidebarNav: React.FC = () => {
                 <span></span>
               </span>
             </button>
+          </>
+        ) : (
+          <>
+            <a href="/about" onClick={handleLinkClick}>
+              <FiInfo size={18} />
+              About
+            </a>
+
+            <a href="/features" onClick={handleLinkClick}>
+              <FiStar size={18} />
+              Features
+            </a>
 
             {/* Mobile Dropdown */}
             {open && (
