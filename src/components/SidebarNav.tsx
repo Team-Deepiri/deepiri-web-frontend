@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-hot-toast";
+import { FiInfo, FiStar } from "react-icons/fi";
 import logo from "../assets/images/logo.png";
 
 type NavItem = {
@@ -16,10 +18,13 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const SidebarNav: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
 
   const toggleMenu = () => {
@@ -151,73 +156,61 @@ const SidebarNav: React.FC = () => {
                 <span></span>
               </span>
             </button>
-          </>
-        ) : (
-          <>
-            <a href="/about" onClick={handleLinkClick}>
-              <FiInfo size={18} />
-              About
-            </a>
+          </div>
 
-            <a href="/features" onClick={handleLinkClick}>
-              <FiStar size={18} />
-              Features
-            </a>
-
-            {/* Mobile Dropdown */}
-            {open && (
-              <div className="deepiri-dropdown" role="menu">
-                {NAV_ITEMS.map((item) => (
+          {/* Mobile Dropdown */}
+          {open && (
+            <div className="deepiri-dropdown" role="menu">
+              {NAV_ITEMS.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `deepiri-dropdown__item ${isActive ? "is-active" : ""}`
+                  }
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+              <div className="deepiri-dropdown__divider"></div>
+              {isAuthenticated ? (
+                <>
                   <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `deepiri-dropdown__item ${isActive ? "is-active" : ""}`
-                    }
-                    role="menuitem"
+                    to="/dashboard"
+                    className="deepiri-dropdown__item"
                     onClick={() => setOpen(false)}
                   >
-                    {item.label}
+                    Dashboard
                   </NavLink>
-                ))}
-                <div className="deepiri-dropdown__divider"></div>
-                {isAuthenticated ? (
-                  <>
-                    <NavLink
-                      to="/dashboard"
-                      className="deepiri-dropdown__item"
-                      onClick={() => setOpen(false)}
-                    >
-                      Dashboard
-                    </NavLink>
-                    <button
-                      onClick={handleSignOut}
-                      className="deepiri-dropdown__item deepiri-dropdown__item--danger"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <NavLink
-                      to="/login"
-                      className="deepiri-dropdown__item"
-                      onClick={() => setOpen(false)}
-                    >
-                      Sign In
-                    </NavLink>
-                    <NavLink
-                      to="/register"
-                      className="deepiri-dropdown__item deepiri-dropdown__item--primary"
-                      onClick={() => setOpen(false)}
-                    >
-                      Get Started
-                    </NavLink>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+                  <button
+                    onClick={handleSignOut}
+                    className="deepiri-dropdown__item deepiri-dropdown__item--danger"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/login"
+                    className="deepiri-dropdown__item"
+                    onClick={() => setOpen(false)}
+                  >
+                    Sign In
+                  </NavLink>
+                  <NavLink
+                    to="/register"
+                    className="deepiri-dropdown__item deepiri-dropdown__item--primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Get Started
+                  </NavLink>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </header>
       {/* Spacer to prevent content from going under navbar */}
