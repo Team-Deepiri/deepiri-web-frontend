@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-hot-toast";
+import { FiInfo, FiStar } from "react-icons/fi";
 import logo from "../assets/images/logo.png";
 
 type NavItem = {
@@ -29,6 +31,7 @@ const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
 ];
 
 const SidebarNav: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
