@@ -8,13 +8,13 @@ WORKDIR /app
 RUN apk add --no-cache inotify-tools
 
 # Copy package files first for better Docker layer caching
-COPY package*.json ./
+COPY deepiri-web-frontend/package*.json ./
 
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
 # Copy source code (this will be overridden by volume mount)
-COPY . .
+COPY deepiri-web-frontend/ .
 
 # Copy K8s env loader scripts
 COPY --chown=root:root ops/k8s/load-k8s-env.sh /usr/local/bin/load-k8s-env.sh
