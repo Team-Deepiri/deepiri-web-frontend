@@ -4,8 +4,8 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Install dependencies for better file watching in Docker
-RUN apk add --no-cache inotify-tools
+# Install dependencies for better file watching in Docker and bash for entrypoint script
+RUN apk add --no-cache inotify-tools bash
 
 # Copy package files first for better Docker layer caching
 COPY deepiri-web-frontend/package*.json ./
