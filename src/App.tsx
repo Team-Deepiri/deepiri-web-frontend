@@ -168,9 +168,9 @@ const App: React.FC = () => {
                           <Route
                             path="/profile"
                             element={
-                              <ProtectedRoute>
+                              
                                 <Profile />
-                              </ProtectedRoute>
+                              
                             }
                           />
                           <Route
