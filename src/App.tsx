@@ -45,6 +45,7 @@ import PythonTools from "./pages/PythonTools";
 import UserInventory from "./pages/UserInventory";
 import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
 import Contact from "./pages/Contact";
+import Forgot from './pages/ForgotPassword.tsx'
 
 // Public pages
 import About from "./pages/About";
@@ -61,7 +62,7 @@ const queryClient = new QueryClient({
 const App: React.FC = () => {
   const location = useLocation();
   const pathname = location?.pathname || "/";
-  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname === "/forgot";
 
   useEffect(() => {
     setupGlobalErrorHandling();
@@ -95,7 +96,7 @@ const App: React.FC = () => {
 
                   {/* Main area */}
                   <div className="app-main">
-                    <main className={isAuthRoute ? "app-content auth" : "app-content"}>
+                    <main className={isAuthRoute ? "app-content no-header" : "app-content"}>
                       <div className="site-container">
                         <Routes>
                           {/* Public */}
@@ -107,6 +108,7 @@ const App: React.FC = () => {
                           <Route path="/about" element={<About />} />
                           <Route path="/privacy" element={<Privacy />} />
                           <Route path="/terms" element={<Terms />} />
+                          <Route path="/forgot" element={<Forgot />} />
 
                           {/* Protected */}
                           <Route
