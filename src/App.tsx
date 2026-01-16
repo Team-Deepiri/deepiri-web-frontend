@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { WebPushProvider } from "./contexts/WebPushContext";
 import { SocketProvider } from "./contexts/SocketContext";
 import { AdventureProvider } from "./contexts/AdventureContext";
@@ -59,45 +59,50 @@ const queryClient = new QueryClient({
   },
 });
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const location = useLocation();
   const pathname = location?.pathname || "/";
   const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname === "/forgot";
+  const { isAuthenticated } = useAuth();
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
 
-  useEffect(() => {
-    setupGlobalErrorHandling();
-    setupPerformanceMonitoring();
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <WebPushProvider>
-            <SocketProvider>
-              <AdventureProvider>
-                <div className="app-shell">
-                  {/* Background layers */}
-                  <div className="fixed inset-0 animated-bg opacity-30" />
-                  <div className="fixed inset-0 bg-pattern-overlay opacity-10" />
+    <div className="app-shell">
+      {/* Background layers */}
+      <div className="fixed inset-0 animated-bg opacity-30" />
+      <div className="fixed inset-0 bg-pattern-overlay opacity-10" />
 
-                  <div className="fixed top-[-4rem] left-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" />
-                  <div
-                    className="fixed top-[10%] right-1/5 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
-                    style={{ animationDelay: "2s" }}
-                  />
-                  <div
-                    className="fixed bottom-[-4rem] left-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
-                    style={{ animationDelay: "4s" }}
-                  />
+      <div className="fixed top-[-4rem] left-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" />
+      <div
+        className="fixed top-[10%] right-1/5 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+      <div
+        className="fixed bottom-[-4rem] left-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
+        style={{ animationDelay: "4s" }}
+      />
 
-                  {/* Sidebar */}
-                  <SidebarNav />
+      {/* Sidebar */}
+      <SidebarNav />
 
-                  {/* Main area */}
-                  <div className="app-main">
-                    <main className={isAuthRoute ? "app-content no-header" : "app-content"}>
-                      <div className="site-container">
+      {/* Main area */}
+      <div
+        className="app-main"
+        style={{
+          marginLeft: isAuthenticated && !isMobile ? "280px" : "0",
+          transition: "margin-left 0.3s ease",
+        }}
+      >
+        <main className={isAuthRoute ? "app-content auth" : "app-content"}>
+          <div className="site-container">
                         <Routes>
                           {/* Public */}
                           <Route path="/" element={<Home />} />
@@ -350,6 +355,23 @@ const App: React.FC = () => {
 
                   <HMRStatus />
                 </div>
+  );
+};
+
+const App: React.FC = () => {
+  useEffect(() => {
+    setupGlobalErrorHandling();
+    setupPerformanceMonitoring();
+  }, []);
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <WebPushProvider>
+            <SocketProvider>
+              <AdventureProvider>
+                <AppContent />
               </AdventureProvider>
             </SocketProvider>
           </WebPushProvider>
