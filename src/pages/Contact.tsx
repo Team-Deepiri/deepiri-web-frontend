@@ -32,7 +32,6 @@ const Contact: React.FC = () => {
             <select required>
               <option value="">Choose one...</option>
               <option value="support">Support</option>
-              <option value="bug">Bug Report</option>
               <option value="feedback">Feedback</option>
               <option value="other">Other</option>
             </select>
