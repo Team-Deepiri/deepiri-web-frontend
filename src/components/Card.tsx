@@ -26,6 +26,7 @@ export interface KPICardWithProgressProps extends BaseKPICardProps {
   progressLabel?: string;
 }
 
+// Creates labels for different variants for styling the KPICard component, can be referred to by label to determine style for card in use
 const getVariantStyles = (variant: KPIVariant = 'primary') => {
   const styles = {
     primary: {
@@ -76,6 +77,7 @@ const LoadingSkeleton: React.FC<{ className?: string }> = ({ className = '' }) =
   </div>
 );
 
+// STANDARD KPI CARD format with title, value, icon, trend, and subtitle
 export const KPICard: React.FC<BaseKPICardProps> = ({
   title,
   value,
@@ -105,7 +107,7 @@ export const KPICard: React.FC<BaseKPICardProps> = ({
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-            <h3 className="text-3xl font-bold text-gray-900 mb-2">{value}</h3>
+            <h3 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontSize: '1.25rem' }}>{value}</h3>
 
             {trend && (
               <div className="flex items-center gap-1">
@@ -139,6 +141,185 @@ export const KPICard: React.FC<BaseKPICardProps> = ({
   );
 };
 
+// GRADIENT KPI CARD format with progress bar at bottom for more appealing visual
+export const KPICardGradient: React.FC<KPICardWithProgressProps> = ({
+  title,
+  value,
+  icon,
+  variant = 'primary',
+  trend,
+  progress,
+  progressLabel,
+  onClick,
+  loading = false,
+  className = '',
+}) => {
+  const styles = getVariantStyles(variant);
+  const isClickable = !!onClick;
+
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        bg-white rounded-xl shadow-md overflow-hidden transition-all
+        ${isClickable ? 'cursor-pointer hover:shadow-xl hover:scale-105' : 'hover:shadow-lg'}
+        ${className}
+      `}
+    >
+      <div className={`bg-gradient-to-r ${styles.gradient} p-6 text-white`}>
+        {loading ? (
+          <div className="animate-pulse">
+            <div className="h-6 bg-white/20 rounded w-1/2 mb-4"></div>
+            <div className="h-10 bg-white/20 rounded w-3/4"></div>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between mb-4">
+              {icon && (
+                <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                  {icon}
+                </div>
+              )}
+              {trend && (
+                <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                  {trend.isPositive ? (
+                    <TrendingUp className="w-4 h-4" />
+                  ) : (
+                    <TrendingDown className="w-4 h-4" />
+                  )}
+                  <span className="text-sm font-semibold">
+                    {trend.isPositive ? '+' : ''}{trend.value}%
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <p className="text-sm opacity-90 mb-1">{title}</p>
+            <h3 className="text-4xl font-bold">{value}</h3>
+          </>
+        )}
+      </div>
+
+      {progress !== undefined && !loading && (
+        <div className="p-4 bg-gray-50">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-medium text-gray-600">
+              {progressLabel || 'Completion'}
+            </span>
+            <span className="text-xs font-bold text-gray-900">{progress}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className={`bg-gradient-to-r ${styles.gradient} h-2 rounded-full transition-all duration-500`}
+              style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// COMPACT KPI CARD format without subtitle or progress, for tighter spaces
+export const KPICardCompact: React.FC<BaseKPICardProps> = ({
+  title,
+  value,
+  icon,
+  variant = 'primary',
+  onClick,
+  loading = false,
+  className = '',
+}) => {
+  const styles = getVariantStyles(variant);
+  const isClickable = !!onClick;
+
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        bg-white rounded-lg shadow p-4 flex items-center gap-4 transition-shadow
+        ${isClickable ? 'cursor-pointer hover:shadow-lg' : 'hover:shadow-md'}
+        ${className}
+      `}
+    >
+      {loading ? (
+        <LoadingSkeleton className="flex-1" />
+      ) : (
+        <>
+          {icon && (
+            <div className={`${styles.text} flex-shrink-0`}>
+              {icon}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500 uppercase font-medium truncate">{title}</p>
+            <h4 className="text-2xl font-bold text-gray-900 truncate">{value}</h4>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// MINIMAL KPI CARD format without subtitle or progress, for smaller displays
+export const KPICardMinimal: React.FC<BaseKPICardProps> = ({
+  title,
+  value,
+  icon,
+  variant = 'primary',
+  trend,
+  onClick,
+  loading = false,
+  className = '',
+}) => {
+  const styles = getVariantStyles(variant);
+  const isClickable = !!onClick;
+
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        bg-white rounded-lg p-4 transition-all
+        ${isClickable ? 'cursor-pointer hover:bg-gray-50' : ''}
+        ${className}
+      `}
+    >
+      {loading ? (
+        <LoadingSkeleton />
+      ) : (
+        <>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              {title}
+            </span>
+            {icon && (
+              <div className={styles.text}>
+                {icon}
+              </div>
+            )}
+          </div>
+          <div className="flex items-end justify-between">
+            <h4 className="text-3xl font-bold text-gray-900">{value}</h4>
+            {trend && (
+              <div className="flex items-center gap-1">
+                {trend.isPositive ? (
+                  <TrendingUp className="w-4 h-4 text-green-600" />
+                ) : (
+                  <TrendingDown className="w-4 h-4 text-red-600" />
+                )}
+                <span className={`text-sm font-semibold ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                  {trend.isPositive ? '+' : ''}{trend.value}%
+                </span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// Sample usage of the KPICard component with sample data (Standard KPI format)
 const Card: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
 
@@ -164,14 +345,14 @@ const Card: React.FC = () => {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">KPI Cards Component Library</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontSize: '2rem' }}>KPI Cards Component Library</h1>
             <p className="text-gray-600">All components in one file - ready to use anywhere</p>
           </div>
         </div>
 
         {/* Standard KPI Cards */}
         <section className="mb-12">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4" style={{ fontSize: '1.5rem' }}>
             <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-mono mr-2">KPICard</span>
             Standard Cards
           </h2>
@@ -196,4 +377,4 @@ const Card: React.FC = () => {
   );
 };
 
-export default { KPICard, getVariantStyles };
+export default { Card, getVariantStyles };
