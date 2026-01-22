@@ -1,0 +1,137 @@
+/* ComponentShowcase Styles */
+.component-showcase {
+  min-height: 100vh;
+  background-color: var(--dark, #0b1020);
+  padding: 5rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.component-showcase-container {
+  max-width: 80rem; /* max-w-7xl = 1280px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.component-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem; /* gap-10 = 40px */
+  margin-top: 3rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .component-showcase-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem; /* Ensure gap is maintained */
+  }
+}
+
+.component-showcase-section {
+  margin-top: 5rem;
+}
+
+.component-showcase-footer {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.component-showcase-footer-text {
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* Card Styles */
+.component-card {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem; /* p-8 = 32px */
+  background: var(--deepiri-panel-bg, linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018)));
+  border: 1px solid var(--deepiri-panel-border, rgba(255, 255, 255, 0.09));
+  border-radius: 1.375rem; /* 22px to match deepiri-panel */
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.component-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background:
+    radial-gradient(600px 180px at 20% 10%, rgba(249, 115, 22, 0.18), transparent 60%),
+    radial-gradient(520px 200px at 85% 20%, rgba(245, 158, 11, 0.14), transparent 60%);
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.component-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.component-card:hover {
+  border-color: var(--primary, #6366f1);
+  transform: translateY(-3px);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.38);
+}
+
+.component-card-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--deepiri-orange, #f97316);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+}
+
+.component-card-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.96);
+  margin-bottom: 1rem;
+}
+
+.component-card-description {
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 0.875rem;
+  line-height: 1.625;
+  flex: 1;
+}
+
+/* SectionDivider Styles */
+.section-divider {
+  position: relative;
+  display: flex;
+  padding: 3rem 0; /* py-12 */
+  align-items: center;
+  width: 100%;
+}
+
+.section-divider-line {
+  flex-grow: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.section-divider-text {
+  flex-shrink: 0;
+  margin: 0 1.5rem;
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+}

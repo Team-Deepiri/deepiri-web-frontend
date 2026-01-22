@@ -1,5 +1,11 @@
+@import "tailwindcss";
+
 /* Modern CSS Reset and Base Styles */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --primary: #6366f1;
@@ -22,8 +28,8 @@
   --deepiri-amber: #f59e0b;
   --deepiri-accent-gradient: linear-gradient(90deg, #f97316, #f59e0b);
 
-  --deepiri-panel-bg: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018));
-  --deepiri-panel-border: rgba(255,255,255,0.09);
+  --deepiri-panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018));
+  --deepiri-panel-border: rgba(255, 255, 255, 0.09);
 
   --dark: #0b1020;
   --darker: #070b17;
@@ -40,7 +46,8 @@
   --transition-fast: 0.15s ease-in-out;
   --transition-normal: 0.3s ease-in-out;
 
-  --deepiri-nav-h: 64px;             /* single source of truth for top nav height */
+  --deepiri-nav-h: 64px;
+  /* single source of truth for top nav height */
   --nav-height: var(--deepiri-nav-h);
 
   /* ✅ tune this to match SidebarNav width */
@@ -60,7 +67,12 @@ body {
   overflow-x: hidden;
 }
 
-#root { height: 100%; width: 100%; background: var(--dark); position: relative; }
+#root {
+  height: 100%;
+  width: 100%;
+  background: var(--dark);
+  position: relative;
+}
 
 /* =========================
    ✅ LAYOUT FIXES (IMPORTANT)
@@ -80,7 +92,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin-left: 0; /* no sidebar offset on this layout */
+  margin-left: 0;
+  /* no sidebar offset on this layout */
 }
 
 /* content fills available space (pushes footer down) */
@@ -98,16 +111,20 @@ body {
 
 /* container */
 .site-container {
-  max-width: 1200px;
+  max-width: 1400px;
+  /* Increased from 1200px */
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
+
 
 /* mobile: sidebar likely collapses */
 @media (max-width: 992px) {
-  .app-main { margin-left: 0; }
+  .app-main {
+    margin-left: 0;
+  }
 }
 
 /* Subtle pattern overlay used by App */
@@ -118,10 +135,22 @@ body {
 /* =========================
    Scrollbar
    ========================= */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #1e293b; }
-::-webkit-scrollbar-thumb { background: var(--primary-gradient); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--secondary-gradient); }
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-gradient);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-gradient);
+}
 
 /* =========================
    Glassmorphism
@@ -150,12 +179,14 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 .gradient-text-secondary {
   background: var(--secondary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 .gradient-text-accent {
   background: var(--accent-gradient);
   -webkit-background-clip: text;
@@ -171,10 +202,19 @@ body {
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
+
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* =========================
@@ -196,6 +236,7 @@ body {
   justify-content: center;
   gap: 8px;
 }
+
 .btn-modern::before {
   content: "";
   position: absolute;
@@ -203,10 +244,13 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.5s;
 }
-.btn-modern:hover::before { left: 100%; }
+
+.btn-modern:hover::before {
+  left: 100%;
+}
 
 .btn-primary {
   background: var(--primary-gradient);
@@ -214,7 +258,11 @@ body {
   box-shadow: var(--shadow-lg);
   border-radius: 1rem;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
 
 .btn-glass {
   background: rgba(30, 27, 75, 0.4);
@@ -222,6 +270,7 @@ body {
   border: 1px solid rgba(99, 102, 241, 0.3);
   color: #e2e8f0;
 }
+
 .btn-glass:hover {
   background: rgba(99, 102, 241, 0.2);
   border-color: rgba(99, 102, 241, 0.5);
@@ -235,6 +284,7 @@ body {
   box-shadow: 0 14px 28px rgba(249, 115, 22, 0.22);
   border-radius: 1rem;
 }
+
 .btn-deepiri:hover {
   transform: translateY(-2px);
   box-shadow: 0 18px 36px rgba(249, 115, 22, 0.28);
@@ -252,6 +302,7 @@ body {
   box-shadow: var(--shadow-xl);
   transition: all var(--transition-normal);
 }
+
 .card-modern:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-2xl);
@@ -262,20 +313,24 @@ body {
 .input-modern {
   width: 100%;
   padding: 16px 20px;
-  border: 2px solid rgba(255,255,255,0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   color: white;
   font-size: 16px;
   transition: all var(--transition-normal);
 }
+
 .input-modern:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
 }
-.input-modern::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+.input-modern::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
 
 /* =========================
    Deepiri panels + rhythm
@@ -289,19 +344,22 @@ body {
   box-shadow: 0 22px 60px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
+
 .deepiri-panel::before {
   content: "";
   position: absolute;
   inset: -2px;
   background:
-    radial-gradient(600px 180px at 20% 10%, rgba(249,115,22,0.18), transparent 60%),
-    radial-gradient(520px 200px at 85% 20%, rgba(245,158,11,0.14), transparent 60%);
+    radial-gradient(600px 180px at 20% 10%, rgba(249, 115, 22, 0.18), transparent 60%),
+    radial-gradient(520px 200px at 85% 20%, rgba(245, 158, 11, 0.14), transparent 60%);
   pointer-events: none;
   opacity: 0.8;
 }
+
 .deepiri-cardLift {
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
 }
+
 .deepiri-cardLift:hover {
   transform: translateY(-3px);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.38);
@@ -318,8 +376,15 @@ body {
   background: rgba(255, 255, 255, 0.03);
 }
 
-.deepiri-sectionHeader { margin-bottom: 18px; position: relative; z-index: 1; }
-.deepiri-sectionHeader.is-center { text-align: center; }
+.deepiri-sectionHeader {
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.deepiri-sectionHeader.is-center {
+  text-align: center;
+}
 
 .deepiri-eyebrow {
   font-size: 11px;
@@ -328,12 +393,14 @@ body {
   color: rgba(148, 163, 184, 0.9);
   margin-bottom: 6px;
 }
+
 .deepiri-sectionTitle {
   font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 800;
   color: rgba(226, 232, 240, 0.96);
   margin: 0;
 }
+
 .deepiri-sectionSubtitle {
   margin-top: 10px;
   margin-bottom: 0;
@@ -341,6 +408,7 @@ body {
   max-width: 940px;
   line-height: 1.7;
 }
+
 .deepiri-sectionHeader.is-center .deepiri-sectionSubtitle {
   margin-left: auto;
   margin-right: auto;
@@ -363,13 +431,19 @@ body {
   background: rgba(255, 255, 255, 0.02);
   transition: transform 160ms ease, border-color 160ms ease;
 }
-.deepiri-miniCard:hover { transform: translateY(-2px); border-color: rgba(245, 158, 11, 0.22); }
+
+.deepiri-miniCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
 .deepiri-miniCardTitle {
   font-size: 12px;
   font-weight: 700;
   color: rgba(251, 146, 60, 0.95);
   margin-bottom: 6px;
 }
+
 .deepiri-miniCardBody {
   font-size: 13px;
   line-height: 1.5;
@@ -384,24 +458,32 @@ body {
   background: rgba(255, 255, 255, 0.02);
   transition: transform 160ms ease, border-color 160ms ease;
 }
-.deepiri-stepCard:hover { transform: translateY(-2px); border-color: rgba(249, 115, 22, 0.22); }
+
+.deepiri-stepCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(249, 115, 22, 0.22);
+}
+
 .deepiri-stepNum {
   font-size: 11px;
   letter-spacing: 0.12em;
   color: rgba(245, 158, 11, 0.95);
   margin-bottom: 8px;
 }
+
 .deepiri-stepTitle {
   font-size: 16px;
   font-weight: 800;
   color: rgba(226, 232, 240, 0.96);
   margin-bottom: 6px;
 }
+
 .deepiri-stepBody {
   font-size: 13px;
   line-height: 1.55;
   color: rgba(226, 232, 240, 0.88);
 }
+
 .deepiri-stepWhy {
   margin-top: 8px;
   font-size: 12px;
@@ -418,16 +500,18 @@ body {
   position: relative;
   overflow: hidden;
 }
+
 .deepiri-metricCard::before {
   content: "";
   position: absolute;
   inset: -2px;
   background:
-    radial-gradient(340px 140px at 18% 12%, rgba(249,115,22,0.16), transparent 60%),
-    radial-gradient(320px 140px at 85% 18%, rgba(245,158,11,0.12), transparent 60%);
+    radial-gradient(340px 140px at 18% 12%, rgba(249, 115, 22, 0.16), transparent 60%),
+    radial-gradient(320px 140px at 85% 18%, rgba(245, 158, 11, 0.12), transparent 60%);
   opacity: 0.9;
   pointer-events: none;
 }
+
 .deepiri-metricIcon {
   width: 42px;
   height: 42px;
@@ -441,6 +525,7 @@ body {
   position: relative;
   z-index: 1;
 }
+
 .deepiri-metricValue {
   font-weight: 900;
   font-size: 16px;
@@ -448,6 +533,7 @@ body {
   position: relative;
   z-index: 1;
 }
+
 .deepiri-metricLabel {
   font-size: 12px;
   margin-top: 3px;
@@ -456,6 +542,7 @@ body {
   position: relative;
   z-index: 1;
 }
+
 .deepiri-metricBody {
   margin-top: 10px;
   font-size: 13px;
@@ -466,7 +553,11 @@ body {
 }
 
 /* hero */
-.deepiri-hero { position: relative; padding: 88px 14px 36px; }
+.deepiri-hero {
+  position: relative;
+  padding: 88px 14px 36px;
+}
+
 .deepiri-heroInner {
   max-width: 980px;
   margin-left: auto;
@@ -474,7 +565,13 @@ body {
   text-align: center;
   padding-top: 6px;
 }
-.deepiri-heroLogoWrap { display: flex; justify-content: center; margin-bottom: 14px; }
+
+.deepiri-heroLogoWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
 .deepiri-heroLogo {
   height: 120px;
   width: auto;
@@ -482,6 +579,7 @@ body {
   filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.18));
   transform: translateX(-10px);
 }
+
 .deepiri-heroEyebrow {
   font-size: 11px;
   letter-spacing: 0.24em;
@@ -489,6 +587,7 @@ body {
   color: rgba(148, 163, 184, 0.92);
   margin-bottom: 14px;
 }
+
 .deepiri-heroTitle {
   margin: 0 auto;
   font-weight: 900;
@@ -498,6 +597,7 @@ body {
   color: rgba(226, 232, 240, 0.98);
   max-width: 20ch;
 }
+
 .deepiri-heroSubtitle {
   margin-top: 18px;
   margin-left: auto;
@@ -507,7 +607,13 @@ body {
   line-height: 1.8;
   color: rgba(203, 213, 225, 0.9);
 }
-.deepiri-heroSupport { margin-top: 12px; font-size: 12px; color: rgba(148, 163, 184, 0.9); }
+
+.deepiri-heroSupport {
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.9);
+}
+
 .deepiri-heroCtas {
   margin-top: 26px;
   display: flex;
@@ -516,18 +622,28 @@ body {
   align-items: center;
   flex-wrap: wrap;
 }
-.deepiri-heroCtas .btn-modern { min-height: 46px; }
+
+.deepiri-heroCtas .btn-modern {
+  min-height: 46px;
+}
 
 /* divider */
-.deepiri-divider { position: relative; height: 22px; margin: 28px 0 14px; }
+.deepiri-divider {
+  position: relative;
+  height: 22px;
+  margin: 28px 0 14px;
+}
+
 .deepiri-dividerLine {
   position: absolute;
   top: 50%;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   height: 1px;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.08);
 }
+
 .deepiri-dividerGlow {
   position: absolute;
   top: 50%;
@@ -535,7 +651,7 @@ body {
   width: 220px;
   height: 18px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(249,115,22,0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.22), transparent 70%);
   filter: blur(2px);
 }
 
@@ -546,6 +662,7 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
 }
+
 .btn-secondary:hover {
   border-color: rgba(255, 255, 255, 0.35);
   background: rgba(255, 255, 255, 0.06);
@@ -557,6 +674,7 @@ body {
   padding-top: 72px;
   padding-bottom: 72px;
 }
+
 .deepiri-section-sm {
   padding-top: 42px;
   padding-bottom: 42px;
@@ -569,6 +687,7 @@ body {
   gap: 14px;
   margin-bottom: 24px;
 }
+
 .deepiri-highlightCard {
   position: relative;
   border-radius: 16px;
@@ -576,6 +695,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(17, 24, 39, 0.72));
 }
+
 .deepiri-highlightCard .pill-dot {
   width: 10px;
   height: 10px;
@@ -584,12 +704,14 @@ body {
   box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.14);
   margin-bottom: 10px;
 }
+
 .deepiri-highlightCard .title {
   font-weight: 800;
   font-size: 16px;
   color: rgba(226, 232, 240, 0.96);
   margin-bottom: 6px;
 }
+
 .deepiri-highlightCard .body {
   font-size: 13px;
   line-height: 1.55;
@@ -605,12 +727,18 @@ body {
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
-.deepiri-platformFrame:hover { transform: translateY(-4px); box-shadow: 0 36px 110px rgba(0, 0, 0, 0.42); }
+
+.deepiri-platformFrame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 36px 110px rgba(0, 0, 0, 0.42);
+}
+
 .deepiri-platformBars {
   display: flex;
   gap: 6px;
   margin-bottom: 14px;
 }
+
 .deepiri-platformBars span {
   display: block;
   height: 10px;
@@ -618,11 +746,13 @@ body {
   background: rgba(255, 255, 255, 0.12);
   flex: 1;
 }
+
 .deepiri-platformGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
 }
+
 .deepiri-platformTile {
   border-radius: 14px;
   padding: 14px;
@@ -630,6 +760,7 @@ body {
   background: rgba(17, 24, 39, 0.5);
   text-align: left;
 }
+
 .deepiri-platformCaption {
   display: inline-flex;
   align-items: center;
@@ -641,6 +772,7 @@ body {
   font-size: 12px;
   margin-bottom: 12px;
 }
+
 .deepiri-platformCaption .dot {
   width: 8px;
   height: 8px;
@@ -648,21 +780,25 @@ body {
   background: #22c55e;
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
 }
+
 .deepiri-platformTile .label {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(148, 163, 184, 0.9);
 }
+
 .deepiri-platformTile .value {
   font-size: 22px;
   font-weight: 800;
   color: rgba(226, 232, 240, 0.96);
 }
+
 .deepiri-platformTile .sub {
   font-size: 12px;
   color: rgba(148, 163, 184, 0.85);
 }
+
 .deepiri-platformTile.is-chart {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(17, 24, 39, 0.6));
   display: grid;
@@ -671,38 +807,64 @@ body {
   align-items: end;
   min-height: 120px;
 }
+
 .deepiri-platformTile.is-chart .chart-fill {
   height: 70%;
   border-radius: 10px;
   background: linear-gradient(180deg, rgba(99, 102, 241, 0.8), rgba(14, 165, 233, 0.4));
 }
+
 .deepiri-platformTile.is-chart .chart-fill.alt {
   height: 50%;
   background: linear-gradient(180deg, rgba(249, 115, 22, 0.8), rgba(245, 158, 11, 0.45));
 }
+
 .deepiri-platformTile.is-list {
   background: rgba(255, 255, 255, 0.04);
 }
+
 .deepiri-platformTile.is-list .list-row {
   font-size: 13px;
   color: rgba(226, 232, 240, 0.92);
   padding: 6px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 .deepiri-platformTile.is-list .list-row:last-child {
   border-bottom: none;
 }
 
 @media (max-width: 768px) {
-  .deepiri-hero { padding: 56px 12px 28px; }
-  .deepiri-heroSubtitle { margin-top: 14px; line-height: 1.75; }
-  .deepiri-heroCtas { margin-top: 18px; gap: 10px; }
-  .deepiri-section { padding-top: 54px; padding-bottom: 54px; }
-  .deepiri-section-sm { padding-top: 32px; padding-bottom: 32px; }
+  .deepiri-hero {
+    padding: 56px 12px 28px;
+  }
+
+  .deepiri-heroSubtitle {
+    margin-top: 14px;
+    line-height: 1.75;
+  }
+
+  .deepiri-heroCtas {
+    margin-top: 18px;
+    gap: 10px;
+  }
+
+  .deepiri-section {
+    padding-top: 54px;
+    padding-bottom: 54px;
+  }
+
+  .deepiri-section-sm {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animated-bg { animation: none; }
+  .animated-bg {
+    animation: none;
+  }
+
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

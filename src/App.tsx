@@ -13,6 +13,8 @@ import "./components/SidebarNav.css";
 import Footer from "./components/Footer";
 import HMRStatus from "./components/HMRStatus";
 import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/logger";
+import './styles/index.css';
+
 
 // Pages
 import Home from "./pages/Home";
@@ -50,7 +52,7 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
-
+import ComponentShowcase from "./pages/ComponentShowcase.tsx";
 // React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -102,257 +104,258 @@ const AppContent: React.FC = () => {
       >
         <main className={isAuthRoute ? "app-content auth" : "app-content"}>
           <div className="site-container">
-                        <Routes>
-                          {/* Public */}
-                          <Route path="/" element={<Home />} />
-                          <Route path="/home" element={<Home />} />
-                          <Route path="/login" element={<Login />} />
-                          <Route path="/register" element={<Register />} />
-                          <Route path="/contact" element={<Contact />} />
-                          <Route path="/about" element={<About />} />
-                          <Route path="/privacy" element={<Privacy />} />
-                          <Route path="/terms" element={<Terms />} />
+            <Routes>
+              {/* Public */}
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/ui-test" element={<ComponentShowcase />} />
 
-                          {/* Protected */}
-                          <Route
-                            path="/dashboard"
-                            element={
-                              <ProtectedRoute>
-                                <Dashboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/adventure/generate"
-                            element={
-                              <ProtectedRoute>
-                                <AdventureGenerator />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/adventure/:id"
-                            element={
-                              <ProtectedRoute>
-                                <AdventureDetail />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/adventures"
-                            element={
-                              <ProtectedRoute>
-                                <AdventureHistory />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/events"
-                            element={
-                              <ProtectedRoute>
-                                <Events />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/events/:id"
-                            element={
-                              <ProtectedRoute>
-                                <EventDetail />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/events/create"
-                            element={
-                              <ProtectedRoute>
-                                <CreateEvent />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/profile"
-                            element={
-                              
-                                <Profile />
-                              
-                            }
-                          />
-                          <Route
-                            path="/friends"
-                            element={
-                              <ProtectedRoute>
-                                <Friends />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/leaderboard"
-                            element={
-                              <ProtectedRoute>
-                                <Leaderboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/tasks"
-                            element={
-                              <ProtectedRoute>
-                                <TaskManagement />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/challenges"
-                            element={
-                              <ProtectedRoute>
-                                <Challenges />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/gamification"
-                            element={
-                              <ProtectedRoute>
-                                <GamificationDashboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/analytics"
-                            element={
-                              <ProtectedRoute>
-                                <AnalyticsDashboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/notifications"
-                            element={
-                              <ProtectedRoute>
-                                <Notifications />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/objectives"
-                            element={
-                              <ProtectedRoute>
-                                <Objectives />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/odysseys"
-                            element={
-                              <ProtectedRoute>
-                                <Odysseys />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/seasons"
-                            element={
-                              <ProtectedRoute>
-                                <Seasons />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/progress"
-                            element={
-                              <ProtectedRoute>
-                                <Progress />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/boosts"
-                            element={
-                              <ProtectedRoute>
-                                <Boosts />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/streaks"
-                            element={
-                              <ProtectedRoute>
-                                <Streaks />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/agent"
-                            element={
-                              <ProtectedRoute>
-                                <AgentChat />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/chat"
-                            element={
-                              <ProtectedRoute>
-                                <ProductivityChat />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/python-tools"
-                            element={
-                              <ProtectedRoute>
-                                <PythonTools />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/inventory"
-                            element={
-                              <ProtectedRoute>
-                                <UserInventory />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/workspace"
-                            element={
-                              <ProtectedRoute>
-                                <ImmersiveWorkspace />
-                              </ProtectedRoute>
-                            }
-                          />
-                        </Routes>
-                      </div>
-                    </main>
+              {/* Protected */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventure/generate"
+                element={
+                  <ProtectedRoute>
+                    <AdventureGenerator />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventure/:id"
+                element={
+                  <ProtectedRoute>
+                    <AdventureDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventures"
+                element={
+                  <ProtectedRoute>
+                    <AdventureHistory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events"
+                element={
+                  <ProtectedRoute>
+                    <Events />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events/:id"
+                element={
+                  <ProtectedRoute>
+                    <EventDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateEvent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
 
-                    <Footer />
-                  </div>
+                  <Profile />
 
-                  <Toaster
-                    position="top-right"
-                    toastOptions={{
-                      duration: 4000,
-                      style: {
-                        background: "rgba(0, 0, 0, 0.8)",
-                        backdropFilter: "blur(10px)",
-                        color: "#fff",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        borderRadius: "12px",
-                      },
-                      success: {
-                        duration: 3000,
-                        iconTheme: { primary: "#10B981", secondary: "#fff" },
-                      },
-                      error: {
-                        duration: 5000,
-                        iconTheme: { primary: "#EF4444", secondary: "#fff" },
-                      },
-                    }}
-                  />
+                }
+              />
+              <Route
+                path="/friends"
+                element={
+                  <ProtectedRoute>
+                    <Friends />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <Leaderboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tasks"
+                element={
+                  <ProtectedRoute>
+                    <TaskManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/challenges"
+                element={
+                  <ProtectedRoute>
+                    <Challenges />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/gamification"
+                element={
+                  <ProtectedRoute>
+                    <GamificationDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute>
+                    <AnalyticsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <ProtectedRoute>
+                    <Notifications />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/objectives"
+                element={
+                  <ProtectedRoute>
+                    <Objectives />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/odysseys"
+                element={
+                  <ProtectedRoute>
+                    <Odysseys />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/seasons"
+                element={
+                  <ProtectedRoute>
+                    <Seasons />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/progress"
+                element={
+                  <ProtectedRoute>
+                    <Progress />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/boosts"
+                element={
+                  <ProtectedRoute>
+                    <Boosts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/streaks"
+                element={
+                  <ProtectedRoute>
+                    <Streaks />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/agent"
+                element={
+                  <ProtectedRoute>
+                    <AgentChat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute>
+                    <ProductivityChat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/python-tools"
+                element={
+                  <ProtectedRoute>
+                    <PythonTools />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/inventory"
+                element={
+                  <ProtectedRoute>
+                    <UserInventory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/workspace"
+                element={
+                  <ProtectedRoute>
+                    <ImmersiveWorkspace />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+        </main>
 
-                  <HMRStatus />
-                </div>
+        <Footer />
+      </div>
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(10px)",
+            color: "#fff",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "12px",
+          },
+          success: {
+            duration: 3000,
+            iconTheme: { primary: "#10B981", secondary: "#fff" },
+          },
+          error: {
+            duration: 5000,
+            iconTheme: { primary: "#EF4444", secondary: "#fff" },
+          },
+        }}
+      />
+
+      <HMRStatus />
+    </div>
   );
 };
 
