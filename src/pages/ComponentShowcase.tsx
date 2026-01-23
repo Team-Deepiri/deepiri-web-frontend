@@ -1,42 +1,43 @@
 import React from 'react';
 import Card from '../components/Card';
 import SectionDivider from '../components/SectionDivider';
+import '../styles/ComponentShowcase.css';
 
 const ComponentShowcase: React.FC = () => {
     return (
-        <div style={{ width: '100%', padding: '3rem 0' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-                
-                <SectionDivider text="SYSTEM ARCHITECTURE" />
-                
-                <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(3, 1fr)', 
-                    gap: '2rem',
-                    marginTop: '1.5rem'
-                }}>
-                    <Card 
+        <div className="component-showcase">
+            <div className="component-showcase-container">
+                {/* Added margin-bottom to separate from cards */}
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <SectionDivider text="SYSTEM ARCHITECTURE" />
+                </div>
+
+                <div className="component-showcase-grid">
+                    <Card
                         label="MODULE 01"
-                        title="Neural Engine" 
-                        description="High-performance processing for real-time behavioral signal analysis." 
+                        title="Neural Engine"
+                        description="Real-time behavioral signal analysis."
                     />
-                    <Card 
+                    <Card
                         label="MODULE 02"
-                        title="Data Vault" 
-                        description="Secure, encrypted storage for proprietary AI datasets and models." 
+                        title="Data Vault"
+                        description="Secure storage for AI datasets."
                     />
-                    <Card 
+                    <Card
                         label="MODULE 03"
-                        title="Edge Gateway" 
-                        description="Low-latency entry points for distributed microservice communication." 
+                        title="Edge Gateway"
+                        description="Distributed microservice communication."
                     />
                 </div>
 
-                <SectionDivider text="UI ELEMENTS" />
-                
-                <p style={{ color: '#6b7280', textAlign: 'center', fontSize: '11px', letterSpacing: '0.1em', margin: '1.5rem 0 0 0' }}>
+                {/* Added margin-top to separate from cards */}
+                <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                    <SectionDivider text="UI ELEMENTS" />
+                </div>
+
+                <span className="component-showcase-footer-text">
                     END-TO-END COMPONENT DESIGN TEST COMPLETE.
-                </p>
+                </span>
             </div>
         </div>
     );
