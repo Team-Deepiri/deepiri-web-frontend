@@ -9,7 +9,7 @@ const Register = () => {
   const { register } = useAuth();
   
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: ''
   });
@@ -31,14 +31,14 @@ const Register = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    if (!formData.username || !formData.email || !formData.password) {
+    if (!formData.name || !formData.email || !formData.password) {
       toast.error('Please fill in all fields');
       return;
     }
 
     setLoading(true);
     try {
-      await register(formData.username, formData.email);
+      await register(formData.name, formData.email, formData.password);
     } catch (error) {
       // Error is handled in the AuthContext
     } finally {
@@ -277,8 +277,8 @@ const Register = () => {
                 </label>
                 <input
                   type="text"
-                  name="username"
-                  value={formData.username}
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Superman23465"
                   maxLength={255}
@@ -302,7 +302,7 @@ const Register = () => {
                   fontSize: '0.75rem',
                   marginTop: '0.25rem'
                 }}>
-                  {formData.username.length}/255
+                  {formData.name.length}/255
                 </div>
               </div>
 

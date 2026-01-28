@@ -22,21 +22,15 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!formData.email || !formData.password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+  if (!formData.email || !formData.password) {
+    toast.error('Please fill in all fields');
+    return;
+  }
 
-    setLoading(true);
-    try {
-      await login(formData.email, formData.password);
-    } catch(error){
-    } finally {
-      setLoading(false);
-    }
-  };
+  await login(formData.email, formData.password);
+};
 
   return (
     <>
