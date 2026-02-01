@@ -350,7 +350,7 @@ const Card: React.FC = () => {
           </div>
         </div>
 
-        {/* Standard KPI Cards */}
+        {/* Standard KPI Cards, can change style/data as you wish in demo */}
         <section className="mb-12">
           <h2 className="text-xl font-semibold text-gray-800 mb-4" style={{ fontSize: '1.5rem' }}>
             <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-mono mr-2">KPICard</span>

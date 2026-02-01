@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -14,11 +13,12 @@ export interface ToastProps {
     id?: string;
     title: string;
     message: string;
-    type?: ToastType;
-    position?: ToastPosition;
+    type: ToastType;
+    position: ToastPosition;
     dismissible: boolean;
     actions?: ToastAction[];
     icon?: React.ReactNode;
     duration?: number; // in milliseconds
     onDismiss?: () => void;
 }
+
