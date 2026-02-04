@@ -1,5 +1,8 @@
 import React from 'react';
+import { motion} from 'framer-motion';
+import { useState, useEffect } from 'react';
 
+// TYPES
 export type AlertType = 'success' | 'error' | 'info' | 'warning';
 
 export type AlertPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
@@ -69,3 +72,112 @@ const XIcon: React.FC = () => (
     />
   </svg>
 );
+
+const DefaultIcon: React.FC<{ variant: AlertType }> = ({ variant }) => {
+  switch (variant) {
+    case 'success':
+      return <SuccessIcon />;
+    case 'error':
+      return <ErrorIcon />;
+    case 'warning':
+      return <WarningIcon />;
+    case 'info':
+      return <InfoIcon />;
+  }
+};
+
+const Alert: React.FC<AlertProps> = ({
+  id,
+  title,
+  message,
+  type,
+  position,
+  dismissible,
+  actions,
+  icon,
+  duration,
+  onDismiss,
+}) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  // Auto-dismiss after duration
+  useEffect(() => {
+    if (duration) {
+      const timer = setTimeout(() => {
+        handleDismiss();
+      }, duration);
+
+      return () => clearTimeout(timer);
+    }
+  }, [duration]);
+
+  const handleDismiss = () => {
+    setIsVisible(false);
+    if (onDismiss) {
+      onDismiss();
+    }
+  };
+
+  if (!isVisible) {
+    return null;
+  }
+
+  // Build CSS classes
+  const alertClasses = [
+    'alert',
+    `alert--${type}`,
+    `alert--${position}`,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return (
+    <div
+      className={alertClasses}
+      role="alert"
+      aria-live="polite"
+      id={id}
+    >
+      {/* Icon */}
+      <div className="alert__icon">
+        {icon || <DefaultIcon variant={type} />}
+      </div>
+
+      {/* Content */}
+      <div className="alert__content">
+        <div className="alert__title">{title}</div>
+        <div className="alert__message">{message}</div>
+
+        {/* Actions */}
+        {actions && actions.length > 0 && (
+          <div className="alert__actions">
+            {actions.map((action, index) => (
+              <button
+                key={index}
+                className="alert__action"
+                onClick={action.onClick}
+                type="button"
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Dismiss button */}
+      {dismissible && (
+        <button
+          className="alert__dismiss"
+          onClick={handleDismiss}
+          aria-label="Dismiss alert"
+          type="button"
+        >
+          <XIcon />
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default { InfoIcon, WarningIcon, ErrorIcon, SuccessIcon, Alert };
