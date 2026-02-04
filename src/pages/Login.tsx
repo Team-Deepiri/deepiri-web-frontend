@@ -44,37 +44,20 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+          transition={{ delay: 0.4 }}
+          className="text-center text-black"
         >
-          <motion.div 
-            className="text-6xl mb-6"
-            animate={{ 
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              repeatDelay: 3
-            }}
-          >
-            🗺️
-          </motion.div>
           <motion.h1 
-            className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-emerald-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            className="deepiri-heroTitle gradient-text-accent text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-emerald-400 bg-clip-text text-transparent"
+            initial={{ opacity: 1 }}
           >
             Welcome Back!
           </motion.h1>
           <motion.p 
             className="text-xl text-gray-300"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+            initial={{ opacity: 1, y: -20 }}
           >
             Sign in to continue your adventure
           </motion.p>
@@ -82,7 +65,7 @@ const Login: React.FC = () => {
 
         {/* Login Form */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="card-modern p-8"
@@ -90,7 +73,7 @@ const Login: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               {/* Linked label and input for testing/accessibility */}
-              <label htmlFor="login-email" className="block text-sm font-medium text-white mb-2">
+              <label htmlFor="login-email" className="block text-sm font-medium mb-2">
                 Email Address
               </label>
               <input
@@ -100,13 +83,12 @@ const Login: React.FC = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="input-modern"
-                placeholder="Enter your email"
                 required
               />
             </div>
 
-            <div>
-              <label htmlFor="login-password" className="block text-sm font-medium text-white mb-2">
+            <div className="pt-3">
+              <label htmlFor="login-password" className="block text-sm font-medium mb-2">
                 Password
               </label>
               <input
@@ -116,71 +98,69 @@ const Login: React.FC = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 className="input-modern"
-                placeholder="Enter your password"
                 required
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
+            <div className="flex items-center justify-between pt-3 pb-4">
                 <input
                   id="remember-me"
                   type="checkbox"
                   className="h-4 w-4 text-purple-500 bg-white/10 border-white/20 rounded focus:ring-purple-500"
+                  style={{color: "#C8C8C866"}}
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
+                <label htmlFor="remember-me" className="ml-4 block text-sm text-gray-300" style={{paddingLeft: '0.5rem'}}>
                   Remember me
                 </label>
-              </div>
-              <a href="#" className="text-sm text-purple-400 hover:text-purple-300">
+              <a href="#" className="text-sm hover:text-purple-300" style={{paddingLeft: '3rem', color: "#6366f1"}}>
                 Forgot password?
               </a>
             </div>
 
-            <button
+            <div className="row">
+              <div className="col-md-auto">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-modern btn-primary w-full"
+                >
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </button>
+              </div>
+              <div className="col-md-auto">
+                <button type="button" className="btn-modern btn-login flex items-center justify-center ">
+                  Sign in with Google
+                </button>
+              </div>
+              <div className="col-md-auto">
+                <button type="button" className="btn-modern btn-login flex items-center justify-center">
+                  Sign in with Facebook
+                </button>
+              </div>
+            </div>
+            {/*<button
               type="submit"
               disabled={loading}
               className="btn-modern btn-primary w-full"
             >
               {loading ? 'Signing in...' : 'Sign In'}
-            </button>
+            </button>*/}
           </form>
-
-          <div className="mt-8">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-800 text-gray-400">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button type="button" className="btn-modern btn-glass flex items-center justify-center gap-2">
-                <span className="text-xl">📧</span>
-                <span>Google</span>
-              </button>
-              <button type="button" className="btn-modern btn-glass flex items-center justify-center gap-2">
-                <span className="text-xl">📘</span>
-                <span>Facebook</span>
-              </button>
-            </div>
-          </div>
         </motion.div>
 
         {/* Sign Up Link */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="text-center"
+          className="text-center text-black pt-5"
         >
           <p className="text-gray-300">
             Don't have an account?{' '}
             <Link
               to="/register"
-              className="text-purple-400 hover:text-purple-300 font-medium"
+              className="hover:text-purple-300 font-medium"
+              style={{color: "#6366f1"}}
             >
               Sign up here
             </Link>

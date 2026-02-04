@@ -56,8 +56,7 @@ const Signup: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       className="bg-white rounded-xl shadow-lg p-8"
     >
-      <div className="text-center mb-6">
-        <div className="text-4xl mb-2">🚀</div>
+      <div className="text-center text-black mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Join the Adventure!</h2>
         <p className="text-gray-600">Create your account and start exploring</p>
       </div>
@@ -75,7 +74,6 @@ const Signup: React.FC = () => {
             value={formData.name}
             onChange={handleInputChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your full name"
             required
           />
         </div>
@@ -91,7 +89,6 @@ const Signup: React.FC = () => {
             value={formData.email}
             onChange={handleInputChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your email"
             required
           />
         </div>
@@ -107,7 +104,6 @@ const Signup: React.FC = () => {
             value={formData.password}
             onChange={handleInputChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Create a password"
             required
           />
         </div>
@@ -123,7 +119,6 @@ const Signup: React.FC = () => {
             value={formData.confirmPassword}
             onChange={handleInputChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Confirm your password"
             required
           />
         </div>

@@ -56,37 +56,20 @@ const Register: React.FC = () => {
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+          transition={{ delay: 0.4 }}
+          className="text-center text-black"
         >
-          <motion.div 
-            className="text-6xl mb-6"
-            animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: [0, 10, -10, 0]
-            }}
-            transition={{ 
-              duration: 2.5,
-              repeat: Infinity,
-              repeatDelay: 4
-            }}
-          >
-            🎯
-          </motion.div>
           <motion.h1 
-            className="text-5xl font-bold mb-4 bg-gradient-to-r from-emerald-400 via-purple-500 to-pink-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            className="deepiri-heroTitle gradient-text-accent text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-emerald-400 bg-clip-text text-transparent"
+            initial={{ opacity: 1, paddingBottom: '1rem' }}
           >
-            Join the Adventure
+            Sign Up
           </motion.h1>
           <motion.p 
             className="text-xl text-gray-300"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+            initial={{ opacity: 1, y: -30 }}
           >
             Create your account and start your day!
           </motion.p>
@@ -94,14 +77,14 @@ const Register: React.FC = () => {
 
         {/* Registration Form */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="card-modern p-8"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Full Name
               </label>
               <input
@@ -110,13 +93,12 @@ const Register: React.FC = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 className="input-modern"
-                placeholder="Enter your full name"
                 required
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
+            <div className="pt-3">
+              <label className="block text-sm font-medium text-black mb-2">
                 Email Address
               </label>
               <input
@@ -125,13 +107,12 @@ const Register: React.FC = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="input-modern"
-                placeholder="Enter your email"
                 required
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
+            <div className="pt-3">
+              <label className="block text-sm font-medium text-black mb-2">
                 Password
               </label>
               <input
@@ -140,13 +121,12 @@ const Register: React.FC = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 className="input-modern"
-                placeholder="Create a password"
                 required
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
+            <div className="pt-3">
+              <label className="block text-sm font-medium text-black mb-2">
                 Confirm Password
               </label>
               <input
@@ -155,73 +135,65 @@ const Register: React.FC = () => {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 className="input-modern"
-                placeholder="Confirm your password"
                 required
               />
             </div>
 
-            <div className="flex items-start">
+            <div className="flex items-start pt-3 pb-4">
               <input
                 type="checkbox"
-                className="h-4 w-4 mt-1 text-purple-500 bg-white/10 border-white/20 rounded focus:ring-purple-500"
+                className="h-4 w-4 text-purple-500 bg-white/10 border-white/20 rounded focus:ring-purple-500"
+                style={{color: "#C8C8C866"}}
                 required
               />
-              <label className="ml-3 block text-sm text-gray-300 leading-5">
+              <label className="ml-4 block text-sm text-gray-300" style={{paddingLeft: '0.5rem'}}>
                 I agree to the{' '}
-                <a href="#" className="text-purple-400 hover:text-purple-300">
+                <a href="#" className="text-purple-400 hover:text-purple-300" style={{color: "#6366f1"}}>
                   Terms of Service
                 </a>{' '}
                 and{' '}
-                <a href="#" className="text-purple-400 hover:text-purple-300">
+                <a href="#" className="text-purple-400 hover:text-purple-300" style={{color: "#6366f1"}}>
                   Privacy Policy
                 </a>
               </label>
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-modern btn-primary w-full"
-            >
-              {loading ? 'Creating account...' : 'Create Account'}
-            </button>
+            <div className="row">
+              <div className="col-md-auto">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-modern btn-primary w-full"
+                >
+                  {loading ? 'Creating account...' : 'Create Account'}
+                </button>
+              </div>
+              <div className="col-md-auto">
+                <button type="button" className="btn-modern btn-login flex items-center justify-center text-black">
+                  <span>Sign in with Google</span>
+                </button>
+              </div>
+              <div className="col-md-auto">
+                <button type="button" className="btn-modern btn-login flex items-center justify-center text-black">
+                  <span>Sign in with Facebook</span>
+                </button>
+              </div>
+            </div>
           </form>
-
-          <div className="mt-8">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-800 text-gray-400">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button type="button" className="btn-modern btn-glass flex items-center justify-center gap-2">
-                <span className="text-xl">📧</span>
-                <span>Google</span>
-              </button>
-              <button type="button" className="btn-modern btn-glass flex items-center justify-center gap-2">
-                <span className="text-xl">📘</span>
-                <span>Facebook</span>
-              </button>
-            </div>
-          </div>
         </motion.div>
 
         {/* Sign In Link */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="text-center"
+          className="text-center text-black pt-5"
         >
           <p className="text-gray-300">
             Already have an account?{' '}
             <Link
               to="/login"
               className="text-purple-400 hover:text-purple-300 font-medium"
+              style={{color: "#6366f1"}}
             >
               Sign in here
             </Link>

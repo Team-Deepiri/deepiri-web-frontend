@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-hot-toast";
 import { FiInfo, FiStar } from "react-icons/fi";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo_squared.png";
 
 type NavItem = {
   label: string;
@@ -128,7 +128,7 @@ const SidebarNav: React.FC = () => {
                 <>
                   <NavLink
                     to="/login"
-                    className="deepiri-btn deepiri-btn--secondary"
+                    className="deepiri-btn deepiri-btn--signin"
                   >
                     Sign In
                   </NavLink>
