@@ -1,193 +1,278 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    
-    if (!formData.email || !formData.password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    setLoading(true);
-    try {
-      await login(formData.email, formData.password);
-    } catch (error) {
-      // Error is handled in the AuthContext
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!formData.email || !formData.password) {
+    toast.error('Please fill in all fields');
+    return;
+  }
+
+  await login(formData.email, formData.password);
+};
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4">
-      <div className="w-full max-w-md space-y-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+    <>
+      <style>{`
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+
+        @keyframes grid-pulse {
+          0%, 100% { opacity: 0.25; }
+          50% { opacity: 0.6; }
+        }
+          
+
+        @media (min-width: 768px) {
+          .deepiri-image-side-login {
+            display: flex !important;
+          }
+          .deepiri-form-side-login {
+            width: 50% !important;
+          }
+        }
+      `}</style>
+
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          background: '#09090b',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Left Side */}
+        <div
+          className="deepiri-form-side-login"
+          style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '3rem 1.5rem',
+          background: 'rgba(9, 9, 11, 0.8)',
+          backdropFilter: 'blur(10px)',
+          position: 'relative',
+          zIndex: 2
+          }}
         >
-          <motion.div 
-            className="text-6xl mb-6"
-            animate={{ 
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              repeatDelay: 3
-            }}
-          >
-            🗺️
-          </motion.div>
-          <motion.h1 
-            className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-emerald-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            Welcome Back!
-          </motion.h1>
-          <motion.p 
-            className="text-xl text-gray-300"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            Sign in to continue your adventure
-          </motion.p>
-        </motion.div>
-
-        {/* Login Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="card-modern p-8"
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              {/* Linked label and input for testing/accessibility */}
-              <label htmlFor="login-email" className="block text-sm font-medium text-white mb-2">
-                Email Address
-              </label>
-              <input
-                id="login-email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="input-modern"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="login-password" className="block text-sm font-medium text-white mb-2">
-                Password
-              </label>
-              <input
-                id="login-password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="input-modern"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-purple-500 bg-white/10 border-white/20 rounded focus:ring-purple-500"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
-                  Remember me
-                </label>
-              </div>
-              <a href="#" className="text-sm text-purple-400 hover:text-purple-300">
-                Forgot password?
-              </a>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-modern btn-primary w-full"
+          <div style={{ width: '100%', maxWidth: '28rem' }}>
+            {/* Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{ textAlign: 'center', marginBottom: '2rem' }}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-          </form>
+              <h1
+                style={{
+                  fontSize: '2.25rem',
+                  fontWeight: 'bold',
+                  background:
+                    'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: 0
+                }}
+              >
+                Log in to Deepiri
+              </h1>
+            </motion.div>
 
-          <div className="mt-8">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20" />
+            {/* Form */}
+            <motion.form
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+            >
+              <div>
+                <label style={{ color: 'white', fontSize: '0.875rem' }}>
+                  Email <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="ash@deepiri.app"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: '#18181b',
+                    border: '1px solid #27272a',
+                    borderRadius: '0.5rem',
+                    color: 'white'
+                  }}
+                />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-800 text-gray-400">Or continue with</span>
-              </div>
-            </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button type="button" className="btn-modern btn-glass flex items-center justify-center gap-2">
-                <span className="text-xl">📧</span>
-                <span>Google</span>
+              <div>
+                <label style={{ color: 'white', fontSize: '0.875rem' }}>
+                  Password <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="••••••••••••"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      paddingRight: '4rem',
+                      background: '#18181b',
+                      border: '1px solid #27272a',
+                      borderRadius: '0.5rem',
+                      color: 'white'
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '1rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      color: '#71717a',
+                      cursor: 'pointer',
+                      fontSize: '0.75rem'
+                    }}
+                  >
+                    {showPassword ? 'HIDE' : 'SHOW'}
+                  </button>
+                </div>
+
+                <Link to="/forgot" style={{ marginTop: '0.5rem' }}>
+                  <span style={{ color: '#60a5fa', fontSize: '0.875rem' }}>
+                    Forgot your password?
+                  </span>
+                </Link>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '9999px',
+                  background: '#0ea5e9',
+                  color: 'white',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: loading ? 'not-allowed' : 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) (e.target as HTMLButtonElement).style.background = '#38bdf8';
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) (e.target as HTMLButtonElement).style.background = '#0ea5e9';
+                }}
+              >
+                {loading ? 'Logging in…' : 'Log in'}
               </button>
-              <button type="button" className="btn-modern btn-glass flex items-center justify-center gap-2">
-                <span className="text-xl">📘</span>
-                <span>Facebook</span>
-              </button>
+            </motion.form>
+
+            {/* Footer */}
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <p style={{ color: '#9ca3af', fontSize: '0.875rem', margin: 0 }}>
+                Need an account?{' '}
+                <Link
+                  to="/register"
+                  style={{ color: '#60a5fa', textDecoration: 'underline' }}
+                >
+                  Sign up
+                </Link>
+              </p>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Sign Up Link */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-center"
+        {/* Right Side */}
+        <div
+          className="deepiri-image-side-login"
+          style={{
+            display: 'none',
+            width: '50%',
+            position: 'relative',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2,
+            background:
+              'linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0f0a1f 50%, #1a0a2e 75%, #0a0a1a 100%)',
+            backgroundSize: '400% 400%',
+            animation: 'gradient-shift 15s ease infinite'
+          }}
         >
-          <p className="text-gray-300">
-            Don't have an account?{' '}
-            <Link
-              to="/register"
-              className="text-purple-400 hover:text-purple-300 font-medium"
+          {/* Grid */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `
+                linear-gradient(rgba(0,212,255,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.15) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+              animation: 'grid-pulse 4s ease-in-out infinite',
+              zIndex: 5,
+              pointerEvents: 'none',
+            }}
+          />
+
+          {/* Logo */}
+          <div style={{ 
+            position: 'relative', 
+            textAlign: 'center',
+            zIndex: 10
+            }}>
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+              backgroundSize: '200% 200%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              animation: 'gradient-shift 3s ease infinite',
+              letterSpacing: '2px',
+              margin: 0
+              }}
             >
-              Sign up here
-            </Link>
-          </p>
-        </motion.div>
+              Deepiri
+            </h1>
+           
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
