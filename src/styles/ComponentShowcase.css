@@ -1,25 +1,33 @@
 .component-showcase {
   background-color: #0b1020;
-  padding: 3rem 0;
+  padding: 2rem 0;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden; /* Stops the horizontal shaking */
 }
 
 .component-showcase-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem; /* Adds the side margins QA asked for */
+  box-sizing: border-box;
 }
 
-/* Increased margins to 3rem (48px) for better spacing */
 .component-showcase-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr; /* Stacked on mobile */
   gap: 1.5rem;
-  margin: 3rem 0;
+  margin: 2.5rem 0;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .component-showcase-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+  }
 }
 
 .component-showcase-footer-text {
@@ -32,47 +40,4 @@
   display: block;
   width: 100%;
   margin-top: 2rem;
-}
-
-.component-card {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  height: 100%;
-}
-
-.component-card:hover {
-  border-color: #7c3aed;
-  /* Purple hover */
-  transform: translateY(-3px);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
-}
-
-.component-card-label {
-  font-size: 9px;
-  font-weight: 700;
-  color: #f97316;
-  /* Deepiri Orange */
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  margin-bottom: 0.5rem;
-}
-
-.component-card-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 0.75rem 0;
-}
-
-.component-card-description {
-  color: #9ca3af;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  margin: 0;
 }
