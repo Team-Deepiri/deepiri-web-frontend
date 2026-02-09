@@ -1,24 +1,24 @@
 .component-showcase {
   background-color: #0b1020;
-  padding: 2rem 0;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: hidden; /* Stops the horizontal shaking */
+  overflow-x: hidden;
+  padding: 3rem 0;
 }
 
 .component-showcase-container {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 1.5rem; /* Adds the side margins QA asked for */
+  padding: 0 1.5rem;
   box-sizing: border-box;
 }
 
 .component-showcase-grid {
   display: grid;
-  grid-template-columns: 1fr; /* Stacked on mobile */
+  grid-template-columns: 1fr; /* Stacks on mobile */
   gap: 1.5rem;
   margin: 2.5rem 0;
   width: 100%;

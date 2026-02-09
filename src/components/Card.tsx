@@ -17,24 +17,23 @@ const Card: React.FC<CardProps> = ({ title, description, label }) => {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#111827',
-        border: `1px solid ${isHovered ? '#a855f7' : '#1f2937'}`,
+        border: `1px solid ${isHovered ? '#7c3aed' : 'rgba(255,255,255,0.08)'}`,
         padding: '2rem',
         borderRadius: '1.5rem',
         cursor: 'pointer',
         transition: 'all 0.3s ease',
-        boxShadow: isHovered ? '0 0 30px rgba(168, 85, 247, 0.15)' : 'none',
+        boxShadow: isHovered ? '0 0 25px rgba(124, 58, 237, 0.15)' : '0 20px 40px rgba(0,0,0,0.2)',
         transform: isHovered ? 'translateY(-5px)' : 'none',
         width: '100%',
-        maxWidth: '100%', // Prevents the card from ever being wider than its parent
-        boxSizing: 'border-box', // Includes padding in the width calculation
-        overflow: 'hidden' // Keeps content inside
+        boxSizing: 'border-box',
+        height: '100%'
       }}
     >
       {label && (
         <span style={{
           color: '#f97316',
           fontSize: '10px',
-          fontWeight: 'bold',
+          fontWeight: '700',
           textTransform: 'uppercase',
           letterSpacing: '0.2em',
           marginBottom: '1rem',
@@ -44,16 +43,17 @@ const Card: React.FC<CardProps> = ({ title, description, label }) => {
         </span>
       )}
       <h3 style={{
-        color: isHovered ? '#c084fc' : 'white',
+        color: '#ffffff',
         fontSize: '1.5rem',
-        fontWeight: 'bold',
-        margin: '0 0 1rem 0'
+        fontWeight: '800',
+        margin: '0 0 1rem 0',
+        lineHeight: '1.2'
       }}>
         {title}
       </h3>
       <p style={{
         color: '#9ca3af',
-        fontSize: '0.9rem',
+        fontSize: '0.875rem',
         lineHeight: '1.6',
         margin: '0'
       }}>
