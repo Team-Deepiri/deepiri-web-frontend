@@ -46,6 +46,11 @@ import UserInventory from "./pages/UserInventory";
 import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
 import Contact from "./pages/Contact";
 import Forgot from './pages/ForgotPassword.tsx'
+import LeaseUpload from './pages/LanguageIntelligence/LeaseUpload';
+import LeaseDetail from './pages/LanguageIntelligence/LeaseDetail';
+import ContractUpload from './pages/LanguageIntelligence/ContractUpload';
+import ContractDetail from './pages/LanguageIntelligence/ContractDetail';
+import ChatWidget from './components/ChatWidget/ChatWidget';
 
 // Public pages
 import About from "./pages/About";
@@ -324,7 +329,40 @@ const AppContent: React.FC = () => {
                               </ProtectedRoute>
                             }
                           />
+                          <Route
+                            path="/language-intelligence/leases/upload"
+                            element={
+                              <ProtectedRoute>
+                                <LeaseUpload />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/language-intelligence/leases/:id"
+                            element={
+                              <ProtectedRoute>
+                                <LeaseDetail />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/language-intelligence/contracts/upload"
+                            element={
+                              <ProtectedRoute>
+                                <ContractUpload />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/language-intelligence/contracts/:id"
+                            element={
+                              <ProtectedRoute>
+                                <ContractDetail />
+                              </ProtectedRoute>
+                            }
+                          />
                         </Routes>
+                        <ChatWidget />
                       </div>
                     </main>
 
