@@ -1,43 +1,38 @@
+
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
-const Register: React.FC = () => {
-  const navigate = useNavigate();
+const Register = () => {
   const { register } = useAuth();
   
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
+    
+    if (name === 'email' && emailError) {
+      setEmailError('');
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+
+    if (!formData.name || !formData.email || !formData.password) {
       toast.error('Please fill in all fields');
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters long');
       return;
     }
 
@@ -52,157 +47,357 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4">
-      <div className="w-full max-w-md space-y-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="text-center text-black"
+    <>
+      <style>{`
+          @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+            
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+          }
+
+          @keyframes grid-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+          }
+
+          @media (min-width: 768px) {
+            .deepiri-image-side {
+              display: flex !important;
+              animation: glow 4s ease-in-out infinite;
+            }
+            .deepiri-form-side {
+              width: 50% !important;
+            }
+          }
+        `}</style>
+
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'row',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+
+        {/* Left Side */}
+        <div
+          className="deepiri-image-side"
+          style={{
+            display: 'none',
+            width: '50%',
+            position: 'relative',
+            overflow: 'hidden',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2,
+            background: 'linear-gradient(135deg, #ffffff 0%, #f2f2f7 25%, #e9e9f0 50%, #f2f2f7 75%, #ffffff 100%)',
+            backgroundSize: '400% 400%',
+            animation: 'gradient-shift 15s ease infinite'
+          }}
         >
-          <motion.h1 
-            className="deepiri-heroTitle gradient-text-accent text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-emerald-400 bg-clip-text text-transparent"
-            initial={{ opacity: 1, paddingBottom: '1rem' }}
-          >
-            Sign Up
-          </motion.h1>
-          <motion.p 
-            className="text-xl text-gray-300"
-            initial={{ opacity: 1, y: -30 }}
-          >
-            Create your account and start your day!
-          </motion.p>
-        </motion.div>
+          {/* Grid */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `
+                linear-gradient(rgba(183, 0, 255,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(183, 0, 255,0.15) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+              animation: 'grid-pulse 4s ease-in-out infinite',
+              zIndex: 5,
+              pointerEvents: 'none',
+            }}
+    />
 
-        {/* Registration Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="card-modern p-8"
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-black mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="input-modern"
-                required
-              />
-            </div>
+          {/* Logo */}
+          <div style={{
+            textAlign: 'center',
+            zIndex: 10,
+            position: 'relative'
+          }}>
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+              backgroundSize: '200% 200%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              animation: 'gradient-shift 3s ease infinite',
+              letterSpacing: '2px',
+              margin: 0
+            }}>
+              Deepiri
+            </h1>
 
-            <div className="pt-3">
-              <label className="block text-sm font-medium text-black mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="input-modern"
-                required
-              />
-            </div>
+            <p style={{
+              marginTop: '16px',
+              fontSize: '16px',
+              color: '#8b5cf6',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              opacity: 0.7
+            }}>
+              AI R&D Collective
+            </p>
+          </div>
+        </div>
 
-            <div className="pt-3">
-              <label className="block text-sm font-medium text-black mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="input-modern"
-                required
-              />
-            </div>
-
-            <div className="pt-3">
-              <label className="block text-sm font-medium text-black mb-2">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className="input-modern"
-                required
-              />
-            </div>
-
-            <div className="flex items-start pt-3 pb-4">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-purple-500 bg-white/10 border-white/20 rounded focus:ring-purple-500"
-                style={{color: "#C8C8C866"}}
-                required
-              />
-              <label className="ml-4 block text-sm text-gray-300" style={{paddingLeft: '0.5rem'}}>
-                I agree to the{' '}
-                <a href="#" className="text-purple-400 hover:text-purple-300" style={{color: "#6366f1"}}>
-                  Terms of Service
-                </a>{' '}
-                and{' '}
-                <a href="#" className="text-purple-400 hover:text-purple-300" style={{color: "#6366f1"}}>
-                  Privacy Policy
-                </a>
-              </label>
-            </div>
-            <div className="row">
-              <div className="col-md-auto">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn-modern btn-primary w-full"
-                >
-                  {loading ? 'Creating account...' : 'Create Account'}
-                </button>
-              </div>
-              <div className="col-md-auto">
-                <button type="button" className="btn-modern btn-login flex items-center justify-center text-black">
-                  <span>Sign in with Google</span>
-                </button>
-              </div>
-              <div className="col-md-auto">
-                <button type="button" className="btn-modern btn-login flex items-center justify-center text-black">
-                  <span>Sign in with Facebook</span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </motion.div>
-
-        {/* Sign In Link */}
-        <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-center text-black pt-5"
-        >
-          <p className="text-gray-300">
-            Already have an account?{' '}
-            <Link
-              to="/login"
-              className="text-purple-400 hover:text-purple-300 font-medium"
-              style={{color: "#6366f1"}}
+        {/* Right Side - Form */}
+        <div 
+         className="deepiri-form-side" 
+          style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '3rem 1.5rem',
+          backdropFilter: 'blur(10px)',
+          position: 'relative',
+          zIndex: 2
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '28rem'
+          }}>
+            {/* Title */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              style={{
+                textAlign: 'center',
+                marginBottom: '2rem'
+              }}
             >
-              Sign in here
-            </Link>
-          </p>
-        </motion.div>
+              <h1 style={{
+                fontSize: '2.25rem',
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                marginBottom: '0.75rem',
+                margin: '0 0 0.75rem 0'
+              }}>
+                Sign up for Deepiri
+              </h1>
+              <p style={{
+                color: '#000000',
+                fontSize: '1rem',
+                lineHeight: '1.5',
+                margin: 0
+              }}>
+                Welcome to Deepiri! We're so glad you're here. Enter your<br />
+                email address and a username to get started.
+              </p>
+            </motion.div>
+
+            {/* Form */}
+            <motion.form
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              onSubmit={handleSubmit}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}
+            >
+              <div>
+                <label style={{
+                  display: 'block',
+                  color: 'black',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem'
+                }}>
+                  Email <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="ash@deepiri.app"
+                  maxLength={255}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: emailError ? '1px solid #ef4444' : '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => {
+                    if (!emailError) e.target.style.borderColor = '#733bf6';
+                  }}
+                  onBlur={(e) => {
+                    if (!emailError) e.target.style.borderColor = '#d0d0d6';
+                  }}
+                />
+                {emailError && (
+                  <p style={{
+                    color: '#ef4444',
+                    fontSize: '0.875rem',
+                    marginTop: '0.25rem',
+                    margin: '0.25rem 0 0 0'
+                  }}>{emailError}</p>
+                )}
+                <div style={{
+                  textAlign: 'right',
+                  color: '#71717a',
+                  fontSize: '0.75rem',
+                  marginTop: '0.25rem'
+                }}>
+                  {formData.email.length}/255
+                </div>
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  color: 'black',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem'
+                }}>
+                  Username <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Superman23465"
+                  maxLength={255}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                    onFocus={(e) => e.target.style.borderColor = '#733bf6'}
+                    onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
+                />
+                <div style={{
+                  textAlign: 'right',
+                  color: '#71717a',
+                  fontSize: '0.75rem',
+                  marginTop: '0.25rem'
+                }}>
+                  {formData.name.length}/255
+                </div>
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  color: 'black',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem'
+                }}>
+                  Password <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="••••••••••"
+                  maxLength={255}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                    onFocus={(e) => e.target.style.borderColor = '#733bf6'}
+                    onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
+                />
+
+                <div style={{
+                  textAlign: 'right',
+                  color: '#71717a',
+                  fontSize: '0.75rem',
+                  marginTop: '0.25rem'
+                }}>
+                  {formData.password.length}/255
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: '#0ea5e9',
+                  color: 'white',
+                  borderRadius: '9999px',
+                  fontWeight: '500',
+                  border: 'none',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  transition: 'background-color 0.2s',
+                  opacity: loading ? 0.5 : 1
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) (e.target as HTMLButtonElement).style.background = '#0ea5e9';
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) (e.target as HTMLButtonElement).style.background = '#38bdf8';
+                }}
+              >
+                {loading ? 'Creating account...' : 'Next'}
+              </button>
+            </motion.form>
+            
+            {/* Footer */}
+            <div style={{
+              textAlign: 'center',
+              marginTop: '2rem'
+            }}>
+              <p style={{
+                color: '#000000',
+                fontSize: '0.875rem',
+                margin: 0
+              }}>
+                Already have an account?{' '}
+                <Link to="/login" 
+                  style={{
+                  color: '#733bf6',
+                  textDecoration: 'underline'
+                }}>
+                  Log in
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Register;
-
