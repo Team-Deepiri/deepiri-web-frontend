@@ -117,10 +117,49 @@ body {
 /* =========================
    Scrollbar
    ========================= */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #1e293b; }
-::-webkit-scrollbar-thumb { background: var(--primary-gradient); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--secondary-gradient); }
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 10px;
+}
+
+/* Thumb (grey scroll button) */
+::-webkit-scrollbar-thumb {
+  background: #9ca3af; /* grey */
+  border-radius: 10px;
+  border: 3px solid #1e293b; /* creates spacing effect */
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* darker grey on hover */
+}
+
+/* Arrow buttons */
+::-webkit-scrollbar-button {
+  height: 16px;
+  background-color: #334155; /* slightly lighter than track */
+}
+
+/* Up arrow */
+::-webkit-scrollbar-button:vertical:decrement {
+  background:
+    center no-repeat
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%23ffffff' d='M7 14l5-5 5 5z'/></svg>");
+}
+
+/* Down arrow */
+::-webkit-scrollbar-button:vertical:increment {
+  background:
+    center no-repeat
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%23ffffff' d='M7 10l5 5 5-5z'/></svg>");
+}
 
 /* =========================
    Glassmorphism
