@@ -80,7 +80,8 @@ body {
 .app-shell {
   min-height: 100vh;
   position: relative;
-  background: var(--dark);
+  background: linear-gradient(to bottom, #1e3a8a, #0f172a);
+  color: white; 
 }
 
 /* main is flex column so footer sits after content */
