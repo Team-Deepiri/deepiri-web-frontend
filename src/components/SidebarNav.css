@@ -174,9 +174,12 @@
 }
 
 .deepiri-btn--secondary {
-  color: rgba(226, 232, 240, 0.9);
+  /*color: rgba(226, 232, 240, 0.9);
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);*/
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--deepiri-orange) 0%, var(--deepiri-orange-light) 100%);
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
 }
 
 .deepiri-btn--secondary:hover {

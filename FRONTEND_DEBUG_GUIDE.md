@@ -99,7 +99,7 @@ logout();
 ### Component Rendering Issues
 ```javascript
 // Add debug logging to components
-import logger from '../utils/logger';
+import { secureLog } from '../utils/secureLogger';
 
 const MyComponent = () => {
   useEffect(() => {
