@@ -36,6 +36,7 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-purple-2xl: 0 25px 50px -12px #c9c6f3;
 
   --glass-bg: rgba(99, 102, 241, 0.15);
   --glass-border: rgba(99, 102, 241, 0.3);
@@ -80,8 +81,7 @@ body {
 .app-shell {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(to bottom, #1e3a8a, #0f172a);
-  color: white; 
+  background: linear-gradient(to bottom, white, rgb(219, 219, 219)); /* var(--dark) */
 }
 
 /* main is flex column so footer sits after content */
@@ -91,8 +91,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin-left: 0;
-  /* no sidebar offset on this layout */
+  margin-left: 0; /* no sidebar offset on this layout */
 }
 
 /* content fills available space (pushes footer down) */
@@ -102,16 +101,14 @@ body {
   padding-bottom: 40px;
 }
 
-/* for login/register spacing */
-.app-content.auth {
-  padding-top: calc(var(--deepiri-nav-h) + 16px);
-  padding-bottom: 40px;
+.app-content.no-header {
+  padding-top: 0 !important;
 }
 
+
 /* container */
-.site-container {
-  max-width: 1400px;
-  /* Increased from 1200px */
+/*.site-container {
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 2rem;
@@ -131,15 +128,23 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
+.bg-chips {
+  background: var(--primary);
+}
+
+.bg-chips:hover {
+  background: var(--primary-500);
+}
+
 /* =========================
-   Scrollbar
+   Scrollbar (looks bad)
    ========================= */
 /* Scrollbar width */
 ::-webkit-scrollbar {
   width: 14px;
 }
 
-/* Track ( dark background) */
+/* Track */
 ::-webkit-scrollbar-track {
   background: #1e293b;
   border-radius: 10px;
@@ -215,6 +220,12 @@ body {
 
 .gradient-text-accent {
   background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-vertical {
+  background: linear-gradient(to bottom, var(--primary), var(--deepiri-orange));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -320,9 +331,10 @@ body {
    Cards + Inputs
    ========================= */
 .card-modern {
-  background: rgba(30, 27, 75, 0.6);
+  background: rgb(250, 250, 250); /* rgba(30, 27, 75, 0.6); */
+  color: black;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid rgb(250, 250, 250); /* rgba(99, 102, 241, 0.2) */
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-xl);
@@ -331,19 +343,19 @@ body {
 
 .card-modern:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-2xl);
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(30, 27, 75, 0.8);
+  box-shadow: var(--shadow-purple-2xl);
+  border-color: lightgray; /* rgba(99, 102, 241, 0.4) */
+  background: white; /* rgba(30, 27, 75, 0.8) */
 }
 
 .input-modern {
   width: 100%;
   padding: 16px 20px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(200, 200, 200, 0.4); /* rgba(255,255,255,0.1) */
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(255,255,255);
   backdrop-filter: blur(10px);
-  color: white;
+  color: black;
   font-size: 16px;
   transition: all var(--transition-normal);
 }
@@ -351,12 +363,9 @@ body {
 .input-modern:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
 }
-
-.input-modern::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
+.input-modern::placeholder { color: rgba(0, 0, 0, 0.5) } /* rgba(255, 255, 255, 0.5) */
 
 /* =========================
    Deepiri panels + rhythm
@@ -402,15 +411,8 @@ body {
   background: rgba(255, 255, 255, 0.03);
 }
 
-.deepiri-sectionHeader {
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
-}
-
-.deepiri-sectionHeader.is-center {
-  text-align: center;
-}
+.deepiri-sectionHeader { margin-bottom: 18px; position: relative; z-index: 1; }
+.deepiri-sectionHeader.is-center { text-align: center; }
 
 .deepiri-eyebrow {
   font-size: 11px;
@@ -419,14 +421,12 @@ body {
   color: rgba(148, 163, 184, 0.9);
   margin-bottom: 6px;
 }
-
 .deepiri-sectionTitle {
   font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 800;
   color: rgba(226, 232, 240, 0.96);
   margin: 0;
 }
-
 .deepiri-sectionSubtitle {
   margin-top: 10px;
   margin-bottom: 0;
@@ -434,7 +434,6 @@ body {
   max-width: 940px;
   line-height: 1.7;
 }
-
 .deepiri-sectionHeader.is-center .deepiri-sectionSubtitle {
   margin-left: auto;
   margin-right: auto;
@@ -457,19 +456,13 @@ body {
   background: rgba(255, 255, 255, 0.02);
   transition: transform 160ms ease, border-color 160ms ease;
 }
-
-.deepiri-miniCard:hover {
-  transform: translateY(-2px);
-  border-color: rgba(245, 158, 11, 0.22);
-}
-
+.deepiri-miniCard:hover { transform: translateY(-2px); border-color: rgba(245, 158, 11, 0.22); }
 .deepiri-miniCardTitle {
   font-size: 12px;
   font-weight: 700;
   color: rgba(251, 146, 60, 0.95);
   margin-bottom: 6px;
 }
-
 .deepiri-miniCardBody {
   font-size: 13px;
   line-height: 1.5;
@@ -484,12 +477,7 @@ body {
   background: rgba(255, 255, 255, 0.02);
   transition: transform 160ms ease, border-color 160ms ease;
 }
-
-.deepiri-stepCard:hover {
-  transform: translateY(-2px);
-  border-color: rgba(249, 115, 22, 0.22);
-}
-
+.deepiri-stepCard:hover { transform: translateY(-2px); border-color: rgba(249, 115, 22, 0.22); }
 .deepiri-stepNum {
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -503,13 +491,11 @@ body {
   color: rgba(226, 232, 240, 0.96);
   margin-bottom: 6px;
 }
-
 .deepiri-stepBody {
   font-size: 13px;
   line-height: 1.55;
   color: rgba(226, 232, 240, 0.88);
 }
-
 .deepiri-stepWhy {
   margin-top: 8px;
   font-size: 12px;
@@ -568,7 +554,6 @@ body {
   position: relative;
   z-index: 1;
 }
-
 .deepiri-metricBody {
   margin-top: 10px;
   font-size: 13px;
@@ -579,11 +564,7 @@ body {
 }
 
 /* hero */
-.deepiri-hero {
-  position: relative;
-  padding: 88px 14px 36px;
-}
-
+.deepiri-hero { position: relative; padding: 88px 14px 36px; }
 .deepiri-heroInner {
   max-width: 980px;
   margin-left: auto;
@@ -623,7 +604,6 @@ body {
   color: rgba(226, 232, 240, 0.98);
   max-width: 20ch;
 }
-
 .deepiri-heroSubtitle {
   margin-top: 18px;
   margin-left: auto;
@@ -633,13 +613,7 @@ body {
   line-height: 1.8;
   color: rgba(203, 213, 225, 0.9);
 }
-
-.deepiri-heroSupport {
-  margin-top: 12px;
-  font-size: 12px;
-  color: rgba(148, 163, 184, 0.9);
-}
-
+.deepiri-heroSupport { margin-top: 12px; font-size: 12px; color: rgba(148, 163, 184, 0.9); }
 .deepiri-heroCtas {
   margin-top: 26px;
   display: flex;
@@ -648,18 +622,10 @@ body {
   align-items: center;
   flex-wrap: wrap;
 }
-
-.deepiri-heroCtas .btn-modern {
-  min-height: 46px;
-}
+.deepiri-heroCtas .btn-modern { min-height: 46px; }
 
 /* divider */
-.deepiri-divider {
-  position: relative;
-  height: 22px;
-  margin: 28px 0 14px;
-}
-
+.deepiri-divider { position: relative; height: 22px; margin: 28px 0 14px; }
 .deepiri-dividerLine {
   position: absolute;
   top: 50%;
@@ -688,10 +654,23 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
 }
-
 .btn-secondary:hover {
   border-color: rgba(255, 255, 255, 0.35);
   background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.btn-login {
+  background: transparent;
+  color: black;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid rgba(215, 215, 215, 0.2); /* rgba(255, 255, 255, 0.2) */
+  border-radius: 12px;
+}
+.btn-login:hover {
+  /* border-color: rgba(255, 255, 255, 0.35); */
+  background: var(--primary);
+  color: white;
   transform: translateY(-2px);
 }
 
@@ -700,7 +679,6 @@ body {
   padding-top: 72px;
   padding-bottom: 72px;
 }
-
 .deepiri-section-sm {
   padding-top: 42px;
   padding-bottom: 42px;
@@ -713,7 +691,6 @@ body {
   gap: 14px;
   margin-bottom: 24px;
 }
-
 .deepiri-highlightCard {
   position: relative;
   border-radius: 16px;
@@ -721,7 +698,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(17, 24, 39, 0.72));
 }
-
 .deepiri-highlightCard .pill-dot {
   width: 10px;
   height: 10px;
@@ -730,14 +706,12 @@ body {
   box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.14);
   margin-bottom: 10px;
 }
-
 .deepiri-highlightCard .title {
   font-weight: 800;
   font-size: 16px;
   color: rgba(226, 232, 240, 0.96);
   margin-bottom: 6px;
 }
-
 .deepiri-highlightCard .body {
   font-size: 13px;
   line-height: 1.55;
@@ -753,18 +727,12 @@ body {
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
-
-.deepiri-platformFrame:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 36px 110px rgba(0, 0, 0, 0.42);
-}
-
+.deepiri-platformFrame:hover { transform: translateY(-4px); box-shadow: 0 36px 110px rgba(0, 0, 0, 0.42); }
 .deepiri-platformBars {
   display: flex;
   gap: 6px;
   margin-bottom: 14px;
 }
-
 .deepiri-platformBars span {
   display: block;
   height: 10px;
@@ -772,13 +740,11 @@ body {
   background: rgba(255, 255, 255, 0.12);
   flex: 1;
 }
-
 .deepiri-platformGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
 }
-
 .deepiri-platformTile {
   border-radius: 14px;
   padding: 14px;
@@ -786,7 +752,6 @@ body {
   background: rgba(17, 24, 39, 0.5);
   text-align: left;
 }
-
 .deepiri-platformCaption {
   display: inline-flex;
   align-items: center;
@@ -798,7 +763,6 @@ body {
   font-size: 12px;
   margin-bottom: 12px;
 }
-
 .deepiri-platformCaption .dot {
   width: 8px;
   height: 8px;
@@ -806,25 +770,21 @@ body {
   background: #22c55e;
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
 }
-
 .deepiri-platformTile .label {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(148, 163, 184, 0.9);
 }
-
 .deepiri-platformTile .value {
   font-size: 22px;
   font-weight: 800;
   color: rgba(226, 232, 240, 0.96);
 }
-
 .deepiri-platformTile .sub {
   font-size: 12px;
   color: rgba(148, 163, 184, 0.85);
 }
-
 .deepiri-platformTile.is-chart {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(17, 24, 39, 0.6));
   display: grid;
@@ -833,57 +793,34 @@ body {
   align-items: end;
   min-height: 120px;
 }
-
 .deepiri-platformTile.is-chart .chart-fill {
   height: 70%;
   border-radius: 10px;
   background: linear-gradient(180deg, rgba(99, 102, 241, 0.8), rgba(14, 165, 233, 0.4));
 }
-
 .deepiri-platformTile.is-chart .chart-fill.alt {
   height: 50%;
   background: linear-gradient(180deg, rgba(249, 115, 22, 0.8), rgba(245, 158, 11, 0.45));
 }
-
 .deepiri-platformTile.is-list {
   background: rgba(255, 255, 255, 0.04);
 }
-
 .deepiri-platformTile.is-list .list-row {
   font-size: 13px;
   color: rgba(226, 232, 240, 0.92);
   padding: 6px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 .deepiri-platformTile.is-list .list-row:last-child {
   border-bottom: none;
 }
 
 @media (max-width: 768px) {
-  .deepiri-hero {
-    padding: 56px 12px 28px;
-  }
-
-  .deepiri-heroSubtitle {
-    margin-top: 14px;
-    line-height: 1.75;
-  }
-
-  .deepiri-heroCtas {
-    margin-top: 18px;
-    gap: 10px;
-  }
-
-  .deepiri-section {
-    padding-top: 54px;
-    padding-bottom: 54px;
-  }
-
-  .deepiri-section-sm {
-    padding-top: 32px;
-    padding-bottom: 32px;
-  }
+  .deepiri-hero { padding: 56px 12px 28px; }
+  .deepiri-heroSubtitle { margin-top: 14px; line-height: 1.75; }
+  .deepiri-heroCtas { margin-top: 18px; gap: 10px; }
+  .deepiri-section { padding-top: 54px; padding-bottom: 54px; }
+  .deepiri-section-sm { padding-top: 32px; padding-bottom: 32px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

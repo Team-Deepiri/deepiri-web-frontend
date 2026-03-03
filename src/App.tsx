@@ -47,6 +47,12 @@ import PythonTools from "./pages/PythonTools";
 import UserInventory from "./pages/UserInventory";
 import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
 import Contact from "./pages/Contact";
+import Forgot from './pages/ForgotPassword.tsx'
+import LeaseUpload from './pages/LanguageIntelligence/LeaseUpload';
+import LeaseDetail from './pages/LanguageIntelligence/LeaseDetail';
+import ContractUpload from './pages/LanguageIntelligence/ContractUpload';
+import ContractDetail from './pages/LanguageIntelligence/ContractDetail';
+import ChatWidget from './components/ChatWidget/ChatWidget';
 
 // Public pages
 import About from "./pages/About";
@@ -63,7 +69,7 @@ const queryClient = new QueryClient({
 const AppContent: React.FC = () => {
   const location = useLocation();
   const pathname = location?.pathname || "/";
-  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname === "/forgot";
   const { isAuthenticated } = useAuth();
   const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
 
