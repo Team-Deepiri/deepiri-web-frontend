@@ -26,198 +26,152 @@ const Profile: React.FC = () => {
   ];
 
   const handleSave = () => {
-    console.log('Saving profile data');
+    const newErrors: Record<string, string> = {};
+    if (!draftProfile.fullName.trim()) newErrors.fullName = 'Full Name is required';
+    if (!draftProfile.email.trim()) newErrors.email = 'Email is required';
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      setSavedProfile(draftProfile);
+      setViewMode(true);
+      setErrors({});
+    }
+  };
+
+  const styles = {
+    wrapper: {
+      backgroundColor: '#0b1020',
+      minHeight: '100vh',
+      padding: '40px 20px',
+      color: 'white',
+      fontFamily: 'Inter, sans-serif'
+    },
+    container: {
+      maxWidth: '1100px',
+      margin: '0 auto'
+    },
+    header: {
+      marginBottom: '40px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end'
+    },
+    sidebar: {
+      backgroundColor: '#111827',
+      borderRadius: '16px',
+      padding: '12px',
+      border: '1px solid rgba(255,255,255,0.05)',
+      height: 'fit-content'
+    },
+    mainCard: {
+      backgroundColor: '#111827',
+      borderRadius: '24px',
+      border: '1px solid rgba(255,255,255,0.05)',
+      overflow: 'hidden'
+    },
+    navButton: (isActive: boolean) => ({
+      width: '100%',
+      padding: '12px 16px',
+      borderRadius: '10px',
+      border: 'none',
+      textAlign: 'left' as const,
+      cursor: 'pointer',
+      fontSize: '14px',
+      transition: '0.2s',
+      backgroundColor: isActive ? 'rgba(124, 58, 237, 0.1)' : 'transparent',
+      color: isActive ? '#a78bfa' : '#9ca3af',
+      fontWeight: isActive ? '600' : '400'
+    }),
+    purpleBtn: {
+      backgroundColor: '#7c3aed',
+      color: 'white',
+      padding: '10px 24px',
+      borderRadius: '12px',
+      border: 'none',
+      fontWeight: '600',
+      cursor: 'pointer',
+      transition: '0.2s'
+    },
+    input: {
+      width: '100%',
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.1)',
+      borderRadius: '10px',
+      padding: '12px',
+      color: 'white',
+      outline: 'none'
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Page Header */}
-        <div className="mb-8 flex justify-between items-start">
+    <div style={styles.wrapper}>
+      <div style={styles.container}>
+        <div style={styles.header}>
           <div>
-            <h1 className="text-3xl font-semibold text-white">Profile</h1>
-            <p className="text-gray-300 mt-1">
-              Manage your account, preferences, and platform settings
-            </p>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', margin: 0 }}>Profile</h1>
+            <p style={{ color: '#9ca3af', marginTop: '8px' }}>Manage your account and platform settings</p>
           </div>
           {activeSection === 'personal' && viewMode && (
-            <button
-              onClick={() => {
-                setDraftProfile(savedProfile);
-                setViewMode(false);
-                setErrors({});
-              }}
-              className="px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-600 transition-colors"
-            >
+            <button style={styles.purpleBtn} onClick={() => setViewMode(false)}>
               Edit Profile
             </button>
           )}
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* Sidebar */}
-          <aside className="col-span-12 lg:col-span-3">
-            <div className="bg-gray-800 rounded-xl border border-gray-700 p-4">
-              <nav className="space-y-1">
-                {sections.map(section => (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={`w-full flex items-center px-4 py-2.5 rounded-lg text-sm transition
-                      ${
-                        activeSection === section.id
-                          ? 'bg-orange-500 text-black underline font-bold'
-                          : 'font-medium text-gray-300 hover:bg-gray-700'
-                      }`}
-                  >
-                    {section.label}
-                  </button>
-                ))}
-              </nav>
-            </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '32px' }}>
+          <aside style={styles.sidebar}>
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {sections.map(s => (
+                <button
+                  key={s.id}
+                  onClick={() => setActiveSection(s.id)}
+                  style={styles.navButton(activeSection === s.id)}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </nav>
           </aside>
 
-          {/* Main Content */}
-          <main className="col-span-12 lg:col-span-9">
-            <div className="bg-gray-800 rounded-xl border border-gray-700">
-              <div className="border-b border-gray-700 px-8 py-6">
-                <h2 className="text-xl font-semibold text-white">
-                  {sections.find(s => s.id === activeSection)?.label}
-                </h2>
-              </div>
+          <main style={styles.mainCard}>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '600', margin: 0 }}>
+                {sections.find(s => s.id === activeSection)?.label}
+              </h2>
+            </div>
 
-              <div className="px-8 py-6 space-y-8">
-                {activeSection === 'personal' && (
-                  <Section title="Basic Details">
-                    <TwoCol>
+            <div style={{ padding: '32px' }}>
+              {activeSection === 'personal' && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                  {Object.entries(viewMode ? savedProfile : draftProfile).map(([key, value]) => (
+                    <div key={key}>
+                      <label style={{ display: 'block', fontSize: '12px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                        {key.replace(/([A-Z])/g, ' $1')}
+                      </label>
                       {viewMode ? (
-                        <>
-                          <ProfileFieldView label="Full Name" value={savedProfile.fullName} />
-                          <ProfileFieldView label="Title" value={savedProfile.title} />
-                          <ProfileFieldView label="Email" value={savedProfile.email} />
-                          <ProfileFieldView label="Phone" value={savedProfile.phone} />
-                          <ProfileFieldView label="Company" value={savedProfile.company} />
-                          <ProfileFieldView label="Department" value={savedProfile.department} />
-                        </>
+                        <p style={{ fontSize: '16px', margin: 0 }}>{value}</p>
                       ) : (
-                        <>
-                          <ProfileFieldEdit
-                            label="Full Name"
-                            value={draftProfile.fullName}
-                            onChange={(value) => setDraftProfile({ ...draftProfile, fullName: value })}
-                            error={errors.fullName}
-                            required
-                          />
-                          <ProfileFieldEdit
-                            label="Title"
-                            value={draftProfile.title}
-                            onChange={(value) => setDraftProfile({ ...draftProfile, title: value })}
-                            error={errors.title}
-                          />
-                          <ProfileFieldEdit
-                            label="Email"
-                            value={draftProfile.email}
-                            onChange={(value) => setDraftProfile({ ...draftProfile, email: value })}
-                            error={errors.email}
-                            required
-                          />
-                          <ProfileFieldEdit
-                            label="Phone"
-                            value={draftProfile.phone}
-                            onChange={(value) => setDraftProfile({ ...draftProfile, phone: value })}
-                            error={errors.phone}
-                          />
-                          <ProfileFieldEdit
-                            label="Company"
-                            value={draftProfile.company}
-                            onChange={(value) => setDraftProfile({ ...draftProfile, company: value })}
-                            error={errors.company}
-                          />
-                          <ProfileFieldEdit
-                            label="Department"
-                            value={draftProfile.department}
-                            onChange={(value) => setDraftProfile({ ...draftProfile, department: value })}
-                            error={errors.department}
-                          />
-                        </>
+                        <input
+                          style={styles.input}
+                          value={value}
+                          onChange={(e) => setDraftProfile({ ...draftProfile, [key]: e.target.value })}
+                        />
                       )}
-                    </TwoCol>
-                  </Section>
-                )}
-
-                {activeSection === 'professional' && (
-                  <Section title="Professional Scope">
-                    <p className="text-sm text-gray-300">
-                      Configure your legal and compliance focus areas.
-                    </p>
-                  </Section>
-                )}
-
-                {activeSection === 'preferences' && (
-                  <Section title="Platform Preferences">
-                    <p className="text-sm text-gray-300">
-                      Control how information is displayed and processed.
-                    </p>
-                  </Section>
-                )}
-
-                {activeSection === 'security' && (
-                  <Section title="Security Controls">
-                    <p className="text-sm text-gray-300">
-                      Manage authentication, passwords, and session policies.
-                    </p>
-                  </Section>
-                )}
-
-                {activeSection === 'billing' && (
-                  <Section title="Billing Overview">
-                    <div className="bg-gray-700 rounded-lg p-6">
-                      <div className="flex justify-between">
-                        <div>
-                          <p className="font-medium text-white">Enterprise Plan</p>
-                          <p className="text-sm text-gray-300">$2,500 / month</p>
-                        </div>
-                        <div className="text-sm text-gray-300">
-                          Next billing: Feb 15, 2026
-                        </div>
-                      </div>
                     </div>
-                  </Section>
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Footer Actions */}
               {!viewMode && (
-                <div className="border-t border-gray-700 px-8 py-4 flex justify-end gap-4">
-                  <button
-                    onClick={() => {
-                      setDraftProfile(savedProfile);
-                      setViewMode(true);
-                      setErrors({});
-                    }}
-                    className="px-6 py-2 bg-gray-600 text-black rounded-lg hover:bg-gray-700 transition-colors"
+                <div style={{ marginTop: '40px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                  <button 
+                    style={{ background: 'transparent', color: '#9ca3af', border: '1px solid #374151', padding: '10px 20px', borderRadius: '12px', cursor: 'pointer' }}
+                    onClick={() => setViewMode(true)}
                   >
                     Cancel
                   </button>
-                  <button
-                    onClick={() => {
-                      // Validation
-                      const newErrors: Record<string, string> = {};
-                      if (!draftProfile.fullName.trim()) newErrors.fullName = 'Full Name is required';
-                      if (!draftProfile.email.trim()) newErrors.email = 'Email is required';
-                      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draftProfile.email)) newErrors.email = 'Invalid email format';
-                      if (draftProfile.phone && !/^\+?[\d\s\-\(\)]+$/.test(draftProfile.phone)) newErrors.phone = 'Invalid phone format';
-
-                      if (Object.keys(newErrors).length > 0) {
-                        setErrors(newErrors);
-                      } else {
-                        setSavedProfile(draftProfile);
-                        setViewMode(true);
-                        setErrors({});
-                      }
-                    }}
-                    className="px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-600 transition-colors"
-                  >
+                  <button style={styles.purpleBtn} onClick={handleSave}>
                     Save Changes
                   </button>
                 </div>
@@ -229,52 +183,5 @@ const Profile: React.FC = () => {
     </div>
   );
 };
-
-/* Internal helper components — still ONE file */
-
-const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
-  title,
-  children
-}) => (
-  <div className="space-y-4">
-    <h3 className="text-lg font-medium text-white">{title}</h3>
-    {children}
-  </div>
-);
-
-const TwoCol: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
-);
-
-const ProfileFieldView: React.FC<{ label: string; value: string }> = ({
-  label,
-  value
-}) => (
-  <div>
-    <label className="block text-sm text-gray-400 mb-1">{label}</label>
-    <p className="text-base text-white">{value || 'Not set'}</p>
-  </div>
-);
-
-const ProfileFieldEdit: React.FC<{
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  required?: boolean;
-}> = ({ label, value, onChange, error, required }) => (
-  <div>
-    <label className="block text-sm font-medium text-white mb-1">
-      {label}{required && <span className="text-red-400 ml-1">*</span>}
-    </label>
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-gray-600 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
-      placeholder={`Enter ${label.toLowerCase()}`}
-    />
-    {error && <p className="text-sm text-red-400 mt-1">{error}</p>}
-  </div>
-);
 
 export default Profile;
