@@ -1,730 +1,561 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useMemo, useState } from 'react';
+
+type SectionId =
+  | 'personal'
+  | 'professional'
+  | 'preferences'
+  | 'notifications'
+  | 'integrations'
+  | 'security'
+  | 'analytics'
+  | 'billing';
+
+type FieldType = 'text' | 'email' | 'tel' | 'select' | 'toggle';
+
+type FieldDef = {
+  key: string;
+  label: string;
+  type: FieldType;
+  options?: string[]; // for select
+  description?: string;
+};
 
 const Profile: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<string>('personal');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [activeSection, setActiveSection] = useState<SectionId>('personal');
+  const [viewMode, setViewMode] = useState(true);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const sections = [
-    { id: 'personal', label: 'Personal Information', icon: '👤' },
-    { id: 'professional', label: 'Professional Information', icon: '💼' },
-    { id: 'preferences', label: 'Platform Preferences', icon: '⚙️' },
-    { id: 'notifications', label: 'Notification Settings', icon: '🔔' },
-    { id: 'integrations', label: 'Integrations & API', icon: '🔗' },
-    { id: 'security', label: 'Security Settings', icon: '🔒' },
-    { id: 'analytics', label: 'Usage Analytics', icon: '📊' },
-    { id: 'billing', label: 'Billing & Subscription', icon: '💳' }
+  // Personal
+  const [savedProfile, setSavedProfile] = useState({
+    fullName: 'Johnathan P. Whitaker',
+    title: 'General Counsel',
+    email: 'j.whitaker@acme-global.com',
+    phone: '+1 (212) 555-0147',
+    company: 'Acme Global Corporation',
+    department: 'Legal & Compliance',
+  });
+  const [draftProfile, setDraftProfile] = useState(savedProfile);
+
+  // Professional
+  const [savedProfessional, setSavedProfessional] = useState({
+    jobTitle: 'General Counsel',
+    industry: 'Legal Services',
+    yearsExperience: '10+',
+    skills: 'Contract Law, Compliance, Risk Management',
+    linkedin: 'linkedin.com/in/johnathanwhitaker',
+    portfolio: 'https://acme-global.com',
+    workPreference: 'Hybrid',
+    location: 'New York, NY',
+  });
+  const [draftProfessional, setDraftProfessional] = useState(savedProfessional);
+
+  // Preferences (toggles + selects)
+  const [savedPreferences, setSavedPreferences] = useState({
+    theme: 'Dark',
+    language: 'English',
+    timezone: 'UTC-05:00 (EST)',
+    accessibility: 'Standard',
+    autoSave: true,
+    compactMode: false,
+  });
+  const [draftPreferences, setDraftPreferences] = useState(savedPreferences);
+
+  // Notifications (toggles)
+  const [savedNotifications, setSavedNotifications] = useState({
+    emailAlerts: true,
+    smsAlerts: false,
+    pushNotifications: true,
+    marketingEmails: false,
+    securityAlerts: true,
+    productUpdates: true,
+  });
+  const [draftNotifications, setDraftNotifications] = useState(savedNotifications);
+
+  // Integrations (toggles + text)
+  const [savedIntegrations, setSavedIntegrations] = useState({
+    apiKeyStatus: 'Not Generated',
+    webhookUrl: '',
+    slackIntegration: false,
+    googleIntegration: false,
+    githubIntegration: false,
+    lastSync: 'Never',
+  });
+  const [draftIntegrations, setDraftIntegrations] = useState(savedIntegrations);
+
+  // Security (toggles + select/text)
+  const [savedSecurity, setSavedSecurity] = useState({
+    twoFactorAuth: false,
+    loginAlerts: true,
+    backupCodes: 'Not Generated',
+    trustedDevices: '0 devices',
+    passwordLastChanged: '3 months ago',
+  });
+  const [draftSecurity, setDraftSecurity] = useState(savedSecurity);
+
+  // Analytics (toggles + select)
+  const [savedAnalytics, setSavedAnalytics] = useState({
+    dataCollection: true,
+    personalization: true,
+    cookiePreference: 'Essential + Analytics',
+    activityHistory: true,
+    exportData: 'Available',
+  });
+  const [draftAnalytics, setDraftAnalytics] = useState(savedAnalytics);
+
+  // Billing (select + text)
+  const [savedBilling, setSavedBilling] = useState({
+    plan: 'Free',
+    billingCycle: 'Monthly',
+    paymentMethod: 'None',
+    billingEmail: 'you@example.com',
+    invoices: 'No invoices yet',
+  });
+  const [draftBilling, setDraftBilling] = useState(savedBilling);
+
+
+  // SECTIONS + FIELD DEFINITIONS
+
+  const sections: { id: SectionId; label: string }[] = [
+    { id: 'personal', label: 'Personal Information' },
+    { id: 'professional', label: 'Professional Information' },
+    { id: 'preferences', label: 'Platform Preferences' },
+    { id: 'notifications', label: 'Notifications' },
+    { id: 'integrations', label: 'Integrations & API' },
+    { id: 'security', label: 'Security' },
+    { id: 'analytics', label: 'Usage Analytics' },
+    { id: 'billing', label: 'Billing & Subscription' },
   ];
 
-  const handleSave = () => {
-    // Placeholder for save functionality
-    console.log('Saving profile data...');
+  const fieldsBySection: Record<SectionId, FieldDef[]> = {
+    personal: [
+      { key: 'fullName', label: 'Full Name', type: 'text' },
+      { key: 'title', label: 'Title', type: 'text' },
+      { key: 'email', label: 'Email', type: 'email' },
+      { key: 'phone', label: 'Phone', type: 'tel' },
+      { key: 'company', label: 'Company', type: 'text' },
+      { key: 'department', label: 'Department', type: 'text' },
+    ],
+    professional: [
+      { key: 'jobTitle', label: 'Job Title', type: 'text' },
+      { key: 'industry', label: 'Industry', type: 'text' },
+      { key: 'yearsExperience', label: 'Years Experience', type: 'select', options: ['0-1', '2-4', '5-9', '10+'] },
+      { key: 'workPreference', label: 'Work Preference', type: 'select', options: ['Remote', 'Hybrid', 'On-site'] },
+      { key: 'skills', label: 'Skills', type: 'text' },
+      { key: 'location', label: 'Location', type: 'text' },
+      { key: 'linkedin', label: 'LinkedIn', type: 'text' },
+      { key: 'portfolio', label: 'Portfolio', type: 'text' },
+    ],
+    preferences: [
+      { key: 'theme', label: 'Theme', type: 'select', options: ['Dark', 'Light', 'System'] },
+      { key: 'language', label: 'Language', type: 'select', options: ['English', 'Spanish', 'French'] },
+      { key: 'timezone', label: 'Timezone', type: 'select', options: ['UTC-08:00 (PST)', 'UTC-05:00 (EST)', 'UTC+00:00 (GMT)', 'UTC+01:00 (CET)'] },
+      { key: 'accessibility', label: 'Accessibility', type: 'select', options: ['Standard', 'High Contrast', 'Large Text'] },
+      { key: 'autoSave', label: 'Auto Save', type: 'toggle', description: 'Automatically save changes while editing.' },
+      { key: 'compactMode', label: 'Compact Mode', type: 'toggle', description: 'Reduce spacing for denser layouts.' },
+    ],
+    notifications: [
+      { key: 'emailAlerts', label: 'Email Alerts', type: 'toggle' },
+      { key: 'smsAlerts', label: 'SMS Alerts', type: 'toggle' },
+      { key: 'pushNotifications', label: 'Push Notifications', type: 'toggle' },
+      { key: 'marketingEmails', label: 'Marketing Emails', type: 'toggle' },
+      { key: 'securityAlerts', label: 'Security Alerts', type: 'toggle' },
+      { key: 'productUpdates', label: 'Product Updates', type: 'toggle' },
+    ],
+    integrations: [
+      { key: 'apiKeyStatus', label: 'API Key Status', type: 'select', options: ['Not Generated', 'Active', 'Revoked'] },
+      { key: 'webhookUrl', label: 'Webhook URL', type: 'text' },
+      { key: 'slackIntegration', label: 'Slack Integration', type: 'toggle' },
+      { key: 'googleIntegration', label: 'Google Integration', type: 'toggle' },
+      { key: 'githubIntegration', label: 'GitHub Integration', type: 'toggle' },
+      { key: 'lastSync', label: 'Last Sync', type: 'select', options: ['Never', 'Today', 'This Week', 'This Month'] },
+    ],
+    security: [
+      { key: 'twoFactorAuth', label: 'Two-Factor Authentication', type: 'toggle' },
+      { key: 'loginAlerts', label: 'Login Alerts', type: 'toggle' },
+      { key: 'backupCodes', label: 'Backup Codes', type: 'select', options: ['Not Generated', 'Generated'] },
+      { key: 'trustedDevices', label: 'Trusted Devices', type: 'select', options: ['0 devices', '1 device', '2 devices', '3+ devices'] },
+      { key: 'passwordLastChanged', label: 'Password Last Changed', type: 'select', options: ['Today', 'This Week', 'This Month', '3 months ago'] },
+    ],
+    analytics: [
+      { key: 'dataCollection', label: 'Data Collection', type: 'toggle' },
+      { key: 'personalization', label: 'Personalization', type: 'toggle' },
+      { key: 'cookiePreference', label: 'Cookie Preference', type: 'select', options: ['Essential Only', 'Essential + Analytics', 'All Cookies'] },
+      { key: 'activityHistory', label: 'Activity History', type: 'toggle' },
+      { key: 'exportData', label: 'Export Data', type: 'select', options: ['Available', 'Unavailable'] },
+    ],
+    billing: [
+      { key: 'plan', label: 'Plan', type: 'select', options: ['Free', 'Pro', 'Enterprise'] },
+      { key: 'billingCycle', label: 'Billing Cycle', type: 'select', options: ['Monthly', 'Yearly'] },
+      { key: 'paymentMethod', label: 'Payment Method', type: 'select', options: ['None', 'Visa **** 1234', 'Mastercard **** 5678'] },
+      { key: 'billingEmail', label: 'Billing Email', type: 'email' },
+      { key: 'invoices', label: 'Invoices', type: 'select', options: ['No invoices yet', 'Download latest'] },
+    ],
   };
 
+
+  // PICK CURRENT SAVED/DRAFT
+
+  const currentData = useMemo(() => {
+    switch (activeSection) {
+      case 'personal': return viewMode ? savedProfile : draftProfile;
+      case 'professional': return viewMode ? savedProfessional : draftProfessional;
+      case 'preferences': return viewMode ? savedPreferences : draftPreferences;
+      case 'notifications': return viewMode ? savedNotifications : draftNotifications;
+      case 'integrations': return viewMode ? savedIntegrations : draftIntegrations;
+      case 'security': return viewMode ? savedSecurity : draftSecurity;
+      case 'analytics': return viewMode ? savedAnalytics : draftAnalytics;
+      case 'billing': return viewMode ? savedBilling : draftBilling;
+      default: return null;
+    }
+  }, [
+    activeSection, viewMode,
+    savedProfile, draftProfile,
+    savedProfessional, draftProfessional,
+    savedPreferences, draftPreferences,
+    savedNotifications, draftNotifications,
+    savedIntegrations, draftIntegrations,
+    savedSecurity, draftSecurity,
+    savedAnalytics, draftAnalytics,
+    savedBilling, draftBilling
+  ]);
+
+  const setCurrentDraft = (key: string, value: any) => {
+    switch (activeSection) {
+      case 'personal': setDraftProfile({ ...draftProfile, [key]: value }); break;
+      case 'professional': setDraftProfessional({ ...draftProfessional, [key]: value }); break;
+      case 'preferences': setDraftPreferences({ ...draftPreferences, [key]: value }); break;
+      case 'notifications': setDraftNotifications({ ...draftNotifications, [key]: value }); break;
+      case 'integrations': setDraftIntegrations({ ...draftIntegrations, [key]: value }); break;
+      case 'security': setDraftSecurity({ ...draftSecurity, [key]: value }); break;
+      case 'analytics': setDraftAnalytics({ ...draftAnalytics, [key]: value }); break;
+      case 'billing': setDraftBilling({ ...draftBilling, [key]: value }); break;
+    }
+  };
+
+
+  // SAVE / CANCEL
+
+  const handleSave = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (activeSection === 'personal') {
+      if (!draftProfile.fullName.trim()) newErrors.fullName = 'Full Name is required';
+      if (!draftProfile.email.trim()) newErrors.email = 'Email is required';
+      if (Object.keys(newErrors).length) return setErrors(newErrors);
+      setSavedProfile(draftProfile);
+    }
+
+    if (activeSection === 'professional') {
+      if (!draftProfessional.jobTitle.trim()) newErrors.jobTitle = 'Job Title is required';
+      if (!draftProfessional.skills.trim()) newErrors.skills = 'Skills are required';
+      if (Object.keys(newErrors).length) return setErrors(newErrors);
+      setSavedProfessional(draftProfessional);
+    }
+
+    if (activeSection === 'preferences') setSavedPreferences(draftPreferences);
+    if (activeSection === 'notifications') setSavedNotifications(draftNotifications);
+    if (activeSection === 'integrations') setSavedIntegrations(draftIntegrations);
+    if (activeSection === 'security') setSavedSecurity(draftSecurity);
+    if (activeSection === 'analytics') setSavedAnalytics(draftAnalytics);
+    if (activeSection === 'billing') setSavedBilling(draftBilling);
+
+    setViewMode(true);
+    setErrors({});
+  };
+
+  const handleCancel = () => {
+    if (activeSection === 'personal') setDraftProfile(savedProfile);
+    if (activeSection === 'professional') setDraftProfessional(savedProfessional);
+    if (activeSection === 'preferences') setDraftPreferences(savedPreferences);
+    if (activeSection === 'notifications') setDraftNotifications(savedNotifications);
+    if (activeSection === 'integrations') setDraftIntegrations(savedIntegrations);
+    if (activeSection === 'security') setDraftSecurity(savedSecurity);
+    if (activeSection === 'analytics') setDraftAnalytics(savedAnalytics);
+    if (activeSection === 'billing') setDraftBilling(savedBilling);
+
+    setViewMode(true);
+    setErrors({});
+  };
+
+  // STYLES (keep your UI)
+
+  const styles = {
+    wrapper: {
+      backgroundColor: '#0b1020',
+      minHeight: '100vh',
+      padding: '40px 20px',
+      color: 'white',
+      fontFamily: 'Inter, sans-serif'
+    },
+    container: { maxWidth: '1100px', margin: '0 auto' },
+    header: {
+      marginBottom: '40px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end'
+    },
+    sidebar: {
+      backgroundColor: '#111827',
+      borderRadius: '16px',
+      padding: '12px',
+      border: '1px solid rgba(255,255,255,0.05)',
+      height: 'fit-content' as const
+    },
+    mainCard: {
+      backgroundColor: '#111827',
+      borderRadius: '24px',
+      border: '1px solid rgba(255,255,255,0.05)',
+      overflow: 'hidden' as const
+    },
+    navButton: (isActive: boolean) => ({
+      width: '100%',
+      padding: '12px 16px',
+      borderRadius: '10px',
+      border: 'none',
+      textAlign: 'left' as const,
+      cursor: 'pointer',
+      fontSize: '14px',
+      transition: '0.2s',
+      backgroundColor: isActive ? 'rgba(124, 58, 237, 0.12)' : 'transparent',
+      color: isActive ? '#a78bfa' : '#9ca3af',
+      fontWeight: isActive ? 600 : 400
+    }),
+    purpleBtn: {
+      backgroundColor: '#7c3aed',
+      color: 'white',
+      padding: '10px 24px',
+      borderRadius: '12px',
+      border: 'none',
+      fontWeight: 600,
+      cursor: 'pointer',
+      transition: '0.2s'
+    },
+    ghostBtn: {
+      background: 'transparent',
+      color: '#9ca3af',
+      border: '1px solid #374151',
+      padding: '10px 20px',
+      borderRadius: '12px',
+      cursor: 'pointer'
+    },
+    label: {
+      display: 'block',
+      fontSize: '12px',
+      color: '#6b7280',
+      textTransform: 'uppercase' as const,
+      marginBottom: '8px',
+      letterSpacing: '0.5px'
+    },
+    input: {
+      width: '100%',
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.10)',
+      borderRadius: '10px',
+      padding: '12px',
+      color: 'white',
+      outline: 'none'
+    },
+    select: {
+      width: '100%',
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.10)',
+      borderRadius: '10px',
+      padding: '12px',
+      color: 'white',
+      outline: 'none'
+    },
+    valueBox: {
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.08)',
+      borderRadius: '12px',
+      padding: '14px 16px',
+      fontSize: '16px',
+      margin: 0
+    },
+    helper: { marginTop: '6px', color: '#9ca3af', fontSize: '12px' }
+  };
+
+
+  // TOGGLE COMPONENT (switch UI)
+
+  const Toggle = ({
+    checked,
+    onChange
+  }: {
+    checked: boolean;
+    onChange: (next: boolean) => void;
+  }) => {
+    const track = {
+      width: 44,
+      height: 24,
+      borderRadius: 999,
+      border: '1px solid rgba(255,255,255,0.12)',
+      backgroundColor: checked ? 'rgba(124,58,237,0.45)' : 'rgba(255,255,255,0.06)',
+      padding: 3,
+      cursor: 'pointer',
+      transition: '0.2s',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: checked ? 'flex-end' : 'flex-start'
+    } as React.CSSProperties;
+
+    const knob = {
+      width: 18,
+      height: 18,
+      borderRadius: 999,
+      backgroundColor: checked ? '#a78bfa' : 'rgba(255,255,255,0.55)',
+      boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
+      transition: '0.2s'
+    } as React.CSSProperties;
+
+    return (
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        style={track}
+      >
+        <span style={knob} />
+      </button>
+    );
+  };
+
+  const formatValue = (val: any) => {
+    if (typeof val === 'boolean') return val ? 'On' : 'Off';
+    if (val === '') return '—';
+    return String(val);
+  };
+
+  // RENDER
+
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-          <p className="text-gray-600 mt-1">Manage your account settings and preferences</p>
+    <div style={styles.wrapper}>
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <div>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', margin: 0 }}>Profile</h1>
+            <p style={{ color: '#9ca3af', marginTop: '8px' }}>Manage your account and platform settings</p>
+          </div>
+
+          {viewMode && currentData && (
+            <button style={styles.purpleBtn} onClick={() => setViewMode(false)}>
+              Edit Settings
+            </button>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-              <nav className="space-y-2">
-                {sections.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      activeSection === section.id
-                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="mr-2">{section.icon}</span>
-                    {section.label}
+        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '32px' }}>
+          <aside style={styles.sidebar}>
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {sections.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => {
+                    setViewMode(true);
+                    setErrors({});
+                    setActiveSection(s.id);
+                  }}
+                  style={styles.navButton(activeSection === s.id)}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </nav>
+          </aside>
+
+          <main style={styles.mainCard}>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <h2 style={{ fontSize: '28px', fontWeight: 700, margin: 0 }}>
+                {sections.find((s) => s.id === activeSection)?.label}
+              </h2>
+            </div>
+
+            <div style={{ padding: '32px' }}>
+              {currentData && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                  {fieldsBySection[activeSection].map((field) => {
+                    const value = (currentData as any)[field.key];
+
+                    return (
+                      <div key={field.key}>
+                        <label style={styles.label}>{field.label}</label>
+
+                        {/* VIEW MODE */}
+                        {viewMode && (
+                          <p style={styles.valueBox as React.CSSProperties}>
+                            {formatValue(value)}
+                          </p>
+                        )}
+
+                        {/* EDIT MODE */}
+                        {!viewMode && (
+                          <>
+                            {field.type === 'toggle' && (
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                                <p style={{ margin: 0, color: '#e5e7eb', fontSize: '14px' }}>
+                                  {formatValue(value)}
+                                </p>
+                                <Toggle
+                                  checked={Boolean(value)}
+                                  onChange={(next) => setCurrentDraft(field.key, next)}
+                                />
+                              </div>
+                            )}
+
+                            {(field.type === 'select') && (
+                              <select
+                                style={styles.select as React.CSSProperties}
+                                value={String(value)}
+                                onChange={(e) => setCurrentDraft(field.key, e.target.value)}
+                              >
+                                {(field.options || []).map((opt) => (
+                                  <option key={opt} value={opt} style={{ background: '#111827', color: 'white' }}>
+                                    {opt}
+                                  </option>
+                                ))}
+                              </select>
+                            )}
+
+                            {(field.type === 'text' || field.type === 'email' || field.type === 'tel') && (
+                              <input
+                                style={styles.input as React.CSSProperties}
+                                type={field.type === 'text' ? 'text' : field.type}
+                                value={String(value)}
+                                onChange={(e) => setCurrentDraft(field.key, e.target.value)}
+                              />
+                            )}
+
+                            {field.description && (
+                              <div style={styles.helper as React.CSSProperties}>{field.description}</div>
+                            )}
+
+                            {errors[field.key] && (
+                              <p style={{ margin: '8px 0 0', color: '#fca5a5', fontSize: '12px' }}>
+                                {errors[field.key]}
+                              </p>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {!viewMode && currentData && (
+                <div style={{ marginTop: '40px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                  <button style={styles.ghostBtn as React.CSSProperties} onClick={handleCancel}>
+                    Cancel
                   </button>
-                ))}
-              </nav>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[600px]">
-              {/* Personal Information */}
-              {activeSection === 'personal' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Personal Information</h2>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="Johnathan P. Whitaker"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Title
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="General Counsel"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        defaultValue="j.whitaker@acme-global.com"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        defaultValue="+1 (212) 555-0147"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Company
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="Acme Global Corporation"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Department
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="Legal & Compliance"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={handleSave}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Save Changes
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Professional Information */}
-              {activeSection === 'professional' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Professional Information</h2>
-
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Jurisdiction Expertise
-                      </label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {['US Federal', 'New York', 'California', 'Delaware', 'EU GDPR', 'UK', 'APAC', 'Other'].map((jurisdiction) => (
-                          <label key={jurisdiction} className="flex items-center">
-                            <input
-                              type="checkbox"
-                              defaultChecked={['US Federal', 'New York', 'California', 'Delaware'].includes(jurisdiction)}
-                              className="mr-2"
-                            />
-                            {jurisdiction}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Document Types You Manage
-                      </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {[
-                          'Commercial Leases',
-                          'MSAs (Master Service Agreements)',
-                          'Office Leases',
-                          'Service Agreements',
-                          'Retail Leases',
-                          'Industrial Leases',
-                          'NDAs'
-                        ].map((docType) => (
-                          <label key={docType} className="flex items-center">
-                            <input
-                              type="checkbox"
-                              defaultChecked={['Commercial Leases', 'MSAs (Master Service Agreements)', 'Office Leases', 'Service Agreements'].includes(docType)}
-                              className="mr-2"
-                            />
-                            {docType}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Areas of Focus
-                      </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {[
-                          'Financial Terms Extraction',
-                          'Obligation Tracking',
-                          'Compliance Monitoring',
-                          'Risk Assessment',
-                          'Clause Evolution Tracking'
-                        ].map((focus) => (
-                          <label key={focus} className="flex items-center">
-                            <input
-                              type="checkbox"
-                              defaultChecked={['Financial Terms Extraction', 'Obligation Tracking', 'Compliance Monitoring'].includes(focus)}
-                              className="mr-2"
-                            />
-                            {focus}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-3">
-                          Average Document Volume
-                        </label>
-                        <div className="space-y-2">
-                          {[
-                            { value: '1-10', label: '1-10 per month' },
-                            { value: '11-50', label: '11-50 per month' },
-                            { value: '50+', label: '50+ per month' }
-                          ].map((option) => (
-                            <label key={option.value} className="flex items-center">
-                              <input
-                                type="radio"
-                                name="documentVolume"
-                                defaultChecked={option.value === '11-50'}
-                                className="mr-2"
-                              />
-                              {option.label}
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-3">
-                          Team Size
-                        </label>
-                        <div className="space-y-2">
-                          {[
-                            { value: 'solo', label: 'Solo' },
-                            { value: '2-5', label: '2-5 members' },
-                            { value: '6-10', label: '6-10 members' },
-                            { value: '11-20', label: '11-20 members' },
-                            { value: '20+', label: '20+ members' }
-                          ].map((option) => (
-                            <label key={option.value} className="flex items-center">
-                              <input
-                                type="radio"
-                                name="teamSize"
-                                defaultChecked={option.value === '6-10'}
-                                className="mr-2"
-                              />
-                              {option.label}
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={handleSave}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Save Professional Settings
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Platform Preferences */}
-              {activeSection === 'preferences' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Platform Preferences</h2>
-
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Dashboard Default View
-                      </label>
-                      <div className="space-y-2">
-                        {[
-                          { value: 'kpi', label: 'KPI Overview' },
-                          { value: 'activity', label: 'Activity Feed' },
-                          { value: 'risk', label: 'Risk Dashboard' }
-                        ].map((option) => (
-                          <label key={option.value} className="flex items-center">
-                            <input
-                              type="radio"
-                              name="defaultView"
-                              defaultChecked={option.value === 'kpi'}
-                              className="mr-2"
-                            />
-                            {option.label}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Document List View
-                      </label>
-                      <div className="space-y-2">
-                        {[
-                          { value: 'grid', label: 'Grid View' },
-                          { value: 'list', label: 'List View' },
-                          { value: 'compact', label: 'Compact View' }
-                        ].map((option) => (
-                          <label key={option.value} className="flex items-center">
-                            <input
-                              type="radio"
-                              name="listView"
-                              defaultChecked={option.value === 'list'}
-                              className="mr-2"
-                            />
-                            {option.label}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Items Per Page
-                        </label>
-                        <select
-                          defaultValue={25}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          <option value={25}>25</option>
-                          <option value={50}>50</option>
-                          <option value={100}>100</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Date Format
-                        </label>
-                        <select
-                          defaultValue="MM/DD/YYYY"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                          <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                          <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Currency Display
-                        </label>
-                        <select
-                          defaultValue="USD"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          <option value="USD">USD ($)</option>
-                          <option value="EUR">EUR (€)</option>
-                          <option value="GBP">GBP (£)</option>
-                          <option value="JPY">JPY (¥)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Time Zone
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue="America/New_York"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Language
-                        </label>
-                        <select
-                          defaultValue="en"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          <option value="en">English</option>
-                          <option value="es">Spanish</option>
-                          <option value="fr">French</option>
-                          <option value="de">German</option>
-                          <option value="ja">Japanese</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={handleSave}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Save Preferences
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Placeholder sections */}
-              {activeSection === 'notifications' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Notification Settings</h2>
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Email Notifications
-                      </label>
-                      <div className="space-y-3">
-                        <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="mr-3" />
-                          Daily Digest
-                        </label>
-                        <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="mr-3" />
-                          Overdue Alerts
-                        </label>
-                        <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="mr-3" />
-                          Processing Complete
-                        </label>
-                        <label className="flex items-center">
-                          <input type="checkbox" className="mr-3" />
-                          Weekly Reports
-                        </label>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        In-App Notifications
-                      </label>
-                      <div className="space-y-3">
-                        <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="mr-3" />
-                          All Activities
-                        </label>
-                        <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="mr-3" />
-                          Critical Only
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={handleSave}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Save Notification Settings
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeSection === 'integrations' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Integrations & API</h2>
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Document Management Systems
-                      </label>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="flex items-center mb-2">
-                            <input type="checkbox" className="mr-3" />
-                            SharePoint Integration
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="SharePoint Folder URL"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="flex items-center mb-2">
-                            <input type="checkbox" className="mr-3" />
-                            Google Drive Integration
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Google Drive Folder ID"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        API Access
-                      </label>
-                      <div className="space-y-3">
-                        <div>
-                          <label className="block text-sm text-gray-600 mb-1">API Key</label>
-                          <div className="flex">
-                            <input
-                              type="password"
-                              defaultValue="••••••••••••••••••••••••••••••••"
-                              readOnly
-                              className="flex-1 p-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            <button className="px-4 py-3 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg hover:bg-gray-200">
-                              Show
-                            </button>
-                          </div>
-                        </div>
-                        <div className="flex space-x-3">
-                          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            Regenerate Key
-                          </button>
-                          <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            Copy Key
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={handleSave}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Save Integration Settings
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeSection === 'security' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Security Settings</h2>
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Two-Factor Authentication
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="mr-3" />
-                        Enable Two-Factor Authentication
-                      </label>
-                      <p className="text-sm text-gray-500 mt-2">Add an extra layer of security to your account</p>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Password Management
-                      </label>
-                      <div className="space-y-3">
-                        <div>
-                          <label className="block text-sm text-gray-600 mb-1">Current Password</label>
-                          <input
-                            type="password"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm text-gray-600 mb-1">New Password</label>
-                          <input
-                            type="password"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm text-gray-600 mb-1">Confirm New Password</label>
-                          <input
-                            type="password"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-                      </div>
-                      <button className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                        Change Password
-                      </button>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Session Management
-                      </label>
-                      <label className="flex items-center mb-3">
-                        <input type="checkbox" defaultChecked className="mr-3" />
-                        Remember me on this device
-                      </label>
-                      <div>
-                        <label className="block text-sm text-gray-600 mb-2">Auto-logout after</label>
-                        <select
-                          defaultValue={60}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          <option value={15}>15 minutes</option>
-                          <option value={30}>30 minutes</option>
-                          <option value={60}>1 hour</option>
-                          <option value={240}>4 hours</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={handleSave}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Save Security Settings
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeSection === 'analytics' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Usage Analytics</h2>
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Current Usage (Last 30 Days)</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-blue-600">48</div>
-                          <div className="text-sm text-gray-600">Documents Processed</div>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-green-600">156</div>
-                          <div className="text-sm text-gray-600">Clauses Identified</div>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-purple-600">92.4%</div>
-                          <div className="text-sm text-gray-600">Average Confidence</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Storage Usage</h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium">Documents</span>
-                          <span className="text-sm text-gray-600">4.2 GB / 10 GB</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div className="bg-blue-600 h-2 rounded-full" style={{ width: '42%' }}></div>
-                        </div>
-                        <button className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
-                          Upgrade Storage
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeSection === 'billing' && (
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Billing & Subscription</h2>
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Current Plan</h3>
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h4 className="text-xl font-semibold text-gray-900">Enterprise Plan</h4>
-                            <p className="text-gray-600 mt-1">$2,500/month</p>
-                            <ul className="text-sm text-gray-600 mt-3 space-y-1">
-                              <li>• 100 documents/month</li>
-                              <li>• Advanced AI analysis</li>
-                              <li>• Priority support</li>
-                              <li>• API access</li>
-                            </ul>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-gray-600">Next billing: Feb 15, 2024</div>
-                            <div className="text-sm text-gray-600 mt-1">Visa •••• 4242</div>
-                          </div>
-                        </div>
-                        <div className="mt-6 flex space-x-3">
-                          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            Update Payment Method
-                          </button>
-                          <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            Upgrade Plan
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Usage This Period</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="text-center p-4 bg-gray-50 rounded-lg">
-                          <div className="text-2xl font-bold text-blue-600">48/100</div>
-                          <div className="text-sm text-gray-600">Documents</div>
-                        </div>
-                        <div className="text-center p-4 bg-gray-50 rounded-lg">
-                          <div className="text-2xl font-bold text-green-600">1,245/5,000</div>
-                          <div className="text-sm text-gray-600">API Calls</div>
-                        </div>
-                        <div className="text-center p-4 bg-gray-50 rounded-lg">
-                          <div className="text-2xl font-bold text-purple-600">4.2/10 GB</div>
-                          <div className="text-sm text-gray-600">Storage</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <button style={styles.purpleBtn as React.CSSProperties} onClick={handleSave}>
+                    Save Changes
+                  </button>
                 </div>
               )}
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>
