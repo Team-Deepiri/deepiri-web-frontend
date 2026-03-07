@@ -79,7 +79,6 @@ const Register = () => {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'row',
-        background: '#09090b',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -95,7 +94,7 @@ const Register = () => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 2,
-            background: 'linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0f0a1f 50%, #1a0a2e 75%, #0a0a1a 100%)',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f2f2f7 25%, #e9e9f0 50%, #f2f2f7 75%, #ffffff 100%)',
             backgroundSize: '400% 400%',
             animation: 'gradient-shift 15s ease infinite'
           }}
@@ -106,8 +105,8 @@ const Register = () => {
               position: 'absolute',
               inset: 0,
               backgroundImage: `
-                linear-gradient(rgba(0, 212, 255, 0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.15) 1px, transparent 1px)
+                linear-gradient(rgba(183, 0, 255,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(183, 0, 255,0.15) 1px, transparent 1px)
               `,
               backgroundSize: '50px 50px',
               animation: 'grid-pulse 4s ease-in-out infinite',
@@ -159,7 +158,6 @@ const Register = () => {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '3rem 1.5rem',
-          background: 'rgba(9, 9, 11, 0.8)',
           backdropFilter: 'blur(10px)',
           position: 'relative',
           zIndex: 2
@@ -190,7 +188,7 @@ const Register = () => {
                 Sign up for Deepiri
               </h1>
               <p style={{
-                color: '#9ca3af',
+                color: '#000000',
                 fontSize: '1rem',
                 lineHeight: '1.5',
                 margin: 0
@@ -215,7 +213,7 @@ const Register = () => {
               <div>
                 <label style={{
                   display: 'block',
-                  color: 'white',
+                  color: 'black',
                   fontSize: '0.875rem',
                   fontWeight: '500',
                   marginBottom: '0.5rem'
@@ -232,19 +230,19 @@ const Register = () => {
                   style={{
                     width: '100%',
                     padding: '0.75rem 1rem',
-                    background: '#18181b',
-                    border: emailError ? '1px solid #ef4444' : '1px solid #27272a',
+                    background: '#ffffff',
+                    border: emailError ? '1px solid #ef4444' : '1px solid #d0d0d6',
                     borderRadius: '0.5rem',
-                    color: 'white',
+                    color: 'black',
                     fontSize: '1rem',
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
                   onFocus={(e) => {
-                    if (!emailError) e.target.style.borderColor = '#3b82f6';
+                    if (!emailError) e.target.style.borderColor = '#733bf6';
                   }}
                   onBlur={(e) => {
-                    if (!emailError) e.target.style.borderColor = '#27272a';
+                    if (!emailError) e.target.style.borderColor = '#d0d0d6';
                   }}
                 />
                 {emailError && (
@@ -268,7 +266,7 @@ const Register = () => {
               <div>
                 <label style={{
                   display: 'block',
-                  color: 'white',
+                  color: 'black',
                   fontSize: '0.875rem',
                   fontWeight: '500',
                   marginBottom: '0.5rem'
@@ -285,16 +283,16 @@ const Register = () => {
                   style={{
                     width: '100%',
                     padding: '0.75rem 1rem',
-                    background: '#18181b',
-                    border: '1px solid #27272a',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
                     borderRadius: '0.5rem',
-                    color: 'white',
+                    color: 'black',
                     fontSize: '1rem',
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                  onBlur={(e) => e.target.style.borderColor = '#27272a'}
+                    onFocus={(e) => e.target.style.borderColor = '#733bf6'}
+                    onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
                 />
                 <div style={{
                   textAlign: 'right',
@@ -309,7 +307,7 @@ const Register = () => {
               <div>
                 <label style={{
                   display: 'block',
-                  color: 'white',
+                  color: 'black',
                   fontSize: '0.875rem',
                   fontWeight: '500',
                   marginBottom: '0.5rem'
@@ -327,16 +325,16 @@ const Register = () => {
                   style={{
                     width: '100%',
                     padding: '0.75rem 1rem',
-                    background: '#18181b',
-                    border: '1px solid #27272a',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
                     borderRadius: '0.5rem',
-                    color: 'white',
+                    color: 'black',
                     fontSize: '1rem',
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                  onBlur={(e) => e.target.style.borderColor = '#27272a'}
+                    onFocus={(e) => e.target.style.borderColor = '#733bf6'}
+                    onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
                 />
 
                 <div style={{
@@ -355,7 +353,7 @@ const Register = () => {
                 style={{
                   width: '100%',
                   padding: '0.75rem',
-                  background: '#27272a',
+                  background: '#0ea5e9',
                   color: 'white',
                   borderRadius: '9999px',
                   fontWeight: '500',
@@ -365,10 +363,10 @@ const Register = () => {
                   opacity: loading ? 0.5 : 1
                 }}
                 onMouseEnter={(e) => {
-                  if (!loading) (e.target as HTMLButtonElement).style.background = '#3f3f46';
+                  if (!loading) (e.target as HTMLButtonElement).style.background = '#0ea5e9';
                 }}
                 onMouseLeave={(e) => {
-                  if (!loading) (e.target as HTMLButtonElement).style.background = '#27272a';
+                  if (!loading) (e.target as HTMLButtonElement).style.background = '#38bdf8';
                 }}
               >
                 {loading ? 'Creating account...' : 'Next'}
@@ -381,14 +379,14 @@ const Register = () => {
               marginTop: '2rem'
             }}>
               <p style={{
-                color: '#9ca3af',
+                color: '#000000',
                 fontSize: '0.875rem',
                 margin: 0
               }}>
                 Already have an account?{' '}
                 <Link to="/login" 
                   style={{
-                  color: '#60a5fa',
+                  color: '#733bf6',
                   textDecoration: 'underline'
                 }}>
                   Log in

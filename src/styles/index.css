@@ -1,5 +1,9 @@
 /* Modern CSS Reset and Base Styles */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --primary: #6366f1;
@@ -22,8 +26,8 @@
   --deepiri-amber: #f59e0b;
   --deepiri-accent-gradient: linear-gradient(90deg, #f97316, #f59e0b);
 
-  --deepiri-panel-bg: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018));
-  --deepiri-panel-border: rgba(255,255,255,0.09);
+  --deepiri-panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018));
+  --deepiri-panel-border: rgba(255, 255, 255, 0.09);
 
   --dark: #0b1020;
   --darker: #070b17;
@@ -32,6 +36,7 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-purple-2xl: 0 25px 50px -12px #c9c6f3;
 
   --glass-bg: rgba(99, 102, 241, 0.15);
   --glass-border: rgba(99, 102, 241, 0.3);
@@ -40,7 +45,8 @@
   --transition-fast: 0.15s ease-in-out;
   --transition-normal: 0.3s ease-in-out;
 
-  --deepiri-nav-h: 64px;             /* single source of truth for top nav height */
+  --deepiri-nav-h: 64px;
+  /* single source of truth for top nav height */
   --nav-height: var(--deepiri-nav-h);
 
   /* ✅ tune this to match SidebarNav width */
@@ -60,7 +66,12 @@ body {
   overflow-x: hidden;
 }
 
-#root { height: 100%; width: 100%; background: var(--dark); position: relative; }
+#root {
+  height: 100%;
+  width: 100%;
+  background: var(--dark);
+  position: relative;
+}
 
 /* =========================
    ✅ LAYOUT FIXES (IMPORTANT)
@@ -70,7 +81,9 @@ body {
 .app-shell {
   min-height: 100vh;
   position: relative;
-  background: var(--dark);
+  /*background: linear-gradient(to bottom, white, rgb(219, 219, 219)); var(--dark) */
+   background: linear-gradient(to bottom, #1e3a8a, #0f172a);
+  color: white;
 }
 
 /* main is flex column so footer sits after content */
@@ -100,13 +113,16 @@ body {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
+
 
 /* mobile: sidebar likely collapses */
 @media (max-width: 992px) {
-  .app-main { margin-left: 0; }
+  .app-main {
+    margin-left: 0;
+  }
 }
 
 /* Subtle pattern overlay used by App */
@@ -114,13 +130,60 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
+.bg-chips {
+  background: var(--primary);
+}
+
+.bg-chips:hover {
+  background: var(--primary-500);
+}
+
 /* =========================
-   Scrollbar
+   Scrollbar (looks bad)
    ========================= */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #1e293b; }
-::-webkit-scrollbar-thumb { background: var(--primary-gradient); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--secondary-gradient); }
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 10px;
+}
+
+/* Thumb (grey scroll button) */
+::-webkit-scrollbar-thumb {
+  background: #9ca3af; /* grey */
+  border-radius: 10px;
+  border: 3px solid #1e293b; /* creates spacing effect */
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* darker grey on hover */
+}
+
+/* Arrow buttons */
+::-webkit-scrollbar-button {
+  height: 16px;
+  background-color: #334155; /* slightly lighter than track */
+}
+
+/* Up arrow */
+::-webkit-scrollbar-button:vertical:decrement {
+  background:
+    center no-repeat
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%23ffffff' d='M7 14l5-5 5 5z'/></svg>");
+}
+
+/* Down arrow */
+::-webkit-scrollbar-button:vertical:increment {
+  background:
+    center no-repeat
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%23ffffff' d='M7 10l5 5 5-5z'/></svg>");
+}
 
 /* =========================
    Glassmorphism
@@ -149,14 +212,22 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 .gradient-text-secondary {
   background: var(--secondary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 .gradient-text-accent {
   background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-vertical {
+  background: linear-gradient(to bottom, var(--primary), var(--deepiri-orange));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -170,10 +241,19 @@ body {
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
+
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* =========================
@@ -195,6 +275,7 @@ body {
   justify-content: center;
   gap: 8px;
 }
+
 .btn-modern::before {
   content: "";
   position: absolute;
@@ -202,10 +283,13 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.5s;
 }
-.btn-modern:hover::before { left: 100%; }
+
+.btn-modern:hover::before {
+  left: 100%;
+}
 
 .btn-primary {
   background: var(--primary-gradient);
@@ -213,7 +297,11 @@ body {
   box-shadow: var(--shadow-lg);
   border-radius: 1rem;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
 
 .btn-glass {
   background: rgba(30, 27, 75, 0.4);
@@ -221,6 +309,7 @@ body {
   border: 1px solid rgba(99, 102, 241, 0.3);
   color: #e2e8f0;
 }
+
 .btn-glass:hover {
   background: rgba(99, 102, 241, 0.2);
   border-color: rgba(99, 102, 241, 0.5);
@@ -234,6 +323,7 @@ body {
   box-shadow: 0 14px 28px rgba(249, 115, 22, 0.22);
   border-radius: 1rem;
 }
+
 .btn-deepiri:hover {
   transform: translateY(-2px);
   box-shadow: 0 18px 36px rgba(249, 115, 22, 0.28);
@@ -243,38 +333,41 @@ body {
    Cards + Inputs
    ========================= */
 .card-modern {
-  background: rgba(30, 27, 75, 0.6);
+  background: rgb(250, 250, 250); /* rgba(30, 27, 75, 0.6); */
+  color: black;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid rgb(250, 250, 250); /* rgba(99, 102, 241, 0.2) */
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-xl);
   transition: all var(--transition-normal);
 }
+
 .card-modern:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-2xl);
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(30, 27, 75, 0.8);
+  box-shadow: var(--shadow-purple-2xl);
+  border-color: lightgray; /* rgba(99, 102, 241, 0.4) */
+  background: white; /* rgba(30, 27, 75, 0.8) */
 }
 
 .input-modern {
   width: 100%;
   padding: 16px 20px;
-  border: 2px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(200, 200, 200, 0.4); /* rgba(255,255,255,0.1) */
   border-radius: 12px;
-  background: rgba(255,255,255,0.05);
+  background: rgb(255,255,255);
   backdrop-filter: blur(10px);
-  color: white;
+  color: black;
   font-size: 16px;
   transition: all var(--transition-normal);
 }
+
 .input-modern:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
 }
-.input-modern::placeholder { color: rgba(255, 255, 255, 0.5); }
+.input-modern::placeholder { color: rgba(0, 0, 0, 0.5) } /* rgba(255, 255, 255, 0.5) */
 
 /* =========================
    Deepiri panels + rhythm
@@ -288,19 +381,22 @@ body {
   box-shadow: 0 22px 60px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
+
 .deepiri-panel::before {
   content: "";
   position: absolute;
   inset: -2px;
   background:
-    radial-gradient(600px 180px at 20% 10%, rgba(249,115,22,0.18), transparent 60%),
-    radial-gradient(520px 200px at 85% 20%, rgba(245,158,11,0.14), transparent 60%);
+    radial-gradient(600px 180px at 20% 10%, rgba(249, 115, 22, 0.18), transparent 60%),
+    radial-gradient(520px 200px at 85% 20%, rgba(245, 158, 11, 0.14), transparent 60%);
   pointer-events: none;
   opacity: 0.8;
 }
+
 .deepiri-cardLift {
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
 }
+
 .deepiri-cardLift:hover {
   transform: translateY(-3px);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.38);
@@ -390,6 +486,7 @@ body {
   color: rgba(245, 158, 11, 0.95);
   margin-bottom: 8px;
 }
+
 .deepiri-stepTitle {
   font-size: 16px;
   font-weight: 800;
@@ -417,16 +514,18 @@ body {
   position: relative;
   overflow: hidden;
 }
+
 .deepiri-metricCard::before {
   content: "";
   position: absolute;
   inset: -2px;
   background:
-    radial-gradient(340px 140px at 18% 12%, rgba(249,115,22,0.16), transparent 60%),
-    radial-gradient(320px 140px at 85% 18%, rgba(245,158,11,0.12), transparent 60%);
+    radial-gradient(340px 140px at 18% 12%, rgba(249, 115, 22, 0.16), transparent 60%),
+    radial-gradient(320px 140px at 85% 18%, rgba(245, 158, 11, 0.12), transparent 60%);
   opacity: 0.9;
   pointer-events: none;
 }
+
 .deepiri-metricIcon {
   width: 42px;
   height: 42px;
@@ -440,6 +539,7 @@ body {
   position: relative;
   z-index: 1;
 }
+
 .deepiri-metricValue {
   font-weight: 900;
   font-size: 16px;
@@ -447,6 +547,7 @@ body {
   position: relative;
   z-index: 1;
 }
+
 .deepiri-metricLabel {
   font-size: 12px;
   margin-top: 3px;
@@ -473,7 +574,13 @@ body {
   text-align: center;
   padding-top: 6px;
 }
-.deepiri-heroLogoWrap { display: flex; justify-content: center; margin-bottom: 14px; }
+
+.deepiri-heroLogoWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
 .deepiri-heroLogo {
   height: 120px;
   width: auto;
@@ -481,6 +588,7 @@ body {
   filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.18));
   transform: translateX(-10px);
 }
+
 .deepiri-heroEyebrow {
   font-size: 11px;
   letter-spacing: 0.24em;
@@ -488,6 +596,7 @@ body {
   color: rgba(148, 163, 184, 0.92);
   margin-bottom: 14px;
 }
+
 .deepiri-heroTitle {
   margin: 0 auto;
   font-weight: 900;
@@ -522,11 +631,13 @@ body {
 .deepiri-dividerLine {
   position: absolute;
   top: 50%;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   height: 1px;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.08);
 }
+
 .deepiri-dividerGlow {
   position: absolute;
   top: 50%;
@@ -534,7 +645,7 @@ body {
   width: 220px;
   height: 18px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(249,115,22,0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.22), transparent 70%);
   filter: blur(2px);
 }
 
@@ -548,6 +659,20 @@ body {
 .btn-secondary:hover {
   border-color: rgba(255, 255, 255, 0.35);
   background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.btn-login {
+  background: transparent;
+  color: black;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid rgba(215, 215, 215, 0.2); /* rgba(255, 255, 255, 0.2) */
+  border-radius: 12px;
+}
+.btn-login:hover {
+  /* border-color: rgba(255, 255, 255, 0.35); */
+  background: var(--primary);
+  color: white;
   transform: translateY(-2px);
 }
 
@@ -701,7 +826,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animated-bg { animation: none; }
+  .animated-bg {
+    animation: none;
+  }
+
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
