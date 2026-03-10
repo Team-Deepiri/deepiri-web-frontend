@@ -1,10 +1,11 @@
-import React from "react";
+import React from 'react';
 
-const SectionDivider: React.FC = () => {
+const SectionDivider: React.FC<{ text?: string }> = ({ text }) => {
   return (
-    <div className="deepiri-divider" aria-hidden="true">
-      <div className="deepiri-dividerLine" />
-      <div className="deepiri-dividerGlow" />
+    <div className="section-divider">
+      <div className="section-divider-line"></div>
+      {text && <span className="section-divider-text">{text}</span>}
+      <div className="section-divider-line"></div>
     </div>
   );
 };
