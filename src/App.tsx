@@ -13,8 +13,6 @@ import "./components/SidebarNav.css";
 import Footer from "./components/Footer";
 import HMRStatus from "./components/HMRStatus";
 import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/logger";
-import './styles/index.css';
-
 
 // Pages
 import Home from "./pages/Home";
@@ -47,12 +45,19 @@ import PythonTools from "./pages/PythonTools";
 import UserInventory from "./pages/UserInventory";
 import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
 import Contact from "./pages/Contact";
+import Forgot from './pages/ForgotPassword.tsx'
+import LeaseUpload from './pages/LanguageIntelligence/LeaseUpload';
+import LeaseDetail from './pages/LanguageIntelligence/LeaseDetail';
+import ContractUpload from './pages/LanguageIntelligence/ContractUpload';
+import ContractDetail from './pages/LanguageIntelligence/ContractDetail';
+import ChatWidget from './components/ChatWidget/ChatWidget';
 
 // Public pages
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ComponentShowcase from "./pages/ComponentShowcase.tsx";
+
 // React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,7 +68,7 @@ const queryClient = new QueryClient({
 const AppContent: React.FC = () => {
   const location = useLocation();
   const pathname = location?.pathname || "/";
-  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname === "/forgot";
   const { isAuthenticated } = useAuth();
   const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
 
@@ -115,6 +120,7 @@ const AppContent: React.FC = () => {
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/ui-test" element={<ComponentShowcase />} />
+              <Route path="/forgot" element={<Forgot />} />
 
               {/* Protected */}
               <Route
@@ -325,7 +331,40 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/language-intelligence/leases/upload"
+                element={
+                  <ProtectedRoute>
+                    <LeaseUpload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/language-intelligence/leases/:id"
+                element={
+                  <ProtectedRoute>
+                    <LeaseDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/language-intelligence/contracts/upload"
+                element={
+                  <ProtectedRoute>
+                    <ContractUpload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/language-intelligence/contracts/:id"
+                element={
+                  <ProtectedRoute>
+                    <ContractDetail />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
+            <ChatWidget />
           </div>
         </main>
 
