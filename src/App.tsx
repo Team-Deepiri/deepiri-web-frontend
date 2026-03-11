@@ -121,6 +121,7 @@ const AppContent: React.FC = () => {
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/ui-test" element={<ComponentShowcase />} />
+              <Route path="/forgot" element={<Forgot />} />
 
               {/* Protected */}
               <Route
@@ -331,7 +332,40 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/language-intelligence/leases/upload"
+                element={
+                  <ProtectedRoute>
+                    <LeaseUpload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/language-intelligence/leases/:id"
+                element={
+                  <ProtectedRoute>
+                    <LeaseDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/language-intelligence/contracts/upload"
+                element={
+                  <ProtectedRoute>
+                    <ContractUpload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/language-intelligence/contracts/:id"
+                element={
+                  <ProtectedRoute>
+                    <ContractDetail />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
+            <ChatWidget />
           </div>
         </main>
 
