@@ -37,7 +37,7 @@ const About: React.FC = () => {
           </motion.div>
           <motion.h1
             variants={itemVariants}
-            className="deepiri-heroTitle text-center text-4xl font-extrabold gradient-text-accent"
+            className="deepiri-heroTitle text-center text-white text-4xl font-extrabold "
           >
             About Deepiri
           </motion.h1>
@@ -86,15 +86,17 @@ const About: React.FC = () => {
             }}
           >
             <strong style={{ color: "#f97316" }}>What we&rsquo;re not:</strong>{" "}
+            <span style={{ color: "#C0C0C0" }}>
             hype decks, vanity dashboards, or &ldquo;AI magic&rdquo; claims. We
             build iteratively, measure carefully, and ship what holds up.
+            </span>
           </motion.div>
 
           <motion.div variants={itemVariants} className="mb-5">
             <div className="max-w-5xl mx-auto text-center pb-3">
-              <h1 className="deepiri-heroTitle gradient-text-accent pb-3">What we&rsquo;re building</h1>
+              <h1 className="deepiri-heroTitle text-white pb-3">What we&rsquo;re building</h1>
               <motion.p 
-                className="text-center deepiri-heroSubtitle gradient-text-vertical"
+                className="text-center deepiri-heroSubtitle text-white"
                 style={{
                   maxWidth: 900,
                   lineHeight: 1.55
@@ -122,14 +124,14 @@ const About: React.FC = () => {
                 },
               ].map((item) => (
                 <div key={item.title} className="col-md-6">
-                  <div className="p-3 rounded-3 border border-white/10 h-100" style={{backgroundColor: "white"}}>
+                  <div className="p-3 rounded-3 border border-white/10 h-100" style={{backgroundColor: "#1a2a5a"}}>
                     <div
                       className="text-sm font-semibold mb-1"
                       style={{ color: "#f97316" }}
                     >
                       {item.title}
                     </div>
-                    <div className="text-sm text-slate-300 text-black">
+                    <div className="text-sm text-slate-300 text-grey-500">
                       {item.body}
                     </div>
                   </div>
@@ -137,7 +139,7 @@ const About: React.FC = () => {
               ))}
             </div>
             <div>
-              <motion.p className="deepiri-heroSubtitle text-black">If you are interested in collaborating with us on our mission, feel free to <Link to="/contact" style={{color: "#6366f1"}}>contact us!</Link></motion.p>
+              <motion.p className="deepiri-heroSubtitle text-white">If you are interested in collaborating with us on our mission, feel free to <Link to="/contact" style={{color: "#6366f1"}}>contact us!</Link></motion.p>
             </div>
           </motion.div>
 
