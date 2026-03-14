@@ -124,7 +124,7 @@ const SidebarNav: React.FC = () => {
               <div className="deepiri-topnav__auth-desktop">
                 <NavLink
                   to="/login"
-                  className="deepiri-btn deepiri-btn--secondary"
+                  className="deepiri-btn deepiri-btn--secondary text-black"
                 >
                   Sign In
                 </NavLink>
@@ -248,7 +248,6 @@ const SidebarNav: React.FC = () => {
                 }
               }}
             >
-              {item.icon && <span className="deepiri-sidebar__icon">{item.icon}</span>}
               <span className="deepiri-sidebar__label">{item.label}</span>
             </NavLink>
           ))}
@@ -268,7 +267,6 @@ const SidebarNav: React.FC = () => {
             onClick={handleSignOut}
             className="deepiri-sidebar__logout"
           >
-            <span className="deepiri-sidebar__icon">🚪</span>
             <span className="deepiri-sidebar__label">Sign Out</span>
           </button>
         </div>

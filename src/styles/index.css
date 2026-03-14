@@ -116,11 +116,7 @@ body {
 }
 
 .bg-chips {
-  background: var(--primary);
-}
-
-.bg-chips:hover {
-  background: var(--primary-500);
+  background: linear-gradient(to bottom, var(--deepiri-amber), rgb(255,255,255,0));
 }
 
 /* =========================

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { 
   ArrowRightIcon, 
@@ -44,6 +44,9 @@ const InventoryWidget: React.FC = () => {
       staleTime: 10 * 60 * 1000, // 10 minutes
     }
   );
+
+
+  const navigate = useNavigate();
 
   // Fetch recent items
   const { data: recentItemsResponse, isLoading: itemsLoading } = useQuery<{ data?: Item[] }>(
@@ -99,29 +102,49 @@ const InventoryWidget: React.FC = () => {
   }
 
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 hover:border-white/40 transition-all duration-300">
+    <div className="card-modern">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 pb-4">
         <div className="flex items-center gap-3">
           <div className="text-2xl"></div>
           <div>
-            <h3 className="text-xl font-bold text-white"> Inventory</h3>
-            <p className="text-gray-400 text-sm">Adventure collection</p>
+            <h3 className="text-xl font-bold text-center pb-2"> Inventory</h3>
+            <p className="text-gray-400 text-sm text-center">Adventure collection</p>
           </div>
         </div>
-        <Link
-          to="/inventory"
-          className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-gray-400 hover:text-white"
-          title="View all items"
-        >
-          <ArrowRightIcon className="w-5 h-5" />
-        </Link>
+        <div className='row pb-4'>
+          <div className="col text-center">
+            <div className="text-2xl font-bold">{stats.totalItems || 0}</div>
+            <div className="text-xs text-gray-400">Items</div>
+          </div>
+          <div className="col text-center">
+            <div className="text-2xl font-bold text-yellow-400">{stats.totalValue || 0}</div>
+            <div className="text-xs text-gray-400">Points</div>
+          </div>
+          <div className="col text-center">
+            <div className="text-2xl font-bold text-red-400">{stats.favoriteCount || 0}</div>
+            <div className="text-xs text-gray-400">Favorites</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button 
+            className='deepiri-btn text-white' 
+            style={{backgroundColor: '#f59e0b', gap: '20px', width: '50%'}}
+            onClick={() => navigate('/inventory')}
+          >
+            <span style={{whiteSpace:'nowrap'}}>View all items</span>
+            <ArrowRightIcon style={{width: '20%', height: '20%'}} />
+          </button>
+        </div>
+
       </div>
 
+
+
       {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      {/*<div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center">
-          <div className="text-2xl font-bold text-white">{stats.totalItems || 0}</div>
+          <div className="text-2xl font-bold">{stats.totalItems || 0}</div>
           <div className="text-xs text-gray-400">Items</div>
         </div>
         <div className="text-center">
@@ -132,24 +155,28 @@ const InventoryWidget: React.FC = () => {
           <div className="text-2xl font-bold text-red-400">{stats.favoriteCount || 0}</div>
           <div className="text-xs text-gray-400">Favorites</div>
         </div>
-      </div>
+      </div>*/}
 
       {/* Recent Items */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold text-gray-300">Recent Items</h4>
-          {recentItems.length > 0 && (
-            <Link
-              to="/inventory"
-              className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
-            >
-              View all
-            </Link>
+        <h4 className="text-sm font-semibold text-gray-300 text-center pb-2">Recent Items</h4>
+        <div className="row">
+          <div className="flex items-center justify-between">
+            {recentItems.length > 0 && (
+              <Link
+                to="/inventory"
+                className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+              >
+                View all
+              </Link>
           )}
+
         </div>
+      </div>
+
 
         {recentItems.length > 0 ? (
-          <div className="space-y-2">
+          <div className="space-y-2 col">
             {recentItems.map((item) => {
               const rarityInfo = getRarityInfo(item.rarity);
               return (
@@ -196,14 +223,13 @@ const InventoryWidget: React.FC = () => {
             })}
           </div>
         ) : (
-          <div className="text-center py-6">
-            <div className="text-4xl mb-2">📦</div>
+          <div className="text-center py-6 col">
             <p className="text-gray-400 text-sm mb-3">No items yet</p>
             <Link
               to="/inventory"
               className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
             >
-              <PlusIcon className="w-4 h-4" />
+              <PlusIcon className="w-1 h-1 text-black" />
               Add First Item
             </Link>
           </div>
