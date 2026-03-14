@@ -118,10 +118,10 @@ const Leaderboard: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setPeriod(p)}
-              className={`px-6 py-3 rounded font-semibold transition-all col-1 ${
+              className={`px-6 py-3 btn-modern transition-all col-1 ${
                 period === p
-                  ? 'bg-gradient-to-r from-purple-400 to-cyan-400 text-white glow-purple'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'btn-primary text-white glow-purple'
+                  : 'bg-gray-700 text-black hover:bg-gray-600'
               }`}
             >
               {p.charAt(0).toUpperCase() + p.slice(1)}
@@ -143,7 +143,6 @@ const Leaderboard: React.FC = () => {
               </div>
               <div className="text-right">
                 <div className="text-sm text-gray-300 mb-1">Keep climbing!</div>
-                <div className="text-2xl">🚀</div>
               </div>
             </div>
           </motion.div>

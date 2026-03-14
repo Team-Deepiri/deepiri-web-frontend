@@ -102,7 +102,7 @@ const InventoryWidget: React.FC = () => {
   }
 
   return (
-    <div className="card-modern">
+    <div className="card-modern bg-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pb-4">
         <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ const InventoryWidget: React.FC = () => {
             <div className="text-xs text-gray-400">Favorites</div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex text-center">
           <button 
             className='deepiri-btn text-white' 
             style={{backgroundColor: '#f59e0b', gap: '20px', width: '50%'}}
@@ -165,7 +165,7 @@ const InventoryWidget: React.FC = () => {
             {recentItems.length > 0 && (
               <Link
                 to="/inventory"
-                className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                className="text-xs text-black hover:text-purple-300 transition-colors"
               >
                 View all
               </Link>
@@ -261,14 +261,14 @@ const InventoryWidget: React.FC = () => {
         <div className="grid grid-cols-2 gap-3">
           <Link
             to="/inventory"
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg transition-colors"
+            className="flex items-center justify-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 text-black text-sm rounded-lg transition-colors"
           >
             <EyeIcon className="w-4 h-4" />
             View All
           </Link>
           <Link
             to="/inventory"
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
+            className="flex items-center justify-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-black text-sm rounded-lg transition-colors"
           >
             <PlusIcon className="w-4 h-4" />
             Add Item

@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import "./Contact.css";
 
 const Contact: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [loading] = useState(false);
+  // const [emailError, setEmailError] = useState('');
   
   return (
     <>

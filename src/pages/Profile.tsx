@@ -281,7 +281,7 @@ const Profile: React.FC = () => {
 
   const styles = {
     wrapper: {
-      backgroundColor: '#0b1020',
+      backgroundColor: 'transparent',
       minHeight: '100vh',
       padding: '40px 20px',
       color: 'white',
@@ -295,14 +295,14 @@ const Profile: React.FC = () => {
       alignItems: 'flex-end'
     },
     sidebar: {
-      backgroundColor: '#111827',
+      backgroundColor: '#f3f3f3',
       borderRadius: '16px',
       padding: '12px',
       border: '1px solid rgba(255,255,255,0.05)',
       height: 'fit-content' as const
     },
     mainCard: {
-      backgroundColor: '#111827',
+      backgroundColor: '#f3f3f3',
       borderRadius: '24px',
       border: '1px solid rgba(255,255,255,0.05)',
       overflow: 'hidden' as const
@@ -331,8 +331,8 @@ const Profile: React.FC = () => {
       transition: '0.2s'
     },
     ghostBtn: {
-      background: 'transparent',
-      color: '#9ca3af',
+      background: '#374151',
+      color: '#ffffff',
       border: '1px solid #374151',
       padding: '10px 20px',
       borderRadius: '12px',
@@ -348,29 +348,30 @@ const Profile: React.FC = () => {
     },
     input: {
       width: '100%',
-      backgroundColor: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.10)',
+      backgroundColor: 'rgba(255,255,255)',
+      border: '1px solid rgba(0, 0, 0, 0.08)',
       borderRadius: '10px',
       padding: '12px',
-      color: 'white',
+      color: '#111827',
       outline: 'none'
     },
     select: {
       width: '100%',
-      backgroundColor: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.10)',
+      backgroundColor: 'rgba(255,255,255)',
+      border: '1px solid rgba(0, 0, 0, 0.08)',
       borderRadius: '10px',
       padding: '12px',
-      color: 'white',
+      color: '#111827',
       outline: 'none'
     },
     valueBox: {
-      backgroundColor: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.08)',
+      backgroundColor: 'rgba(255,255,255)',
+      border: '1px solid rgba(0, 0, 0, 0.08)',
       borderRadius: '12px',
       padding: '14px 16px',
       fontSize: '16px',
-      margin: 0
+      margin: 0,
+      color: '#111827'
     },
     helper: { marginTop: '6px', color: '#9ca3af', fontSize: '12px' }
   };
@@ -390,7 +391,7 @@ const Profile: React.FC = () => {
       height: 24,
       borderRadius: 999,
       border: '1px solid rgba(255,255,255,0.12)',
-      backgroundColor: checked ? 'rgba(124,58,237,0.45)' : 'rgba(255,255,255,0.06)',
+      backgroundColor: checked ? 'rgba(124,58,237,0.45)' : 'rgba(0, 0, 0, 0.06)',
       padding: 3,
       cursor: 'pointer',
       transition: '0.2s',
@@ -403,7 +404,7 @@ const Profile: React.FC = () => {
       width: 18,
       height: 18,
       borderRadius: 999,
-      backgroundColor: checked ? '#a78bfa' : 'rgba(255,255,255,0.55)',
+      backgroundColor: 'rgba(255,255,255)',
       boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
       transition: '0.2s'
     } as React.CSSProperties;
@@ -435,7 +436,7 @@ const Profile: React.FC = () => {
       <div style={styles.container}>
         <div style={styles.header}>
           <div>
-            <h1 style={{ fontSize: '32px', fontWeight: 'bold', margin: 0 }}>Profile</h1>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', margin: 0, color: 'black' }}>Profile</h1>
             <p style={{ color: '#9ca3af', marginTop: '8px' }}>Manage your account and platform settings</p>
           </div>
 
@@ -467,7 +468,7 @@ const Profile: React.FC = () => {
 
           <main style={styles.mainCard}>
             <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-              <h2 style={{ fontSize: '28px', fontWeight: 700, margin: 0 }}>
+              <h2 style={{ fontSize: '28px', fontWeight: 700, margin: 0, color: '#111827' }}>
                 {sections.find((s) => s.id === activeSection)?.label}
               </h2>
             </div>
@@ -494,7 +495,7 @@ const Profile: React.FC = () => {
                           <>
                             {field.type === 'toggle' && (
                               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
-                                <p style={{ margin: 0, color: '#e5e7eb', fontSize: '14px' }}>
+                                <p style={{ margin: 0, color: '#374151', fontSize: '14px' }}>
                                   {formatValue(value)}
                                 </p>
                                 <Toggle
@@ -511,7 +512,7 @@ const Profile: React.FC = () => {
                                 onChange={(e) => setCurrentDraft(field.key, e.target.value)}
                               >
                                 {(field.options || []).map((opt) => (
-                                  <option key={opt} value={opt} style={{ background: '#111827', color: 'white' }}>
+                                  <option key={opt} value={opt} style={{ background: '#ffffff80', color: 'black' }}>
                                     {opt}
                                   </option>
                                 ))}

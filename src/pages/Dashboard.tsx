@@ -194,7 +194,7 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="card-modern"
+              className="card-modern bg-white"
               style={{ paddingBottom: '2rem' }}
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-6 text-black text-center">
@@ -217,6 +217,7 @@ const Dashboard: React.FC = () => {
                 <Link
                   to="/events"
                   className="group p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
                   <div className="flex items-center space-x-4 card-modern">
                     <div>
@@ -229,6 +230,7 @@ const Dashboard: React.FC = () => {
                 <Link
                   to="/friends"
                   className="group p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
                   <div className="flex items-center space-x-4 card-modern">
                     <div>
@@ -241,6 +243,7 @@ const Dashboard: React.FC = () => {
                 <Link
                   to="/adventures"
                   className="group p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
                   <div className="flex items-center space-x-4 text-black card-modern">
                     <div>
@@ -257,7 +260,7 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 10 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="card-modern"
+              className="card-modern bg-white"
             >
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">
@@ -314,7 +317,7 @@ const Dashboard: React.FC = () => {
                   </p>
                   <Link
                     to="/adventure/generate"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                    className="inline-flex items-center btn-modern btn-primary px-6 py-3 glow-purple"
                   >
                     Generate Adventure
                   </Link>
@@ -383,7 +386,7 @@ const Dashboard: React.FC = () => {
                 className="bg-white rounded-xl shadow-lg p-4"
               >
                 <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Nearby Events 📅
+                  Nearby Events
                 </h2>
                 <div className="space-y-4">
                   {nearbyEvents.map((event, index) => (
@@ -411,7 +414,7 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 border border-yellow-200 card-modern"
+              className="rounded-xl p-4 border border-yellow-200 card-modern bg-white"
             >
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Pro Tip
