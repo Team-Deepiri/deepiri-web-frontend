@@ -179,7 +179,7 @@ const AdventureGenerator: React.FC = () => {
     >
       <div className="text-center">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          What interests you? 🎯
+          What interests you?
         </h2>
         <p className="text-gray-600">
           Select your interests to personalize your adventure

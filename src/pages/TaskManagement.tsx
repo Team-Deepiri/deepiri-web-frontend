@@ -130,7 +130,7 @@ const TaskManagement: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -139,10 +139,20 @@ const TaskManagement: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <h1
+                style={{
+                  fontSize: '4rem',
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: 0,
+                  paddingBottom: '1rem'
+                }}
+              >
                 Task Management
               </h1>
-              <p className="text-gray-300 text-lg">Organize and gamify your productivity</p>
+              <motion.p className="text-lg text-black" initial={{y:-10}}>Organize and gamify your productivity</motion.p>
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -150,7 +160,6 @@ const TaskManagement: React.FC = () => {
               onClick={() => setShowCreateModal(true)}
               className="btn-modern btn-primary px-6 py-3 glow-purple"
             >
-              <span className="text-xl mr-2">➕</span>
               New Task
             </motion.button>
           </div>
@@ -160,7 +169,7 @@ const TaskManagement: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+          className="row gap-4 mb-8"
         >
           {[
             { label: 'Total Tasks', value: tasks.length, icon: '📋', color: 'from-purple-400 to-purple-500' },
@@ -173,11 +182,10 @@ const TaskManagement: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.1 }}
-              className={`card-modern bg-gradient-to-br ${stat.color} p-6 text-white`}
+              className={`card-modern bg-gradient-to-br ${stat.color} p-6 text-white col text-center`}
             >
-              <div className="text-4xl mb-2">{stat.icon}</div>
-              <div className="text-3xl font-bold mb-1">{stat.value}</div>
-              <div className="text-sm opacity-90">{stat.label}</div>
+              <div className="text-3xl font-bold mb-1 text-black">{stat.value}</div>
+              <div className="text-sm opacity-90 text-black">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -241,7 +249,7 @@ const TaskManagement: React.FC = () => {
                   onClick={() => deleteTask(task._id)}
                   className="btn-modern btn-glass px-4 py-2 text-sm"
                 >
-                  🗑️
+                  Delete Task
                 </motion.button>
               </div>
             </motion.div>
@@ -252,11 +260,10 @@ const TaskManagement: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20"
+            className="text-center py-20 pt-4"
           >
-            <div className="text-6xl mb-4">📝</div>
-            <h3 className="text-2xl font-bold text-gray-300 mb-2">No tasks yet</h3>
-            <p className="text-gray-400 mb-6">Create your first task to get started!</p>
+            <h3 className="text-2xl font-bold mb-2 text-black pt-4">No tasks yet</h3>
+            <p className="mb-6 text-black ">Create your first task to get started!</p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -282,13 +289,22 @@ const TaskManagement: React.FC = () => {
             </h2>
             <form onSubmit={createTask}>
               <div className="mb-4">
-                <label className="block text-gray-300 mb-2">Title</label>
+                <label className="block text-gray-300 mb-4">Title: </label>
                 <input
                   type="text"
                   required
                   value={newTask.title}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setNewTask({ ...newTask, title: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-purple-400/30 text-white focus:border-purple-400 focus:outline-none"
+                  style={{
+                    width: '20%',
+                    padding: '0.75rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
                 />
               </div>
               <div className="mb-4">
@@ -296,7 +312,16 @@ const TaskManagement: React.FC = () => {
                 <textarea
                   value={newTask.description}
                   onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setNewTask({ ...newTask, description: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-purple-400/30 text-white focus:border-purple-400 focus:outline-none"
+                  style={{
+                    width: '30%',
+                    padding: '0.75rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
                   rows={3}
                 />
               </div>
@@ -306,7 +331,16 @@ const TaskManagement: React.FC = () => {
                   <select
                     value={newTask.priority}
                     onChange={(e: ChangeEvent<HTMLSelectElement>) => setNewTask({ ...newTask, priority: e.target.value })}
-                    className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-purple-400/30 text-white focus:border-purple-400 focus:outline-none"
+                    style={{
+                      width: '20%',
+                      padding: '0.75rem',
+                      background: '#ffffff',
+                      border: '1px solid #d0d0d6',
+                      borderRadius: '0.5rem',
+                      color: 'black',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -314,13 +348,22 @@ const TaskManagement: React.FC = () => {
                     <option value="urgent">Urgent</option>
                   </select>
                 </div>
-                <div>
+                <div className='pt-4'>
                   <label className="block text-gray-300 mb-2">Duration (min)</label>
                   <input
                     type="number"
                     value={newTask.estimatedDuration}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setNewTask({ ...newTask, estimatedDuration: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-purple-400/30 text-white focus:border-purple-400 focus:outline-none"
+                    style={{
+                      width: '20%',
+                      padding: '0.75rem',
+                      background: '#ffffff',
+                      border: '1px solid #d0d0d6',
+                      borderRadius: '0.5rem',
+                      color: 'black',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
                   />
                 </div>
               </div>
@@ -338,7 +381,7 @@ const TaskManagement: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowCreateModal(false)}
-                  className="btn-modern btn-glass"
+                  className="btn-modern btn-secondary text-black"
                 >
                   Cancel
                 </motion.button>

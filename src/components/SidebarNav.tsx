@@ -124,7 +124,7 @@ const SidebarNav: React.FC = () => {
               <div className="deepiri-topnav__auth-desktop">
                 <NavLink
                   to="/login"
-                  className="deepiri-btn deepiri-btn--secondary text-black"
+                  className="deepiri-btn deepiri-btn--signin"
                 >
                   Sign In
                 </NavLink>
@@ -170,7 +170,7 @@ const SidebarNav: React.FC = () => {
                   <div className="deepiri-dropdown__divider"></div>
                   <NavLink
                     to="/login"
-                    className="deepiri-dropdown__item"
+                    className="deepiri-dropdown__item deepiri-dropdown__item--primary"
                     onClick={() => setOpen(false)}
                   >
                     Sign In

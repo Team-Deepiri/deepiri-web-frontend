@@ -87,28 +87,38 @@ const Leaderboard: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto">
+      <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1
+            style={{
+              fontSize: '4rem',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              margin: 0,
+              paddingBottom: '1rem'
+            }}
+          >
             Leaderboard
           </h1>
-          <p className="text-gray-300 text-lg">Compete with the best performers</p>
+          <motion.p className="text-lg text-black" initial={{y:-10}}>Compete with the best performers</motion.p>
         </motion.div>
 
         {/* Period Selector */}
-        <div className="flex gap-4 mb-8">
+        <div className="flex gap-4 mb-8 pb-4 row">
           {['all', 'week', 'month'].map((p) => (
             <motion.button
               key={p}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setPeriod(p)}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+              className={`px-6 py-3 rounded font-semibold transition-all col-1 ${
                 period === p
                   ? 'bg-gradient-to-r from-purple-400 to-cyan-400 text-white glow-purple'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -215,8 +225,7 @@ const Leaderboard: React.FC = () => {
             animate={{ opacity: 1 }}
             className="card-modern text-center py-20"
           >
-            <div className="text-6xl mb-4">🏆</div>
-            <h3 className="text-2xl font-bold text-gray-300 mb-2">No rankings yet</h3>
+            <h3 className="text-2xl font-bold text-gray-300 mb-2 mt-2">No rankings yet</h3>
             <p className="text-gray-400">Be the first to complete tasks and climb the leaderboard!</p>
           </motion.div>
         )}

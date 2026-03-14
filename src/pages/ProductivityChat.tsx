@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useRef, useEffect, FormEvent } from 'react';
+import MessageInput from '../components/chat/MessageInput';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 
@@ -51,8 +52,8 @@ const ProductivityChat: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
+  const handleSend = async (e?: FormEvent<HTMLFormElement>): Promise<void> => {
+    e?.preventDefault();
     if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
@@ -274,21 +275,14 @@ const ProductivityChat: React.FC = () => {
       </div>
 
       <div className="border-t border-gray-700 p-4 bg-gray-800">
-        <form onSubmit={handleSend} className="flex space-x-2">
-          <input
-            type="text"
+        <form onSubmit={handleSend} className="flex gap-2 items-center">
+          <MessageInput
             value={input}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+            onChange={setInput}
+            onSend={() => handleSend()}
+            loading={isLoading}
             placeholder="Ask me to create a task, generate a challenge, or help with productivity..."
-            className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-6 py-2 rounded-lg text-white font-medium"
-          >
-            Send
-          </button>
         </form>
       </div>
     </div>
