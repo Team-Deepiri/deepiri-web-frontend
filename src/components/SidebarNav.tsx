@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-hot-toast";
 import { FiInfo, FiStar } from "react-icons/fi";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo_squared.png";
 
 type NavItem = {
   label: string;
@@ -124,7 +124,7 @@ const SidebarNav: React.FC = () => {
               <div className="deepiri-topnav__auth-desktop">
                 <NavLink
                   to="/login"
-                  className="deepiri-btn deepiri-btn--secondary"
+                  className="deepiri-btn deepiri-btn--signin"
                 >
                   Sign In
                 </NavLink>
@@ -170,7 +170,7 @@ const SidebarNav: React.FC = () => {
                   <div className="deepiri-dropdown__divider"></div>
                   <NavLink
                     to="/login"
-                    className="deepiri-dropdown__item"
+                    className="deepiri-dropdown__item deepiri-dropdown__item--primary"
                     onClick={() => setOpen(false)}
                   >
                     Sign In
@@ -248,7 +248,6 @@ const SidebarNav: React.FC = () => {
                 }
               }}
             >
-              {item.icon && <span className="deepiri-sidebar__icon">{item.icon}</span>}
               <span className="deepiri-sidebar__label">{item.label}</span>
             </NavLink>
           ))}
@@ -268,7 +267,6 @@ const SidebarNav: React.FC = () => {
             onClick={handleSignOut}
             className="deepiri-sidebar__logout"
           >
-            <span className="deepiri-sidebar__icon">🚪</span>
             <span className="deepiri-sidebar__label">Sign Out</span>
           </button>
         </div>

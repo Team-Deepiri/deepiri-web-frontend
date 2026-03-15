@@ -36,6 +36,7 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-purple-2xl: 0 25px 50px -12px #c9c6f3;
 
   --glass-bg: rgba(99, 102, 241, 0.15);
   --glass-border: rgba(99, 102, 241, 0.3);
@@ -80,7 +81,9 @@ body {
 .app-shell {
   min-height: 100vh;
   position: relative;
-  background: var(--dark);
+  background: linear-gradient(to bottom, white, rgb(219, 219, 219));
+   /*background: linear-gradient(to bottom, #1e3a8a, #0f172a);*/
+  color: white;
 }
 
 /* main is flex column so footer sits after content */
@@ -109,12 +112,12 @@ body {
 
 /* container */
 .site-container {
-  max-width: 1400px;
+
   /* Increased from 1200px */
   margin-left: auto;
   margin-right: auto;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: auto;
+  padding-right: auto;
 }
 
 
@@ -130,8 +133,19 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%239C92AC%22 fill-opacity=%220.05%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
+.bg-chips {
+  background: linear-gradient(135deg, #0b1a3b, #1a2a5a); /* dark metallic gradient */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.bg-chips:hover {
+  background:  #1a2a5a;  ;
+}
+
 /* =========================
-   Scrollbar
+   Scrollbar (looks bad)
    ========================= */
 /* Scrollbar width */
 ::-webkit-scrollbar {
@@ -218,6 +232,12 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.gradient-text-vertical {
+  background: linear-gradient(to bottom,orange, var(--deepiri-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 /* =========================
    Animated background
@@ -289,6 +309,20 @@ body {
   box-shadow: var(--shadow-xl);
 }
 
+.btn-secondary {
+  background: transparent;
+  color: black;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid rgba(215, 215, 215, 0.2); /* rgba(255, 255, 255, 0.2) */
+  border-radius: 12px;
+}
+.btn-secondary:hover {
+  /* border-color: rgba(255, 255, 255, 0.35); */
+  background: var(--deepiri-amber);
+  color: rgb(0, 0, 0);
+  transform: translateY(-2px);
+}
+
 .btn-glass {
   background: rgba(30, 27, 75, 0.4);
   backdrop-filter: blur(10px);
@@ -319,9 +353,10 @@ body {
    Cards + Inputs
    ========================= */
 .card-modern {
-  background: rgba(30, 27, 75, 0.6);
+  background: rgba(240, 240, 240, 0.75);
+  color: black;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid rgb(250, 250, 250); /* rgba(99, 102, 241, 0.2) */
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-xl);
@@ -330,9 +365,9 @@ body {
 
 .card-modern:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-2xl);
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(30, 27, 75, 0.8);
+  box-shadow: var(--shadow-purple-2xl);
+  border-color: lightgray; /* rgba(99, 102, 241, 0.4) */
+  background: rgb(255, 255, 255);
 }
 
 .input-modern {
@@ -342,7 +377,7 @@ body {
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  color: white;
+  color: black;
   font-size: 16px;
   transition: all var(--transition-normal);
 }
@@ -350,11 +385,11 @@ body {
 .input-modern:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
 }
 
 .input-modern::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(165, 165, 165, 0.75);
 }
 
 /* =========================
@@ -365,7 +400,6 @@ body {
   border-radius: 22px;
   padding: 18px;
   background: var(--deepiri-panel-bg);
-  border: 1px solid var(--deepiri-panel-border);
   box-shadow: 0 22px 60px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
@@ -375,8 +409,7 @@ body {
   position: absolute;
   inset: -2px;
   background:
-    radial-gradient(600px 180px at 20% 10%, rgba(249, 115, 22, 0.18), transparent 60%),
-    radial-gradient(520px 200px at 85% 20%, rgba(245, 158, 11, 0.14), transparent 60%);
+    white, transparent 60%;
   pointer-events: none;
   opacity: 0.8;
 }
@@ -389,7 +422,7 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.38);
   border-color: rgba(249, 115, 22, 0.22);
-  background: rgba(30, 27, 75, 0.75);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .deepiri-pill {
@@ -397,8 +430,8 @@ body {
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 12px;
-  color: rgba(203, 213, 225, 0.95);
-  background: rgba(255, 255, 255, 0.03);
+  color: rgba(83, 86, 90, 0.95);
+  background: rgba(152, 171, 185, 0.03);
 }
 
 .deepiri-sectionHeader {
@@ -415,21 +448,21 @@ body {
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.9);
+  color: rgba(172, 172, 172, 0.9);
   margin-bottom: 6px;
 }
 
 .deepiri-sectionTitle {
   font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 800;
-  color: rgba(226, 232, 240, 0.96);
+  color: rgba(0, 0, 0, 0.96);
   margin: 0;
 }
 
 .deepiri-sectionSubtitle {
   margin-top: 10px;
   margin-bottom: 0;
-  color: rgba(148, 163, 184, 0.9);
+  color: rgba(138, 139, 139, 0.9);
   max-width: 940px;
   line-height: 1.7;
 }
@@ -472,7 +505,7 @@ body {
 .deepiri-miniCardBody {
   font-size: 13px;
   line-height: 1.5;
-  color: rgba(226, 232, 240, 0.88);
+  color: rgba(71, 71, 71, 0.88);
 }
 
 /* step cards */
@@ -499,14 +532,14 @@ body {
 .deepiri-stepTitle {
   font-size: 16px;
   font-weight: 800;
-  color: rgba(226, 232, 240, 0.96);
+  color: rgba(0, 0, 0, 0.96);
   margin-bottom: 6px;
 }
 
 .deepiri-stepBody {
   font-size: 13px;
   line-height: 1.55;
-  color: rgba(226, 232, 240, 0.88);
+  color: rgba(48, 49, 51, 0.88);
 }
 
 .deepiri-stepWhy {
@@ -531,8 +564,7 @@ body {
   position: absolute;
   inset: -2px;
   background:
-    radial-gradient(340px 140px at 18% 12%, rgba(249, 115, 22, 0.16), transparent 60%),
-    radial-gradient(320px 140px at 85% 18%, rgba(245, 158, 11, 0.12), transparent 60%);
+    radial-gradient(320px 140px at 85% 18%, rgba(11, 140, 245, 0.12), transparent 60%);
   opacity: 0.9;
   pointer-events: none;
 }
@@ -554,7 +586,7 @@ body {
 .deepiri-metricValue {
   font-weight: 900;
   font-size: 16px;
-  color: rgba(226, 232, 240, 0.96);
+  color: rgba(70, 70, 70, 0.96);
   position: relative;
   z-index: 1;
 }
@@ -572,7 +604,7 @@ body {
   margin-top: 10px;
   font-size: 13px;
   line-height: 1.55;
-  color: rgba(226, 232, 240, 0.88);
+  color: rgba(70, 70, 70, 0.88);
   position: relative;
   z-index: 1;
 }
@@ -619,7 +651,7 @@ body {
   letter-spacing: -0.03em;
   line-height: 1.04;
   font-size: clamp(34px, 5.0vw, 72px);
-  color: rgba(226, 232, 240, 0.98);
+  color: rgba(245, 249, 250, 0.98);
   max-width: 20ch;
 }
 
@@ -694,6 +726,20 @@ body {
   transform: translateY(-2px);
 }
 
+.btn-login {
+  background: transparent;
+  color: black;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid rgba(215, 215, 215, 0.2); /* rgba(255, 255, 255, 0.2) */
+  border-radius: 12px;
+}
+.btn-login:hover {
+  /* border-color: rgba(255, 255, 255, 0.35); */
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
 /* Section spacing helpers */
 .deepiri-section {
   padding-top: 72px;
@@ -717,8 +763,7 @@ body {
   position: relative;
   border-radius: 16px;
   padding: 14px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(17, 24, 39, 0.72));
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(255, 255, 255, 0.72));
 }
 
 .deepiri-highlightCard .pill-dot {
@@ -733,24 +778,35 @@ body {
 .deepiri-highlightCard .title {
   font-weight: 800;
   font-size: 16px;
-  color: rgba(226, 232, 240, 0.96);
+  color: rgba(70, 70, 70, 0.96);
   margin-bottom: 6px;
 }
 
 .deepiri-highlightCard .body {
   font-size: 13px;
   line-height: 1.55;
-  color: rgba(226, 232, 240, 0.88);
+  color: rgba(70, 70, 70, 0.96);
 }
 
 /* Platform snapshot */
 .deepiri-platformFrame {
   border-radius: 18px;
-  padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(17, 24, 39, 0.8));
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+}
+
+.deepiri-platformFrame::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background:
+    radial-gradient(320px 140px at 85% 18%, rgba(11, 140, 245, 0.12), transparent 60%);
+  opacity: 0.9;
+  pointer-events: none;
 }
 
 .deepiri-platformFrame:hover {
@@ -781,8 +837,7 @@ body {
 .deepiri-platformTile {
   border-radius: 14px;
   padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(17, 24, 39, 0.5);
+  background: rgba(99, 102, 241, 0.12);
   text-align: left;
 }
 
@@ -793,7 +848,7 @@ body {
   padding: 6px 10px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
-  color: rgba(226, 232, 240, 0.9);
+  color: rgba(47, 49, 51, 0.9);
   font-size: 12px;
   margin-bottom: 12px;
 }
@@ -810,22 +865,22 @@ body {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.9);
+  color: rgba(70, 70, 70, 0.9);
 }
 
 .deepiri-platformTile .value {
   font-size: 22px;
   font-weight: 800;
-  color: rgba(226, 232, 240, 0.96);
+  color: rgba(61, 61, 61, 0.96);
 }
 
 .deepiri-platformTile .sub {
   font-size: 12px;
-  color: rgba(148, 163, 184, 0.85);
+  color: rgba(108, 119, 134, 0.85);
 }
 
 .deepiri-platformTile.is-chart {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(17, 24, 39, 0.6));
+  background: rgba(99, 102, 241, 0.12);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
@@ -845,12 +900,12 @@ body {
 }
 
 .deepiri-platformTile.is-list {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(99, 102, 241, 0.12);
 }
 
 .deepiri-platformTile.is-list .list-row {
   font-size: 13px;
-  color: rgba(226, 232, 240, 0.92);
+  color: rgba(106, 111, 116, 0.92);
   padding: 6px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }

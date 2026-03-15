@@ -170,7 +170,7 @@ const Events: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -179,36 +179,44 @@ const Events: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Events & Meetups 📅
+              <h1
+                style={{
+                  fontSize: '4rem',
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: 0,
+                  paddingBottom: '1rem'
+                }}
+              >
+                Events & Meetups
               </h1>
-              <p className="text-gray-600 mt-2">
-                Discover local events and create your own meetups
-              </p>
+              <motion.p className="text-lg text-black" initial={{y:-10}}>Discover local events and create your own meetups</motion.p>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+              className="px-6 py-3 btn-modern btn-primary"
             >
               Create Event
             </button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="row gap-4 mb-6 pb-4 pt-4">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
               <div className="text-sm text-gray-600">Total Events</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-blue-600">{stats.upcoming}</div>
               <div className="text-sm text-gray-600">Upcoming</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-green-600">{stats.userHosted}</div>
               <div className="text-sm text-gray-600">User Hosted</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-purple-600">{stats.totalParticipants}</div>
               <div className="text-sm text-gray-600">Total Participants</div>
             </div>
@@ -217,10 +225,10 @@ const Events: React.FC = () => {
 
         {/* Filters and Search */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-6 mb-8"
+          className="bg-white card-modern rounded-xl shadow-lg p-6 mb-8"
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             {/* Search */}
@@ -232,10 +240,18 @@ const Events: React.FC = () => {
                   value={searchTerm}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{
+                    width: '20%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
                 />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-400">🔍</span>
-                </div>
               </div>
             </div>
 
@@ -245,6 +261,17 @@ const Events: React.FC = () => {
                 value={filter}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{
+                  width: '20%',
+                  padding: '0.75rem 1rem',
+                  background: '#ffffff',
+                  border: '1px solid #d0d0d6',
+                  borderRadius: '0.5rem',
+                  color: 'black',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
               >
                 <option value="all">All Types</option>
                 <option value="bar">Bars</option>
@@ -259,6 +286,17 @@ const Events: React.FC = () => {
                 value={sortBy}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{
+                  width: '20%',
+                  padding: '0.75rem 1rem',
+                  background: '#ffffff',
+                  border: '1px solid #d0d0d6',
+                  borderRadius: '0.5rem',
+                  color: 'black',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
               >
                 <option value="upcoming">Upcoming First</option>
                 <option value="popular">Most Popular</option>
@@ -371,15 +409,14 @@ const Events: React.FC = () => {
             ))
           ) : (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="col-span-full bg-white rounded-xl shadow-lg p-12 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="col-span-full bg-white card-modern rounded-xl shadow-lg p-12 text-center"
             >
-              <div className="text-6xl mb-4">📅</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-black mb-2">
                 No events found
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-black mb-6">
                 {searchTerm || filter !== 'all' 
                   ? 'Try adjusting your search or filters'
                   : 'Be the first to create an event!'
@@ -387,7 +424,7 @@ const Events: React.FC = () => {
               </p>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                className="px-6 py-3 btn-modern btn-primary"
               >
                 Create Event
               </button>
@@ -397,34 +434,37 @@ const Events: React.FC = () => {
 
         {/* Create Event Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <motion.div 
+            className="fixed inset-0 card-modern bg-white bg-opacity-50 flex items-center justify-center z-50 pt-4"
+            initial={{ y: 10 }}
+            >
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
+              className="rounded-xl p-6 max-w-md w-full mx-4"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Create New Event 🎉
+              <h3 className="text-xl font-bold text-black mb-4">
+                Create New Event
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-black mb-6">
                 This feature is coming soon! For now, you can create events through the adventure generator.
               </p>
               <div className="flex space-x-3">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200"
+                  className="px-6 py-3 btn-modern btn-primary"
                 >
                   Close
                 </button>
                 <Link
                   to="/adventure/generate"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center"
+                  className="btn-modern btn-secondary text-center text-black"
                 >
                   Generate Adventure
                 </Link>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

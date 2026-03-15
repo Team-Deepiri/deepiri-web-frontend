@@ -112,7 +112,7 @@ const AdventureHistory: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -121,36 +121,44 @@ const AdventureHistory: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                My Adventures 🗺️
+              <h1
+                style={{
+                  fontSize: '4rem',
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: 0,
+                  paddingBottom: '1rem'
+                }}
+              >
+                My Adventures
               </h1>
-              <p className="text-gray-600 mt-2">
-                Track your adventure history and discover new experiences
-              </p>
+              <motion.p className="text-lg text-black" initial={{y:-10}}>Track your adventure history and discover new experiences</motion.p>
             </div>
             <Link
               to="/adventure/generate"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+              className="px-6 py-3 btn-modern btn-primary"
             >
               Generate New Adventure
             </Link>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="row gap-4 mb-6 pb-4 pt-4">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
               <div className="text-sm text-gray-600">Total Adventures</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-green-600">{stats.completed}</div>
               <div className="text-sm text-gray-600">Completed</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-blue-600">{stats.active}</div>
               <div className="text-sm text-gray-600">Active</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white card-modern text-center rounded-lg p-4 shadow-sm col">
               <div className="text-2xl font-bold text-purple-600">{Math.round(stats.totalTime / 60)}h</div>
               <div className="text-sm text-gray-600">Total Time</div>
             </div>
@@ -159,10 +167,10 @@ const AdventureHistory: React.FC = () => {
 
         {/* Filters and Search */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: -10 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-6 mb-8"
+          className="bg-white card-modern rounded-xl shadow-lg p-6 mb-8"
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             {/* Search */}
@@ -174,10 +182,18 @@ const AdventureHistory: React.FC = () => {
                   value={searchTerm}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{
+                    width: '20%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
                 />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-400">🔍</span>
-                </div>
               </div>
             </div>
 
@@ -187,6 +203,17 @@ const AdventureHistory: React.FC = () => {
                 value={filter}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{
+                  width: '20%',
+                  padding: '0.75rem 1rem',
+                  background: '#ffffff',
+                  border: '1px solid #d0d0d6',
+                  borderRadius: '0.5rem',
+                  color: 'black',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
               >
                 <option value="all">All Status</option>
                 <option value="completed">Completed</option>
@@ -199,6 +226,17 @@ const AdventureHistory: React.FC = () => {
                 value={sortBy}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{
+                  width: '20%',
+                  padding: '0.75rem 1rem',
+                  background: '#ffffff',
+                  border: '1px solid #d0d0d6',
+                  borderRadius: '0.5rem',
+                  color: 'black',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -328,13 +366,12 @@ const AdventureHistory: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-12 text-center"
+              className="bg-white card-modern rounded-xl shadow-lg p-12 text-center"
             >
-              <div className="text-6xl mb-4">🗺️</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-black mb-2">
                 No adventures found
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-black mb-6">
                 {searchTerm || filter !== 'all' 
                   ? 'Try adjusting your search or filters'
                   : 'Generate your first adventure to get started!'
@@ -342,7 +379,7 @@ const AdventureHistory: React.FC = () => {
               </p>
               <Link
                 to="/adventure/generate"
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                className="px-6 py-3 btn-modern btn-primary"
               >
                 Generate Adventure
               </Link>

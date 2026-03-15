@@ -62,7 +62,7 @@
   display: flex;
   flex-direction: column;
 
-  background: rgba(20, 28, 45, 0.78);
+  background: rgba(255, 255, 255, 0.78);
 
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;
@@ -81,7 +81,7 @@
 .chat-header {
   font-size: 32px;
   font-weight: 600;
-  color: white;
+  color: black;
 
   padding: 32px 40px 10px 40px;
 }
@@ -148,7 +148,7 @@
 
   border-radius: 18px;
 
-  background: #1f2937;
+  background: #0f172a;
   color: #e5e7eb;
 
   font-size: 15px;
@@ -177,7 +177,7 @@
    INPUT FIELD (FORCED WHITE TEXT)
 ================================= */
 
-.chat-input-form input {
+/*.chat-input-form input {
   flex: 1;
 
   padding: 14px 16px;
@@ -188,7 +188,7 @@
 
   background: #0f172a !important;
 
-  color: #ffffff !important;
+  color: #0f172a !important;
 
   -webkit-text-fill-color: #ffffff;
 
@@ -199,7 +199,26 @@
   outline: none;
 
   transition: border 0.2s ease, box-shadow 0.2s ease;
+}*/
+
+.chat-input-form input {
+  flex: 1;
+
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(112, 112, 112, 0.15);
+
+  caret-color: #ffffff;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 .chat-input-form input::placeholder {
   color: #9ca3af !important;
@@ -251,9 +270,7 @@
 
   gap: 6px;
 
-  margin-top: 12px;
-
-  color: #cbd5f5;
+  color: #000000;
 
   font-size: 14px;
 }

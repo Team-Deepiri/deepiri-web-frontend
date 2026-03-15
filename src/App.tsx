@@ -13,6 +13,8 @@ import "./components/SidebarNav.css";
 import Footer from "./components/Footer";
 import HMRStatus from "./components/HMRStatus";
 import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/logger";
+import './styles/index.css';
+
 
 // Pages
 import Home from "./pages/Home";
@@ -57,7 +59,6 @@ import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ComponentShowcase from "./pages/ComponentShowcase.tsx";
-
 // React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -376,9 +377,9 @@ const AppContent: React.FC = () => {
         toastOptions={{
           duration: 4000,
           style: {
-            background: "rgba(0, 0, 0, 0.8)",
+            background: "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(10px)",
-            color: "#fff",
+            color: "#000000",
             border: "1px solid rgba(255, 255, 255, 0.2)",
             borderRadius: "12px",
           },
