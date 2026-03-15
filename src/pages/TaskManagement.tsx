@@ -247,7 +247,7 @@ const TaskManagement: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => deleteTask(task._id)}
-                  className="btn-modern btn-glass px-4 py-2 text-sm"
+                  className="btn-modern btn-secondary px-4 py-2 text-sm"
                 >
                   Delete Task
                 </motion.button>
@@ -282,65 +282,44 @@ const TaskManagement: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="card-modern bg-gray-800 max-w-md w-full"
+            className="card-modern bg-white max-w-md w-full"
           >
             <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
               Create New Task
             </h2>
             <form onSubmit={createTask}>
               <div className="mb-4">
-                <label className="block text-gray-300 mb-4">Title: </label>
+                <label className="block text-gray-300 mb-1">Title: </label>
+                <br />
                 <input
                   type="text"
                   required
                   value={newTask.title}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setNewTask({ ...newTask, title: e.target.value })}
-                  style={{
-                    width: '20%',
-                    padding: '0.75rem',
-                    background: '#ffffff',
-                    border: '1px solid #d0d0d6',
-                    borderRadius: '0.5rem',
-                    color: 'black',
-                    outline: 'none',
-                    transition: 'border-color 0.2s'
-                  }}
+                  className='input-modern bg-white text-black'
+                  style={{width: '25%'}}
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-gray-300 mb-2">Description</label>
+                <br />
                 <textarea
                   value={newTask.description}
                   onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setNewTask({ ...newTask, description: e.target.value })}
-                  style={{
-                    width: '30%',
-                    padding: '0.75rem',
-                    background: '#ffffff',
-                    border: '1px solid #d0d0d6',
-                    borderRadius: '0.5rem',
-                    color: 'black',
-                    outline: 'none',
-                    transition: 'border-color 0.2s'
-                  }}
+                  className='input-modern bg-white text-black'
                   rows={3}
+                  style={{width: '25%'}}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-gray-300 mb-2">Priority</label>
+                  <br />
                   <select
                     value={newTask.priority}
                     onChange={(e: ChangeEvent<HTMLSelectElement>) => setNewTask({ ...newTask, priority: e.target.value })}
-                    style={{
-                      width: '20%',
-                      padding: '0.75rem',
-                      background: '#ffffff',
-                      border: '1px solid #d0d0d6',
-                      borderRadius: '0.5rem',
-                      color: 'black',
-                      outline: 'none',
-                      transition: 'border-color 0.2s'
-                    }}
+                    className='input-modern bg-white text-black'
+                    style={{width: '25%'}}
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -350,20 +329,13 @@ const TaskManagement: React.FC = () => {
                 </div>
                 <div className='pt-4'>
                   <label className="block text-gray-300 mb-2">Duration (min)</label>
+                  <br />
                   <input
                     type="number"
                     value={newTask.estimatedDuration}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setNewTask({ ...newTask, estimatedDuration: parseInt(e.target.value) })}
-                    style={{
-                      width: '20%',
-                      padding: '0.75rem',
-                      background: '#ffffff',
-                      border: '1px solid #d0d0d6',
-                      borderRadius: '0.5rem',
-                      color: 'black',
-                      outline: 'none',
-                      transition: 'border-color 0.2s'
-                    }}
+                    className='input-modern bg-white text-black'
+                    style={{width: '25%'}}
                   />
                 </div>
               </div>

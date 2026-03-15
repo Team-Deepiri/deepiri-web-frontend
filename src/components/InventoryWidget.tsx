@@ -190,22 +190,22 @@ const InventoryWidget: React.FC = () => {
                   {/* Item Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-white text-sm font-medium truncate">
+                      <p className="text-black text-sm font-medium truncate">
                         {item.name}
                       </p>
                       {item.metadata?.isFavorite && (
                         <HeartIcon className="w-3 h-3 text-red-400 fill-current" />
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-400">
-                      <span className={rarityInfo.color || 'text-gray-400'}>
+                    <div className="flex items-center gap-2 text-xs text-black">
+                      <span className={rarityInfo.color || 'text-black'}>
                         <SparklesIcon className="w-3 h-3 inline mr-1" />
                         {rarityInfo.label}
                       </span>
                       {item.value?.points && item.value.points > 0 && (
                         <>
                           <span>•</span>
-                          <span className="text-yellow-400">{item.value.points} pts</span>
+                          <span className="text-black">{item.value.points} pts</span>
                         </>
                       )}
                     </div>
@@ -216,7 +216,7 @@ const InventoryWidget: React.FC = () => {
                     to="/inventory"
                     className="opacity-0 group-hover:opacity-100 p-1 bg-white/10 hover:bg-white/20 rounded transition-all"
                   >
-                    <EyeIcon className="w-4 h-4 text-gray-400" />
+                    <EyeIcon className="w-4 h-4 text-black" />
                   </Link>
                 </div>
               );
@@ -224,13 +224,13 @@ const InventoryWidget: React.FC = () => {
           </div>
         ) : (
           <div className="text-center py-6 col">
-            <p className="text-gray-400 text-sm mb-3">No items yet</p>
+            <p className="text-black text-sm mb-3">No items yet</p>
             <Link
               to="/inventory"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
+              className="inline-flex text-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-black text-sm rounded-lg transition-colors"
             >
-              <PlusIcon className="w-1 h-1 text-black" />
-              Add First Item
+              <PlusIcon className="w-50 h-50 text-black" />
+              <p>Add First Item</p>
             </Link>
           </div>
         )}
@@ -258,17 +258,17 @@ const InventoryWidget: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="mt-6 pt-4 border-t border-white/10">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="row">
           <Link
             to="/inventory"
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 text-black text-sm rounded-lg transition-colors"
+            className="flex items-center text-center justify-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 text-black text-sm rounded-lg transition-colors col"
           >
             <EyeIcon className="w-4 h-4" />
             View All
           </Link>
           <Link
             to="/inventory"
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-black text-sm rounded-lg transition-colors"
+            className="flex items-center text-center justify-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-black text-sm rounded-lg transition-colors col"
           >
             <PlusIcon className="w-4 h-4" />
             Add Item

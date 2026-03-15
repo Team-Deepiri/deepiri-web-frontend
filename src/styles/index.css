@@ -389,7 +389,7 @@ body {
 }
 
 .input-modern::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(165, 165, 165, 0.75);
 }
 
 /* =========================

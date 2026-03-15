@@ -102,43 +102,51 @@ const Friends: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 pb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Friends & Connections 👥
+              <h1
+                style={{
+                  fontSize: '4rem',
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: 0,
+                  paddingBottom: '1rem'
+                }}
+              >
+                Friends & Connections
               </h1>
-              <p className="text-gray-600 mt-2">
-                Connect with friends and discover new adventure companions
-              </p>
+              <motion.p className="text-lg text-black" initial={{y:-10}}>Connect with friends and discover new adventure companions</motion.p>
             </div>
             <button
               onClick={() => setShowAddFriend(!showAddFriend)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+              className="px-6 py-3 btn-modern btn-primary"
             >
               {showAddFriend ? 'Hide Add Friend' : 'Add Friend'}
             </button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="text-2xl font-bold text-gray-900">{friends.length}</div>
-              <div className="text-sm text-gray-600">Friends</div>
+          <div className="row gap-4 mb-6 pb-4">
+            <div className="card-modern text-center rounded-lg p-4 shadow-sm col">
+              <div className="text-2xl font-bold text-black">{friends.length}</div>
+              <div className="text-sm text-black">Friends</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="text-2xl font-bold text-blue-600">{allUsers.length}</div>
-              <div className="text-sm text-gray-600">Available Users</div>
+            <div className="card-modern text-center rounded-lg p-4 shadow-sm col">
+              <div className="text-2xl font-bold text-black">{allUsers.length}</div>
+              <div className="text-sm text-black">Available Users</div>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="text-2xl font-bold text-green-600">0</div>
-              <div className="text-sm text-gray-600">Pending Requests</div>
+            <div className="card-modern text-center rounded-lg p-4 shadow-sm col">
+              <div className="text-2xl font-bold text-black">0</div>
+              <div className="text-sm text-black">Pending Requests</div>
             </div>
           </div>
         </motion.div>
@@ -146,12 +154,12 @@ const Friends: React.FC = () => {
         {/* Add Friend Section */}
         {showAddFriend && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg p-6 mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="card-modern bg-white rounded-xl shadow-lg p-6 mb-8"
           >
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Add New Friends 🔍
+              Add New Friends
             </h2>
             
             <div className="mb-4">
@@ -162,10 +170,18 @@ const Friends: React.FC = () => {
                   value={searchTerm}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{
+                    width: '40%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
                 />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-400">🔍</span>
-                </div>
               </div>
             </div>
 
@@ -198,7 +214,6 @@ const Friends: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-8">
-                <div className="text-4xl mb-4">👥</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   No users found
                 </h3>
@@ -213,12 +228,12 @@ const Friends: React.FC = () => {
         {/* Friends List */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="card-modern bg-white rounded-xl shadow-lg p-6 pb-4 pt-4"
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Your Friends 👫
+          <h2 className="text-2xl font-bold text-black mb-6">
+            Your Friends
           </h2>
 
           {friends.length > 0 ? (
@@ -243,16 +258,16 @@ const Friends: React.FC = () => {
                   </div>
 
                   <div className="space-y-2 mb-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Adventures:</span>
+                    <div className="flex items-center text-center justify-between text-sm">
+                      <span className="text-black">Adventures:</span>
                       <span className="font-medium">{friend.adventureCount || 0}</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Points:</span>
+                    <div className="flex items-center text-center justify-between text-sm">
+                      <span className="text-black">Points:</span>
                       <span className="font-medium">{friend.points || 0}</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Member since:</span>
+                    <div className="flex items-center text-center justify-between text-sm">
+                      <span className="text-black">Member since:</span>
                       <span className="font-medium">
                         {friend.createdAt ? new Date(friend.createdAt).toLocaleDateString() : 'N/A'}
                       </span>
@@ -281,7 +296,6 @@ const Friends: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">👥</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 No friends yet
               </h3>
@@ -290,7 +304,7 @@ const Friends: React.FC = () => {
               </p>
               <button
                 onClick={() => setShowAddFriend(true)}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                className="px-6 py-3 btn-modern btn-primary"
               >
                 Add Your First Friend
               </button>
@@ -300,20 +314,19 @@ const Friends: React.FC = () => {
 
         {/* Friend Activity (Coming Soon) */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1}}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-xl shadow-lg p-6 mt-8"
+          className="card-modern bg-white rounded-xl shadow-lg p-6 mt-8"
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Friend Activity 📈
+          <h2 className="text-2xl font-bold text-black mb-6">
+            Friend Activity
           </h2>
           <div className="text-center py-8">
-            <div className="text-4xl mb-4">🚧</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-black mb-2">
               Coming Soon
             </h3>
-            <p className="text-gray-600">
+            <p className="text-black">
               Track your friends' adventures and see what they're up to!
             </p>
           </div>

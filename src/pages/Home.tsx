@@ -105,7 +105,7 @@ const Home: React.FC = () => {
                   <Link to="/dashboard" className="btn-modern btn-deepiri px-8 py-3">
                     Go to Dashboard
                   </Link>
-                  <Link to="/analytics" className="btn-modern btn-glass px-8 py-3">
+                  <Link to="/analytics" className="btn-modern btn-secondary text-black px-8 py-3">
                     View Analytics
                   </Link>
                 </>
