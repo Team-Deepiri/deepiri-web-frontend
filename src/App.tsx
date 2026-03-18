@@ -41,6 +41,8 @@ import Boosts from "./pages/Boosts";
 import Streaks from "./pages/Streaks";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
+import GroupChats from "./pages/GroupChats";
+import GroupChatView from "./pages/GroupChatView";
 import PythonTools from "./pages/PythonTools";
 import UserInventory from "./pages/UserInventory";
 import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
@@ -295,6 +297,20 @@ const AppContent: React.FC = () => {
                             element={
                               <ProtectedRoute>
                                 <ProductivityChat />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/group-chats"
+                            element={
+                                <GroupChats />
+                            }
+                          />
+                          <Route
+                            path="/group-chats/:groupChatId"
+                            element={
+                              <ProtectedRoute>
+                                <GroupChatView />
                               </ProtectedRoute>
                             }
                           />

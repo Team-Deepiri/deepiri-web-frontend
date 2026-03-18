@@ -28,6 +28,7 @@ const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
   { label: "Profile", to: "/profile", icon: "👤" },
   { label: "Notifications", to: "/notifications", icon: "🔔" },
   { label: "AI Assistant", to: "/agent", icon: "🤖" },
+  { label: "Group Chats", to: "/group-chats", icon: "💬" },
 ];
 
 const SidebarNav: React.FC = () => {
