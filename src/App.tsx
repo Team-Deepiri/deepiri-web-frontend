@@ -303,7 +303,9 @@ const AppContent: React.FC = () => {
                           <Route
                             path="/group-chats"
                             element={
+                              <ProtectedRoute>
                                 <GroupChats />
+                              </ProtectedRoute>
                             }
                           />
                           <Route
