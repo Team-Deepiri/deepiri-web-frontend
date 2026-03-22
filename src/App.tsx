@@ -124,237 +124,69 @@ const AppContent: React.FC = () => {
               <Route path="/ui-test" element={<ComponentShowcase />} />
               <Route path="/forgot" element={<Forgot />} />
 
-                          {/* Protected */}
-                          <Route
-                            path="/dashboard"
-                            element={
-                              <ProtectedRoute>
-                                <Dashboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/adventure/generate"
-                            element={
-                              <ProtectedRoute>
-                                <AdventureGenerator />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/adventure/:id"
-                            element={
-                              <ProtectedRoute>
-                                <AdventureDetail />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/adventures"
-                            element={
-                              <ProtectedRoute>
-                                <AdventureHistory />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/events"
-                            element={
-                              <ProtectedRoute>
-                                <Events />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/events/:id"
-                            element={
-                              <ProtectedRoute>
-                                <EventDetail />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/events/create"
-                            element={
-                              <ProtectedRoute>
-                                <CreateEvent />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/profile"
-                            element={
-                              <ProtectedRoute>
-                                <Profile />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/friends"
-                            element={
-                              <ProtectedRoute>
-                                <Friends />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/leaderboard"
-                            element={
-                              <ProtectedRoute>
-                                <Leaderboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/tasks"
-                            element={
-                              <ProtectedRoute>
-                                <TaskManagement />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/challenges"
-                            element={
-                              <ProtectedRoute>
-                                <Challenges />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/gamification"
-                            element={
-                              <ProtectedRoute>
-                                <GamificationDashboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/analytics"
-                            element={
-                              <ProtectedRoute>
-                                <AnalyticsDashboard />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/notifications"
-                            element={
-                              <ProtectedRoute>
-                                <Notifications />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/objectives"
-                            element={
-                              <ProtectedRoute>
-                                <Objectives />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/odysseys"
-                            element={
-                              <ProtectedRoute>
-                                <Odysseys />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/seasons"
-                            element={
-                              <ProtectedRoute>
-                                <Seasons />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/progress"
-                            element={
-                              <ProtectedRoute>
-                                <Progress />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/boosts"
-                            element={
-                              <ProtectedRoute>
-                                <Boosts />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/streaks"
-                            element={
-                              <ProtectedRoute>
-                                <Streaks />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/agent"
-                            element={
-                              <ProtectedRoute>
-                                <AgentChat />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/chat"
-                            element={
-                              <ProtectedRoute>
-                                <ProductivityChat />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/group-chats"
-                            element={
-                              <ProtectedRoute>
-                                <GroupChats />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/group-chats/:groupChatId"
-                            element={
-                              <ProtectedRoute>
-                                <GroupChatView />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/python-tools"
-                            element={
-                              <ProtectedRoute>
-                                <PythonTools />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/inventory"
-                            element={
-                              <ProtectedRoute>
-                                <UserInventory />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="/workspace"
-                            element={
-                              <ProtectedRoute>
-                                <ImmersiveWorkspace />
-                              </ProtectedRoute>
-                            }
-                          />
-                        </Routes>
-                      </div>
-                    </main>
-
-                  <Profile />
-
+              {/* Protected */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventure/generate"
+                element={
+                  <ProtectedRoute>
+                    <AdventureGenerator />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventure/:id"
+                element={
+                  <ProtectedRoute>
+                    <AdventureDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventures"
+                element={
+                  <ProtectedRoute>
+                    <AdventureHistory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events"
+                element={
+                  <ProtectedRoute>
+                    <Events />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events/:id"
+                element={
+                  <ProtectedRoute>
+                    <EventDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateEvent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
                 }
               />
               <Route
@@ -474,6 +306,22 @@ const AppContent: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <ProductivityChat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/group-chats"
+                element={
+                  <ProtectedRoute>
+                    <GroupChats />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/group-chats/:groupChatId"
+                element={
+                  <ProtectedRoute>
+                    <GroupChatView />
                   </ProtectedRoute>
                 }
               />
