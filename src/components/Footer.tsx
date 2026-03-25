@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/images/logo_squared.png";
-import { Bold } from "lucide-react";
 
 const Footer: React.FC = () => {
   const { isAuthenticated } = useAuth();
