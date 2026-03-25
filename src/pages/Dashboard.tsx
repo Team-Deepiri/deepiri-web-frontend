@@ -163,14 +163,11 @@ const Dashboard: React.FC = () => {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 margin: 0,
-                paddingBottom: '1rem'
+                paddingBottom: '1.5rem'
               }}
             >
               {getGreeting()}, {user?.name}!
             </h1>
-            <p className="text-emerald-100 text-lg">
-              Ready for your next adventure? Let's explore what's around you.
-            </p>
             {weather && (
               <div className="mt-4 flex items-center space-x-4">
                 <span className="text-2xl">
@@ -201,7 +198,7 @@ const Dashboard: React.FC = () => {
                 Quick Actions
               </h2>
               <div className="row g-3">
-                <Link
+                {/*<Link
                   to="/adventure/generate"
                   className="group p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-white transition-all duration-200 col-6"
                   style={{textDecorationColor: 'transparent'}}
@@ -212,7 +209,7 @@ const Dashboard: React.FC = () => {
                       <p className="text-blue-100">Create a new personalized adventure</p>
                     </div>
                   </div>
-                </Link>
+                </Link>*/}
 
                 <Link
                   to="/events"
@@ -240,7 +237,7 @@ const Dashboard: React.FC = () => {
                   </div>
                 </Link>
 
-                <Link
+                {/*<Link
                   to="/adventures"
                   className="group p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-white transition-all duration-200 col-6"
                   style={{textDecorationColor: 'transparent'}}
@@ -251,12 +248,12 @@ const Dashboard: React.FC = () => {
                       <p className="text-orange-100">View your adventure history</p>
                     </div>
                   </div>
-                </Link>
+                </Link>*/}
               </div>
             </motion.div>
 
             {/* Recent Adventures */}
-            <motion.div
+            {/*<motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 10 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -323,19 +320,19 @@ const Dashboard: React.FC = () => {
                   </Link>
                 </div>
               )}
-            </motion.div>
+            </motion.div>*/}
           </div>
 
           {/* Sidebar */}
           <div className="col-lg-4 d-flex flex-column gap-4">
             {/* Inventory Widget */}
-            <motion.div
+            {/*<motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <InventoryWidget />
-            </motion.div>
+            </motion.div>*/}
 
             {/* Stats */}
             {stats && (
@@ -414,7 +411,7 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="rounded-xl p-4 border border-yellow-200 card-modern bg-white"
+              className="rounded-xl p-4 card-modern bg-white"
             >
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Pro Tip

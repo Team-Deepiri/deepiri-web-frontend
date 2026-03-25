@@ -249,7 +249,7 @@ const Login: React.FC = () => {
               `,
               backgroundSize: '50px 50px',
               animation: 'grid-pulse 4s ease-in-out infinite',
-              zIndex: 5,
+              zIndex: -1,
               pointerEvents: 'none',
             }}
           />

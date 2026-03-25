@@ -129,7 +129,7 @@ const TaskManagement: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-6" style={{paddingBottom: '10rem'}}>
       <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
@@ -152,7 +152,7 @@ const TaskManagement: React.FC = () => {
               >
                 Task Management
               </h1>
-              <motion.p className="text-lg text-black" initial={{y:-10}}>Organize and gamify your productivity</motion.p>
+              <motion.p className="text-lg text-black" initial={{y:-10}}>Organize your productivity</motion.p>
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}

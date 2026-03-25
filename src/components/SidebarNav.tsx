@@ -21,13 +21,11 @@ const PUBLIC_NAV_ITEMS: NavItem[] = [
 const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: "🏠" },
   { label: "Tasks", to: "/tasks", icon: "📋" },
-  { label: "Challenges", to: "/challenges", icon: "🎮" },
-  { label: "Progress", to: "/gamification", icon: "⭐" },
-  { label: "Leaderboard", to: "/leaderboard", icon: "🏆" },
+  /*{ label: "Challenges", to: "/challenges", icon: "🎮" },*/
   { label: "Analytics", to: "/analytics", icon: "📊" },
   { label: "Profile", to: "/profile", icon: "👤" },
   { label: "Notifications", to: "/notifications", icon: "🔔" },
-  { label: "AI Assistant", to: "/agent", icon: "🤖" },
+  { label: "AI Assistant", to: "/agent", icon: "🤖" }
 ];
 
 const SidebarNav: React.FC = () => {

@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
+import logo from "../assets/images/logo_squared.png";
+import { Bold } from "lucide-react";
 
 const Footer: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -18,15 +20,16 @@ const Footer: React.FC = () => {
 
   const linkBaseStyle: React.CSSProperties = {
     fontFamily: "Poppins, sans-serif",
-    color: "#f97316",
+    color: "#6366f1",
+    textDecoration: "none"
   };
 
   const onEnter = (e: React.MouseEvent<HTMLElement>) => {
-    (e.currentTarget as HTMLElement).style.color = "#f59e0b";
+    (e.currentTarget as HTMLElement).style.color = "#5153be";
   };
 
   const onLeave = (e: React.MouseEvent<HTMLElement>) => {
-    (e.currentTarget as HTMLElement).style.color = "#f97316";
+    (e.currentTarget as HTMLElement).style.color = "#6366f1";
   };
 
   return (
@@ -35,134 +38,60 @@ const Footer: React.FC = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="relative glass-dark backdrop-blur-xl border-top border-white/10"
+      className="relative backdrop-blur-xl border-top border-white/10"
     >
-      <div className="container px-4 py-5">
-        <div className="row g-4 row-cols-1 row-cols-md-4">
-          {/* Brand */}
-          <motion.div variants={itemVariants} className="col-md-6">
-            <div className="mb-8">
-              <div>
-                <span className="text-4xl font-bold gradient-text">Deepiri</span>
-                <br />
-                <span className="text-xl gradient-text-secondary font-medium">
-                  AI R&amp;D Collective
-                </span>
+      <div className="container px-4 py-2">
+        <div className="row g-4 text-center align-items-center">
+          <div className="col" style={{maxWidth: '150px'}}>
+            <img src={logo} alt="Deepiri logo" className="deepiri-heroLogoFooter" draggable={false}/>
+          </div>
+          {!isAuthenticated && (
+            <>
+              <div className="col" style={{maxWidth: '150px'}}>
+                <Link
+                  to="/login"
+                  className="font-black no-underline transition-colors duration-300"
+                  style={linkBaseStyle}
+                  onMouseEnter={onEnter}
+                  onMouseLeave={onLeave}
+                >
+                  Sign In
+                </Link>
               </div>
-            </div>
-
-            <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
-              An independent AI research collective exploring productivity intelligence through behavioral signals—turning complex activity patterns into actionable insight.
-            </p>
-
-            <div className="d-flex gap-3 flex-wrap">
+              <div className="col" style={{maxWidth: '150px'}}>
+                <Link
+                  to="/register"
+                  className="font-black no-underline transition-colors duration-300"
+                  style={linkBaseStyle}
+                  onMouseEnter={onEnter}
+                  onMouseLeave={onLeave}
+                >
+                  Create Account
+                </Link>
+              </div>
+            </>
+          )}
+          {[
+            { label: "Contact Us", to: "/contact" },
+            { label: "Privacy Policy", to: "/privacy" },
+            { label: "Terms of Service", to: "/terms" },
+          ].map((item, index) => (
+            <div className="col" style={{maxWidth: '150px'}}>
               <Link
-                to="/contact"
+                to={item.to}
                 className="font-black no-underline transition-colors duration-300"
                 style={linkBaseStyle}
                 onMouseEnter={onEnter}
                 onMouseLeave={onLeave}
               >
-                Contact
+                {item.label}
               </Link>
-
-              {!isAuthenticated && (
-                <>
-                  <Link
-                    to="/login"
-                    className="font-black no-underline transition-colors duration-300"
-                    style={linkBaseStyle}
-                    onMouseEnter={onEnter}
-                    onMouseLeave={onLeave}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="font-black no-underline transition-colors duration-300"
-                    style={linkBaseStyle}
-                    onMouseEnter={onEnter}
-                    onMouseLeave={onLeave}
-                  >
-                    Create Account
-                  </Link>
-                </>
-              )}
             </div>
-          </motion.div>
-
-          {/* Quick Links */}
-          <motion.div variants={itemVariants} className="col">
-            <h3 className="text-xl font-black mb-6 gradient-text" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Quick Links
-            </h3>
-
-            <ul className="space-y-3">
-              {[
-                { to: "/", label: "Home", show: true },
-                { to: "/about", label: "About", show: true },
-                { to: "/contact", label: "Contact", show: true },
-                { to: "/dashboard", label: "Dashboard", show: isAuthenticated },
-                { to: "/analytics", label: "Analytics", show: isAuthenticated },
-                { to: "/agent", label: "AI Assistant", show: isAuthenticated },
-              ]
-                .filter((l) => l.show)
-                .map((link, index) => (
-                  <motion.li
-                    key={link.to}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Link
-                      to={link.to}
-                      className="font-black no-underline transition-colors duration-300 group"
-                      style={linkBaseStyle}
-                      onMouseEnter={onEnter}
-                      onMouseLeave={onLeave}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.li>
-                ))}
-            </ul>
-          </motion.div>
-
-          {/* Support */}
-          <motion.div variants={itemVariants} className="col">
-            <h3 className="text-xl font-black mb-6 gradient-text-secondary" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Support
-            </h3>
-
-            <ul className="space-y-3">
-              {[
-                { label: "Contact Us", to: "/contact" },
-                { label: "Privacy Policy", to: "/privacy" },
-                { label: "Terms of Service", to: "/terms" },
-              ].map((item, index) => (
-                <motion.li
-                  key={item.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    to={item.to}
-                    className="font-black no-underline transition-colors duration-300 group"
-                    style={linkBaseStyle}
-                    onMouseEnter={onEnter}
-                    onMouseLeave={onLeave}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+          ))}
         </div>
 
         {/* Newsletter */}
-        <motion.div variants={itemVariants} className="mt-5 p-4 glass rounded-4 border border-white/10">
+        <motion.div variants={itemVariants} className="mt-3 p-4 card-modern bg-white">
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-4 gradient-text-accent">
               Research &amp; Platform Updates
@@ -190,14 +119,14 @@ const Footer: React.FC = () => {
         </motion.div>
 
         {/* Bottom */}
-        <motion.div variants={itemVariants} className="border-top border-white/10 mt-4 pt-4">
+        <motion.div variants={itemVariants} className="border-top border-white/10 mt-4 pt-4 pb-4" style={{ color: "#33373b"}}>
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <div className="d-flex align-items-center gap-3 mb-3 mb-md-0">
-              <p className="text-gray-400 small mb-0">
+              <p className="small mb-0">
                 © {new Date().getFullYear()} Deepiri. All rights reserved.
               </p>
 
-              <div className="d-flex align-items-center gap-2 small text-gray-400">
+              <div className="d-flex align-items-center gap-2 small">
                 <span>Built with</span>
                 <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
                   ❤️
@@ -206,7 +135,7 @@ const Footer: React.FC = () => {
               </div>
             </div>
 
-            <div className="d-flex align-items-center gap-3 small text-gray-400">
+            <div className="d-flex align-items-center gap-3 small">
               <span>Research-first</span>
               <span>Privacy-conscious</span>
               <span>Built to evolve</span>

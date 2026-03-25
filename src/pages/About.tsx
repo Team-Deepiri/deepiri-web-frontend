@@ -23,28 +23,6 @@ const itemVariants: Variants = {
 const About: React.FC = () => {
   return (
     <>
-      <style>{`
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-
-        @keyframes grid-pulse {
-          0%, 100% { opacity: 0.25; }
-          50% { opacity: 0.6; }
-        }
-          
-
-        @media (min-width: 768px) {
-          .deepiri-image-side-login {
-            display: flex !important;
-          }
-          .deepiri-form-side-login {
-            width: 50% !important;
-          }
-        }
-      `}</style>
-
       <div
         style={{
           minHeight: "100vh",
@@ -57,19 +35,19 @@ const About: React.FC = () => {
             variants={itemVariants}
             className="deepiri-heroLogoWrap"
           >
-            <img src={logo} alt="Deepiri logo" className="deepiri-heroLogo" draggable={false} style={{ width: '35%', height: '35%', zIndex: 0 }} />
+            <img src={logo} alt="Deepiri logo" className="deepiri-heroLogo" draggable={false} style={{ width: '25%', height: '25%', zIndex: 0 }} />
           </motion.div>
           <motion.h1
             variants={itemVariants}
             className="deepiri-heroTitle text-black text-4xl font-extrabold"
-            initial={{y: -35}}
+            initial={{y: -45}}
           >
-            About Deepiri
+            About Us
           </motion.h1>
           <motion.p
             variants={itemVariants}
             className="text-center deepiri-heroSubtitle text-black"
-            initial={{y: -40}}
+            initial={{y: -30}}
             style={{
               color: "white",
               maxWidth: 900,
@@ -95,7 +73,7 @@ const About: React.FC = () => {
             We're building an intelligence layer for productivity: collecting signals, interpreting patterns, 
             and producing decision-ready insight designed for further iteration and long-term evolution.
           </motion.p>
-          <motion.div className='row pb-4'>
+          <motion.div className='row pb-4 justify-content-center'>
             {["Researchers", "Builders", "Operators", "Platform Teams", "Labs"].map(
               (label) => (
                 <div 
@@ -104,10 +82,10 @@ const About: React.FC = () => {
                   style={{
                     paddingTop: "0.5rem", 
                     paddingBottom: "0.5rem", 
-                    maxWidth: 400, 
+                    maxWidth: 200, 
                     lineHeight: 2, 
                     color: "white", 
-                    background: 'linear-gradient(to bottom, #6366f1, #8b5cf6, rgb(255,255,255,0))'
+                    background: '#6366f1'
                   }}
                 >
                   {label}
@@ -145,7 +123,7 @@ const About: React.FC = () => {
                 Deepiri is building an intelligence layer for productivity: collecting signals, interpreting patterns, and producing decision-ready insight designed for further iteration and long-term evolution.
               </motion.p>
             </div>
-            <div className="row g-3 pb-3">
+            <div className="row g-3 pb-3 justify-content-center" style={{width: '70%',  margin: '0 auto'}}>
               {[
                 {
                   title: "Behavioral intelligence",
@@ -165,7 +143,7 @@ const About: React.FC = () => {
                 },
               ].map((item) => (
                 <div key={item.title} className="col-md-6">
-                  <div className="p-3 rounded-3 border border-white/10 h-100" style={{backgroundColor: "#ffffff"}}>
+                  <div className="card-modern p-4 h-100 deepiri-cardLift" style={{backgroundColor: "#ffffff"}}>
                     <div
                       className="text-sm font-semibold mb-1"
                       style={{ color: "#f97316" }}
