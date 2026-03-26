@@ -72,7 +72,7 @@ const Home: React.FC = () => {
               Deepiri — AI R&amp;D Collective
             </motion.div>
 
-            <motion.h1 variants={itemVariants} className="deepiri-heroTitle">
+            <motion.h1 variants={itemVariants} className="deepiri-heroTitle text-black">
               Productivity analytics, grounded in{" "}
               <span
                 style={{
@@ -85,7 +85,7 @@ const Home: React.FC = () => {
               </span>
             </motion.h1>
 
-            <motion.p variants={itemVariants} className="deepiri-heroSubtitle">
+            <motion.p variants={itemVariants} className="deepiri-heroSubtitle" style={{color: '#636363'}}>
               Turn behavioral signals into decision-ready insight—so teams can reason about momentum,
               consistency, and adaptation instead of counting output.
             </motion.p>
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
                   <Link to="/contact" className="btn-modern btn-deepiri px-8 py-3">
                     Talk to the Collective
                   </Link>
-                  <Link to="/about" className="btn-modern btn-glass px-8 py-3">
+                  <Link to="/about" className="btn-modern btn-secondary text-black px-8 py-3">
                     Explore the Research
                   </Link>
                 </>
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
                   <Link to="/dashboard" className="btn-modern btn-deepiri px-8 py-3">
                     Go to Dashboard
                   </Link>
-                  <Link to="/analytics" className="btn-modern btn-glass px-8 py-3">
+                  <Link to="/analytics" className="btn-modern btn-secondary text-black px-8 py-3">
                     View Analytics
                   </Link>
                 </>
@@ -125,7 +125,7 @@ const Home: React.FC = () => {
               variants={itemVariants}
               className="d-flex flex-wrap align-items-center justify-content-center gap-2 text-xs text-slate-200"
             >
-              <span className="fw-semibold text-slate-300">Trusted by operators who need clarity:</span>
+              <span className="fw-semibold text-slate-300 text-black">Trusted by operators who need clarity:</span>
               {["Growth", "Ops", "Eng", "Analytics"].map((pill) => (
                 <span key={pill} className="deepiri-pill">
                   {pill}
@@ -229,7 +229,7 @@ const Home: React.FC = () => {
                 eyebrow="Research + Platform"
                 title="Built for signal quality—not vanity metrics"
                 subtitle="Clear outcomes, credible constraints, and interpretable results."
-                align="left"
+                align="center"
               />
 
               <div className="row g-4 mt-3">
@@ -255,7 +255,6 @@ const Home: React.FC = () => {
                 ].map((c) => (
                   <div key={c.value} className="col-md-4">
                     <div className="deepiri-metricCard deepiri-cardLift">
-                      <div className="deepiri-metricIcon">{c.icon}</div>
                       <div className="deepiri-metricValue">{c.value}</div>
                       <div className="deepiri-metricLabel">{c.label}</div>
                       <div className="deepiri-metricBody">{c.body}</div>
@@ -266,7 +265,7 @@ const Home: React.FC = () => {
 
               {!isAuthenticated && (
                 <div className="d-flex flex-column flex-sm-row gap-3 mt-4">
-                  <Link to="/about" className="btn-modern btn-glass px-6 py-3">
+                  <Link to="/about" className="btn-modern btn-secondary text-black px-6 py-3">
                     Explore the Research
                   </Link>
                   <Link to="/contact" className="btn-modern btn-deepiri px-6 py-3">
@@ -290,16 +289,17 @@ const Home: React.FC = () => {
                 eyebrow="Problem"
                 title="Why productivity analytics keeps missing the point"
                 subtitle="Most tools measure output. Deepiri models behavior—engagement, consistency, and adaptation over time."
+                align="center"
               />
 
               <div className="row g-4 align-items-stretch mt-3">
                 <motion.div variants={itemVariants} className="col-lg-5">
                   <div className="card-modern p-4 h-100 deepiri-cardLift">
                     <div className="deepiri-accentBar" />
-                    <h3 className="text-2xl font-bold mb-2 text-white">
+                    <h3 className="text-2xl font-bold mb-2 text-black">
                       Productivity is poorly understood.
                     </h3>
-                    <p className="mb-0" style={{ color: "#94a3b8", lineHeight: 1.65 }}>
+                    <p className="mb-0" style={{ color: "#616a77", lineHeight: 1.65 }}>
                       Most tools measure output, not behavior. Deepiri models engagement, consistency,
                       and adaptation over time—so teams can reason about momentum, not just completed tasks.
                     </p>
@@ -342,6 +342,7 @@ const Home: React.FC = () => {
                 eyebrow="System flow"
                 title="From signals to decision-ready insight"
                 subtitle="A research-first pipeline that stays measurable and iteration-friendly."
+                align="center"
               />
 
               <motion.div variants={itemVariants} className="card-modern p-5 mt-3 deepiri-cardLift">
@@ -379,7 +380,7 @@ const Home: React.FC = () => {
 
                 {!isAuthenticated && (
                 <div className="d-flex flex-column flex-sm-row gap-3 mt-4">
-                  <Link to="/about" className="btn-modern btn-glass px-6 py-3">
+                  <Link to="/about" className="btn-modern btn-secondary text-black px-6 py-3">
                     Read the approach
                   </Link>
                     <Link to="/contact" className="btn-modern btn-deepiri px-6 py-3">
@@ -404,10 +405,11 @@ const Home: React.FC = () => {
                 eyebrow="Developer-first R&D"
                 title="Built by people who ship systems"
                 subtitle="No hype decks. No “AI magic.” Iteration, measurement, and honest claims."
+                align="center"
               />
 
               <motion.div variants={itemVariants} className="card-modern p-5 mt-3 deepiri-cardLift">
-                <p style={{ color: "#cbd5e1", lineHeight: 1.65, maxWidth: 980 }}>
+                <p style={{ color: "#33373b", lineHeight: 1.65, maxWidth: 980 }}>
                   Deepiri is an independent R&amp;D collective focused on how work actually happens.
                   We build research-driven systems that model engagement, consistency, and adaptation—
                   using behavioral signals instead of task checklists.
@@ -424,7 +426,7 @@ const Home: React.FC = () => {
                     <Link to="/contact" className="btn-modern btn-deepiri px-6 py-3">
                       Talk to the Collective
                     </Link>
-                    <Link to="/register" className="btn-modern btn-glass px-6 py-3">
+                    <Link to="/register" className="btn-modern btn-secondary text-black px-6 py-3">
                       Request Early Access
                     </Link>
                   </div>
@@ -433,7 +435,6 @@ const Home: React.FC = () => {
             </Panel>
           </div>
         </section>
-
         <div className="pb-8" />
       </motion.div>
     </div>

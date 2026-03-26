@@ -121,15 +121,10 @@ const AgentChat: React.FC = () => {
               </div>
             </div>
           )}
-
           <div ref={messagesEndRef} />
-
         </div>
-
         <div className="chat-input-bar">
-
           <form onSubmit={send} className="chat-input-form">
-
             <MessageInput
               value={input}
               onChange={setInput}
@@ -137,7 +132,6 @@ const AgentChat: React.FC = () => {
               loading={loading}
               placeholder="Type a message"
             />
-
             <label className="chat-stream-toggle">
               <input
                 type="checkbox"
@@ -148,13 +142,9 @@ const AgentChat: React.FC = () => {
               />
               Stream
             </label>
-
           </form>
-
         </div>
-
       </div>
-
     </div>
   );
 };

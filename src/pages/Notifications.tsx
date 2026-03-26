@@ -127,7 +127,7 @@ const Notifications: React.FC = () => {
 
    return (
     <div className="min-h-screen bg-transparent">
-       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+       <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -136,12 +136,20 @@ const Notifications: React.FC = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">
-                Notifications 🔔
+              <h1
+                style={{
+                fontSize: '4rem',
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                margin: 0,
+                paddingBottom: '1rem'
+              }}
+              >
+                Notifications
               </h1>
-              <p className="text-gray-400 mt-2">
-                Stay updated with your adventure activities
-              </p>
+              <motion.p className="text-lg text-black" initial={{y:-10}}>Stay updated with your adventure activities</motion.p>
             </div>
             {unreadCount > 0 && (
               <button
@@ -174,8 +182,8 @@ const Notifications: React.FC = () => {
                       : 'opacity-50 hover:opacity-75'
                   }`}
                 >
-                  <div className="text-white">{notifications.length}</div>
-                  <div className="text-sm text-white">Total</div>
+                  <div className="text-black">{notifications.length}</div>
+                  <div className="text-sm text-black">Total</div>
                 </button>
                 
                 <button
@@ -186,8 +194,8 @@ const Notifications: React.FC = () => {
                       : 'opacity-50 hover:opacity-75'
                   }`}
                 >
-                  <div className="text-white">{unreadCount}</div>
-                  <div className="text-sm text-white">Unread</div>
+                  <div className="text-black">{unreadCount}</div>
+                  <div className="text-sm text-black">Unread</div>
                 </button>
                 
                 <button
@@ -198,8 +206,8 @@ const Notifications: React.FC = () => {
                       : 'opacity-50 hover:opacity-75'
                   }`}
                 >
-                  <div className="text-white">{notifications.length - unreadCount}</div>
-                  <div className="text-sm text-white">Read</div>
+                  <div className="text-black">{notifications.length - unreadCount}</div>
+                  <div className="text-sm text-black">Read</div>
                 </button>
               </div>
             </motion.div>
@@ -229,7 +237,6 @@ const Notifications: React.FC = () => {
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${
                       !notification.read ? 'bg-blue-900/50' : 'bg-gray-800/50'
                     }`}>
-                      {getNotificationIcon(notification.type)}
                     </div>
                   </div>
 
@@ -237,7 +244,7 @@ const Notifications: React.FC = () => {
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center space-x-2 mb-2">
-                          <h3 className="text-lg font-semibold text-white">
+                          <h3 className="text-lg font-semibold text-black">
                             {notification.title || 'Notification'}
                           </h3>
                           {!notification.read && (
@@ -282,7 +289,6 @@ const Notifications: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               className="card-modern rounded-xl shadow-lg p-12 text-center"
             >
-              <div className="text-6xl mb-4">🔔</div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 No notifications found
               </h3>
@@ -306,12 +312,11 @@ const Notifications: React.FC = () => {
           transition={{ delay: 0.6 }}
           className="card-modern rounded-xl shadow-lg mt-3 mb-3 "
         >
-          <h2 className="text-xl font-bold text-white mb-4">
-            Notification Settings ⚙️
+          <h2 className="text-xl font-bold text-black mb-4">
+            Notification Settings
           </h2>
           <div className="text-center py-8">
-            <div className="text-4xl mb-4">🚧</div>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-black mb-2">
               Coming Soon
             </h3>
             <p className="text-gray-400">
