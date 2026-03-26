@@ -36,6 +36,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         disabled={loading}
         className="flex-1 bg-gray-200 text-black rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+      <span style={{paddingLeft: '1rem'}} />
       <Button
         type="button"
         onClick={onSend}
@@ -44,6 +45,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       >
         Send
       </Button>
+      <span style={{paddingLeft: '1rem'}} />
     </div>
   );
 };

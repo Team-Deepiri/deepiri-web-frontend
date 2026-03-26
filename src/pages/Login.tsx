@@ -60,7 +60,6 @@ const Login: React.FC = () => {
         style={{
           minHeight: '100vh',
           display: 'flex',
-          background: '#09090b',
           overflow: 'hidden'
         }}
       >
@@ -73,7 +72,7 @@ const Login: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '3rem 1.5rem',
-          background: 'rgba(9, 9, 11, 0.8)',
+          /* background: 'rgba(9, 9, 11, 0.8)', */
           backdropFilter: 'blur(10px)',
           position: 'relative',
           zIndex: 2
@@ -110,7 +109,7 @@ const Login: React.FC = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
             >
               <div>
-                <label style={{ color: 'white', fontSize: '0.875rem' }}>
+                <label style={{ color: 'black', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
                   Email <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <input
@@ -122,16 +121,20 @@ const Login: React.FC = () => {
                   style={{
                     width: '100%',
                     padding: '0.75rem',
-                    background: '#18181b',
-                    border: '1px solid #27272a',
+                    background: '#ffffff',
+                    border: '1px solid #d0d0d6',
                     borderRadius: '0.5rem',
-                    color: 'white'
+                    color: 'black',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
                   }}
+                  onFocus={(e) => e.target.style.borderColor = '#733bf6'}
+                  onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
                 />
               </div>
 
               <div>
-                <label style={{ color: 'white', fontSize: '0.875rem' }}>
+                <label style={{ color: 'black', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
                   Password <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -145,11 +148,15 @@ const Login: React.FC = () => {
                       width: '100%',
                       padding: '0.75rem',
                       paddingRight: '4rem',
-                      background: '#18181b',
-                      border: '1px solid #27272a',
+                      background: '#ffffff',
+                      border: '1px solid #d0d0d6',
                       borderRadius: '0.5rem',
-                      color: 'white'
+                      color: 'black',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
                     }}
+                    onFocus={(e) => e.target.style.borderColor = '#733bf6'}
+                    onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
                   />
                   <button
                     type="button"
@@ -171,7 +178,7 @@ const Login: React.FC = () => {
                 </div>
 
                 <Link to="/forgot" style={{ marginTop: '0.5rem' }}>
-                  <span style={{ color: '#60a5fa', fontSize: '0.875rem' }}>
+                  <span style={{ color: '#733bf6', fontSize: '0.875rem' }}>
                     Forgot your password?
                   </span>
                 </Link>
@@ -202,11 +209,11 @@ const Login: React.FC = () => {
 
             {/* Footer */}
             <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-              <p style={{ color: '#9ca3af', fontSize: '0.875rem', margin: 0 }}>
+              <p style={{ color: '#000000', fontSize: '0.875rem', margin: 0 }}>
                 Need an account?{' '}
                 <Link
                   to="/register"
-                  style={{ color: '#60a5fa', textDecoration: 'underline' }}
+                  style={{ color: '#733bf6', textDecoration: 'underline' }}
                 >
                   Sign up
                 </Link>
@@ -226,7 +233,7 @@ const Login: React.FC = () => {
             justifyContent: 'center',
             zIndex: 2,
             background:
-              'linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0f0a1f 50%, #1a0a2e 75%, #0a0a1a 100%)',
+              'linear-gradient(135deg, #ffffff 0%, #f2f2f7 25%, #e9e9f0 50%, #f2f2f7 75%, #ffffff 100%)',
             backgroundSize: '400% 400%',
             animation: 'gradient-shift 15s ease infinite'
           }}
@@ -237,12 +244,12 @@ const Login: React.FC = () => {
               position: 'absolute',
               inset: 0,
               backgroundImage: `
-                linear-gradient(rgba(0,212,255,0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,212,255,0.15) 1px, transparent 1px)
+                linear-gradient(rgba(183, 0, 255,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(183, 0, 255,0.15) 1px, transparent 1px)
               `,
               backgroundSize: '50px 50px',
               animation: 'grid-pulse 4s ease-in-out infinite',
-              zIndex: 5,
+              zIndex: -1,
               pointerEvents: 'none',
             }}
           />
