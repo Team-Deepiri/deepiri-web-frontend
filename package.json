@@ -72,6 +72,8 @@
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@types/three": "^0.160.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-react": "^4.7.0",
     "esbuild": "^0.25.3",
     "eslint-plugin-react": "^7.37.5",
