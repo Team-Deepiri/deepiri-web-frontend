@@ -1,6 +1,6 @@
 # CodeQL Setup for deepiri-web-frontend
 
-This folder contains the CodeQL configuration for security scanning in this service.
+This folder contains the CodeQL configuration for security scanning for deepiri-web-frontend(this submodule).
 
 ## What each file does
 
@@ -9,7 +9,7 @@ This folder contains the CodeQL configuration for security scanning in this serv
 - `.github/codeql/codeql-config.yml`
   - Defines what folders to include and ignore during analysis.
 
-## Workflow breakdown (`.github/workflows/codeql.yml`)
+## CodeQL workflow breakdown (`.github/workflows/codeql.yml`)
 
 ### `name: CodeQL`
 The display name in the Actions tab.
@@ -101,6 +101,7 @@ paths-ignore:
    Triage high/critical findings first and suppress only with documented reasoning.
 
 ## Maintenance examples
+Keeping this update as more code and languages are added is vital. Here are some examples of things to maintain.
 
 ### Keep language scope aligned with this service
 This workflow currently analyzes JavaScript/TypeScript only:
