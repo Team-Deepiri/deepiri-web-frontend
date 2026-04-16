@@ -24,6 +24,7 @@ import Dashboard from "./pages/Dashboard";
 import AdventureGenerator from "./pages/AdventureGenerator";
 import AdventureDetail from "./pages/AdventureDetail";
 import AdventureHistory from "./pages/AdventureHistory";
+import Contract from "./pages/Contract";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
@@ -158,6 +159,7 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/language-intelligence/contract" element={<Contract />} />
               <Route
                 path="/events"
                 element={
@@ -185,9 +187,8 @@ const AppContent: React.FC = () => {
               <Route
                 path="/profile"
                 element={
-                  <ProtectedRoute>
                     <Profile />
-                  </ProtectedRoute>
+                
                 }
               />
               <Route
@@ -353,33 +354,32 @@ const AppContent: React.FC = () => {
               <Route
                 path="/language-intelligence/leases/upload"
                 element={
-                  <ProtectedRoute>
+                  
                     <LeaseUpload />
-                  </ProtectedRoute>
+                  
                 }
               />
               <Route
                 path="/language-intelligence/leases/:id"
                 element={
-                  <ProtectedRoute>
+          
                     <LeaseDetail />
-                  </ProtectedRoute>
+
                 }
               />
               <Route
                 path="/language-intelligence/contracts/upload"
                 element={
-                  <ProtectedRoute>
                     <ContractUpload />
-                  </ProtectedRoute>
+                  
                 }
               />
               <Route
                 path="/language-intelligence/contracts/:id"
                 element={
-                  <ProtectedRoute>
+                
                     <ContractDetail />
-                  </ProtectedRoute>
+                
                 }
               />
             </Routes>
