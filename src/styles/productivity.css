@@ -43,3 +43,265 @@
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
+/* =================================
+   PAGE LAYOUT
+================================= */
+
+.chat-page {
+  display: flex;
+  justify-content: center;
+  padding: 80px 24px;
+}
+
+/* Main chat panel */
+
+.chat-layout {
+  width: 100%;
+  max-width: 1250px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    0 18px 60px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* =================================
+   HEADER
+================================= */
+
+.chat-header {
+  font-size: 32px;
+  font-weight: 600;
+  color: black;
+
+  padding: 32px 40px 10px 40px;
+}
+
+/* =================================
+   MESSAGE AREA
+================================= */
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  padding: 20px 40px 40px 40px;
+
+  min-height: 420px;
+}
+
+.chat-placeholder {
+  color: #9ca3af;
+}
+
+/* =================================
+   MESSAGE ROWS
+================================= */
+
+.chat-row {
+  display: flex;
+}
+
+.chat-row.user {
+  justify-content: flex-end;
+}
+
+.chat-row.assistant {
+  justify-content: flex-start;
+}
+
+/* =================================
+   MESSAGE BUBBLES
+================================= */
+
+.chat-bubble-user {
+  max-width: 72%;
+
+  padding: 14px 18px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(90deg,#3b82f6,#7c3aed);
+  color: white;
+
+  font-size: 15px;
+  line-height: 1.55;
+
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+
+.chat-bubble-assistant {
+  max-width: 72%;
+
+  padding: 14px 18px;
+
+  border-radius: 18px;
+
+  background: #0f172a;
+  color: #e5e7eb;
+
+  font-size: 15px;
+  line-height: 1.55;
+
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+}
+
+/* =================================
+   INPUT SECTION
+================================= */
+
+.chat-input-bar {
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  padding: 26px 40px 30px 40px;
+}
+
+.chat-input-form {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+/* =================================
+   INPUT FIELD (FORCED WHITE TEXT)
+================================= */
+
+/*.chat-input-form input {
+  flex: 1;
+
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,0.15);
+
+  background: #0f172a !important;
+
+  color: #0f172a !important;
+
+  -webkit-text-fill-color: #ffffff;
+
+  caret-color: #ffffff;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}*/
+
+.chat-input-form input {
+  flex: 1;
+
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(112, 112, 112, 0.15);
+
+  caret-color: #ffffff;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.chat-input-form input::placeholder {
+  color: #9ca3af !important;
+}
+
+.chat-input-form input:focus {
+  border: 1px solid #6366f1;
+
+  box-shadow:
+    0 0 0 2px rgba(99,102,241,0.25);
+}
+
+/* =================================
+   SEND BUTTON
+================================= */
+
+.chat-input-form button {
+  padding: 12px 22px;
+
+  border-radius: 12px;
+
+  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+
+  color: white;
+
+  border: none;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chat-input-form button:hover {
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+/* =================================
+   STREAM TOGGLE
+================================= */
+
+.chat-stream-toggle {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #000000;
+
+  font-size: 14px;
+}
+
+.chat-stream-toggle input {
+  width: 16px;
+  height: 16px;
+
+  accent-color: #6366f1;
+
+  cursor: pointer;
+}
+
+/* =================================
+   SCROLLBAR
+================================= */
+
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #374151;
+
+  border-radius: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}

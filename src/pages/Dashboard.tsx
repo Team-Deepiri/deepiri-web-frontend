@@ -155,12 +155,19 @@ const Dashboard: React.FC = () => {
           className="mb-8"
         >
           <div className="bg-gradient-to-r from-purple-600 to-emerald-500 header-hero text-white">
-            <h1 className="text-3xl font-bold mb-2">
-              {getGreeting()}, {user?.name}! 👋
+            <h1
+              style={{
+                fontSize: '4rem',
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                margin: 0,
+                paddingBottom: '1.5rem'
+              }}
+            >
+              {getGreeting()}, {user?.name}!
             </h1>
-            <p className="text-emerald-100 text-lg">
-              Ready for your next adventure? Let's explore what's around you.
-            </p>
             {weather && (
               <div className="mt-4 flex items-center space-x-4">
                 <span className="text-2xl">
@@ -184,33 +191,34 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-white rounded-xl shadow-lg p-4"
+              className="card-modern bg-white"
+              style={{ paddingBottom: '2rem' }}
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Quick Actions 🚀
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-black text-center">
+                Quick Actions
               </h2>
               <div className="row g-3">
-                <Link
+                {/*<Link
                   to="/adventure/generate"
-                  className="group p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-white transition-all duration-200"
+                  className="group p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="text-3xl">🎯</div>
+                  <div className="flex items-center space-x-4 card-modern">
                     <div>
-                      <h3 className="text-lg font-semibold">Generate Adventure</h3>
+                      <h2 className="text-lg font-semibold text-black">Generate Adventure</h2>
                       <p className="text-blue-100">Create a new personalized adventure</p>
                     </div>
                   </div>
-                </Link>
+                </Link>*/}
 
                 <Link
                   to="/events"
-                  className="group p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg text-white transition-all duration-200"
+                  className="group p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="text-3xl">📅</div>
+                  <div className="flex items-center space-x-4 card-modern">
                     <div>
-                      <h3 className="text-lg font-semibold">Browse Events</h3>
+                      <h2 className="text-lg font-semibold text-black">Browse Events</h2>
                       <p className="text-purple-100">Discover local events and meetups</p>
                     </div>
                   </div>
@@ -218,42 +226,42 @@ const Dashboard: React.FC = () => {
 
                 <Link
                   to="/friends"
-                  className="group p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white transition-all duration-200"
+                  className="group p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="text-3xl">👥</div>
+                  <div className="flex items-center space-x-4 card-modern">
                     <div>
-                      <h3 className="text-lg font-semibold">Connect</h3>
+                      <h2 className="text-lg font-semibold text-black">Connect</h2>
                       <p className="text-green-100">Find and invite friends</p>
                     </div>
                   </div>
                 </Link>
 
-                <Link
+                {/*<Link
                   to="/adventures"
-                  className="group p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-white transition-all duration-200"
+                  className="group p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-white transition-all duration-200 col-6"
+                  style={{textDecorationColor: 'transparent'}}
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="text-3xl">🗺️</div>
+                  <div className="flex items-center space-x-4 text-black card-modern">
                     <div>
-                      <h3 className="text-lg font-semibold">My Adventures</h3>
+                      <h2 className="text-lg font-semibold text-black">My Adventures</h2>
                       <p className="text-orange-100">View your adventure history</p>
                     </div>
                   </div>
-                </Link>
+                </Link>*/}
               </div>
             </motion.div>
 
             {/* Recent Adventures */}
-            <motion.div
+            {/*<motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 10 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="bg-white rounded-xl shadow-lg p-4 lift"
+              className="card-modern bg-white"
             >
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Recent Adventures 🗺️
+                  Recent Adventures
                 </h2>
                 <Link
                   to="/adventures"
@@ -298,7 +306,6 @@ const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <div className="text-4xl mb-4">🗺️</div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     No adventures yet
                   </h3>
@@ -307,25 +314,25 @@ const Dashboard: React.FC = () => {
                   </p>
                   <Link
                     to="/adventure/generate"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                    className="inline-flex items-center btn-modern btn-primary px-6 py-3 glow-purple"
                   >
                     Generate Adventure
                   </Link>
                 </div>
               )}
-            </motion.div>
+            </motion.div>*/}
           </div>
 
           {/* Sidebar */}
           <div className="col-lg-4 d-flex flex-column gap-4">
             {/* Inventory Widget */}
-            <motion.div
+            {/*<motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <InventoryWidget />
-            </motion.div>
+            </motion.div>*/}
 
             {/* Stats */}
             {stats && (
@@ -336,7 +343,7 @@ const Dashboard: React.FC = () => {
                 className="bg-white rounded-xl shadow-lg p-4"
               >
                 <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Your Stats 📊
+                  Your Stats
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -376,7 +383,7 @@ const Dashboard: React.FC = () => {
                 className="bg-white rounded-xl shadow-lg p-4"
               >
                 <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Nearby Events 📅
+                  Nearby Events
                 </h2>
                 <div className="space-y-4">
                   {nearbyEvents.map((event, index) => (
@@ -404,10 +411,10 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 border border-yellow-200"
+              className="rounded-xl p-4 card-modern bg-white"
             >
               <h2 className="text-xl font-bold text-gray-900 mb-4">
-                💡 Pro Tip
+                Pro Tip
               </h2>
               <p className="text-gray-700 text-sm">
                 {getTimeOfDay() === 'morning' && "Perfect time for outdoor adventures and coffee shop visits!"}

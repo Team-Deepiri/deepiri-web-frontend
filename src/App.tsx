@@ -13,6 +13,8 @@ import "./components/SidebarNav.css";
 import Footer from "./components/Footer";
 import HMRStatus from "./components/HMRStatus";
 import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/logger";
+import './styles/index.css';
+
 
 // Pages
 import Home from "./pages/Home";
@@ -22,6 +24,7 @@ import Dashboard from "./pages/Dashboard";
 import AdventureGenerator from "./pages/AdventureGenerator";
 import AdventureDetail from "./pages/AdventureDetail";
 import AdventureHistory from "./pages/AdventureHistory";
+import Contract from "./pages/Contract";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
@@ -41,6 +44,8 @@ import Boosts from "./pages/Boosts";
 import Streaks from "./pages/Streaks";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
+import GroupChats from "./pages/GroupChats";
+import GroupChatView from "./pages/GroupChatView";
 import PythonTools from "./pages/PythonTools";
 import UserInventory from "./pages/UserInventory";
 import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
@@ -57,7 +62,6 @@ import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ComponentShowcase from "./pages/ComponentShowcase.tsx";
-
 // React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -155,6 +159,7 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/language-intelligence/contract" element={<Contract />} />
               <Route
                 path="/events"
                 element={
@@ -182,9 +187,8 @@ const AppContent: React.FC = () => {
               <Route
                 path="/profile"
                 element={
-
-                  <Profile />
-
+                    <Profile />
+                
                 }
               />
               <Route
@@ -308,6 +312,22 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route
+                path="/group-chats"
+                element={
+                  <ProtectedRoute>
+                    <GroupChats />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/group-chats/:groupChatId"
+                element={
+                  <ProtectedRoute>
+                    <GroupChatView />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/python-tools"
                 element={
                   <ProtectedRoute>
@@ -334,33 +354,32 @@ const AppContent: React.FC = () => {
               <Route
                 path="/language-intelligence/leases/upload"
                 element={
-                  <ProtectedRoute>
+                  
                     <LeaseUpload />
-                  </ProtectedRoute>
+                  
                 }
               />
               <Route
                 path="/language-intelligence/leases/:id"
                 element={
-                  <ProtectedRoute>
+          
                     <LeaseDetail />
-                  </ProtectedRoute>
+
                 }
               />
               <Route
                 path="/language-intelligence/contracts/upload"
                 element={
-                  <ProtectedRoute>
                     <ContractUpload />
-                  </ProtectedRoute>
+                  
                 }
               />
               <Route
                 path="/language-intelligence/contracts/:id"
                 element={
-                  <ProtectedRoute>
+                
                     <ContractDetail />
-                  </ProtectedRoute>
+                
                 }
               />
             </Routes>
@@ -376,9 +395,9 @@ const AppContent: React.FC = () => {
         toastOptions={{
           duration: 4000,
           style: {
-            background: "rgba(0, 0, 0, 0.8)",
+            background: "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(10px)",
-            color: "#fff",
+            color: "#000000",
             border: "1px solid rgba(255, 255, 255, 0.2)",
             borderRadius: "12px",
           },

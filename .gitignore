@@ -165,7 +165,6 @@ Thumbs.db
 # MISC
 # ========================================
 .husky
-.github
 .dockerignore
 *.cache
 .cache/

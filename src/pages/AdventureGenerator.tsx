@@ -178,10 +178,10 @@ const AdventureGenerator: React.FC = () => {
       className="space-y-6"
     >
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          What interests you? 🎯
+        <h2 className="text-3xl font-bold text-black mb-2 pt-4">
+          What interests you?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-black">
           Select your interests to personalize your adventure
         </p>
       </div>
@@ -194,7 +194,7 @@ const AdventureGenerator: React.FC = () => {
             className={`p-4 rounded-lg border-2 transition-all duration-200 ${
               formData.interests.includes(interest)
                 ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                : 'border-gray-200 hover:border-gray-300 text-black'
             }`}
           >
             <div className="text-2xl mb-2">
@@ -209,7 +209,7 @@ const AdventureGenerator: React.FC = () => {
                interest === 'entertainment' ? '🎭' :
                '🎯'}
             </div>
-            <div className="font-medium capitalize">{interest}</div>
+            <div className="font-medium capitalize text-black">{interest}</div>
           </button>
         ))}
       </div>
@@ -233,10 +233,10 @@ const AdventureGenerator: React.FC = () => {
       className="space-y-6"
     >
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          How much time do you have? ⏰
+        <h2 className="text-3xl font-bold text-black mb-2 pt-4">
+          How much time do you have?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-black">
           Choose your adventure duration
         </p>
       </div>
@@ -289,10 +289,10 @@ const AdventureGenerator: React.FC = () => {
       className="space-y-6"
     >
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          Adventure style? 👥
+        <h2 className="text-3xl font-bold text-black mb-2 pt-4">
+          Adventure style?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-black">
           How would you like to experience this adventure?
         </p>
       </div>
@@ -330,10 +330,10 @@ const AdventureGenerator: React.FC = () => {
       className="space-y-6"
     >
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          Adventure level? 🎯
+        <h2 className="text-3xl font-bold text-black mb-2 pt-4">
+          Adventure level?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-black">
           Choose your comfort level for this adventure
         </p>
       </div>
@@ -371,10 +371,10 @@ const AdventureGenerator: React.FC = () => {
       className="space-y-6"
     >
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          Ready to generate? 🎉
+        <h2 className="text-3xl font-bold text-black mb-2 pt-4">
+          Ready to generate?
         </h2>
-        <p className="text-gray-600">
+        <p className="text-black">
           Review your preferences and generate your adventure
         </p>
       </div>
@@ -436,10 +436,11 @@ const AdventureGenerator: React.FC = () => {
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-black">
               Step {step} of 5
             </span>
-            <span className="text-sm text-gray-500">
+            <br />
+            <span className="text-sm text-black">
               {Math.round((step / 5) * 100)}% Complete
             </span>
           </div>
@@ -454,7 +455,7 @@ const AdventureGenerator: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white card-modern rounded-xl shadow-lg p-8">
           <AnimatePresence mode="wait">
             {renderStep()}
           </AnimatePresence>
@@ -464,10 +465,10 @@ const AdventureGenerator: React.FC = () => {
             <button
               onClick={handleBack}
               disabled={step === 1}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors duration-200 ${
+              className={`px-6 py-2 btn-modern btn-secondary font-medium transition-colors duration-200 ${
                 step === 1
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-gray-100 text-black cursor-not-allowed'
+                  : 'bg-gray-200 text-black hover:bg-gray-300'
               }`}
             >
               Back
@@ -477,10 +478,10 @@ const AdventureGenerator: React.FC = () => {
               <button
                 onClick={handleNext}
                 disabled={!canProceed()}
-                className={`px-6 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                className={`px-6 py-2 btn-modern btn-primary rounded-lg font-medium transition-colors duration-200 ${
                   canProceed()
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    ? 'text-gray-400 cursor-not-allowed'
+                    : 'text-white hover:bg-blue-700'
                 }`}
               >
                 Next

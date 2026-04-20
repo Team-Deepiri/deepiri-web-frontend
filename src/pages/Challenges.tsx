@@ -81,7 +81,7 @@ const Challenges: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.dismiss();
-      toast.success('Challenge generated! 🎮');
+      toast.success('Challenge generated!');
       fetchChallenges();
       setSelectedChallenge(response.data.data);
     } catch (error) {
@@ -134,22 +134,32 @@ const Challenges: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="container px-3 py-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1
+            style={{
+              fontSize: '4rem',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              margin: 0,
+              paddingBottom: '1rem'
+            }}
+          >
             Challenges
           </h1>
-          <p className="text-gray-300 text-lg">Transform your tasks into engaging challenges</p>
+          <motion.p className="text-lg text-black" initial={{y:-10}}>Transform your tasks into engaging challenges</motion.p>
         </motion.div>
 
         {/* Active Challenges */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Active Challenges</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">Active Challenges</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {challenges.filter(c => c.status === 'active' || c.status === 'pending').map((challenge, idx) => (
               <motion.div
@@ -221,7 +231,7 @@ const Challenges: React.FC = () => {
                     onClick={() => generateChallenge(task._id)}
                     className="btn-modern btn-primary glow-purple"
                   >
-                    🎮 Generate
+                    Generate
                   </motion.button>
                 </motion.div>
               ))}

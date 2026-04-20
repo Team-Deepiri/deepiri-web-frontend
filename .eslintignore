@@ -1,0 +1,4 @@
+nodes_modules
+dist
+public
+*.config.js
