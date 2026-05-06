@@ -211,7 +211,7 @@ const Register = () => {
               }}
             >
               <div>
-                <label htmlFor="email" style={{
+                <label style={{
                   display: 'block',
                   color: 'black',
                   fontSize: '0.875rem',
@@ -221,7 +221,6 @@ const Register = () => {
                   Email <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <input
-                  id="email"
                   type="email"
                   name="email"
                   value={formData.email}
@@ -265,7 +264,7 @@ const Register = () => {
               </div>
 
               <div>
-                <label htmlFor="username" style={{
+                <label style={{
                   display: 'block',
                   color: 'black',
                   fontSize: '0.875rem',
@@ -275,7 +274,6 @@ const Register = () => {
                   Username <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <input
-                  id="username"
                   type="text"
                   name="name"
                   value={formData.name}
@@ -307,7 +305,7 @@ const Register = () => {
               </div>
 
               <div>
-                <label htmlFor="password" style={{
+                <label style={{
                   display: 'block',
                   color: 'black',
                   fontSize: '0.875rem',
@@ -318,7 +316,6 @@ const Register = () => {
                 </label>
 
                 <input
-                  id="password"
                   type="password"
                   name="password"
                   value={formData.password}

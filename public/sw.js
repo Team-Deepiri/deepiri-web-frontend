@@ -1,4 +1,3 @@
-/* global clients */
 // Service Worker for Web Push Notifications
 const CACHE_NAME = 'deepiri-v1';
 const urlsToCache = [
