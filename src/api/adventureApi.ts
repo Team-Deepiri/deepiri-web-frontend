@@ -35,16 +35,16 @@ interface AdventureData {
     duration?: string;
     groupSize?: number;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 import type { AppLocationLatLng } from '../types/common';
 
 interface AdventureResponse {
   success?: boolean;
-  data?: any;
+  data?: unknown;
   message?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const adventureApi = {
@@ -114,7 +114,7 @@ export const adventureApi = {
     }
   },
 
-  shareAdventure: async (adventureId: string, shareData: any): Promise<AdventureResponse> => {
+  shareAdventure: async (adventureId: string, shareData: Record<string, unknown>): Promise<AdventureResponse> => {
     try {
       const response = await api.post(`/adventures/${adventureId}/share`, shareData);
       return response.data;

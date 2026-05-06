@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom'; 
+import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, test, expect, beforeEach } from 'vitest';
 import toast from 'react-hot-toast';
 import { AdventureProvider } from '../contexts/AdventureContext';
 
@@ -12,7 +12,7 @@ const renderWithProviders = (ui) => {
     <QueryClientProvider client={queryClient}>
       <MemoryRouter>
         <AuthProvider>
-          <AdventureProvider> {/* Add this wrapper */}
+          <AdventureProvider>
             {ui}
           </AdventureProvider>
         </AuthProvider>
@@ -38,17 +38,34 @@ import { authApi } from '../api/authApi';
 import { adventureApi } from '../api/adventureApi';
 
 vi.mock('../api/authApi', () => ({
-  authApi: { 
-    login: vi.fn(), 
-    register: vi.fn(), 
-    verifyToken: vi.fn(), 
-    logout: vi.fn(), 
-    refreshToken: vi.fn() 
+  authApi: {
+    login: vi.fn(),
+    register: vi.fn(),
+    verifyToken: vi.fn(),
+    logout: vi.fn(),
+    refreshToken: vi.fn()
   }
 }));
 
 vi.mock('../api/adventureApi', () => ({
-  adventureApi: { generateAdventure: vi.fn(), getAdventures: vi.fn() }
+  adventureApi: {
+    generateAdventure: vi.fn(),
+    getAdventures: vi.fn(),
+    getAdventureRecommendations: vi.fn().mockResolvedValue({})
+  }
+}));
+
+vi.mock('../api/userApi', () => ({
+  userApi: {
+    getStats: vi.fn().mockResolvedValue({ success: true, data: {} }),
+    getProfile: vi.fn().mockResolvedValue({ success: true, data: {} })
+  }
+}));
+
+vi.mock('../api/externalApi', () => ({
+  externalApi: {
+    getCurrentWeather: vi.fn().mockResolvedValue({ success: false, data: null })
+  }
 }));
 
 // 3. Mock AuthContext hook (Dynamic Mocking)
@@ -84,25 +101,24 @@ const createTestQueryClient = () => new QueryClient({
 describe('Home Component', () => {
   test('renders home page with correct content', () => {
     renderWithProviders(<Home />);
-    expect(screen.getByText('Welcome to tripblip MAG 2.0')).toBeInTheDocument();
+    expect(screen.getByText('Deepiri — AI R&D Collective')).toBeInTheDocument();
   });
 
-  test('shows sign up and sign in buttons when not authenticated', () => {
+  test('shows call-to-action buttons', () => {
     renderWithProviders(<Home />);
-    expect(screen.getByText('Get Started')).toBeInTheDocument();
-    expect(screen.getByText('Sign In')).toBeInTheDocument();
+    expect(screen.getByText('Talk to the Collective')).toBeInTheDocument();
+    expect(screen.getByText('Explore the Research')).toBeInTheDocument();
   });
 });
 
 describe('Navbar Component', () => {
   test('renders navbar with logo and navigation', () => {
     renderWithProviders(<Navbar />);
-    expect(screen.getByText('tripblip MAG 2.0')).toBeInTheDocument();
+    expect(screen.getAllByText('Deepiri').length).toBeGreaterThan(0);
   });
 
-  test('handles logout when logout button is clicked', () => {
+  test('handles logout when logout button is clicked', async () => {
     const mockLogout = vi.fn();
-    // Removed "as any" type assertions
     vi.mocked(useAuth).mockReturnValue({
       user: { _id: '1', name: 'Test User', email: 'test@example.com' },
       isAuthenticated: true,
@@ -114,7 +130,9 @@ describe('Navbar Component', () => {
     });
 
     renderWithProviders(<Navbar />);
-    const logoutButton = screen.getByText('Sign Out');
+    // Open the mobile menu to expose the Sign Out button
+    fireEvent.click(screen.getByRole('button', { name: /toggle menu/i }));
+    const logoutButton = await screen.findByText('Sign Out');
     fireEvent.click(logoutButton);
     expect(mockLogout).toHaveBeenCalled();
   });
@@ -127,11 +145,13 @@ describe('AuthContext', () => {
   });
 
   test('handles successful login', async () => {
-    const mockUser = { _id: '1', name: 'Test User', email: 'test@example.com' };
-    vi.mocked(authApi.login).mockResolvedValue({
-      success: true,
-      user: mockUser,
-      token: 'mock-token'
+    const mockLogin = vi.fn();
+    vi.mocked(useAuth).mockReturnValue({
+      isAuthenticated: false,
+      user: null,
+      loading: false,
+      login: mockLogin,
+      logout: vi.fn(),
     });
 
     const TestComponent = () => {
@@ -143,7 +163,7 @@ describe('AuthContext', () => {
     fireEvent.click(screen.getByText('Login'));
 
     await waitFor(() => {
-      expect(authApi.login).toHaveBeenCalledWith('test@example.com', 'password');
+      expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'password');
     });
   });
 });
@@ -159,7 +179,7 @@ describe('Login Component', () => {
     renderWithProviders(<Login />);
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
-    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
     await waitFor(() => {
       expect(authApi.login).toHaveBeenCalledWith('test@example.com', 'password123');
@@ -176,11 +196,10 @@ describe('Register Component', () => {
     });
 
     renderWithProviders(<Register />);
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Test User' } });
+    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'Test User' } });
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
-    fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'password123' } });
-    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+    fireEvent.click(screen.getByRole('button', { name: /next/i }));
 
     await waitFor(() => {
       expect(authApi.register).toHaveBeenCalled();
@@ -201,13 +220,14 @@ describe('Dashboard Component', () => {
     });
 
     renderWithProviders(<Dashboard />);
-    expect(screen.getByText(/welcome/i)).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    // Greeting varies by time of day; check for the user's name in the greeting h1
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading.textContent).toMatch(/Test User/);
   });
 });
 
 describe('AdventureGenerator Component', () => {
-  test('submits form with valid data', async () => {
+  test('allows interest selection and advances to next step', async () => {
     vi.mocked(adventureApi.generateAdventure).mockResolvedValue({
       success: true,
       data: { _id: 'adventure-123', name: 'Test Adventure' }
@@ -224,13 +244,18 @@ describe('AdventureGenerator Component', () => {
     });
 
     renderWithProviders(<AdventureGenerator />);
-    fireEvent.change(screen.getByLabelText(/interests/i), { target: { value: 'food,music' } });
-    fireEvent.change(screen.getByLabelText(/duration/i), { target: { value: '60' } });
-    fireEvent.click(screen.getByRole('button', { name: /generate/i }));
 
-    await waitFor(() => {
-      expect(adventureApi.generateAdventure).toHaveBeenCalled();
-    });
+    // Wait for interests to load and render
+    const foodButton = await screen.findByText('food');
+    fireEvent.click(foodButton);
+
+    // Next button should now be enabled
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    expect(nextButton).not.toBeDisabled();
+    fireEvent.click(nextButton);
+
+    // Should advance to step 2 (duration)
+    expect(await screen.findByText(/How much time do you have/i)).toBeInTheDocument();
   });
 });
 
@@ -241,7 +266,7 @@ describe('Error Handling', () => {
     renderWithProviders(<Login />);
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
-    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

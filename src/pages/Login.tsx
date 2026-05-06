@@ -109,10 +109,11 @@ const Login: React.FC = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
             >
               <div>
-                <label style={{ color: 'black', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
+                <label htmlFor="email" style={{ color: 'black', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
                   Email <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <input
+                  id="email"
                   name="email"
                   type="email"
                   value={formData.email}
@@ -134,11 +135,12 @@ const Login: React.FC = () => {
               </div>
 
               <div>
-                <label style={{ color: 'black', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
+                <label htmlFor="password" style={{ color: 'black', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
                   Password <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <div style={{ position: 'relative' }}>
                   <input
+                    id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
