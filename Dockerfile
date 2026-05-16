@@ -1,25 +1,25 @@
-# Build stage
+# Deepiri Web Frontend — multi-stage Dockerfile
+#
+#   docker build -t deepiri-frontend:dev .              # default: dev
+#   docker build --target prod -t deepiri-frontend:prod .
+#
+# Dev: load-k8s-env.sh is mounted at runtime via docker-compose (ops/k8s/).
+
+# --- Production build ---
 FROM node:20-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies and clean up in one layer
 RUN npm install --legacy-peer-deps && \
     npm cache clean --force && \
     rm -rf /tmp/* /var/tmp/*
 
-# Copy TypeScript type definition files FIRST (critical for build)
 COPY src/vite-env.d.ts ./src/
 COPY src/declarations.d.ts ./src/
-
-# Copy source code
 COPY . .
 
-# Build arguments for environment variables
 ARG VITE_API_URL
 ARG VITE_FIREBASE_API_KEY
 ARG VITE_FIREBASE_AUTH_DOMAIN
@@ -29,32 +29,46 @@ ARG VITE_FIREBASE_MESSAGING_SENDER_ID
 ARG VITE_FIREBASE_APP_ID
 ARG VITE_FIREBASE_MEASUREMENT_ID
 
-# Set environment variables
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY
-ENV VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN
-ENV VITE_FIREBASE_PROJECT_ID=$VITE_FIREBASE_PROJECT_ID
-ENV VITE_FIREBASE_STORAGE_BUCKET=$VITE_FIREBASE_STORAGE_BUCKET
-ENV VITE_FIREBASE_MESSAGING_SENDER_ID=$VITE_FIREBASE_MESSAGING_SENDER_ID
-ENV VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID
-ENV VITE_FIREBASE_MEASUREMENT_ID=$VITE_FIREBASE_MEASUREMENT_ID
+ENV VITE_API_URL=$VITE_API_URL \
+    VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY \
+    VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN \
+    VITE_FIREBASE_PROJECT_ID=$VITE_FIREBASE_PROJECT_ID \
+    VITE_FIREBASE_STORAGE_BUCKET=$VITE_FIREBASE_STORAGE_BUCKET \
+    VITE_FIREBASE_MESSAGING_SENDER_ID=$VITE_FIREBASE_MESSAGING_SENDER_ID \
+    VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID \
+    VITE_FIREBASE_MEASUREMENT_ID=$VITE_FIREBASE_MEASUREMENT_ID
 
-# Build the application and clean up build artifacts
 RUN npm run build && \
     npm cache clean --force && \
     rm -rf /tmp/* /var/tmp/* /root/.npm
 
-# Production stage
-FROM nginx:alpine
+# --- Production runtime ---
+FROM nginx:alpine AS prod
 
-# Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+# --- Development (Vite HMR) — default when --target is omitted ---
+FROM node:20-alpine AS dev
+
+WORKDIR /app
+
+RUN apk add --no-cache inotify-tools bash
+
+COPY package*.json ./
+
+RUN npm install --legacy-peer-deps
+
+COPY . .
+
+ENV NODE_ENV=development
+
+EXPOSE 5173
+
+# load-k8s-env.sh is bind-mounted in docker-compose.dev.yml
+ENTRYPOINT ["/bin/sh", "-c", "if [ -f /usr/local/bin/load-k8s-env.sh ]; then . /usr/local/bin/load-k8s-env.sh; fi; exec \"$@\"", "--"]
+CMD ["npm", "run", "dev:turbo"]
