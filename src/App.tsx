@@ -72,7 +72,11 @@ const queryClient = new QueryClient({
 const AppContent: React.FC = () => {
   const location = useLocation();
   const pathname = location?.pathname || "/";
-  const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname === "/forgot";
+  const isAuthRoute =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot" ||
+    pathname === "/contact";
   const { isAuthenticated } = useAuth();
   const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
 
