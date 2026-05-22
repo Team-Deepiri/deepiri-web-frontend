@@ -104,10 +104,10 @@ body {
   padding-bottom: 40px;
 }
 
-/* for login/register spacing */
+/* login/register/contact: spacer already clears the fixed navbar */
 .app-content.auth {
-  padding-top: calc(var(--deepiri-nav-h) + 16px);
-  padding-bottom: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* container */
