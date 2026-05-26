@@ -24,7 +24,7 @@ import Dashboard from "./pages/Dashboard";
 import AdventureGenerator from "./pages/AdventureGenerator";
 import AdventureDetail from "./pages/AdventureDetail";
 import AdventureHistory from "./pages/AdventureHistory";
-import Contract from "./pages/Contract";
+import Contract from "./pages/General Documents.tsx";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";

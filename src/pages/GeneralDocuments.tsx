@@ -1,68 +1,68 @@
 import React, { useMemo, useState } from "react";
 import { Search, Upload, Plus, Eye } from "lucide-react";
 
-type ContractStatus = "Active" | "Pending" | "Expired";
+type DocumentStatus = "Archived" | "Draft" | "Published";
 
-type ContractItem = {
+type DocumentItem = {
   id: number;
   title: string;
-  company: string;
+  author: string;
   category: string;
-  startDate: string;
-  endDate: string;
-  status: ContractStatus;
+  createdDate: string;
+  modifiedDate: string;
+  status: DocumentStatus;
 };
 
-const Contract: React.FC = () => {
+const Documents: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const contracts: ContractItem[] = [
+  const documents: DocumentItem[] = [
     {
       id: 1,
-      title: "Master Service Agreement",
-      company: "OpenWave Technologies",
-      category: "Legal",
-      startDate: "2026-01-10",
-      endDate: "2027-01-10",
-      status: "Active",
+      title: "Q1 Financial Report",
+      author: "OpenWave Technologies",
+      category: "Finance",
+      createdDate: "2026-01-10",
+      modifiedDate: "2026-01-15",
+      status: "Published",
     },
     {
       id: 2,
-      title: "Employment Contract",
-      company: "Deepiri Inc.",
+      title: "Employee Handbook",
+      author: "Deepiri Inc.",
       category: "HR",
-      startDate: "2026-02-14",
-      endDate: "2028-02-14",
-      status: "Active",
+      createdDate: "2026-02-14",
+      modifiedDate: "2026-03-01",
+      status: "Published",
     },
     {
       id: 3,
-      title: "Vendor Supply Agreement",
-      company: "NorthStar Supplies",
-      category: "Procurement",
-      startDate: "2026-03-01",
-      endDate: "2026-12-31",
-      status: "Pending",
+      title: "Product Roadmap 2026",
+      author: "NorthStar Supplies",
+      category: "Product",
+      createdDate: "2026-03-01",
+      modifiedDate: "2026-05-20",
+      status: "Draft",
     },
     {
       id: 4,
-      title: "Partnership Agreement",
-      company: "Vertex Labs",
+      title: "2025 Annual Report",
+      author: "Vertex Labs",
       category: "Business",
-      startDate: "2024-05-12",
-      endDate: "2025-05-12",
-      status: "Expired",
+      createdDate: "2024-05-12",
+      modifiedDate: "2025-06-15",
+      status: "Archived",
     },
   ];
 
-  const filteredContracts = useMemo(() => {
+  const filteredDocuments = useMemo(() => {
     const query = searchTerm.toLowerCase();
-    return contracts.filter((contract) => {
+    return documents.filter((document) => {
       return (
-        contract.title.toLowerCase().includes(query) ||
-        contract.company.toLowerCase().includes(query) ||
-        contract.category.toLowerCase().includes(query) ||
-        contract.status.toLowerCase().includes(query)
+        document.title.toLowerCase().includes(query) ||
+        document.author.toLowerCase().includes(query) ||
+        document.category.toLowerCase().includes(query) ||
+        document.status.toLowerCase().includes(query)
       );
     });
   }, [searchTerm]);
@@ -182,8 +182,8 @@ const Contract: React.FC = () => {
     },
   };
 
-  const getStatusStyle = (status: ContractStatus): React.CSSProperties => {
-    if (status === "Active") {
+  const getStatusStyle = (status: DocumentStatus): React.CSSProperties => {
+    if (status === "Published") {
       return {
         display: "inline-block",
         padding: "6px 12px",
@@ -195,7 +195,7 @@ const Contract: React.FC = () => {
       };
     }
 
-    if (status === "Pending") {
+    if (status === "Draft") {
       return {
         display: "inline-block",
         padding: "6px 12px",
@@ -213,21 +213,21 @@ const Contract: React.FC = () => {
       borderRadius: "999px",
       fontSize: "12px",
       fontWeight: 600,
-      backgroundColor: "#fee2e2",
-      color: "#b91c1c",
+      backgroundColor: "#e5e7eb",
+      color: "#374151",
     };
   };
 
-  const totalContracts = contracts.length;
-  const activeContracts = contracts.filter((c) => c.status === "Active").length;
-  const pendingContracts = contracts.filter((c) => c.status === "Pending").length;
-  const expiredContracts = contracts.filter((c) => c.status === "Expired").length;
+  const totalDocuments = documents.length;
+  const publishedDocuments = documents.filter((d) => d.status === "Published").length;
+  const draftDocuments = documents.filter((d) => d.status === "Draft").length;
+  const archivedDocuments = documents.filter((d) => d.status === "Archived").length;
 
   const sections = [
-    "All Contracts",
-    "Active Contracts",
-    "Pending Review",
-    "Expired Contracts",
+    "All Documents",
+    "Published",
+    "Drafts",
+    "Archived",
     "Uploads",
   ];
 
@@ -244,21 +244,21 @@ const Contract: React.FC = () => {
                 color: "black",
               }}
             >
-              Contract
+              Documents
             </h1>
             <p style={{ color: "#9ca3af", marginTop: "8px" }}>
-              Manage your contracts and related documents
+              Manage and organize your documents
             </p>
           </div>
 
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <button style={styles.ghostBtn}>
               <Upload size={16} />
-              Upload Contract
+              Upload Document
             </button>
             <button style={styles.purpleBtn}>
               <Plus size={16} />
-              New Contract
+              New Document
             </button>
           </div>
         </div>
@@ -298,7 +298,7 @@ const Contract: React.FC = () => {
                   color: "#111827",
                 }}
               >
-                Contract Overview
+                Document Overview
               </h2>
             </div>
 
@@ -313,7 +313,7 @@ const Contract: React.FC = () => {
               >
                 <div style={styles.statCard}>
                   <p style={{ margin: 0, color: "#6b7280", fontSize: "13px" }}>
-                    Total Contracts
+                    Total Documents
                   </p>
                   <h3
                     style={{
@@ -322,13 +322,13 @@ const Contract: React.FC = () => {
                       color: "#111827",
                     }}
                   >
-                    {totalContracts}
+                    {totalDocuments}
                   </h3>
                 </div>
 
                 <div style={styles.statCard}>
                   <p style={{ margin: 0, color: "#6b7280", fontSize: "13px" }}>
-                    Active
+                    Published
                   </p>
                   <h3
                     style={{
@@ -337,13 +337,13 @@ const Contract: React.FC = () => {
                       color: "#111827",
                     }}
                   >
-                    {activeContracts}
+                    {publishedDocuments}
                   </h3>
                 </div>
 
                 <div style={styles.statCard}>
                   <p style={{ margin: 0, color: "#6b7280", fontSize: "13px" }}>
-                    Pending
+                    Drafts
                   </p>
                   <h3
                     style={{
@@ -352,13 +352,13 @@ const Contract: React.FC = () => {
                       color: "#111827",
                     }}
                   >
-                    {pendingContracts}
+                    {draftDocuments}
                   </h3>
                 </div>
 
                 <div style={styles.statCard}>
                   <p style={{ margin: 0, color: "#6b7280", fontSize: "13px" }}>
-                    Expired
+                    Archived
                   </p>
                   <h3
                     style={{
@@ -367,7 +367,7 @@ const Contract: React.FC = () => {
                       color: "#111827",
                     }}
                   >
-                    {expiredContracts}
+                    {archivedDocuments}
                   </h3>
                 </div>
               </div>
@@ -385,7 +385,7 @@ const Contract: React.FC = () => {
                 />
                 <input
                   type="text"
-                  placeholder="Search contracts..."
+                  placeholder="Search documents..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   style={styles.searchInput}
@@ -396,27 +396,27 @@ const Contract: React.FC = () => {
                 <table style={styles.table}>
                   <thead>
                     <tr>
-                      <th style={styles.th}>Contract Name</th>
-                      <th style={styles.th}>Company</th>
+                      <th style={styles.th}>Document Name</th>
+                      <th style={styles.th}>Author</th>
                       <th style={styles.th}>Category</th>
-                      <th style={styles.th}>Start Date</th>
-                      <th style={styles.th}>End Date</th>
+                      <th style={styles.th}>Created</th>
+                      <th style={styles.th}>Modified</th>
                       <th style={styles.th}>Status</th>
                       <th style={styles.th}>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredContracts.length > 0 ? (
-                      filteredContracts.map((contract) => (
-                        <tr key={contract.id}>
-                          <td style={styles.td}>{contract.title}</td>
-                          <td style={styles.td}>{contract.company}</td>
-                          <td style={styles.td}>{contract.category}</td>
-                          <td style={styles.td}>{contract.startDate}</td>
-                          <td style={styles.td}>{contract.endDate}</td>
+                    {filteredDocuments.length > 0 ? (
+                      filteredDocuments.map((document) => (
+                        <tr key={document.id}>
+                          <td style={styles.td}>{document.title}</td>
+                          <td style={styles.td}>{document.author}</td>
+                          <td style={styles.td}>{document.category}</td>
+                          <td style={styles.td}>{document.createdDate}</td>
+                          <td style={styles.td}>{document.modifiedDate}</td>
                           <td style={styles.td}>
-                            <span style={getStatusStyle(contract.status)}>
-                              {contract.status}
+                            <span style={getStatusStyle(document.status)}>
+                              {document.status}
                             </span>
                           </td>
                           <td style={styles.td}>
@@ -438,7 +438,7 @@ const Contract: React.FC = () => {
                             padding: "28px",
                           }}
                         >
-                          No contracts found.
+                          No documents found.
                         </td>
                       </tr>
                     )}
@@ -453,4 +453,4 @@ const Contract: React.FC = () => {
   );
 };
 
-export default Contract;
+export default Documents;
