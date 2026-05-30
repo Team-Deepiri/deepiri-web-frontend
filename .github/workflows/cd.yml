@@ -1,15 +1,24 @@
 name: Deepiri CD - deepiri-web-frontend
 
 # Builds the production (nginx) image from the multi-stage Dockerfile and
-# publishes it to GitHub Container Registry (GHCR) on merge to main.
+# publishes it to Google Artifact Registry (GCP) on merge to main — aligning
+# with skaffold/skaffold-prod-cloud.yaml, which builds the frontend via Google
+# Cloud Build / GCP. Image name `deepiri-frontend` matches that artifact.
 #
-# NOTE: the prod build bakes VITE_* values in at build time. These are NOT
-# confidential — Vite inlines them into the client bundle and Firebase web
-# config is a public client identifier by design — so they are stored as repo
-# Variables (vars.*), not Secrets. Set them under
-# Settings > Secrets and variables > Actions > Variables, or the image ships
-# with empty config. If your k8s pulls from a different registry, change
-# `images:` in the metadata step and the login registry accordingly.
+# Required repo config (Settings > Secrets and variables > Actions):
+#   Variables (vars.*):
+#     GCP_PROJECT_ID   - target GCP project
+#     GCP_AR_REPO      - Artifact Registry repository name
+#     GCP_REGION       - AR region (optional; defaults to us-central1)
+#     VITE_*           - 8 client build args (below). Non-confidential: Vite
+#                        inlines them into the client bundle and Firebase web
+#                        config is a public client identifier, so Variables
+#                        (not Secrets) is correct. Empty => image ships blank.
+#   Secret (secrets.*):
+#     GCP_SA_KEY       - service-account JSON with the Artifact Registry Writer
+#                        role. (Alternative: keyless Workload Identity
+#                        Federation — replace `credentials_json` with
+#                        `workload_identity_provider` + `service_account`.)
 
 on:
   push:
@@ -18,7 +27,7 @@ on:
 
 permissions:
   contents: read
-  packages: write
+  id-token: write # for Workload Identity Federation, if adopted
 
 jobs:
   build-and-push:
@@ -32,18 +41,25 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GHCR
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          token_format: access_token
+
+      - name: Log in to Artifact Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ vars.GCP_REGION || 'us-central1' }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
 
       - name: Derive image metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ${{ vars.GCP_REGION || 'us-central1' }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_AR_REPO }}/deepiri-frontend
           tags: |
             type=sha,format=long
             type=raw,value=latest,enable={{is_default_branch}}
