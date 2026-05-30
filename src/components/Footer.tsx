@@ -74,8 +74,8 @@ const Footer: React.FC = () => {
             { label: "Contact Us", to: "/contact" },
             { label: "Privacy Policy", to: "/privacy" },
             { label: "Terms of Service", to: "/terms" },
-          ].map((item, index) => (
-            <div className="col" style={{maxWidth: '150px'}}>
+          ].map((item) => (
+            <div key={item.to} className="col" style={{maxWidth: '150px'}}>
               <Link
                 to={item.to}
                 className="font-black no-underline transition-colors duration-300"
