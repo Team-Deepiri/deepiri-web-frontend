@@ -40,6 +40,17 @@ if (typeof globalThis.window !== 'undefined' && !globalThis.window.matchMedia) {
   })
 }
 
+// Provide a no-op IntersectionObserver for components that observe visibility
+if (typeof globalThis.IntersectionObserver === 'undefined') {
+  // @ts-ignore
+  globalThis.IntersectionObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() { return [] }
+  }
+}
+
 // Provide basic globals if not injected
 if (typeof globalThis.document === 'undefined') {
   // jsdom should provide this, but guard just in case

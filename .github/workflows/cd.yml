@@ -1,0 +1,85 @@
+name: Deepiri CD - deepiri-web-frontend
+
+# Builds the production (nginx) image from the multi-stage Dockerfile and
+# publishes it to Google Artifact Registry (GCP) on merge to main — aligning
+# with skaffold/skaffold-prod-cloud.yaml, which builds the frontend via Google
+# Cloud Build / GCP. Image name `deepiri-frontend` matches that artifact.
+#
+# Required repo config (Settings > Secrets and variables > Actions):
+#   Variables (vars.*):
+#     GCP_PROJECT_ID   - target GCP project
+#     GCP_AR_REPO      - Artifact Registry repository name
+#     GCP_REGION       - AR region (optional; defaults to us-central1)
+#     VITE_*           - 8 client build args (below). Non-confidential: Vite
+#                        inlines them into the client bundle and Firebase web
+#                        config is a public client identifier, so Variables
+#                        (not Secrets) is correct. Empty => image ships blank.
+#   Secret (secrets.*):
+#     GCP_SA_KEY       - service-account JSON with the Artifact Registry Writer
+#                        role. (Alternative: keyless Workload Identity
+#                        Federation — replace `credentials_json` with
+#                        `workload_identity_provider` + `service_account`.)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # for Workload Identity Federation, if adopted
+
+jobs:
+  build-and-push:
+    name: Build & Push Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          token_format: access_token
+
+      - name: Log in to Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.GCP_REGION || 'us-central1' }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: Derive image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.GCP_REGION || 'us-central1' }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_AR_REPO }}/deepiri-frontend
+          tags: |
+            type=sha,format=long
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push (prod target)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: prod
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
+            VITE_FIREBASE_API_KEY=${{ vars.VITE_FIREBASE_API_KEY }}
+            VITE_FIREBASE_AUTH_DOMAIN=${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+            VITE_FIREBASE_PROJECT_ID=${{ vars.VITE_FIREBASE_PROJECT_ID }}
+            VITE_FIREBASE_STORAGE_BUCKET=${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+            VITE_FIREBASE_MESSAGING_SENDER_ID=${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+            VITE_FIREBASE_APP_ID=${{ vars.VITE_FIREBASE_APP_ID }}
+            VITE_FIREBASE_MEASUREMENT_ID=${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
