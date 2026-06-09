@@ -169,7 +169,7 @@ const DocumentDetail: React.FC = () => {
         <FileText size={48} color="#d1d5db" style={{ marginBottom: "16px" }} />
         <h2 style={{ color: "#111827", marginBottom: "8px" }}>Document not found</h2>
         <p style={{ color: "#6b7280", marginBottom: "24px" }}>
-          This document may have been deleted or doesn't exist.
+          This document may have been deleted or doesn&apos;t exist.
         </p>
         <button
           onClick={() => navigate("/language-intelligence/documents")}
