@@ -2,10 +2,8 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
-import { useAuth } from '../contexts/AuthContext';
 
 const ForgotPassword = () => {
-  const { /* reset */ } = useAuth();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
