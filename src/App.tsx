@@ -24,7 +24,8 @@ import Dashboard from "./pages/Dashboard";
 import AdventureGenerator from "./pages/AdventureGenerator";
 import AdventureDetail from "./pages/AdventureDetail";
 import AdventureHistory from "./pages/AdventureHistory";
-import Contract from "./pages/Contract";
+import DocumentsPage from "./pages/Document.tsx";
+import DocumentDetail from './pages/LanguageIntelligence/DocumentDetail';
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
@@ -53,8 +54,6 @@ import Contact from "./pages/Contact";
 import Forgot from './pages/ForgotPassword.tsx'
 import LeaseUpload from './pages/LanguageIntelligence/LeaseUpload';
 import LeaseDetail from './pages/LanguageIntelligence/LeaseDetail';
-import ContractUpload from './pages/LanguageIntelligence/ContractUpload';
-import ContractDetail from './pages/LanguageIntelligence/ContractDetail';
 import ChatWidget from './components/ChatWidget/ChatWidget';
 
 // Public pages
@@ -163,7 +162,11 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/language-intelligence/contract" element={<Contract />} />
+              <Route path="/language-intelligence/documents" element={<DocumentsPage />} />
+              <Route
+                 path="/language-intelligence/documents/:id"
+                element={<DocumentDetail />}
+                    />
               <Route
                 path="/events"
                 element={
@@ -172,6 +175,7 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+            
               <Route
                 path="/events/:id"
                 element={
@@ -371,21 +375,7 @@ const AppContent: React.FC = () => {
 
                 }
               />
-              <Route
-                path="/language-intelligence/contracts/upload"
-                element={
-                    <ContractUpload />
-                  
-                }
-              />
-              <Route
-                path="/language-intelligence/contracts/:id"
-                element={
-                
-                    <ContractDetail />
-                
-                }
-              />
+        
             </Routes>
             <ChatWidget />
           </div>
