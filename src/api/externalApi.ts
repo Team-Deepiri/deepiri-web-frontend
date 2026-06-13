@@ -13,18 +13,14 @@ const getErrorMessage = (error: unknown, defaultMessage: string): string => {
 
 export const externalApi = {
   cyrexMessage: async (content: string, sessionId: string | null = null): Promise<any> => {
-    try {
-      const base = import.meta.env.VITE_CYREX_URL || 'http://localhost:8000';
-      const res = await fetch(`${base}/agent/message`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, session_id: sessionId })
-      });
-      if (!res.ok) throw await res.json();
-      return await res.json();
-    } catch (error) {
-      throw error;
-    }
+    const base = import.meta.env.VITE_CYREX_URL || 'http://localhost:8000';
+    const res = await fetch(`${base}/agent/message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content, session_id: sessionId })
+    });
+    if (!res.ok) throw await res.json();
+    return await res.json();
   },
   // Get current weather for location
   getCurrentWeather: async (location: AppLocation): Promise<ApiResponse> => {

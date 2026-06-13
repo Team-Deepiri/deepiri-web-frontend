@@ -136,10 +136,11 @@ const Events: React.FC = () => {
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'upcoming':
+        case 'upcoming': {
           const dateA = a.startTime ? new Date(a.startTime).getTime() : 0;
           const dateB = b.startTime ? new Date(b.startTime).getTime() : 0;
           return dateA - dateB;
+        }
         case 'popular':
           return (b.participants?.length || 0) - (a.participants?.length || 0);
         case 'name':

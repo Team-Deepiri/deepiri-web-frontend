@@ -74,14 +74,16 @@ const AdventureHistory: React.FC = () => {
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'newest':
+        case 'newest': {
           const dateA = a.metadata?.generatedAt ? new Date(a.metadata.generatedAt).getTime() : 0;
           const dateB = b.metadata?.generatedAt ? new Date(b.metadata.generatedAt).getTime() : 0;
           return dateB - dateA;
-        case 'oldest':
+        }
+        case 'oldest': {
           const dateA2 = a.metadata?.generatedAt ? new Date(a.metadata.generatedAt).getTime() : 0;
           const dateB2 = b.metadata?.generatedAt ? new Date(b.metadata.generatedAt).getTime() : 0;
           return dateA2 - dateB2;
+        }
         case 'duration':
           return (b.totalDuration || 0) - (a.totalDuration || 0);
         case 'name':
