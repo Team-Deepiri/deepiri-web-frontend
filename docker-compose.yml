@@ -1,0 +1,36 @@
+services:
+  portal:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    command: sh -c "corepack enable && yarn install && yarn dev:portal"
+
+  immersive:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5174:5174"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    command: sh -c "corepack enable && yarn install && yarn dev:immersive"
+
+  hub-server:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5200:5200"
+    environment:
+      NODE_ENV: development
+      PORT: "5200"
+    command: sh -c "corepack enable && yarn install && yarn dev:server"

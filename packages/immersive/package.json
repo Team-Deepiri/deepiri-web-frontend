@@ -1,0 +1,25 @@
+{
+  "name": "@deepiri/immersive",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5174"
+  },
+  "dependencies": {
+    "@deepiri/shared": "workspace:*",
+    "@react-three/drei": "^9.92.7",
+    "@react-three/fiber": "^8.15.19",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@types/three": "^0.160.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vite": "^6.4.2"
+  }
+}
