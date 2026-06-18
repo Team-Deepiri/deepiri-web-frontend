@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: development
       CHOKIDAR_USEPOLLING: "true"
-    command: sh -c "corepack enable && yarn install && yarn dev:portal"
+    command: sh -c "npm ci && npm run dev:portal"
 
   immersive:
     image: node:20-alpine
@@ -21,7 +21,7 @@ services:
     environment:
       NODE_ENV: development
       CHOKIDAR_USEPOLLING: "true"
-    command: sh -c "corepack enable && yarn install && yarn dev:immersive"
+    command: sh -c "npm ci && npm run dev:immersive"
 
   hub-server:
     image: node:20-alpine
@@ -33,4 +33,4 @@ services:
     environment:
       NODE_ENV: development
       PORT: "5200"
-    command: sh -c "corepack enable && yarn install && yarn dev:server"
+    command: sh -c "npm ci && npm run dev:server"
