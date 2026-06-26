@@ -1,0 +1,11 @@
+export const STATUS_THRESHOLD_MS = {
+  HEALTHY: 200,
+  DEGRADED: 500,
+} as const;
+
+export const POLL_INTERVALS_MS = {
+  HEALTH: 10_000,
+  IMMERSIVE_CHECK: 30_000,
+  DOCKER_STATUS: 30_000,
+  GITHUB_ACTIVITY: 300_000,
+} as const;
