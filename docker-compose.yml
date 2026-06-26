@@ -1,0 +1,52 @@
+services:
+  deps:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm ci"
+
+  portal:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+    command: npm run dev:portal
+
+  immersive:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5174:5174"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+    command: npm run dev:immersive
+
+  hub-server:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5200:5200"
+    environment:
+      NODE_ENV: development
+      PORT: "5200"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+    command: npm run dev:server
