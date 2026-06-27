@@ -25,7 +25,8 @@ function resolveColor(health: string): string {
 
 export const Planet = forwardRef<THREE.Mesh, PlanetProps>(
   ({ label, health, size, orbitRadius, orbitSpeed, center, onClick }, ref) => {
-    const meshRef = (ref as React.RefObject<THREE.Mesh>) ?? useRef<THREE.Mesh>(null)
+    const localRef = useRef<THREE.Mesh>(null)
+    const meshRef = (ref as React.RefObject<THREE.Mesh>) ?? localRef
     const labelRef = useRef<THREE.Group>(null)
     const orbitAngle = useRef(Math.random() * Math.PI * 2)
     const color = resolveColor(health)
