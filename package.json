@@ -1,9 +1,28 @@
 {
-  "name": "deepiri-frontend",
+  "name": "deepiri-client-hub",
   "version": "3.0.0",
   "description": "Deepiri Frontend - Productivity Gamification Interface",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "dev:fast": "vite --host 0.0.0.0 --port 5173 --force",
+    "dev:turbo": "vite --host 0.0.0.0 --port 5173 --force --clearScreen false",
+    "dev:debug": "vite --host 0.0.0.0 --port 5173 --debug",
+    "dev:portal": "npm run dev -w @deepiri/portal",
+    "dev:immersive": "npm run dev -w @deepiri/immersive",
+    "dev:server": "npm run dev -w @deepiri/server",
+    "dev:all": "concurrently -n portal,immersive,server -c blue,magenta,green \"npm run dev:portal\" \"npm run dev:immersive\" \"npm run dev:server\"",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "lint": "eslint . --report-unused-disable-directives",
+    "type-check": "tsc --noEmit"
+  },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.2",
     "@heroicons/react": "^2.2.0",
@@ -37,32 +56,7 @@
     "web-vitals": "^3.5.0",
     "zustand": "^4.4.7"
   },
-  "scripts": {
-    "dev": "vite --host 0.0.0.0 --port 5173",
-    "dev:fast": "vite --host 0.0.0.0 --port 5173 --force",
-    "dev:turbo": "vite --host 0.0.0.0 --port 5173 --force --clearScreen false",
-    "dev:debug": "vite --host 0.0.0.0 --port 5173 --debug",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "coverage": "vitest run --coverage",
-    "lint": "eslint . --report-unused-disable-directives",
-    "type-check": "tsc --noEmit"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.22.5",
     "@eslint/js": "^9.39.4",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
@@ -76,6 +70,7 @@
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^9.0.0",
     "esbuild": "^0.28.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
@@ -88,6 +83,18 @@
     "vite": "^8.0.16",
     "vite-plugin-react-inspector": "^0.3.3",
     "vitest": "^4.1.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "proxy": "http://localhost:5000",
   "optionalDependencies": {
