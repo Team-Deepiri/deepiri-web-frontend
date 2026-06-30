@@ -25,6 +25,7 @@ import AdventureGenerator from "./pages/AdventureGenerator";
 import AdventureDetail from "./pages/AdventureDetail";
 import AdventureHistory from "./pages/AdventureHistory";
 import DocumentsPage from "./pages/Document.tsx";
+import DocumentDetail from './pages/LanguageIntelligence/DocumentDetail';
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
@@ -161,7 +162,11 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/language-intelligence/document" element={<DocumentsPage />} />
+              <Route path="/language-intelligence/documents" element={<DocumentsPage />} />
+              <Route
+                 path="/language-intelligence/documents/:id"
+                element={<DocumentDetail />}
+                    />
               <Route
                 path="/events"
                 element={
@@ -170,6 +175,7 @@ const AppContent: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+            
               <Route
                 path="/events/:id"
                 element={
