@@ -1,52 +1,34 @@
+version: "3.9"
 services:
-  deps:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - .:/app
-    command: sh -c "npm ci"
-
-  portal:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - .:/app
-    ports:
-      - "5173:5173"
-    environment:
-      NODE_ENV: development
-      CHOKIDAR_USEPOLLING: "true"
-    depends_on:
-      deps:
-        condition: service_completed_successfully
-    command: npm run dev:portal
-
-  immersive:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - .:/app
-    ports:
-      - "5174:5174"
-    environment:
-      NODE_ENV: development
-      CHOKIDAR_USEPOLLING: "true"
-    depends_on:
-      deps:
-        condition: service_completed_successfully
-    command: npm run dev:immersive
-
   hub-server:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - .:/app
+    build: ./packages/server
     ports:
       - "5200:5200"
     environment:
-      NODE_ENV: development
-      PORT: "5200"
+      - REALTIME_GATEWAY_URL=ws://realtime-gateway:5008
+      - API_GATEWAY_URL=http://api-gateway:5100
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    networks:
+      - deepiri
+
+  portal:
+    build: ./packages/portal
+    ports:
+      - "5173:5173"
     depends_on:
-      deps:
-        condition: service_completed_successfully
-    command: npm run dev:server
+      - hub-server
+    networks:
+      - deepiri
+
+  immersive:
+    build: ./packages/immersive
+    ports:
+      - "5174:5174"
+    depends_on:
+      - hub-server
+    networks:
+      - deepiri
+
+networks:
+  deepiri:
+    external: true

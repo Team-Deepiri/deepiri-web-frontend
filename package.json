@@ -12,9 +12,9 @@
     "dev:fast": "vite --host 0.0.0.0 --port 5173 --force",
     "dev:turbo": "vite --host 0.0.0.0 --port 5173 --force --clearScreen false",
     "dev:debug": "vite --host 0.0.0.0 --port 5173 --debug",
-    "dev:portal": "npm run dev -w @deepiri/portal",
-    "dev:immersive": "npm run dev -w @deepiri/immersive",
-    "dev:server": "npm run dev -w @deepiri/server",
+    "dev:portal": "yarn workspace @deepiri/portal dev",
+    "dev:immersive": "yarn workspace @deepiri/immersive dev",
+    "dev:server": "yarn workspace @deepiri/server dev",
     "dev:all": "concurrently -n portal,immersive,server -c blue,magenta,green \"npm run dev:portal\" \"npm run dev:immersive\" \"npm run dev:server\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -52,7 +52,6 @@
     "react-router-dom": "^7.15.0",
     "recharts": "^2.10.3",
     "socket.io-client": "^4.7.4",
-    "three": "^0.160.0",
     "web-vitals": "^3.5.0",
     "zustand": "^4.4.7"
   },
@@ -66,7 +65,6 @@
     "@types/node": "^20.19.25",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
-    "@types/three": "^0.160.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-react": "^6.0.2",
@@ -102,5 +100,9 @@
   },
   "overrides": {
     "shell-quote": "^1.8.4"
+  },
+  "resolutions": {
+    "three": "^0.184.0",
+    "zustand": "^4.5.0"
   }
 }

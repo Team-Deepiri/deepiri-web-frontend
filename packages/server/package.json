@@ -1,20 +1,23 @@
 {
   "name": "@deepiri/server",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@deepiri/shared": "*",
-    "@fastify/cors": "^10.0.0",
-    "@fastify/websocket": "^11.0.0",
-    "fastify": "^5.0.0"
+    "fastify": "^4.26.0",
+    "@fastify/websocket": "^10.0.0",
+    "@fastify/cors": "^9.0.0",
+    "socket.io-client": "^4.7.0",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
-    "@types/node": "^20.19.25",
-    "tsx": "^4.19.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.0",
+    "ts-node-dev": "^2.0.0",
+    "@types/node": "^20.0.0"
   }
 }
