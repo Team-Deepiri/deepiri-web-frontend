@@ -6,7 +6,6 @@ import { STATUS_COLORS } from "@deepiri/shared";
 export default function Home() {
   const services = useHealthStore((s) => s.services);
   const immersiveLive = useUIStore((s) => s.immersiveLive);
-  const { token } = useUIStore();
 
   const healthy = services.filter((s) => s.status === "healthy").length;
   const degraded = services.filter((s) => s.status === "degraded").length;

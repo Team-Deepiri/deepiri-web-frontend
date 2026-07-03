@@ -17,6 +17,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "types": ["vite/client"],
     "paths": {
       "@deepiri/shared": ["../shared/src/index.ts"],
       "@/*": ["./src/*"]
