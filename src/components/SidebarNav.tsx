@@ -23,6 +23,7 @@ const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
   { label: "Tasks", to: "/tasks", icon: "📋" },
   /*{ label: "Challenges", to: "/challenges", icon: "🎮" },*/
   { label: "Analytics", to: "/analytics", icon: "📊" },
+  { label: "Ops Hub", to: "/ops", icon: "🛠️" },
   { label: "Profile", to: "/profile", icon: "👤" },
   { label: "Notifications", to: "/notifications", icon: "🔔" },
   { label: "AI Assistant", to: "/agent", icon: "🤖" },
