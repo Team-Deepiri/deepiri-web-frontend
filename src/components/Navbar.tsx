@@ -102,9 +102,6 @@ const Navbar: React.FC = () => {
                 {[
                   { to: "/dashboard", label: "Dashboard", icon: "🏠" },
                   { to: "/tasks", label: "Tasks", icon: "📋" },
-                  { to: "/challenges", label: "Challenges", icon: "🎮" },
-                  { to: "/gamification", label: "Progress", icon: "⭐" },
-                  { to: "/leaderboard", label: "Leaderboard", icon: "🏆" },
                   { to: "/analytics", label: "Analytics", icon: "📊" },
                 ].map((item, index) => (
                   <motion.div
@@ -315,9 +312,6 @@ const Navbar: React.FC = () => {
                     {[
                       { to: "/dashboard", label: "Dashboard", icon: "🏠" },
                       { to: "/tasks", label: "Tasks", icon: "📋" },
-                      { to: "/challenges", label: "Challenges", icon: "🎮" },
-                      { to: "/gamification", label: "Progress", icon: "⭐" },
-                      { to: "/leaderboard", label: "Leaderboard", icon: "🏆" },
                       { to: "/analytics", label: "Analytics", icon: "📊" },
                       { to: "/profile", label: "Profile", icon: "👤" },
                       { to: "/notifications", label: "Notifications", icon: "🔔" },
