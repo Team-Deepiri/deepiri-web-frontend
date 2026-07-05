@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 type ServiceCard = {
   name: string;
@@ -23,7 +23,7 @@ const OpsHub: React.FC = () => {
       const results: ServiceCard[] = [];
       for (const ep of OPS_ENDPOINTS) {
         try {
-          await axios.get(ep.path, { timeout: 5000 });
+          await axiosInstance.get(ep.path, { timeout: 5000 });
           results.push({ name: ep.name, path: ep.path, status: 'ok' });
         } catch {
           results.push({ name: ep.name, path: ep.path, status: 'unreachable' });
