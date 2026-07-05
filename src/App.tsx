@@ -34,6 +34,7 @@ import Friends from "./pages/Friends";
 import TaskManagement from "./pages/TaskManagement";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import Notifications from "./pages/Notifications";
+import OpsHub from "./pages/OpsHub";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
 import GroupChats from "./pages/GroupChats";
@@ -211,6 +212,14 @@ const AppContent: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <AnalyticsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops"
+                element={
+                  <ProtectedRoute>
+                    <OpsHub />
                   </ProtectedRoute>
                 }
               />
