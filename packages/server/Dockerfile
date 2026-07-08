@@ -6,6 +6,7 @@ COPY packages/server ./packages/server
 RUN yarn install --frozen-lockfile
 
 RUN cd /app/packages/shared && npx tsc && ls dist
+RUN echo '{"name":"@deepiri/shared","version":"1.0.0","main":"dist/src/index.js","types":"src/index.ts"}' > /app/packages/shared/package.json
 
 WORKDIR /app/packages/server
 RUN yarn build

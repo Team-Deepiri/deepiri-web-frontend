@@ -164,7 +164,7 @@ const Contact: React.FC = () => {
                   onFocus={(e) => e.target.style.borderColor = '#733bf6'}
                   onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
                   required>
-                  <option disabled selected>Select...</option>
+                  <option value= "" disabled>Select...</option>
                   <option value="support">Question</option>
                   <option value="feedback">Feedback</option>
                   <option value="bug">Issue</option>

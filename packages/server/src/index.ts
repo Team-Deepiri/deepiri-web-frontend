@@ -21,6 +21,8 @@ async function start() {
     origin: [
       "http://localhost:5173", // Portal
       "http://localhost:5174", // Immersive
+      "http://127.0.0.1:5173",
+      "http://127.0.0.1:5174",
     ],
     methods: ["GET", "POST", "PATCH", "DELETE"],
   });
