@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import axiosInstance from '../api/axiosInstance';
 import './OpsHub.css';
 
@@ -21,26 +22,29 @@ const OPS_ENDPOINTS: Array<{ name: string; path: string; link?: string }> = [
   { name: 'Telemetry', path: '/telemetry/health' },
 ];
 
-const OpsHub: React.FC = () => {
-  const [services, setServices] = useState<ServiceCard[]>([]);
-  const [loading, setLoading] = useState(true);
+async function checkServices(): Promise<ServiceCard[]> {
+  const results: ServiceCard[] = [];
+  for (const ep of OPS_ENDPOINTS) {
+    try {
+      await axiosInstance.get(ep.path, { timeout: 5000 });
+      results.push({ name: ep.name, path: ep.path, status: 'ok', link: ep.link });
+    } catch {
+      results.push({ name: ep.name, path: ep.path, status: 'unreachable', link: ep.link });
+    }
+  }
+  return results;
+}
 
-  useEffect(() => {
-    const load = async () => {
-      const results: ServiceCard[] = [];
-      for (const ep of OPS_ENDPOINTS) {
-        try {
-          await axiosInstance.get(ep.path, { timeout: 5000 });
-          results.push({ name: ep.name, path: ep.path, status: 'ok', link: ep.link });
-        } catch {
-          results.push({ name: ep.name, path: ep.path, status: 'unreachable', link: ep.link });
-        }
-      }
-      setServices(results);
-      setLoading(false);
-    };
-    void load();
-  }, []);
+// Matches JobsDashboard's cache window so hopping between /ops and /ops/jobs
+// doesn't re-run every health check on each visit.
+const OPS_STALE_TIME = 30 * 1000;
+
+const OpsHub: React.FC = () => {
+  const { data: services = [], isLoading: loading } = useQuery<ServiceCard[]>(
+    ['opsHub', 'services'],
+    checkServices,
+    { staleTime: OPS_STALE_TIME }
+  );
 
   return (
     <div className="ops-hub-container">

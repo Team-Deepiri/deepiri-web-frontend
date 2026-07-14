@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
 import { ArrowLeft, RotateCcw, XCircle, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import {
   listJobs,
@@ -8,7 +9,6 @@ import {
   retryJob,
   getQueueStats,
   type JobRecord,
-  type JobLogLine,
   type JobStatus,
 } from '../../services/jobsService';
 import './JobsDashboard.css';
@@ -23,62 +23,52 @@ const STATUS_STYLES: Record<JobStatus, string> = {
 
 const STATUS_FILTERS: (JobStatus | 'all')[] = ['all', 'queued', 'running', 'completed', 'failed', 'cancelled'];
 
+// Cached for this long before a background refetch kicks in on remount --
+// keeps "go back to /ops/jobs" instant instead of re-hitting the gateway
+// and flashing a loading state every time.
+const JOBS_STALE_TIME = 30 * 1000;
+
 const JobsDashboard: React.FC = () => {
-  const [jobs, setJobs] = useState<JobRecord[]>([]);
-  const [stats, setStats] = useState<Record<string, number>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<JobStatus | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [logsByJob, setLogsByJob] = useState<Record<string, JobLogLine[]>>({});
-  const [logsLoading, setLogsLoading] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [jobList, queueStats] = await Promise.all([
-        listJobs(statusFilter === 'all' ? {} : { status: statusFilter }),
-        getQueueStats(),
-      ]);
-      setJobs(jobList);
-      setStats(queueStats);
-    } catch {
-      setError('Could not reach the jobs service.');
-    } finally {
-      setLoading(false);
-    }
-  }, [statusFilter]);
+  const {
+    data: jobs = [],
+    isLoading: jobsLoading,
+    isError: jobsErrored,
+  } = useQuery<JobRecord[]>(
+    ['jobs', statusFilter],
+    () => listJobs(statusFilter === 'all' ? {} : { status: statusFilter }),
+    { staleTime: JOBS_STALE_TIME }
+  );
 
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const { data: stats = {} } = useQuery<Record<string, number>>(
+    ['jobs', 'queueStats'],
+    getQueueStats,
+    { staleTime: JOBS_STALE_TIME }
+  );
 
-  const toggleExpand = async (job: JobRecord) => {
-    if (expandedId === job.id) {
-      setExpandedId(null);
-      return;
-    }
-    setExpandedId(job.id);
-    if (!logsByJob[job.id]) {
-      setLogsLoading(job.id);
-      try {
-        const logs = await getJobLogs(job.id);
-        setLogsByJob((prev) => ({ ...prev, [job.id]: logs }));
-      } catch {
-        setLogsByJob((prev) => ({ ...prev, [job.id]: [] }));
-      } finally {
-        setLogsLoading(null);
-      }
-    }
+  const { data: expandedLogs, isLoading: logsLoading } = useQuery(
+    ['jobs', 'logs', expandedId],
+    () => getJobLogs(expandedId as string),
+    { enabled: expandedId !== null, staleTime: JOBS_STALE_TIME }
+  );
+
+  const refreshAll = () => {
+    void queryClient.invalidateQueries(['jobs']);
+  };
+
+  const toggleExpand = (job: JobRecord) => {
+    setExpandedId((prev) => (prev === job.id ? null : job.id));
   };
 
   const handleCancel = async (job: JobRecord) => {
     setActionError(null);
     try {
       await cancelJob(job.id);
-      await load();
+      refreshAll();
     } catch (err) {
       const message =
         err && typeof err === 'object' && 'response' in err
@@ -92,7 +82,7 @@ const JobsDashboard: React.FC = () => {
     setActionError(null);
     try {
       await retryJob(job.id);
-      await load();
+      refreshAll();
     } catch (err) {
       const message =
         err && typeof err === 'object' && 'response' in err
@@ -110,7 +100,7 @@ const JobsDashboard: React.FC = () => {
 
       <div className="jobs-header-row">
         <h1 className="jobs-title">Jobs</h1>
-        <button onClick={() => void load()} className="jobs-refresh-btn">
+        <button onClick={refreshAll} className="jobs-refresh-btn">
           <RefreshCw size={14} /> Refresh
         </button>
       </div>
@@ -141,10 +131,10 @@ const JobsDashboard: React.FC = () => {
 
       {actionError && <div className="jobs-error-banner">{actionError}</div>}
 
-      {loading ? (
+      {jobsLoading ? (
         <p className="jobs-muted-text">Loading jobs…</p>
-      ) : error ? (
-        <p className="jobs-error-text">{error}</p>
+      ) : jobsErrored ? (
+        <p className="jobs-error-text">Could not reach the jobs service.</p>
       ) : jobs.length === 0 ? (
         <p className="jobs-muted-text">No jobs match this filter.</p>
       ) : (
@@ -152,7 +142,7 @@ const JobsDashboard: React.FC = () => {
           {jobs.map((job) => (
             <div key={job.id} className="jobs-list-row">
               <div className="jobs-row-main">
-                <button onClick={() => void toggleExpand(job)} className="jobs-row-expand-btn">
+                <button onClick={() => toggleExpand(job)} className="jobs-row-expand-btn">
                   {expandedId === job.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   <div className="min-w-0">
                     <div className="jobs-row-type">{job.type}</div>
@@ -177,13 +167,13 @@ const JobsDashboard: React.FC = () => {
                 <div className="jobs-row-expanded">
                   {job.error && <p className="jobs-row-error">Error: {job.error}</p>}
                   <div className="jobs-logs-heading">Logs</div>
-                  {logsLoading === job.id ? (
+                  {logsLoading ? (
                     <p className="jobs-muted-text">Loading logs…</p>
-                  ) : (logsByJob[job.id]?.length ?? 0) === 0 ? (
+                  ) : (expandedLogs?.length ?? 0) === 0 ? (
                     <p className="jobs-muted-text">No log lines yet.</p>
                   ) : (
                     <div className="jobs-logs-box">
-                      {logsByJob[job.id].map((log, i) => (
+                      {expandedLogs!.map((log, i) => (
                         <div key={i} className="jobs-log-line">
                           <span className="jobs-log-timestamp">{log.createdAt}</span> {log.line}
                         </div>
