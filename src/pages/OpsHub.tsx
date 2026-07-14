@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
+import './OpsHub.css';
 
 type ServiceCard = {
   name: string;
@@ -42,27 +43,27 @@ const OpsHub: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-2">Platform Ops Hub</h1>
-      <p className="text-gray-500 mb-6">Registry, jobs, truss, and telemetry at a glance.</p>
+    <div className="ops-hub-container">
+      <h1 className="ops-hub-title">Platform Ops Hub</h1>
+      <p className="ops-hub-subtitle">Registry, jobs, truss, and telemetry at a glance.</p>
       {loading ? (
-        <p>Checking services…</p>
+        <p className="ops-hub-subtitle">Checking services…</p>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="ops-hub-grid">
           {services.map((s) => {
             const card = (
-              <div className="border rounded-lg p-4 shadow-sm h-full">
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold">{s.name}</span>
-                  <span className={s.status === 'ok' ? 'text-green-600' : 'text-red-500'}>
+              <div className="ops-card">
+                <div className="ops-card-header">
+                  <span className="ops-card-name">{s.name}</span>
+                  <span className={s.status === 'ok' ? 'ops-card-status-ok' : 'ops-card-status-bad'}>
                     {s.status}
                   </span>
                 </div>
-                <code className="text-xs text-gray-500">{s.path}</code>
+                <code className="ops-card-path">{s.path}</code>
               </div>
             );
             return s.link ? (
-              <Link key={s.name} to={s.link} className="hover:shadow-md transition-shadow rounded-lg">
+              <Link key={s.name} to={s.link} className="ops-card-link">
                 {card}
               </Link>
             ) : (
