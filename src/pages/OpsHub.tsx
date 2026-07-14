@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { RefreshCw } from 'lucide-react';
 import axiosInstance from '../api/axiosInstance';
 import './OpsHub.css';
 
@@ -40,15 +41,21 @@ async function checkServices(): Promise<ServiceCard[]> {
 const OPS_STALE_TIME = 30 * 1000;
 
 const OpsHub: React.FC = () => {
-  const { data: services = [], isLoading: loading } = useQuery<ServiceCard[]>(
-    ['opsHub', 'services'],
-    checkServices,
-    { staleTime: OPS_STALE_TIME }
-  );
+  const {
+    data: services = [],
+    isLoading: loading,
+    isFetching,
+    refetch,
+  } = useQuery<ServiceCard[]>(['opsHub', 'services'], checkServices, { staleTime: OPS_STALE_TIME });
 
   return (
     <div className="ops-hub-container">
-      <h1 className="ops-hub-title">Platform Ops Hub</h1>
+      <div className="ops-hub-header-row">
+        <h1 className="ops-hub-title">Platform Ops Hub</h1>
+        <button onClick={() => void refetch()} className="ops-hub-refresh-btn" disabled={isFetching}>
+          <RefreshCw size={14} /> Refresh
+        </button>
+      </div>
       <p className="ops-hub-subtitle">Registry, jobs, truss, and telemetry at a glance.</p>
       {loading ? (
         <p className="ops-hub-subtitle">Checking services…</p>
