@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 
 type ServiceCard = {
   name: string;
   path: string;
   status: string;
+  link?: string;
 };
 
-const OPS_ENDPOINTS = [
-  { name: 'Registry', path: '/api/registry/services' },
-  { name: 'Jobs', path: '/api/jobs' },
-  { name: 'Truss', path: '/api/truss/health' },
-  { name: 'Telemetry', path: '/api/telemetry/health' },
+// axiosInstance's baseURL already ends in /api, so these must NOT repeat
+// the /api prefix -- otherwise every request doubles up to /api/api/... and
+// never resolves, which is why these health checks always showed
+// "unreachable" regardless of actual service health.
+const OPS_ENDPOINTS: Array<{ name: string; path: string; link?: string }> = [
+  { name: 'Registry', path: '/registry/services' },
+  { name: 'Jobs', path: '/jobs', link: '/ops/jobs' },
+  { name: 'Truss', path: '/truss/health' },
+  { name: 'Telemetry', path: '/telemetry/health' },
 ];
 
 const OpsHub: React.FC = () => {
@@ -24,9 +30,9 @@ const OpsHub: React.FC = () => {
       for (const ep of OPS_ENDPOINTS) {
         try {
           await axiosInstance.get(ep.path, { timeout: 5000 });
-          results.push({ name: ep.name, path: ep.path, status: 'ok' });
+          results.push({ name: ep.name, path: ep.path, status: 'ok', link: ep.link });
         } catch {
-          results.push({ name: ep.name, path: ep.path, status: 'unreachable' });
+          results.push({ name: ep.name, path: ep.path, status: 'unreachable', link: ep.link });
         }
       }
       setServices(results);
@@ -43,17 +49,26 @@ const OpsHub: React.FC = () => {
         <p>Checking services…</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
-          {services.map((s) => (
-            <div key={s.name} className="border rounded-lg p-4 shadow-sm">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">{s.name}</span>
-                <span className={s.status === 'ok' ? 'text-green-600' : 'text-red-500'}>
-                  {s.status}
-                </span>
+          {services.map((s) => {
+            const card = (
+              <div className="border rounded-lg p-4 shadow-sm h-full">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">{s.name}</span>
+                  <span className={s.status === 'ok' ? 'text-green-600' : 'text-red-500'}>
+                    {s.status}
+                  </span>
+                </div>
+                <code className="text-xs text-gray-500">{s.path}</code>
               </div>
-              <code className="text-xs text-gray-500">{s.path}</code>
-            </div>
-          ))}
+            );
+            return s.link ? (
+              <Link key={s.name} to={s.link} className="hover:shadow-md transition-shadow rounded-lg">
+                {card}
+              </Link>
+            ) : (
+              <div key={s.name}>{card}</div>
+            );
+          })}
         </div>
       )}
     </div>
