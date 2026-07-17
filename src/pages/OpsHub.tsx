@@ -20,7 +20,7 @@ const OPS_ENDPOINTS: Array<{ name: string; path: string; link?: string }> = [
   { name: 'Registry', path: '/registry/services', link: '/ops/registry' },
   { name: 'Jobs', path: '/jobs', link: '/ops/jobs' },
   { name: 'Truss', path: '/truss/health' },
-  { name: 'Telemetry', path: '/telemetry/health' },
+  { name: 'Telemetry', path: '/telemetry/health', link: '/ops/telemetry' },
 ];
 
 async function checkServices(): Promise<ServiceCard[]> {
