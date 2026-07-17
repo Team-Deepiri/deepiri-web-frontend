@@ -1,6 +1,6 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock tsconfig.json ./
 COPY packages/shared ./packages/shared
 COPY packages/immersive ./packages/immersive
 RUN yarn install --frozen-lockfile

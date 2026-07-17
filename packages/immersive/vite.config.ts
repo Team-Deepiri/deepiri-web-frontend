@@ -11,4 +11,12 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      external: [],
+    }
+  },
+  esbuild: {
+    tsconfig: path.resolve(__dirname, 'tsconfig.app.json'),
+  }
 })

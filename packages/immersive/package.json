@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0 --port 5174"
+    "dev": "vite --port 5174",
+    "build": "tsc -p tsconfig.app.json --noEmit && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@deepiri/shared": "*",
