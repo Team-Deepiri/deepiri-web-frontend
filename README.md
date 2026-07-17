@@ -1,42 +1,48 @@
 # Deepiri Web Frontend
 
-Monorepo — 3 services, 1 repo.
+One Vite/React app, one container. Backends live in **deepiri-platform**.
 
-## Services
-
-| Service | Port | Description |
-|---|---|---|
-| `packages/portal` | 5173 | Main hub — every team, every role, every day |
-| `packages/immersive` | 5174 | Three.js 3D universe — separate subrepo service |
-| `packages/server` | 5200 | Hub backend server — owned by the frontend team |
-| `packages/shared` | — | Shared types and utilities (@deepiri/shared) |
-
-## Getting Started
+## Run
 
 ```bash
-# Install dependencies
 yarn install
+yarn dev          # http://localhost:5173  (portal + /immersive)
+```
 
-# Run all services
-yarn dev:all
+Prefer platform bring-up: `docker-compose.dev.yml` → `frontend-dev` on `deepiri-dev-network`.
 
-# Run individually
-yarn dev:portal
-yarn dev:server
-yarn dev:immersive
+## App routes
+
+| Route | What |
+|---|---|
+| `/` … portal pages | Hub UI (ops, events, launchpad, …) |
+| `/immersive` | Three.js universe (same app, not a second container) |
+| `/login` | Auth via **api-gateway** → **auth-service** |
+
+## Platform backends (do not add hub-server here)
+
+| Need | Platform service |
+|---|---|
+| Login / API | `api-gateway` (:5100) + `auth-service` |
+| Service catalog + health | `deepiri-registry` (:5003) |
+| Live events | `realtime-gateway` (:5008) |
+| GitHub webhooks → catalog | `external-bridge` → registry |
+
+Env (see `.env.example`):
+
+```bash
+VITE_API_GATEWAY_URL=http://localhost:5100
+VITE_REGISTRY_URL=http://localhost:5003
+VITE_REALTIME_GATEWAY_URL=http://localhost:5008
 ```
 
 ## Structure
 
 ```
-packages/
-  portal/      # React + Vite — port 5173
-  immersive/   # Three.js — port 5174
-  server/      # Fastify — port 5200
-  shared/      # @deepiri/shared types + utils
+src/                 # single app
+  app/ pages/ …      # portal shell
+  immersive/         # 3D scene (route /immersive)
+packages/shared/     # @deepiri/shared types/utils
+Dockerfile           # one image (dev + prod targets)
+docker-compose.yml   # optional UI-only; primary path is platform compose
 ```
-
-## Notes
-- Hub Server must be running before Portal and Immersive
-- Immersive button in Portal navbar only appears when Immersive is detected live
-- Frontend only — no platform microservices are modified

@@ -21,10 +21,10 @@
     "types": ["vite/client", "node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@deepiri/shared": ["./packages/shared/src/index.ts"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "packages/shared/src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
-

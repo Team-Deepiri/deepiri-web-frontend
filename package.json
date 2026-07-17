@@ -1,7 +1,7 @@
 {
-  "name": "deepiri-client-hub",
+  "name": "deepiri-web-frontend",
   "version": "3.0.0",
-  "description": "Deepiri Frontend - Productivity Gamification Interface",
+  "description": "Deepiri Web Frontend — single app, single container; backends via deepiri-platform services",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -12,10 +12,6 @@
     "dev:fast": "vite --host 0.0.0.0 --port 5173 --force",
     "dev:turbo": "vite --host 0.0.0.0 --port 5173 --force --clearScreen false",
     "dev:debug": "vite --host 0.0.0.0 --port 5173 --debug",
-    "dev:portal": "yarn workspace @deepiri/portal dev",
-    "dev:immersive": "yarn workspace @deepiri/immersive dev",
-    "dev:server": "yarn workspace @deepiri/server dev",
-    "dev:all": "concurrently -n portal,immersive,server -c blue,magenta,green \"npm run dev:portal\" \"npm run dev:immersive\" \"npm run dev:server\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
@@ -53,7 +49,8 @@
     "recharts": "^2.10.3",
     "socket.io-client": "^4.7.4",
     "web-vitals": "^3.5.0",
-    "zustand": "^4.4.7"
+    "zustand": "^4.4.7",
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
@@ -80,7 +77,8 @@
     "typescript-eslint": "^8.59.0",
     "vite": "^8.0.16",
     "vite-plugin-react-inspector": "^0.3.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "@types/three": "^0.160.0"
   },
   "browserslist": {
     "production": [

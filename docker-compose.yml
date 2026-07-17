@@ -1,39 +1,36 @@
-version: "3.9"
+# Deepiri Web Frontend — single container, single Vite app.
+#
+# Backends live in deepiri-platform (do not run hub-server here):
+#   auth-service + api-gateway  → login / API
+#   deepiri-registry            → service catalog + health
+#   realtime-gateway            → live events
+#   external-bridge             → GitHub webhooks → registry
+#
+# Prefer running via platform docker-compose.dev.yml (frontend-dev).
+# This file is for optional local UI-only bring-up on the platform network.
+
 services:
-  hub-server:
+  frontend:
     build:
       context: .
-      dockerfile: packages/server/Dockerfile
+      dockerfile: Dockerfile
+      target: dev
     ports:
-      - "5200:5200"
+      - "5173:5173"
     environment:
-      - PORT=5200
-      - NODE_ENV=production
-      - REALTIME_GATEWAY_URL=ws://realtime-gateway:5008
-      - API_GATEWAY_URL=http://api-gateway:5100
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+      VITE_API_GATEWAY_URL: ${VITE_API_GATEWAY_URL:-http://localhost:5100}
+      VITE_REGISTRY_URL: ${VITE_REGISTRY_URL:-http://localhost:5003}
+      VITE_REALTIME_GATEWAY_URL: ${VITE_REALTIME_GATEWAY_URL:-http://localhost:5008}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev:turbo
     networks:
-      - deepiri
-  portal:
-    build:
-      context: .
-      dockerfile: packages/portal/Dockerfile
-    ports:
-      - "5173:80"
-    depends_on:
-      - hub-server
-    networks:
-      - deepiri
-  immersive:
-    build:
-      context: .
-      dockerfile: packages/immersive/Dockerfile
-    ports:
-      - "5174:80"
-    depends_on:
-      - hub-server
-    networks:
-      - deepiri
+      - deepiri-dev-network
+
 networks:
-  deepiri:
+  deepiri-dev-network:
     external: true
+    name: deepiri-dev-network
