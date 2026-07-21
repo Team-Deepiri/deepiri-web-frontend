@@ -7,7 +7,7 @@ interface LoginPayload {
 }
 
 export async function login(payload: LoginPayload) {
-  const res = await apiClient.post("/auth/login", payload);
+  const res = await apiClient.post("/api/auth/login", payload);
   const { user, token } = res.data;
   useAuthStore.getState().setAuth(user, token);
   return { user, token };

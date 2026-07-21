@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useSceneStore } from '@/immersive/store/sceneStore'
 import { STATUS_COLORS } from '@deepiri/shared'
 
@@ -50,21 +51,19 @@ export function ServicePanel() {
       </div>
 
       {/* Link back to Portal service detail */}
-      <a
-        href={`${PORTAL_URL}/ops?service=${svc.serviceId}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'block', marginTop: 16, padding: '8px 0',
-          textAlign: 'center', borderRadius: 8,
-          border: '1px solid rgba(99,102,241,0.3)',
-          background: 'rgba(99,102,241,0.08)',
-          color: '#818cf8', fontSize: 11, fontWeight: 600,
-          textDecoration: 'none', letterSpacing: '0.06em',
-        }}
-      >
-        View in Portal →
-      </a>
+        <Link
+          to={`/ops?service=${svc.serviceId}`}
+          style={{
+            display: 'block', marginTop: 16, padding: '8px 0',
+            textAlign: 'center', borderRadius: 8,
+            border: '1px solid rgba(99,102,241,0.3)',
+            background: 'rgba(99,102,241,0.08)',
+            color: '#818cf8', fontSize: 11, fontWeight: 600,
+            textDecoration: 'none', letterSpacing: '0.06em',
+          }}
+        >
+          View in Ops →
+        </Link>
     </div>
   )
 }

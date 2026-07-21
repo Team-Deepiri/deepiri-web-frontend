@@ -5,7 +5,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role?: string; // auth-service login response doesn't currently return this
   avatar?: string;
 }
 
