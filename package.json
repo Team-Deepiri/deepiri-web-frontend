@@ -50,7 +50,7 @@
     "socket.io-client": "^4.7.4",
     "web-vitals": "^3.5.0",
     "zustand": "^4.4.7",
-    "three": "^0.160.0"
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
