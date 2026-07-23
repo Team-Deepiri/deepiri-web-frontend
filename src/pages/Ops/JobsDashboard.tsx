@@ -28,6 +28,16 @@ const STATUS_FILTERS: (JobStatus | 'all')[] = ['all', 'queued', 'running', 'comp
 // and flashing a loading state every time.
 const JOBS_STALE_TIME = 30 * 1000;
 
+function getActionErrorMessage(err: unknown, fallback: string): string {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const message = (err as { response?: { data?: { error?: string } } }).response?.data?.error;
+    if (message) {
+      return message;
+    }
+  }
+  return fallback;
+}
+
 const JobsDashboard: React.FC = () => {
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<JobStatus | 'all'>('all');
@@ -70,11 +80,7 @@ const JobsDashboard: React.FC = () => {
       await cancelJob(job.id);
       refreshAll();
     } catch (err) {
-      const message =
-        err && typeof err === 'object' && 'response' in err
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error
-          : undefined;
-      setActionError(message ?? `Could not cancel job ${job.id}.`);
+      setActionError(getActionErrorMessage(err, `Could not cancel job ${job.id}.`));
     }
   };
 
@@ -84,11 +90,7 @@ const JobsDashboard: React.FC = () => {
       await retryJob(job.id);
       refreshAll();
     } catch (err) {
-      const message =
-        err && typeof err === 'object' && 'response' in err
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error
-          : undefined;
-      setActionError(message ?? `Could not retry job ${job.id}.`);
+      setActionError(getActionErrorMessage(err, `Could not retry job ${job.id}.`));
     }
   };
 
