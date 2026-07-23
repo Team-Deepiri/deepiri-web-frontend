@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "react-hot-toast";
-import { FiInfo, FiStar } from "react-icons/fi";
 import logo from "../assets/images/logo_squared.png";
 
 type NavItem = {
@@ -14,7 +12,8 @@ type NavItem = {
 const PUBLIC_NAV_ITEMS: NavItem[] = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
-  { label: "Features", to: "/features" },
+  { label: "Codebase", to: "/codebase" },
+  { label: "PR Impact", to: "/pr-impact" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -23,7 +22,8 @@ const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
   { label: "Tasks", to: "/tasks", icon: "📋" },
   /*{ label: "Challenges", to: "/challenges", icon: "🎮" },*/
   { label: "Analytics", to: "/analytics", icon: "📊" },
-  { label: "Ops Hub", to: "/ops", icon: "🛠️" },
+  { label: "Codebase", to: "/codebase", icon: "🔍" },
+  { label: "PR Impact", to: "/pr-impact", icon: "⚡" },
   { label: "Profile", to: "/profile", icon: "👤" },
   { label: "Notifications", to: "/notifications", icon: "🔔" },
   { label: "AI Assistant", to: "/agent", icon: "🤖" },
@@ -31,7 +31,6 @@ const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
 ];
 
 const SidebarNav: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -202,6 +201,8 @@ const SidebarNav: React.FC = () => {
           className="deepiri-sidebar__mobile-toggle"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Toggle sidebar"
+          aria-expanded={sidebarOpen}
+          aria-controls="deepiri-sidebar"
         >
           <span></span>
         </button>
@@ -210,21 +211,13 @@ const SidebarNav: React.FC = () => {
       {/* Sidebar Overlay for Mobile */}
       {isMobile && sidebarOpen && (
         <div
-          className="deepiri-sidebar__overlay"
+          className="deepiri-sidebar__overlay--fixed"
           onClick={() => setSidebarOpen(false)}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 9998,
-          }}
         />
       )}
 
       <aside
+        id="deepiri-sidebar"
         className={`deepiri-sidebar ${isMobile && sidebarOpen ? 'deepiri-sidebar--open' : ''}`}
       >
         <div className="deepiri-sidebar__header">
