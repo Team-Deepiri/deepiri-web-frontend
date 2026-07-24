@@ -16,6 +16,8 @@ const TABS: Array<{ key: Tab; label: string }> = [
 // Matches the other Ops dashboards' cache window so switching tabs / hopping
 // back from /ops doesn't re-poll every check each time.
 const TELEMETRY_STALE_TIME = 30 * 1000;
+const DEFAULT_RECENT_EVENTS_LIMIT = 50;
+const MAX_EVENT_DATA_LENGTH = 180;
 
 function statusBadgeClass(status: string): string {
   switch (status) {
@@ -28,6 +30,20 @@ function statusBadgeClass(status: string): string {
     default:
       return 'telemetry-status-unknown';
   }
+}
+
+function formatEventData(data: unknown): string {
+  const serialized = typeof data === 'string' ? data : JSON.stringify(data);
+  if (!serialized) {
+    return '';
+  }
+  return serialized.length > MAX_EVENT_DATA_LENGTH
+    ? `${serialized.slice(0, MAX_EVENT_DATA_LENGTH)}...`
+    : serialized;
+}
+
+function eventKey(event: { eventType: string; source: string; timestamp: string }, index: number): string {
+  return `${event.timestamp}:${event.source}:${event.eventType}:${index}`;
 }
 
 const TelemetryDashboard: React.FC = () => {
@@ -56,7 +72,7 @@ const TelemetryDashboard: React.FC = () => {
     data: events = [],
     isLoading: eventsLoading,
     isError: eventsErrored,
-  } = useQuery(['telemetry', 'events'], () => getRecentEvents(50), {
+  } = useQuery(['telemetry', 'events'], () => getRecentEvents(DEFAULT_RECENT_EVENTS_LIMIT), {
     staleTime: TELEMETRY_STALE_TIME,
     enabled: tab === 'events',
   });
@@ -103,21 +119,27 @@ const TelemetryDashboard: React.FC = () => {
                 Degraded: {ecosystem.error ?? 'ecosystem health source unavailable'}
               </div>
             )}
-            {ecosystem.registry && (
+            {!ecosystem.registry ? (
+              <p className="telemetry-muted-text">No registry data available.</p>
+            ) : (
               <>
                 <div className="telemetry-section-heading">Repos</div>
-                <div className="telemetry-list">
-                  {ecosystem.registry.repos.map((repo) => (
-                    <div key={repo.id} className="telemetry-list-row">
-                      <div className="telemetry-row-main">
-                        <div className="telemetry-row-name">{repo.name}</div>
+                {ecosystem.registry.repos.length === 0 ? (
+                  <p className="telemetry-muted-text">No repo health checks have been recorded yet.</p>
+                ) : (
+                  <div className="telemetry-list">
+                    {ecosystem.registry.repos.map((repo) => (
+                      <div key={repo.id} className="telemetry-list-row">
+                        <div className="telemetry-row-main">
+                          <div className="telemetry-row-name">{repo.name}</div>
+                        </div>
+                        <span className={`telemetry-status-badge ${statusBadgeClass(repo.status)}`}>
+                          {repo.status}
+                        </span>
                       </div>
-                      <span className={`telemetry-status-badge ${statusBadgeClass(repo.status)}`}>
-                        {repo.status}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="telemetry-section-heading">Services</div>
                 {ecosystem.registry.services.length === 0 ? (
@@ -171,11 +193,13 @@ const TelemetryDashboard: React.FC = () => {
         ) : (
           <div className="telemetry-list">
             {events.map((event, i) => (
-              <div key={i} className="telemetry-list-row">
+              <div key={eventKey(event, i)} className="telemetry-list-row">
                 <div className="telemetry-row-main">
                   <div className="telemetry-row-name">{event.source}</div>
                   {event.data !== undefined && (
-                    <div className="telemetry-row-desc">{JSON.stringify(event.data)}</div>
+                    <div className="telemetry-row-desc" title={formatEventData(event.data)}>
+                      {formatEventData(event.data)}
+                    </div>
                   )}
                 </div>
                 <span className="telemetry-event-type">{event.eventType}</span>
