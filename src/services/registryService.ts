@@ -12,18 +12,6 @@ export interface Repo {
   updatedAt: string;
 }
 
-export interface RepoHealthCheck {
-  id?: string;
-  repoId: string;
-  status: string;
-  detail?: string | null;
-  checkedAt: string | null;
-}
-
-export interface RepoWithHealth extends Repo {
-  healthChecks: RepoHealthCheck[];
-}
-
 export interface Tool {
   id: string;
   name: string;
@@ -43,11 +31,6 @@ export interface EcosystemHealth {
 export async function listRepos(): Promise<Repo[]> {
   const res = await axiosInstance.get<{ repos: Repo[] }>('/registry/repos');
   return res.data.repos;
-}
-
-export async function getRepo(id: string): Promise<RepoWithHealth> {
-  const res = await axiosInstance.get<RepoWithHealth>(`/registry/repos/${id}`);
-  return res.data;
 }
 
 export async function listTools(): Promise<Tool[]> {

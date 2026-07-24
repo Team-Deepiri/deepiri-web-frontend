@@ -37,18 +37,21 @@ const RegistryDashboard: React.FC = () => {
   const {
     data: repos = [],
     isLoading: reposLoading,
+    isFetching: reposFetching,
     isError: reposErrored,
   } = useQuery(['registry', 'repos'], listRepos, { staleTime: REGISTRY_STALE_TIME, enabled: tab === 'repos' });
 
   const {
     data: tools = [],
     isLoading: toolsLoading,
+    isFetching: toolsFetching,
     isError: toolsErrored,
   } = useQuery(['registry', 'tools'], listTools, { staleTime: REGISTRY_STALE_TIME, enabled: tab === 'tools' });
 
   const {
     data: ecosystem,
     isLoading: ecosystemLoading,
+    isFetching: ecosystemFetching,
     isError: ecosystemErrored,
   } = useQuery(['registry', 'ecosystem'], getEcosystemHealth, {
     staleTime: REGISTRY_STALE_TIME,
@@ -58,6 +61,7 @@ const RegistryDashboard: React.FC = () => {
   const refreshAll = () => {
     void queryClient.invalidateQueries(['registry']);
   };
+  const refreshing = reposFetching || toolsFetching || ecosystemFetching;
 
   return (
     <div className="registry-dashboard-container">
@@ -67,7 +71,7 @@ const RegistryDashboard: React.FC = () => {
 
       <div className="registry-header-row">
         <h1 className="registry-title">Registry</h1>
-        <button onClick={refreshAll} className="registry-refresh-btn">
+        <button onClick={refreshAll} className="registry-refresh-btn" disabled={refreshing}>
           <RefreshCw size={14} /> Refresh
         </button>
       </div>
@@ -89,7 +93,7 @@ const RegistryDashboard: React.FC = () => {
         (reposLoading ? (
           <p className="registry-muted-text">Loading repos…</p>
         ) : reposErrored ? (
-          <p className="registry-error-text">Could not reach the registry service.</p>
+          <p className="registry-error-text">Could not load repositories from the registry service.</p>
         ) : repos.length === 0 ? (
           <p className="registry-muted-text">No repos in the catalog yet.</p>
         ) : (
@@ -101,7 +105,7 @@ const RegistryDashboard: React.FC = () => {
                     <a
                       href={repo.githubUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="registry-row-name registry-row-link"
                     >
                       {repo.name}
@@ -121,7 +125,7 @@ const RegistryDashboard: React.FC = () => {
         (toolsLoading ? (
           <p className="registry-muted-text">Loading tools…</p>
         ) : toolsErrored ? (
-          <p className="registry-error-text">Could not reach the registry service.</p>
+          <p className="registry-error-text">Could not load tools from the registry service.</p>
         ) : tools.length === 0 ? (
           <p className="registry-muted-text">No tools registered yet.</p>
         ) : (
@@ -142,7 +146,7 @@ const RegistryDashboard: React.FC = () => {
         (ecosystemLoading ? (
           <p className="registry-muted-text">Loading ecosystem health…</p>
         ) : ecosystemErrored || !ecosystem ? (
-          <p className="registry-error-text">Could not reach the registry service.</p>
+          <p className="registry-error-text">Could not load ecosystem health from the registry service.</p>
         ) : (
           <>
             <div className="registry-section-heading">Repos</div>
