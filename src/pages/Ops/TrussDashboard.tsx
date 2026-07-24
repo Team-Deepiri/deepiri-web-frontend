@@ -202,6 +202,8 @@ const TrussDashboard: React.FC = () => {
                     <button
                       onClick={() => setExpandedId((prev) => (prev === run.id ? null : run.id))}
                       className="truss-run-expand-btn"
+                      aria-expanded={expandedId === run.id}
+                      aria-controls={`truss-run-${run.id}-details`}
                     >
                       {expandedId === run.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                       <div className="truss-run-text">
@@ -221,7 +223,7 @@ const TrussDashboard: React.FC = () => {
                   </div>
 
                   {expandedId === run.id && (
-                    <div className="truss-run-expanded">
+                    <div id={`truss-run-${run.id}-details`} className="truss-run-expanded">
                       <div className="truss-run-meta-grid">
                         <div>
                           <span>Current step</span>
