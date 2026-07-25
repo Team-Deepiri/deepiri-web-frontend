@@ -24,16 +24,16 @@ const OPS_ENDPOINTS: Array<{ name: string; path: string; link?: string }> = [
 ];
 
 async function checkServices(): Promise<ServiceCard[]> {
-  const results: ServiceCard[] = [];
-  for (const ep of OPS_ENDPOINTS) {
-    try {
-      await axiosInstance.get(ep.path, { timeout: 5000 });
-      results.push({ name: ep.name, path: ep.path, status: 'ok', link: ep.link });
-    } catch {
-      results.push({ name: ep.name, path: ep.path, status: 'unreachable', link: ep.link });
-    }
-  }
-  return results;
+  return Promise.all(
+    OPS_ENDPOINTS.map(async (ep) => {
+      try {
+        await axiosInstance.get(ep.path, { timeout: 5000 });
+        return { name: ep.name, path: ep.path, status: 'ok', link: ep.link };
+      } catch {
+        return { name: ep.name, path: ep.path, status: 'unreachable', link: ep.link };
+      }
+    })
+  );
 }
 
 // Matches JobsDashboard's cache window so hopping between /ops and /ops/jobs
