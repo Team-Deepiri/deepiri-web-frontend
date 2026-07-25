@@ -251,6 +251,14 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route
+                path="/ops/truss"
+                element={
+                  <ProtectedRoute>
+                    <TrussDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/ops/telemetry"
                 element={
                   <ProtectedRoute>
