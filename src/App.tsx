@@ -36,6 +36,7 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import Notifications from "./pages/Notifications";
 import OpsHub from "./pages/OpsHub";
 import JobsDashboard from "./pages/Ops/JobsDashboard";
+import TrussDashboard from "./pages/Ops/TrussDashboard";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
 import GroupChats from "./pages/GroupChats";
@@ -229,6 +230,14 @@ const AppContent: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <JobsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/truss"
+                element={
+                  <ProtectedRoute>
+                    <TrussDashboard />
                   </ProtectedRoute>
                 }
               />
