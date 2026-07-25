@@ -36,7 +36,8 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import Notifications from "./pages/Notifications";
 import OpsHub from "./pages/OpsHub";
 import JobsDashboard from "./pages/Ops/JobsDashboard";
-import TrussDashboard from "./pages/Ops/TrussDashboard";
+import RegistryDashboard from "./pages/Ops/RegistryDashboard";
+import TelemetryDashboard from "./pages/Ops/TelemetryDashboard";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
 import GroupChats from "./pages/GroupChats";
@@ -234,10 +235,26 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route
+                path="/ops/registry"
+                element={
+                  <ProtectedRoute>
+                    <RegistryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/ops/truss"
                 element={
                   <ProtectedRoute>
                     <TrussDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/telemetry"
+                element={
+                  <ProtectedRoute>
+                    <TelemetryDashboard />
                   </ProtectedRoute>
                 }
               />
