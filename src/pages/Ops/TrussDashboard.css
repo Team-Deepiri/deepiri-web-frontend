@@ -1,0 +1,429 @@
+.truss-dashboard-container {
+  padding: 1.5rem;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.truss-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.truss-back-link:hover {
+  color: #374151;
+}
+
+.truss-header-row,
+.truss-panel-header,
+.truss-section-header,
+.truss-run-main,
+.truss-definition-header,
+.truss-step-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.truss-header-row {
+  margin-bottom: 1rem;
+}
+
+.truss-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.truss-subtitle,
+.truss-panel-subtitle,
+.truss-muted-text {
+  color: #6b7280;
+}
+
+.truss-subtitle,
+.truss-panel-subtitle {
+  margin: 0.25rem 0 0;
+}
+
+.truss-refresh-btn,
+.truss-primary-btn,
+.truss-cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.truss-refresh-btn {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: none;
+}
+
+.truss-refresh-btn:hover {
+  color: #374151;
+}
+
+.truss-refresh-btn:disabled,
+.truss-primary-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.truss-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 760px) {
+  .truss-summary-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+.truss-summary-card,
+.truss-launch-panel,
+.truss-runs-list,
+.truss-definition-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.truss-summary-card {
+  padding: 0.75rem;
+}
+
+.truss-summary-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.truss-summary-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.truss-error-banner {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.truss-launch-panel {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.truss-panel-title,
+.truss-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.truss-primary-btn {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  background: #111827;
+  color: #ffffff;
+  font-size: 0.875rem;
+}
+
+.truss-primary-btn:hover {
+  background: #1f2937;
+}
+
+.truss-input-textarea {
+  width: 100%;
+  min-height: 9rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: #111827;
+  background: #f9fafb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.truss-input-textarea:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #60a5fa;
+}
+
+.truss-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .truss-layout-grid {
+    grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.85fr);
+  }
+}
+
+.truss-section-header {
+  margin-bottom: 0.75rem;
+}
+
+.truss-error-text {
+  color: #ef4444;
+}
+
+.truss-run-row + .truss-run-row {
+  border-top: 1px solid #e5e7eb;
+}
+
+.truss-run-main {
+  padding: 1rem;
+}
+
+.truss-run-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  color: #111827;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.truss-run-text {
+  min-width: 0;
+}
+
+.truss-run-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.truss-run-name span,
+.truss-version-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.truss-run-id,
+.truss-definition-id,
+.truss-step-detail {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.truss-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.truss-status-queued {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.truss-status-running {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.truss-status-waiting {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.truss-status-completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.truss-status-failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.truss-status-cancelled {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.truss-cancel-btn {
+  font-size: 0.75rem;
+  color: #dc2626;
+  background: none;
+}
+
+.truss-cancel-btn:hover {
+  color: #991b1b;
+}
+
+.truss-run-expanded {
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem;
+  background: #f9fafb;
+}
+
+.truss-run-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+  .truss-run-meta-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.truss-run-meta-grid span {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.truss-run-meta-grid strong {
+  display: block;
+  margin-top: 0.125rem;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.truss-row-error {
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.truss-step-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.truss-step-row {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.truss-step-name,
+.truss-definition-name {
+  font-weight: 600;
+  color: #111827;
+}
+
+.truss-step-output {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.truss-step-output code {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.truss-definition-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.truss-definition-card {
+  padding: 1rem;
+}
+
+.truss-definition-description {
+  margin: 0.75rem 0;
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+.truss-definition-steps {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.truss-definition-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  background: #f9fafb;
+  color: #111827;
+  font-size: 0.8125rem;
+}
+
+.truss-definition-step code {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .truss-header-row,
+  .truss-panel-header,
+  .truss-run-main,
+  .truss-step-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .truss-refresh-btn,
+  .truss-primary-btn,
+  .truss-cancel-btn {
+    width: 100%;
+  }
+
+  .truss-step-output {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

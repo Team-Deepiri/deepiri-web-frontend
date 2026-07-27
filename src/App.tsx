@@ -36,6 +36,9 @@ import TaskManagement from "./pages/TaskManagement";
 import Challenges from "./pages/Challenges";
 import GamificationDashboard from "./pages/GamificationDashboard";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import OpsHub from "./pages/OpsHub";
+import JobsDashboard from "./pages/Ops/JobsDashboard";
+import TrussDashboard from "./pages/Ops/TrussDashboard";
 import Notifications from "./pages/Notifications";
 import Objectives from "./pages/Objectives";
 import Odysseys from "./pages/Odysseys";
@@ -246,6 +249,30 @@ const AppContent: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <AnalyticsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops"
+                element={
+                  <ProtectedRoute>
+                    <OpsHub />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/jobs"
+                element={
+                  <ProtectedRoute>
+                    <JobsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/truss"
+                element={
+                  <ProtectedRoute>
+                    <TrussDashboard />
                   </ProtectedRoute>
                 }
               />

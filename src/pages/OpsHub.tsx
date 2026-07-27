@@ -1,59 +1,86 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { RefreshCw } from 'lucide-react';
 import axiosInstance from '../api/axiosInstance';
+import './OpsHub.css';
 
 type ServiceCard = {
   name: string;
   path: string;
   status: string;
+  link?: string;
 };
 
-const OPS_ENDPOINTS = [
-  { name: 'Registry', path: '/api/registry/services' },
-  { name: 'Jobs', path: '/api/jobs' },
-  { name: 'Truss', path: '/api/truss/health' },
-  { name: 'Telemetry', path: '/api/telemetry/health' },
+// axiosInstance's baseURL already ends in /api, so these must NOT repeat
+// the /api prefix -- otherwise every request doubles up to /api/api/... and
+// never resolves, which is why these health checks always showed
+// "unreachable" regardless of actual service health.
+const OPS_ENDPOINTS: Array<{ name: string; path: string; link?: string }> = [
+  { name: 'Registry', path: '/registry/services' },
+  { name: 'Jobs', path: '/jobs', link: '/ops/jobs' },
+  { name: 'Truss', path: '/truss/health', link: '/ops/truss' },
+  { name: 'Telemetry', path: '/telemetry/health' },
 ];
 
-const OpsHub: React.FC = () => {
-  const [services, setServices] = useState<ServiceCard[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const load = async () => {
-      const results: ServiceCard[] = [];
-      for (const ep of OPS_ENDPOINTS) {
-        try {
-          await axiosInstance.get(ep.path, { timeout: 5000 });
-          results.push({ name: ep.name, path: ep.path, status: 'ok' });
-        } catch {
-          results.push({ name: ep.name, path: ep.path, status: 'unreachable' });
-        }
+async function checkServices(): Promise<ServiceCard[]> {
+  return Promise.all(
+    OPS_ENDPOINTS.map(async (ep) => {
+      try {
+        await axiosInstance.get(ep.path, { timeout: 5000 });
+        return { name: ep.name, path: ep.path, status: 'ok', link: ep.link };
+      } catch {
+        return { name: ep.name, path: ep.path, status: 'unreachable', link: ep.link };
       }
-      setServices(results);
-      setLoading(false);
-    };
-    void load();
-  }, []);
+    })
+  );
+}
+
+// Matches JobsDashboard's cache window so hopping between /ops and /ops/jobs
+// doesn't re-run every health check on each visit.
+const OPS_STALE_TIME = 30 * 1000;
+
+const OpsHub: React.FC = () => {
+  const {
+    data: services = [],
+    isLoading: loading,
+    isFetching,
+    refetch,
+  } = useQuery<ServiceCard[]>(['opsHub', 'services'], checkServices, { staleTime: OPS_STALE_TIME });
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-2">Platform Ops Hub</h1>
-      <p className="text-gray-500 mb-6">Registry, jobs, truss, and telemetry at a glance.</p>
+    <div className="ops-hub-container">
+      <div className="ops-hub-header-row">
+        <h1 className="ops-hub-title">Platform Ops Hub</h1>
+        <button onClick={() => void refetch()} className="ops-hub-refresh-btn" disabled={isFetching}>
+          <RefreshCw size={14} /> Refresh
+        </button>
+      </div>
+      <p className="ops-hub-subtitle">Registry, jobs, truss, and telemetry at a glance.</p>
       {loading ? (
-        <p>Checking services…</p>
+        <p className="ops-hub-subtitle">Checking services…</p>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {services.map((s) => (
-            <div key={s.name} className="border rounded-lg p-4 shadow-sm">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">{s.name}</span>
-                <span className={s.status === 'ok' ? 'text-green-600' : 'text-red-500'}>
-                  {s.status}
-                </span>
+        <div className="ops-hub-grid">
+          {services.map((s) => {
+            const card = (
+              <div className="ops-card">
+                <div className="ops-card-header">
+                  <span className="ops-card-name">{s.name}</span>
+                  <span className={s.status === 'ok' ? 'ops-card-status-ok' : 'ops-card-status-bad'}>
+                    {s.status}
+                  </span>
+                </div>
+                <code className="ops-card-path">{s.path}</code>
               </div>
-              <code className="text-xs text-gray-500">{s.path}</code>
-            </div>
-          ))}
+            );
+            return s.link ? (
+              <Link key={s.name} to={s.link} className="ops-card-link">
+                {card}
+              </Link>
+            ) : (
+              <div key={s.name}>{card}</div>
+            );
+          })}
         </div>
       )}
     </div>
