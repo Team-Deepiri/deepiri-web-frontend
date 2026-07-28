@@ -38,6 +38,8 @@ import GamificationDashboard from "./pages/GamificationDashboard";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import OpsHub from "./pages/OpsHub";
 import JobsDashboard from "./pages/Ops/JobsDashboard";
+import RegistryDashboard from "./pages/Ops/RegistryDashboard";
+import TelemetryDashboard from "./pages/Ops/TelemetryDashboard";
 import TrussDashboard from "./pages/Ops/TrussDashboard";
 import Notifications from "./pages/Notifications";
 import Objectives from "./pages/Objectives";
@@ -269,10 +271,26 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route
+                path="/ops/registry"
+                element={
+                  <ProtectedRoute>
+                    <RegistryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/ops/truss"
                 element={
                   <ProtectedRoute>
                     <TrussDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/telemetry"
+                element={
+                  <ProtectedRoute>
+                    <TelemetryDashboard />
                   </ProtectedRoute>
                 }
               />
