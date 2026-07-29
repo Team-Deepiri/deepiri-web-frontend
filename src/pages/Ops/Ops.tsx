@@ -1,8 +1,16 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { RefreshCw } from "lucide-react";
 import { useHealthPoll } from "@/hooks/useHealthPoll";
 import { useHealthStore } from "@/store/healthStore";
 import { STATUS_COLORS } from "@deepiri/shared";
+
+const OPS_LINKS = [
+  { label: "Jobs", to: "/ops/jobs", description: "Queue, retries, and job logs" },
+  { label: "Registry", to: "/ops/registry", description: "Repos, tools, ecosystem health" },
+  { label: "Truss", to: "/ops/truss", description: "Workflow definitions and runs" },
+  { label: "Telemetry", to: "/ops/telemetry", description: "Metrics and recent events" },
+];
 
 function formatLastPing(ts: number): string {
   const seconds = Math.max(0, Math.round((Date.now() - ts) / 1000));
@@ -46,6 +54,33 @@ export default function Ops() {
         Live service catalog and health via deepiri-registry.
         {lastUpdated ? ` Updated ${formatLastPing(lastUpdated)}.` : ""}
       </p>
+
+      <div
+        style={{
+          display: "grid",
+          gap: 12,
+          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+          marginBottom: 28,
+        }}
+      >
+        {OPS_LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              border: "1px solid var(--border)",
+              borderRadius: 10,
+              padding: 14,
+              background: "var(--surface)",
+            }}
+          >
+            <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{link.label}</div>
+            <div style={{ fontSize: 12, color: "var(--dim)" }}>{link.description}</div>
+          </Link>
+        ))}
+      </div>
 
       {isLoading && services.length === 0 ? (
         <p style={{ color: "var(--dim)", fontSize: 13 }}>Checking services…</p>

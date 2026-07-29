@@ -3,12 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/uiStore";
 import { useHealthStore } from "@/store/healthStore";
 import { useAuthStore } from "@/store/authStore";
+import { logout } from "@/services/authService";
 
 const ROUTE_LABELS: Record<string, string> = {
   "/": "Home",
   "/events": "Event River",
   "/dependencies": "Dependency Map",
   "/ops": "Ops Dashboard",
+  "/ops/jobs": "Jobs",
+  "/ops/registry": "Registry",
+  "/ops/truss": "Truss",
+  "/ops/telemetry": "Telemetry",
   "/pulse": "Platform Pulse",
   "/sankey": "Traffic Flow",
   "/launchpad": "Launchpad",
@@ -103,9 +108,43 @@ export function Topbar() {
         ◐ AI
       </button>
 
-      {/* Avatar */}
-      <div style={{ width: 30, height: 30, borderRadius: 6, background: "linear-gradient(135deg, var(--accent), var(--accent-ai))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff", fontFamily: "var(--font-head)", cursor: "pointer" }}>
-        {user?.name?.[0]?.toUpperCase() || "U"}
+      {/* Avatar + logout */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div
+          title={user?.email || user?.name || "User"}
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 6,
+            background: "linear-gradient(135deg, var(--accent), var(--accent-ai))",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 11,
+            fontWeight: 700,
+            color: "#fff",
+            fontFamily: "var(--font-head)",
+          }}
+        >
+          {user?.name?.[0]?.toUpperCase() || "U"}
+        </div>
+        <button
+          type="button"
+          onClick={() => logout()}
+          style={{
+            padding: "6px 10px",
+            borderRadius: 6,
+            border: "1px solid var(--border)",
+            background: "transparent",
+            color: "var(--dim)",
+            fontSize: 11,
+            fontWeight: 600,
+            letterSpacing: "0.04em",
+            cursor: "pointer",
+          }}
+        >
+          Log out
+        </button>
       </div>
     </header>
   );

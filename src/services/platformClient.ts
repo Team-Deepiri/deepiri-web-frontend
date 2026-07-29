@@ -19,7 +19,11 @@ export const REALTIME_GATEWAY_URL =
 function attachAuth(client: ReturnType<typeof axios.create>) {
   client.interceptors.request.use((config) => {
     const token = useAuthStore.getState().token;
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete config.headers.Authorization;
+    }
     return config;
   });
 }
@@ -31,17 +35,6 @@ export const apiClient = axios.create({
 });
 attachAuth(apiClient);
 
-apiClient.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err.response?.status === 401) {
-      useAuthStore.getState().logout();
-      window.location.href = "/login";
-    }
-    return Promise.reject(err);
-  }
-);
-
 /**
  * Service catalog + health via deepiri-registry.
  * Prefer gateway proxy when available; direct registry URL works in local platform compose.
@@ -51,3 +44,21 @@ export const registryClient = axios.create({
   timeout: 8_000,
 });
 attachAuth(registryClient);
+
+/** Clear Authorization header defaults after logout. */
+export function clearAuthToken() {
+  delete apiClient.defaults.headers.common.Authorization;
+  delete registryClient.defaults.headers.common.Authorization;
+}
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401) {
+      useAuthStore.getState().logout();
+      clearAuthToken();
+      // AuthGuard will Navigate to /login on next render — no full reload.
+    }
+    return Promise.reject(err);
+  }
+);

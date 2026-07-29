@@ -1,0 +1,280 @@
+.jobs-dashboard-container {
+  padding: 1.5rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.jobs-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.jobs-back-link:hover {
+  color: #374151;
+}
+
+.jobs-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.jobs-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.jobs-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.jobs-refresh-btn:hover {
+  color: #374151;
+}
+
+.jobs-subtitle {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.jobs-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .jobs-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.jobs-stat-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+}
+
+.jobs-stat-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.jobs-stat-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.jobs-filters-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.jobs-filter-btn {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.jobs-filter-btn:hover {
+  border-color: #9ca3af;
+}
+
+.jobs-filter-btn.active {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+.jobs-error-banner {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.jobs-muted-text {
+  color: #6b7280;
+}
+
+.jobs-error-text {
+  color: #ef4444;
+}
+
+.jobs-list {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.jobs-list-row + .jobs-list-row {
+  border-top: 1px solid #e5e7eb;
+}
+
+.jobs-row-main {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.jobs-row-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #111827;
+}
+
+.jobs-row-type {
+  font-weight: 500;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jobs-row-id {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jobs-status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.jobs-status-queued {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.jobs-status-running {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.jobs-status-completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.jobs-status-failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.jobs-status-cancelled {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.jobs-row-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.jobs-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.jobs-cancel-btn {
+  color: #dc2626;
+}
+
+.jobs-cancel-btn:hover {
+  color: #991b1b;
+}
+
+.jobs-retry-btn {
+  color: #2563eb;
+}
+
+.jobs-retry-btn:hover {
+  color: #1e40af;
+}
+
+.jobs-row-expanded {
+  padding: 0 1rem 1rem;
+  background: #f9fafb;
+}
+
+.jobs-row-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+  margin-bottom: 0.5rem;
+}
+
+.jobs-logs-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.jobs-logs-box {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #1f2937;
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.jobs-log-line + .jobs-log-line {
+  margin-top: 0.25rem;
+}
+
+.jobs-log-timestamp {
+  color: #9ca3af;
+}

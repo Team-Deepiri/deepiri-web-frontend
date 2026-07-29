@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { login } from "@/services/authService";
+import { AuthError, login } from "@/services/authService";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,8 +17,12 @@ export default function Login() {
     try {
       await login({ email, password });
       navigate("/");
-    } catch {
-      setError("Invalid credentials. Check email and password.");
+    } catch (err) {
+      setError(
+        err instanceof AuthError
+          ? err.message
+          : "Invalid credentials. Check email and password."
+      );
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,10 @@ const Home = lazy(() => import("@/pages/Home/Home"));
 const EventRiver = lazy(() => import("@/pages/EventRiver/EventRiver"));
 const DependencyMap = lazy(() => import("@/pages/DependencyMap/DependencyMap"));
 const Ops = lazy(() => import("@/pages/Ops/Ops"));
+const JobsDashboard = lazy(() => import("@/pages/Ops/JobsDashboard"));
+const RegistryDashboard = lazy(() => import("@/pages/Ops/RegistryDashboard"));
+const TrussDashboard = lazy(() => import("@/pages/Ops/TrussDashboard"));
+const TelemetryDashboard = lazy(() => import("@/pages/Ops/TelemetryDashboard"));
 const Pulse = lazy(() => import("@/pages/Pulse/Pulse"));
 const Sankey = lazy(() => import("@/pages/Sankey/Sankey"));
 const Launchpad = lazy(() => import("@/pages/Launchpad/Launchpad"));
@@ -56,6 +60,10 @@ export function AppRouter() {
           <Route path="events" element={<EventRiver />} />
           <Route path="dependencies" element={<DependencyMap />} />
           <Route path="ops" element={<Ops />} />
+          <Route path="ops/jobs" element={<JobsDashboard />} />
+          <Route path="ops/registry" element={<RegistryDashboard />} />
+          <Route path="ops/truss" element={<TrussDashboard />} />
+          <Route path="ops/telemetry" element={<TelemetryDashboard />} />
           <Route path="pulse" element={<Pulse />} />
           <Route path="sankey" element={<Sankey />} />
           <Route path="launchpad" element={<Launchpad />} />
