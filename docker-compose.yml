@@ -1,13 +1,12 @@
-# Deepiri Web Frontend — single container, single Vite app.
+# Deepiri Web Frontend — optional UI-only compose
 #
-# Backends live in deepiri-platform (do not run hub-server here):
-#   auth-service + api-gateway  → login / API
-#   deepiri-registry            → service catalog + health
-#   realtime-gateway            → live events
-#   external-bridge             → GitHub webhooks → registry
+# PRIMARY PATH: from deepiri-platform repo root use
+#   docker compose -f docker-compose.dev.yml up -d frontend-dev
+# (with auth-service, api-gateway, realtime-gateway as needed).
 #
-# Prefer running via platform docker-compose.dev.yml (frontend-dev).
-# This file is for optional local UI-only bring-up on the platform network.
+# This file is only for rare UI-only bring-up when the platform
+# deepiri-dev-network is already running. Do not treat it as the
+# normal developer workflow.
 
 services:
   frontend:

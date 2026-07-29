@@ -20,6 +20,7 @@ const NAV = [
   { section: "Team", items: [
     { to: "/team",        icon: "◳", label: "Team Ops" },
     { to: "/onboarding",  icon: "★", label: "Start Here" },
+    { to: "/contact",     icon: "✉", label: "Contact" },
   ]},
 ];
 

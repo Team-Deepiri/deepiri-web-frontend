@@ -4,6 +4,7 @@ import { useUIStore } from "@/store/uiStore";
 import { useHealthStore } from "@/store/healthStore";
 import { useAuthStore } from "@/store/authStore";
 import { logout } from "@/services/authService";
+import { usePresence } from "@/hooks/usePresence";
 
 const ROUTE_LABELS: Record<string, string> = {
   "/": "Home",
@@ -20,6 +21,7 @@ const ROUTE_LABELS: Record<string, string> = {
   "/ai": "AI Workspace",
   "/team": "Team Ops",
   "/onboarding": "Start Here",
+  "/contact": "Contact",
 };
 
 function HealthDots() {
@@ -77,6 +79,7 @@ export function Topbar() {
   const label = ROUTE_LABELS[location.pathname] || "Hub";
   const { setCyrexOpen, cyrexOpen } = useUIStore();
   const user = useAuthStore((s) => s.user);
+  const { peerCount, connected: presenceConnected } = usePresence(true);
 
   return (
     <header style={{
@@ -96,6 +99,36 @@ export function Topbar() {
 
       {/* Spacer */}
       <div style={{ flex: 1 }} />
+
+      {/* Multi-user presence via platform realtime-gateway */}
+      <div
+        title={
+          presenceConnected
+            ? `${peerCount} other user${peerCount === 1 ? "" : "s"} on this hub (realtime-gateway)`
+            : "Presence connecting to realtime-gateway…"
+        }
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          fontSize: 11,
+          color: "var(--dim)",
+          padding: "4px 8px",
+          borderRadius: 6,
+          border: "1px solid var(--border)",
+        }}
+      >
+        <span
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: "50%",
+            background: presenceConnected ? "var(--live)" : "var(--warn)",
+            display: "inline-block",
+          }}
+        />
+        <span>{peerCount} online</span>
+      </div>
 
       {/* Immersive button — only shown when live */}
       <ImmersiveButton />

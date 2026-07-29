@@ -78,6 +78,11 @@ export default function Login() {
 
         <div style={{ marginTop: 24, fontSize: 10, color: "var(--dim)", textAlign: "center", letterSpacing: "0.06em" }}>
           auth-service :5001 · api-gateway :5100
+          <div style={{ marginTop: 10 }}>
+            <a href="/contact" style={{ color: "var(--accent)", textDecoration: "none" }}>
+              Contact support
+            </a>
+          </div>
         </div>
       </motion.div>
     </div>

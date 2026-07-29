@@ -4,6 +4,7 @@ import { AuthGuard } from "./AuthGuard";
 import { Shell } from "./Shell";
 
 const Login = lazy(() => import("@/pages/Login/Login"));
+const Contact = lazy(() => import("@/pages/Contact/Contact"));
 const Home = lazy(() => import("@/pages/Home/Home"));
 const EventRiver = lazy(() => import("@/pages/EventRiver/EventRiver"));
 const DependencyMap = lazy(() => import("@/pages/DependencyMap/DependencyMap"));
@@ -40,6 +41,7 @@ export function AppRouter() {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="/immersive"
           element={
