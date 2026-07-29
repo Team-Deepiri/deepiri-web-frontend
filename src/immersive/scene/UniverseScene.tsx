@@ -55,7 +55,7 @@ export function UniverseScene() {
           return filterCategories.includes(category)
         })
         .map((svc, i) => {
-          const category = (svc as any).category || 'Platform'
+          const category = (svc as { category?: string }).category || 'Platform'
           const config = ORBIT_CONFIG[category] || ORBIT_CONFIG.Platform
           // Stagger orbit radius slightly per service to avoid overlap
           const staggeredRadius = config.radius + (i % 3) * 1.5
