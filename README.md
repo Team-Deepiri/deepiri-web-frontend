@@ -5,8 +5,8 @@ One Vite/React app, one container. Backends live in **deepiri-platform**.
 ## Run
 
 ```bash
-yarn install
-yarn dev          # http://localhost:5173  (portal + /immersive)
+npm install
+npm run dev          # http://localhost:5173  (portal + /immersive)
 ```
 
 Prefer platform bring-up: `docker-compose.dev.yml` → `frontend-dev` on `deepiri-dev-network`.
