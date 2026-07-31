@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { hubClient } from '../services/hubClient';
+import { useUiStore } from '../store/uiStore';
 
 export type ImmersiveLiveState = {
   live: boolean;
@@ -7,9 +8,13 @@ export type ImmersiveLiveState = {
   lastChecked: string | null;
 };
 
-/** Polls Hub Server for Immersive availability (Enter 3D button gate). */
+/**
+ * Polls Hub Server GET /health/immersive every 30s and mirrors into uiStore.immersiveLive
+ * (Enter 3D button gate — Phase 3).
+ */
 export function useImmersiveStatus(intervalMs = 30_000): ImmersiveLiveState {
-  const [live, setLive] = useState(false);
+  const setImmersiveLive = useUiStore((s) => s.setImmersiveLive);
+  const live = useUiStore((s) => s.immersiveLive);
   const [loading, setLoading] = useState(true);
   const [lastChecked, setLastChecked] = useState<string | null>(null);
 
@@ -20,11 +25,11 @@ export function useImmersiveStatus(intervalMs = 30_000): ImmersiveLiveState {
       try {
         const res = await hubClient.getImmersiveStatus();
         if (cancelled) return;
-        setLive(res.status === 'live');
+        setImmersiveLive(res.status === 'live');
         setLastChecked(res.lastChecked);
       } catch {
         if (cancelled) return;
-        setLive(false);
+        setImmersiveLive(false);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -36,7 +41,7 @@ export function useImmersiveStatus(intervalMs = 30_000): ImmersiveLiveState {
       cancelled = true;
       clearInterval(id);
     };
-  }, [intervalMs]);
+  }, [intervalMs, setImmersiveLive]);
 
   return { live, loading, lastChecked };
 }

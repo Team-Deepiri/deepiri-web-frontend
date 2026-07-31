@@ -126,7 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         persistUser(user);
         persistToken(token);
         toast.success('Welcome back!');
-        navigate('/home');
+        navigate('/dashboard');
         return { success: true };
       } else {
         toast.error(response.message || 'Login failed');
@@ -155,7 +155,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         persistUser(user);
         persistToken(token);
         toast.success('Account created successfully!');
-        navigate('/home');
+        navigate('/dashboard');
         return { success: true };
       } else {
         toast.error(response.message || 'Registration failed');
