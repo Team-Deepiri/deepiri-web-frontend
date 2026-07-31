@@ -44,7 +44,7 @@ export class HealthPoller {
 
   private async pollOne(svc: ServiceDef): Promise<void> {
     const started = Date.now();
-    let status: ServiceStatus = 'unknown';
+    let status: ServiceStatus;
     let latencyMs: number | null = null;
     let message: string | undefined;
 

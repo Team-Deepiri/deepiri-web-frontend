@@ -30,7 +30,7 @@ export function ServiceNodes() {
 
   const ordered = useMemo(() => IMMERSIVE_SERVICES.map((s) => s.id), []);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
     for (let i = 0; i < ordered.length; i++) {

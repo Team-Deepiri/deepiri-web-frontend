@@ -82,7 +82,6 @@ export const useSceneStore = create<SceneState>((set, get) => ({
   quality: 'high',
 
   initNodes: () => {
-    const nodes: Record<string, NodeState> = {};
     const degree = new Map<string, number>();
     // filled by App with edges — default 1
     for (const s of IMMERSIVE_SERVICES) {

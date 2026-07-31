@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { colorMap, errorColor } from '@deepiri/shared/utils/colorMap';
@@ -18,9 +18,10 @@ const POOL = 120;
 export function EventParticles() {
   const pointsRef = useRef<THREE.Points>(null);
   const pool = useRef<Particle[]>([]);
-  const positions = useRef(new Float32Array(POOL * 3));
-  const colors = useRef(new Float32Array(POOL * 3));
-  const sizes = useRef(new Float32Array(POOL));
+  // Stable buffers — avoid reading refs during render (react-hooks/refs)
+  const positions = useMemo(() => new Float32Array(POOL * 3), []);
+  const colors = useMemo(() => new Float32Array(POOL * 3), []);
+  const sizes = useMemo(() => new Float32Array(POOL), []);
 
   const particlesEnabled = useSceneStore((s) => s.particlesEnabled);
   const reducedMotion = useSceneStore((s) => s.reducedMotion);
@@ -65,9 +66,8 @@ export function EventParticles() {
 
   useFrame((_, dt) => {
     if (!particlesEnabled || reducedMotion) {
-      // keep particles hidden
       for (let i = 0; i < POOL; i++) {
-        positions.current[i * 3 + 1] = -999;
+        positions[i * 3 + 1] = -999;
         pool.current[i].active = false;
       }
     } else {
@@ -76,23 +76,23 @@ export function EventParticles() {
       for (let i = 0; i < POOL; i++) {
         const p = pool.current[i];
         if (!p?.active || !p.curve) {
-          positions.current[i * 3 + 1] = -999;
+          positions[i * 3 + 1] = -999;
           continue;
         }
         p.t += dt * p.speed;
         if (p.t >= 1) {
           p.active = false;
-          positions.current[i * 3 + 1] = -999;
+          positions[i * 3 + 1] = -999;
           continue;
         }
         const pt = p.curve.getPoint(p.t);
-        positions.current[i * 3] = pt.x;
-        positions.current[i * 3 + 1] = pt.y;
-        positions.current[i * 3 + 2] = pt.z;
-        colors.current[i * 3] = p.color.r;
-        colors.current[i * 3 + 1] = p.color.g;
-        colors.current[i * 3 + 2] = p.color.b;
-        sizes.current[i] = p.size;
+        positions[i * 3] = pt.x;
+        positions[i * 3 + 1] = pt.y;
+        positions[i * 3 + 2] = pt.z;
+        colors[i * 3] = p.color.r;
+        colors[i * 3 + 1] = p.color.g;
+        colors[i * 3 + 2] = p.color.b;
+        sizes[i] = p.size;
       }
     }
 
@@ -108,8 +108,8 @@ export function EventParticles() {
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions.current, 3]} />
-        <bufferAttribute attach="attributes-color" args={[colors.current, 3]} />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
         size={0.18}

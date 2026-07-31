@@ -65,7 +65,7 @@ function tick(
       const b = nodes[j];
       let dx = b.x - a.x;
       let dy = b.y - a.y;
-      let dist = Math.hypot(dx, dy) || 0.01;
+      const dist = Math.hypot(dx, dy) || 0.01;
       const same = a.communityId === b.communityId;
       const minDist = same ? 28 : 55;
       if (dist < minDist * 3) {
