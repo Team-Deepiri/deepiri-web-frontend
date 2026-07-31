@@ -30,7 +30,35 @@ function randomPeer(from: string): string {
   return e[0] === from ? e[1] : e[0];
 }
 
-/** Seed positions by category cluster + wire Hub health/events. */
+function ingestEvent(
+  pushEvent: (ev: {
+    id: string;
+    producer: EventProducer;
+    type: string;
+    error?: boolean;
+    fromId: string;
+    toId: string;
+    bornAt: number;
+  }) => void,
+  event: { id?: string; producer?: string; type?: string; error?: boolean }
+): void {
+  const producer = (PRODUCERS.includes(event.producer as EventProducer)
+    ? event.producer
+    : 'realtimeGateway') as EventProducer;
+  const fromId = producerToNode(producer);
+  const toId = randomPeer(fromId);
+  pushEvent({
+    id: event.id ?? `${Date.now()}`,
+    producer,
+    type: event.type ?? 'event',
+    error: Boolean(event.error),
+    fromId,
+    toId,
+    bornAt: performance.now(),
+  });
+}
+
+/** Seed positions by category cluster + wire Hub health/events (REST + WS). */
 export function useHubData(): void {
   const initNodes = useSceneStore((s) => s.initNodes);
   const updateHealth = useSceneStore((s) => s.updateHealth);
@@ -40,7 +68,6 @@ export function useHubData(): void {
 
   useEffect(() => {
     initNodes();
-    // Place by category with jitter
     const counts: Record<string, number> = {};
     for (const svc of IMMERSIVE_SERVICES) {
       const n = counts[svc.category] ?? 0;
@@ -54,7 +81,6 @@ export function useHubData(): void {
       ]);
     }
 
-    // Connection counts
     const deg = new Map<string, number>();
     for (const [a, b] of IMMERSIVE_EDGES) {
       deg.set(a, (deg.get(a) ?? 0) + 1);
@@ -86,7 +112,13 @@ export function useHubData(): void {
         const data = (await res.json()) as {
           services?: Array<{ serviceId: string; healthBand?: string; status?: string; latencyMs?: number | null }>;
         };
-        updateHealth(data.services ?? []);
+        const services = [...(data.services ?? [])];
+        // Local tooling nodes always present when Hub answers
+        services.push(
+          { serviceId: 'hub-server', healthBand: 'green', status: 'up', latencyMs: 5 },
+          { serviceId: 'portal', healthBand: 'green', status: 'up', latencyMs: 8 }
+        );
+        updateHealth(services);
       } catch {
         /* hub optional during boot */
       }
@@ -114,22 +146,25 @@ export function useHubData(): void {
           const data = JSON.parse(String(msg.data)) as {
             type?: string;
             event?: { id?: string; producer?: string; type?: string; error?: boolean };
+            services?: Array<{ serviceId: string; healthBand?: string; status?: string; latencyMs?: number | null }>;
+            health?: Array<{ serviceId: string; healthBand?: string; status?: string; latencyMs?: number | null }>;
+            recent?: Array<{ id?: string; producer?: string; type?: string; error?: boolean }>;
           };
-          if (data.type !== 'event' || !data.event) return;
-          const producer = (PRODUCERS.includes(data.event.producer as EventProducer)
-            ? data.event.producer
-            : 'realtimeGateway') as EventProducer;
-          const fromId = producerToNode(producer);
-          const toId = randomPeer(fromId);
-          pushEvent({
-            id: data.event.id ?? `${Date.now()}`,
-            producer,
-            type: data.event.type ?? 'event',
-            error: Boolean(data.event.error),
-            fromId,
-            toId,
-            bornAt: performance.now(),
-          });
+
+          if (data.type === 'health' && data.services) {
+            updateHealth(data.services);
+            return;
+          }
+
+          if (data.type === 'hello') {
+            if (data.health?.length) updateHealth(data.health);
+            for (const ev of data.recent ?? []) ingestEvent(pushEvent, ev);
+            return;
+          }
+
+          if (data.type === 'event' && data.event) {
+            ingestEvent(pushEvent, data.event);
+          }
         } catch {
           /* ignore */
         }
@@ -140,8 +175,11 @@ export function useHubData(): void {
     timer = setInterval(() => void pollHealth(), 10_000);
     connectWs();
 
-    // Lightweight demo particles if hub is quiet
+    // Demo particles only when Hub is quiet (no pending backlog)
     const demo = setInterval(() => {
+      if (useSceneStore.getState().hubConnected && useSceneStore.getState().pendingEvents.length > 4) {
+        return;
+      }
       if (useSceneStore.getState().pendingEvents.length > 8) return;
       const from = IMMERSIVE_SERVICES[Math.floor(Math.random() * IMMERSIVE_SERVICES.length)].id;
       const to = randomPeer(from);
@@ -156,7 +194,7 @@ export function useHubData(): void {
         toId: to,
         bornAt: performance.now(),
       });
-    }, 1600);
+    }, 1800);
 
     return () => {
       closed = true;

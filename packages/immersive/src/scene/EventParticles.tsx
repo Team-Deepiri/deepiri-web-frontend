@@ -57,7 +57,7 @@ export function EventParticles() {
     ]);
     slot.active = true;
     slot.t = 0;
-    slot.speed = ev.error ? 0.7 : 0.35;
+    slot.speed = ev.error ? 0.7 : 0.35; // errors: 2× speed
     slot.size = ev.error ? 1.5 : 1;
     const hex = ev.error ? errorColor : colorMap[ev.producer] ?? '#38bdf8';
     slot.color = new THREE.Color(hex);

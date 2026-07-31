@@ -180,3 +180,23 @@ body,
   color: #a5b4fc;
   font-size: 0.8rem;
 }
+
+.node-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.72rem;
+  color: #e2e8f0;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.node-tooltip strong {
+  font-size: 0.8rem;
+}
+
+

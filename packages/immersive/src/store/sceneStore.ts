@@ -36,6 +36,9 @@ type SceneState = {
   hubConnected: boolean;
   traffic: Record<string, number>;
   pendingEvents: ImmersiveEvent[];
+  hoveredNode: string | null;
+  targetFps: 30 | 60;
+  quality: 'high' | 'medium' | 'low';
   setSelectedNode: (id: string | null) => void;
   setCameraTarget: (t: [number, number, number] | null) => void;
   setFilter: (cat: ServiceCategory, on: boolean) => void;
@@ -45,6 +48,9 @@ type SceneState = {
   setWebglOk: (v: boolean) => void;
   setToken: (t: string | null) => void;
   setHubConnected: (v: boolean) => void;
+  setHoveredNode: (id: string | null) => void;
+  setTargetFps: (fps: 30 | 60) => void;
+  setQuality: (q: 'high' | 'medium' | 'low') => void;
   updateHealth: (services: Array<{ serviceId: string; healthBand?: string; status?: string; latencyMs?: number | null }>) => void;
   setNodePosition: (id: string, pos: [number, number, number]) => void;
   bumpTraffic: (a: string, b: string, amount?: number) => void;
@@ -71,6 +77,9 @@ export const useSceneStore = create<SceneState>((set, get) => ({
   hubConnected: false,
   traffic: {},
   pendingEvents: [],
+  hoveredNode: null,
+  targetFps: 60,
+  quality: 'high',
 
   initNodes: () => {
     const nodes: Record<string, NodeState> = {};
@@ -112,6 +121,9 @@ export const useSceneStore = create<SceneState>((set, get) => ({
   setWebglOk: (v) => set({ webglOk: v }),
   setToken: (t) => set({ token: t }),
   setHubConnected: (v) => set({ hubConnected: v }),
+  setHoveredNode: (id) => set({ hoveredNode: id }),
+  setTargetFps: (fps) => set({ targetFps: fps }),
+  setQuality: (q) => set({ quality: q }),
 
   updateHealth: (services) => {
     set((s) => {

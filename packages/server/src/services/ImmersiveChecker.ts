@@ -9,7 +9,8 @@ export class ImmersiveChecker {
 
   constructor(
     url = process.env.IMMERSIVE_URL ?? 'http://localhost:5174',
-    intervalMs = 30_000
+    // Match portal health cadence so Enter 3D appears promptly when :5174 is up
+    intervalMs = 10_000
   ) {
     this.url = url.replace(/\/$/, '');
     this.intervalMs = intervalMs;
@@ -29,6 +30,12 @@ export class ImmersiveChecker {
 
   getStatus(): { status: ImmersiveStatus; lastChecked: string | null; url: string } {
     return { status: this.status, lastChecked: this.lastChecked, url: this.url };
+  }
+
+  /** Public re-check for Hub routes / tests. */
+  async recheck(): Promise<{ status: ImmersiveStatus; lastChecked: string | null; url: string }> {
+    await this.check();
+    return this.getStatus();
   }
 
   private async check(): Promise<void> {

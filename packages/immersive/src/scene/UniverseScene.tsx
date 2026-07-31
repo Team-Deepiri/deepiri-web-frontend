@@ -6,6 +6,7 @@ import { StarField } from './StarField';
 import { ServiceNodes } from './ServiceNodes';
 import { EdgeLines } from './EdgeLines';
 import { EventParticles } from './EventParticles';
+import { PerformanceGovernor } from './PerformanceGovernor';
 import { ConstellationForce } from '../gravity/ConstellationForce';
 import { useSceneStore } from '../store/sceneStore';
 
@@ -42,41 +43,55 @@ function GravityDriver() {
 
   useFrame((state) => {
     if (!constellationMode || reducedMotion) return;
-    // Reheat occasionally when traffic changes / every few seconds
     if (state.clock.elapsedTime - lastHeat.current > 3) {
       force.current.reheat();
       lastHeat.current = state.clock.elapsedTime;
     }
   });
 
-  // touch traffic so component re-renders when traffic map identity changes
   void traffic;
-
   return null;
 }
 
-export function UniverseScene() {
+function SceneBody() {
   const reducedMotion = useSceneStore((s) => s.reducedMotion);
+  const quality = useSceneStore((s) => s.quality);
+  const particlesEnabled = useSceneStore((s) => s.particlesEnabled);
+
+  return (
+    <>
+      <ambientLight intensity={0.35} />
+      <pointLight position={[10, 12, 8]} intensity={1.2} color="#c7d2fe" />
+      <pointLight position={[-12, -4, -6]} intensity={0.6} color="#67e8f9" />
+      {!reducedMotion && quality === 'high' && <StarField />}
+      <EdgeLines />
+      <ServiceNodes />
+      {!reducedMotion && particlesEnabled && <EventParticles />}
+      <CameraRig />
+      <GravityDriver />
+      <PerformanceGovernor />
+      <OrbitControls enableDamping dampingFactor={0.08} maxDistance={40} minDistance={4} />
+    </>
+  );
+}
+
+export function UniverseScene() {
+  const targetFps = useSceneStore((s) => s.targetFps);
+  const quality = useSceneStore((s) => s.quality);
 
   return (
     <Canvas
       camera={{ position: [0, 8, 18], fov: 50, near: 0.1, far: 200 }}
-      dpr={[1, 1.75]}
-      gl={{ antialias: true, alpha: false }}
+      dpr={quality === 'high' ? [1, 1.75] : [1, 1.25]}
+      gl={{ antialias: quality === 'high', alpha: false, powerPreference: 'high-performance' }}
+      frameloop="always"
       onCreated={({ gl }) => {
         gl.setClearColor('#05080f');
+        // Soft cap via performance governor; document 60→30 degrade
+        void targetFps;
       }}
     >
-      <ambientLight intensity={0.35} />
-      <pointLight position={[10, 12, 8]} intensity={1.2} color="#c7d2fe" />
-      <pointLight position={[-12, -4, -6]} intensity={0.6} color="#67e8f9" />
-      {!reducedMotion && <StarField />}
-      <EdgeLines />
-      <ServiceNodes />
-      {!reducedMotion && <EventParticles />}
-      <CameraRig />
-      <GravityDriver />
-      <OrbitControls enableDamping dampingFactor={0.08} maxDistance={40} minDistance={4} />
+      <SceneBody />
     </Canvas>
   );
 }

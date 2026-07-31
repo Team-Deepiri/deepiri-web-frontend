@@ -10,6 +10,8 @@ export class HealthPoller {
   private cache = new Map<string, ServiceHealth>();
   private timer: ReturnType<typeof setInterval> | null = null;
   private readonly intervalMs: number;
+  /** Optional hook — Hub WS relay broadcasts health to Immersive/Portal. */
+  onUpdate: ((services: ServiceHealth[]) => void) | null = null;
 
   constructor(intervalMs = 10_000) {
     this.intervalMs = intervalMs;
@@ -37,6 +39,7 @@ export class HealthPoller {
 
   private async pollAll(): Promise<void> {
     await Promise.all(registry.services.map((svc) => this.pollOne(svc)));
+    this.onUpdate?.(this.getAll());
   }
 
   private async pollOne(svc: ServiceDef): Promise<void> {

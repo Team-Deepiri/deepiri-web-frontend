@@ -17,6 +17,9 @@ export function SceneControls() {
   const setWebglOk = useSceneStore((s) => s.setWebglOk);
   const setSelectedNode = useSceneStore((s) => s.setSelectedNode);
   const setCameraTarget = useSceneStore((s) => s.setCameraTarget);
+  const targetFps = useSceneStore((s) => s.targetFps);
+  const quality = useSceneStore((s) => s.quality);
+  const token = useSceneStore((s) => s.token);
 
   return (
     <div className="scene-hud">
@@ -29,6 +32,8 @@ export function SceneControls() {
           Hub {hubConnected ? 'live' : 'offline'}
         </span>
         <span>{webglOk ? 'WebGL' : '2D fallback'}</span>
+        <span title="Adaptive render target">{targetFps}fps · {quality}</span>
+        {token ? <span className="is-live">auth ✓</span> : null}
       </div>
 
       <div className="scene-controls" role="toolbar" aria-label="Scene controls">

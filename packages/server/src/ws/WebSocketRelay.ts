@@ -44,6 +44,7 @@ export class WebSocketRelay {
   private readonly gatewayUrl: string;
   private recent: DeepiriEvent[] = [];
   private readonly recentCap = 200;
+  private latestHealth: unknown[] = [];
 
   constructor(gatewayUrl = process.env.REALTIME_GATEWAY_URL ?? 'http://localhost:5008') {
     this.gatewayUrl = gatewayUrl;
@@ -58,6 +59,7 @@ export class WebSocketRelay {
           type: 'hello',
           producers: PRODUCERS,
           recent: this.recent.slice(-50),
+          health: this.latestHealth,
         })
       );
       socket.on('close', () => this.clients.delete(socket));
@@ -84,7 +86,17 @@ export class WebSocketRelay {
   publish(event: DeepiriEvent): void {
     this.recent.push(event);
     if (this.recent.length > this.recentCap) this.recent.shift();
-    const msg = JSON.stringify({ type: 'event', event });
+    this.broadcast({ type: 'event', event });
+  }
+
+  /** Push health snapshot to Immersive + Portal WS clients. */
+  publishHealth(services: unknown[]): void {
+    this.latestHealth = services;
+    this.broadcast({ type: 'health', services, ts: new Date().toISOString() });
+  }
+
+  private broadcast(payload: unknown): void {
+    const msg = JSON.stringify(payload);
     for (const c of this.clients) {
       if (c.readyState === 1) c.send(msg);
     }

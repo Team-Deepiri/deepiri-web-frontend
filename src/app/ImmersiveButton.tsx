@@ -12,7 +12,8 @@ const ImmersiveButton: React.FC = () => {
   const { token } = useAuth();
 
   const openImmersive = () => {
-    const win = window.open(IMMERSIVE_URL, '_blank', 'noopener,noreferrer');
+    // Avoid noopener so Immersive can signal deepiri:immersive-ready via window.opener
+    const win = window.open(IMMERSIVE_URL, '_blank');
     if (!win) return;
 
     const payload = {
@@ -21,7 +22,6 @@ const ImmersiveButton: React.FC = () => {
       source: 'portal',
     };
 
-    // Retry postMessage until immersive listens (or give up after ~3s)
     let attempts = 0;
     const timer = window.setInterval(() => {
       attempts += 1;
@@ -30,8 +30,8 @@ const ImmersiveButton: React.FC = () => {
       } catch {
         /* cross-origin until loaded */
       }
-      if (attempts >= 10 || win.closed) window.clearInterval(timer);
-    }, 300);
+      if (attempts >= 12 || win.closed) window.clearInterval(timer);
+    }, 250);
   };
 
   return (

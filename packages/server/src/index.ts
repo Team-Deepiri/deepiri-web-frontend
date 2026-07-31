@@ -34,11 +34,12 @@ async function main(): Promise<void> {
   const graphs = new GraphBuilder();
   const relay = new WebSocketRelay();
 
+  health.onUpdate = (services) => relay.publishHealth(services);
   health.start();
   immersive.start();
   docker.start();
 
-  await registerHealthRoutes(app, { health, immersive });
+  await registerHealthRoutes(app, { health, immersive, relay });
   await registerRegistryRoutes(app);
   await registerDockerRoutes(app, docker);
   await registerGithubRoutes(app);

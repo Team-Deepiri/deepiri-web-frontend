@@ -46,8 +46,20 @@ export class ConstellationForce {
       )
       .force('charge', d3.forceManyBody().strength(-18))
       .force('center', d3.forceCenter(0, 0))
-      .alpha(0.6)
-      .alphaDecay(0.02);
+      .force(
+        'towardCenter',
+        // High-connection / high-traffic nodes drift inward
+        () => {
+          for (const n of this.nodes) {
+            const deg = useSceneStore.getState().nodes[n.id]?.connections ?? 1;
+            const pull = Math.min(0.08, deg * 0.008);
+            n.vx = (n.vx ?? 0) - (n.x ?? 0) * pull * 0.02;
+            n.vy = (n.vy ?? 0) - (n.y ?? 0) * pull * 0.02;
+          }
+        }
+      )
+      .alpha(0.55)
+      .alphaDecay(0.022);
 
     this.sim.on('tick', () => {
       if (!useSceneStore.getState().constellationMode) return;
