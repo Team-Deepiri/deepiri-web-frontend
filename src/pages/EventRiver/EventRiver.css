@@ -38,6 +38,7 @@
 }
 
 .event-river-actions input,
+.event-river-actions select,
 .event-river-actions button {
   background: var(--er-card);
   border: 1px solid var(--er-border);

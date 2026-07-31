@@ -1,58 +1,79 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
 import { useHealthStore } from '../../store/healthStore';
+import { useMetricsStore } from '../../store/metricsStore';
 import './OpsDashboard.css';
 
 type Range = '1h' | '6h' | '24h' | '7d';
+type Panel = 'requestRate' | 'errorRate' | 'p95Latency' | 'memoryMb';
 
 const RANGE_POINTS: Record<Range, number> = {
-  '1h': 12,
-  '6h': 24,
-  '24h': 48,
-  '7d': 84,
+  '1h': 20,
+  '6h': 40,
+  '24h': 70,
+  '7d': 100,
+};
+
+const PANEL_META: Record<Panel, { title: string; color: string; unit: string }> = {
+  requestRate: { title: 'Request rate', color: '#6366f1', unit: 'req/min' },
+  errorRate: { title: 'Error rate', color: '#ef4444', unit: '%' },
+  p95Latency: { title: 'p95 latency', color: '#06b6d4', unit: 'ms' },
+  memoryMb: { title: 'Memory', color: '#a78bfa', unit: 'MB' },
 };
 
 const OpsDashboard: React.FC = () => {
   const services = useHealthStore((s) => s.services);
-  const history = useHealthStore((s) => s.history);
   const error = useHealthStore((s) => s.error);
   const lastFetched = useHealthStore((s) => s.lastFetched);
+  const series = useMetricsStore((s) => s.series);
+  const telemetry = useMetricsStore((s) => s.telemetry);
+  const refreshTelemetry = useMetricsStore((s) => s.refreshTelemetry);
+
   const [range, setRange] = useState<Range>('1h');
   const [selected, setSelected] = useState<string | null>(null);
 
+  useEffect(() => {
+    void refreshTelemetry();
+  }, [refreshTelemetry]);
+
   const activeId = selected ?? services[0]?.serviceId ?? null;
-
-  const series = useMemo(() => {
+  const points = useMemo(() => {
     if (!activeId) return [];
-    const samples = (history[activeId] ?? []).slice(-RANGE_POINTS[range]);
-    return samples.map((s, i) => ({
-      i,
-      ts: new Date(s.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      latency: s.latencyMs ?? 0,
-      up: s.status === 'up' ? 1 : 0,
-      error: s.status === 'down' || s.status === 'degraded' ? 1 : 0,
-    }));
-  }, [activeId, history, range]);
+    return (series[activeId] ?? []).slice(-RANGE_POINTS[range]);
+  }, [activeId, series, range]);
 
-  const overview = useMemo(
+  const overview = useMemo(() => {
+    return services.map((s) => {
+      const last = series[s.serviceId]?.at(-1);
+      return {
+        name: (s.name ?? s.serviceId).replace(/-service$/, ''),
+        requestRate: last?.requestRate ?? 0,
+        errorRate: last?.errorRate ?? 0,
+        p95: last?.p95Latency ?? s.latencyMs ?? 0,
+        memory: last?.memoryMb ?? 0,
+      };
+    });
+  }, [services, series]);
+
+  const jobBars = useMemo(
     () =>
-      services.map((s) => ({
-        name: s.name ?? s.serviceId,
-        latency: s.latencyMs ?? 0,
-        status: s.status,
+      Object.entries(telemetry.jobStats).map(([k, v]) => ({
+        name: k,
+        value: v,
       })),
-    [services]
+    [telemetry.jobStats]
   );
 
   return (
@@ -61,7 +82,8 @@ const OpsDashboard: React.FC = () => {
         <div>
           <h1>Ops Dashboard</h1>
           <p>
-            Live Hub health metrics · last fetch {lastFetched ? new Date(lastFetched).toLocaleTimeString() : '—'}
+            Request rate · error rate · p95 · memory per service
+            {lastFetched ? ` · Hub ${new Date(lastFetched).toLocaleTimeString()}` : ''}
             {error ? ` · ${error}` : ''}
           </p>
         </div>
@@ -89,25 +111,41 @@ const OpsDashboard: React.FC = () => {
         </div>
       </header>
 
-      <div className="ops-dash-grid">
-        <section className="ops-dash-panel ops-dash-span">
-          <h2>Latency by service</h2>
-          <div className="ops-dash-chart">
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={overview}>
-                <CartesianGrid stroke="#21262d" strokeDasharray="3 3" />
-                <XAxis dataKey="name" tick={{ fill: '#8b949e', fontSize: 11 }} />
-                <YAxis tick={{ fill: '#8b949e', fontSize: 11 }} />
-                <Tooltip
-                  contentStyle={{ background: '#161b22', border: '1px solid #21262d' }}
-                  labelStyle={{ color: '#e6edf3' }}
-                />
-                <Bar dataKey="latency" fill="#6366f1" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
+      <div className="ops-dash-panels">
+        {(Object.keys(PANEL_META) as Panel[]).map((key) => (
+          <section key={key} className="ops-dash-panel">
+            <h2>
+              {PANEL_META[key].title}
+              <span>{PANEL_META[key].unit}</span>
+            </h2>
+            <div className="ops-dash-chart">
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={overview}>
+                  <CartesianGrid stroke="#21262d" strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fill: '#8b949e', fontSize: 10 }} interval={0} angle={-20} textAnchor="end" height={50} />
+                  <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
+                  <Tooltip contentStyle={{ background: '#161b22', border: '1px solid #21262d' }} />
+                  <Bar
+                    dataKey={
+                      key === 'requestRate'
+                        ? 'requestRate'
+                        : key === 'errorRate'
+                          ? 'errorRate'
+                          : key === 'p95Latency'
+                            ? 'p95'
+                            : 'memory'
+                    }
+                    fill={PANEL_META[key].color}
+                    radius={[5, 5, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+        ))}
+      </div>
 
+      <div className="ops-dash-grid">
         <section className="ops-dash-panel">
           <h2>Services</h2>
           <ul className="ops-dash-services">
@@ -127,25 +165,61 @@ const OpsDashboard: React.FC = () => {
           </ul>
         </section>
 
-        <section className="ops-dash-panel ops-dash-wide">
-          <h2>{activeId ? `${activeId} · latency & availability` : 'Select a service'}</h2>
+        <section className="ops-dash-panel ops-dash-wide-inline">
+          <h2>{activeId ? `${activeId} · time series (${range})` : 'Select a service'}</h2>
           <div className="ops-dash-chart">
-            <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={series}>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={points}>
                 <CartesianGrid stroke="#21262d" strokeDasharray="3 3" />
-                <XAxis dataKey="ts" tick={{ fill: '#8b949e', fontSize: 11 }} />
-                <YAxis tick={{ fill: '#8b949e', fontSize: 11 }} />
-                <Tooltip
-                  contentStyle={{ background: '#161b22', border: '1px solid #21262d' }}
-                  labelStyle={{ color: '#e6edf3' }}
-                />
-                <Area type="monotone" dataKey="latency" stroke="#06b6d4" fill="rgba(6,182,212,0.2)" />
-                <Area type="monotone" dataKey="error" stroke="#ef4444" fill="rgba(239,68,68,0.15)" />
-              </AreaChart>
+                <XAxis dataKey="label" tick={{ fill: '#8b949e', fontSize: 10 }} />
+                <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
+                <Tooltip contentStyle={{ background: '#161b22', border: '1px solid #21262d' }} />
+                <Legend />
+                <Line type="monotone" dataKey="requestRate" stroke="#6366f1" dot={false} strokeWidth={2} />
+                <Line type="monotone" dataKey="errorRate" stroke="#ef4444" dot={false} strokeWidth={2} />
+                <Line type="monotone" dataKey="p95Latency" stroke="#06b6d4" dot={false} strokeWidth={2} />
+                <Line type="monotone" dataKey="memoryMb" stroke="#a78bfa" dot={false} strokeWidth={2} />
+              </LineChart>
             </ResponsiveContainer>
           </div>
         </section>
       </div>
+
+      {(jobBars.length > 0 || telemetry.recentEvents.length > 0) && (
+        <div className="ops-dash-grid ops-dash-telemetry">
+          {jobBars.length > 0 && (
+            <section className="ops-dash-panel">
+              <h2>Jobs metrics (telemetry)</h2>
+              <div className="ops-dash-chart">
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={jobBars}>
+                    <CartesianGrid stroke="#21262d" strokeDasharray="3 3" />
+                    <XAxis dataKey="name" tick={{ fill: '#8b949e', fontSize: 10 }} />
+                    <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
+                    <Tooltip contentStyle={{ background: '#161b22', border: '1px solid #21262d' }} />
+                    <Bar dataKey="value" fill="#22c55e" radius={[5, 5, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </section>
+          )}
+          {telemetry.recentEvents.length > 0 && (
+            <section className="ops-dash-panel">
+              <h2>Recent telemetry events</h2>
+              <ul className="ops-dash-events">
+                {telemetry.recentEvents.slice(0, 12).map((ev, i) => (
+                  <li key={`${ev.timestamp}-${i}`}>
+                    <strong>{ev.eventType}</strong>
+                    <span>
+                      {ev.source} · {new Date(ev.timestamp).toLocaleTimeString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      )}
     </div>
   );
 };

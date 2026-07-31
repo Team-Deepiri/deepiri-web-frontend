@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { hubClient, type HubRepo } from '../../services/hubClient';
@@ -11,6 +11,8 @@ type DockerRepoStatus = {
   services: Array<{ name: string; running: boolean; status: string }>;
 };
 
+type GhCommit = { sha: string; commit: { message: string; author?: { name?: string; date?: string } } };
+
 const Launchpad: React.FC = () => {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
@@ -18,6 +20,9 @@ const Launchpad: React.FC = () => {
   const [cloneMode, setCloneMode] = useState<'https' | 'ssh'>('https');
   const [detail, setDetail] = useState<HubRepo | null>(null);
   const [copied, setCopied] = useState(false);
+  const [readme, setReadme] = useState<string | null>(null);
+  const [commits, setCommits] = useState<GhCommit[]>([]);
+  const [detailLoading, setDetailLoading] = useState(false);
 
   const { data: registry, isLoading, isError, error, refetch, isFetching } = useQuery(
     ['hub', 'registry'],
@@ -56,25 +61,68 @@ const Launchpad: React.FC = () => {
     });
   }, [registry, query, category]);
 
+  useEffect(() => {
+    if (!detail?.httpsUrl) {
+      setReadme(null);
+      setCommits([]);
+      return;
+    }
+    const match = detail.httpsUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (!match) return;
+    const [, owner, rawRepo] = match;
+    const repo = rawRepo.replace(/\.git$/, '');
+    let cancelled = false;
+    setDetailLoading(true);
+    void (async () => {
+      try {
+        const [readmeRes, commitsRes] = await Promise.all([
+          fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/README.md`).catch(() => null),
+          fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=5`).catch(() => null),
+        ]);
+        if (cancelled) return;
+        if (readmeRes?.ok) {
+          const text = await readmeRes.text();
+          setReadme(text.slice(0, 2500));
+        } else {
+          setReadme(null);
+        }
+        if (commitsRes?.ok) {
+          setCommits((await commitsRes.json()) as GhCommit[]);
+        } else {
+          setCommits([]);
+        }
+      } finally {
+        if (!cancelled) setDetailLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [detail]);
+
   const cloneUrl = (repo: HubRepo) => {
     if (cloneMode === 'ssh') {
-      return (repo as HubRepo & { sshUrl?: string }).sshUrl ||
-        (repo.httpsUrl ? repo.httpsUrl.replace('https://github.com/', 'git@github.com:') + '.git' : '');
+      return (
+        repo.sshUrl ||
+        (repo.httpsUrl ? `${repo.httpsUrl.replace('https://github.com/', 'git@github.com:')}.git` : '')
+      );
     }
     return repo.httpsUrl || '';
   };
 
   const copyClone = async () => {
     if (!cloneRepo) return;
-    const url = cloneUrl(cloneRepo);
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(cloneUrl(cloneRepo));
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1500);
   };
 
-  const vscodeUri = (repo: HubRepo) => {
-    const url = repo.httpsUrl || '';
-    return `vscode://vscode.git/clone?url=${encodeURIComponent(url)}`;
+  const vscodeUri = (repo: HubRepo) =>
+    `vscode://vscode.git/clone?url=${encodeURIComponent(repo.httpsUrl || '')}`;
+
+  const launch = (repo: HubRepo) => {
+    const url = repo.launchUrl || (repo.nginxPath ? `http://localhost${repo.nginxPath}` : null);
+    if (url) window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -82,7 +130,7 @@ const Launchpad: React.FC = () => {
       <header className="launchpad-toolbar">
         <div>
           <h1>Repo Launchpad</h1>
-          <p>Clone, inspect, and open Deepiri repos from the Hub registry.</p>
+          <p>Clone, launch, inspect README/activity, and open graphs for every registered Deepiri repo.</p>
         </div>
         <div className="launchpad-controls">
           <input
@@ -132,10 +180,14 @@ const Launchpad: React.FC = () => {
                   : dock?.error
                     ? 'Docker: unavailable'
                     : 'Docker: —'}
+                {repo.nginxPath ? ` · nginx ${repo.nginxPath}` : ''}
               </div>
               <div className="launchpad-actions">
                 <button type="button" onClick={() => setCloneRepo(repo)}>
                   Clone
+                </button>
+                <button type="button" onClick={() => launch(repo)} disabled={!repo.launchUrl && !repo.nginxPath}>
+                  Launch
                 </button>
                 <Link to={`/repos/${repo.id}/graph`}>Graph</Link>
                 <button type="button" onClick={() => setDetail(repo)}>
@@ -195,11 +247,49 @@ const Launchpad: React.FC = () => {
               <dd>{detail.localPath || '—'}</dd>
             </div>
             <div>
+              <dt>Launch</dt>
+              <dd>{detail.launchUrl || detail.nginxPath || '—'}</dd>
+            </div>
+            <div>
               <dt>HTTPS</dt>
               <dd>{detail.httpsUrl || '—'}</dd>
             </div>
           </dl>
-          <Link to={`/repos/${detail.id}/graph`}>Open community graph</Link>
+
+          <h3>Docker services</h3>
+          <ul className="launchpad-svc-list">
+            {(dockerByRepo.get(detail.id)?.services ?? []).map((s) => (
+              <li key={s.name}>
+                {s.name} · {s.running ? 'up' : s.status}
+              </li>
+            ))}
+            {(dockerByRepo.get(detail.id)?.services ?? []).length === 0 && <li>No compose services reported</li>}
+          </ul>
+
+          <h3>Recent activity</h3>
+          {detailLoading && <p className="launchpad-muted">Loading GitHub…</p>}
+          <ul className="launchpad-svc-list">
+            {commits.map((c) => (
+              <li key={c.sha}>
+                {c.commit.message.split('\n')[0]}
+                <em>
+                  {c.commit.author?.name} ·{' '}
+                  {c.commit.author?.date ? new Date(c.commit.author.date).toLocaleDateString() : ''}
+                </em>
+              </li>
+            ))}
+            {!detailLoading && commits.length === 0 && <li>No public commit activity loaded</li>}
+          </ul>
+
+          <h3>README</h3>
+          <pre className="launchpad-readme">{readme || 'README unavailable (private repo or missing main branch).'}</pre>
+
+          <div className="launchpad-actions">
+            <button type="button" onClick={() => launch(detail)} disabled={!detail.launchUrl && !detail.nginxPath}>
+              Launch
+            </button>
+            <Link to={`/repos/${detail.id}/graph`}>Open community graph</Link>
+          </div>
         </aside>
       )}
     </div>

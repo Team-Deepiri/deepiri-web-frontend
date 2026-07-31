@@ -20,6 +20,9 @@ export type HubRepo = {
   tags?: string[];
   localPath?: string;
   httpsUrl?: string;
+  sshUrl?: string;
+  launchUrl?: string;
+  nginxPath?: string;
 };
 
 export type HubGraphNode = {

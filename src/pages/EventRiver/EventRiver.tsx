@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEventStore } from '../../store/eventStore';
 import type { DeepiriEvent, EventProducer } from '../../types/hub';
 import { PRODUCERS, colorMap, errorColor, producerLabels } from '../../utils/colorMap';
@@ -17,12 +18,12 @@ const EventRiver: React.FC = () => {
 
   const [enabled, setEnabled] = useState<Set<EventProducer>>(new Set(PRODUCERS));
   const [keyword, setKeyword] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
   const [errorsOnly, setErrorsOnly] = useState(false);
   const [selected, setSelected] = useState<DeepiriEvent | null>(null);
 
   useEffect(() => {
-    // Auto-start a light demo stream so the river is alive without realtime-gateway
-    const stop = startDemoStream(1_400);
+    const stop = startDemoStream(1_200);
     return stop;
   }, [startDemoStream]);
 
@@ -37,8 +38,10 @@ const EventRiver: React.FC = () => {
 
   const filterLane = (events: DeepiriEvent[]) => {
     const q = keyword.trim().toLowerCase();
+    const t = typeFilter.trim().toLowerCase();
     return events
       .filter((e) => (errorsOnly ? e.error : true))
+      .filter((e) => (t ? e.type.toLowerCase().includes(t) : true))
       .filter((e) => {
         if (!q) return true;
         return (
@@ -56,14 +59,21 @@ const EventRiver: React.FC = () => {
     [byProducer]
   );
 
+  const types = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of PRODUCERS) for (const e of byProducer[p]) set.add(e.type);
+    return [...set].sort();
+  }, [byProducer]);
+
   return (
     <div className="event-river">
       <header className="event-river-toolbar">
         <div>
           <h1>Event Stream River</h1>
           <p>
-            {connected ? 'Hub WS connected' : 'Hub WS offline'} · {total} buffered
+            {connected ? 'Hub WS connected' : 'Hub WS offline'} · {total} buffered · DOM cap {LANE_CAP}/lane
             {demoRunning ? ' · demo stream on' : ''}
+            {paused ? ' · PAUSED' : ''}
           </p>
         </div>
         <div className="event-river-actions">
@@ -73,6 +83,18 @@ const EventRiver: React.FC = () => {
             placeholder="Filter keyword…"
             aria-label="Filter events"
           />
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            aria-label="Filter by type"
+          >
+            <option value="">All types</option>
+            {types.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
           <label className="event-river-check">
             <input type="checkbox" checked={errorsOnly} onChange={(e) => setErrorsOnly(e.target.checked)} />
             Errors only
@@ -103,7 +125,6 @@ const EventRiver: React.FC = () => {
       <div className="event-river-lanes">
         {PRODUCERS.filter((p) => enabled.has(p)).map((p) => {
           const cards = filterLane(byProducer[p]);
-          // Errors float to top
           const ordered = [...cards].sort((a, b) => Number(b.error) - Number(a.error));
           return (
             <section key={p} className="event-river-lane" style={{ ['--lane' as string]: colorMap[p] }}>
@@ -114,19 +135,26 @@ const EventRiver: React.FC = () => {
               </header>
               <div className="event-river-cards">
                 {ordered.length === 0 && <p className="event-river-empty">Waiting for events…</p>}
-                {ordered.map((ev) => (
-                  <button
-                    key={ev.id}
-                    type="button"
-                    className={`event-river-card ${ev.error ? 'is-error' : ''}`}
-                    onClick={() => setSelected(ev)}
-                  >
-                    <span className="event-river-card-type">{ev.type}</span>
-                    <span className="event-river-card-time">
-                      {new Date(ev.timestamp).toLocaleTimeString()}
-                    </span>
-                  </button>
-                ))}
+                <AnimatePresence initial={false}>
+                  {ordered.map((ev) => (
+                    <motion.button
+                      key={ev.id}
+                      type="button"
+                      className={`event-river-card ${ev.error ? 'is-error' : ''}`}
+                      onClick={() => setSelected(ev)}
+                      layout
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.18 }}
+                    >
+                      <span className="event-river-card-type">{ev.type}</span>
+                      <span className="event-river-card-time">
+                        {new Date(ev.timestamp).toLocaleTimeString()}
+                      </span>
+                    </motion.button>
+                  ))}
+                </AnimatePresence>
               </div>
             </section>
           );

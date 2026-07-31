@@ -2,10 +2,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import * as d3 from 'd3';
 import { hubClient } from '../../services/hubClient';
+import { useHealthStore } from '../../store/healthStore';
+import { communityEdgeMetric } from '../../services/metricsService';
 import './DependencyMap.css';
 
 type Mode = 'matrix' | 'graph';
-type Metric = 'volume' | 'degree' | 'lines';
+type Metric = 'volume' | 'errorRate' | 'avgLatency' | 'p95';
 
 const DependencyMap: React.FC = () => {
   const [repoId, setRepoId] = useState('deepiri-web-frontend');
@@ -13,6 +15,7 @@ const DependencyMap: React.FC = () => {
   const [metric, setMetric] = useState<Metric>('volume');
   const [hover, setHover] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const services = useHealthStore((s) => s.services);
 
   const { data: repos } = useQuery(['hub', 'graph-repos'], () => hubClient.listGraphRepos(), {
     staleTime: 60_000,
@@ -31,34 +34,30 @@ const DependencyMap: React.FC = () => {
     if (!graph) return [] as number[][];
     const index = new Map(communities.map((c, i) => [c.name, i]));
     const n = communities.length;
-    const m = Array.from({ length: n }, () => Array.from({ length: n }, () => 0));
+    const raw = Array.from({ length: n }, () => Array.from({ length: n }, () => 0));
     const nodeCommunity = new Map(graph.nodes.map((node) => [node.id, node.community]));
 
     for (const e of graph.edges) {
       const a = index.get(nodeCommunity.get(e.source) ?? '');
       const b = index.get(nodeCommunity.get(e.target) ?? '');
       if (a == null || b == null) continue;
-      m[a][b] += 1;
+      raw[a][b] += 1;
     }
 
-    if (metric === 'degree') {
-      for (let i = 0; i < n; i++) {
-        const deg = communities[i].count;
-        for (let j = 0; j < n; j++) m[i][j] = i === j ? deg : m[i][j];
-      }
-    }
-    if (metric === 'lines') {
-      const lines = new Map<string, number>();
-      for (const node of graph.nodes) {
-        lines.set(node.community, (lines.get(node.community) ?? 0) + node.lines);
-      }
-      for (let i = 0; i < n; i++) {
-        const v = lines.get(communities[i].name) ?? 0;
-        for (let j = 0; j < n; j++) m[i][j] = i === j ? v : m[i][j];
+    // Approximate community health from overlapping service names / path tokens
+    const bandFor = (communityName: string): string => {
+      const hit = services.find((s) => communityName.toLowerCase().includes(s.serviceId.split('-')[0]));
+      return hit?.healthBand ?? 'green';
+    };
+
+    const m = Array.from({ length: n }, () => Array.from({ length: n }, () => 0));
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        m[i][j] = communityEdgeMetric(raw[i][j], bandFor(communities[i].name), bandFor(communities[j].name), metric);
       }
     }
     return m;
-  }, [graph, communities, metric]);
+  }, [graph, communities, metric, services]);
 
   const maxVal = useMemo(() => Math.max(1, ...matrix.flatMap((row) => row)), [matrix]);
 
@@ -166,9 +165,10 @@ const DependencyMap: React.FC = () => {
             </button>
           </div>
           <select value={metric} onChange={(e) => setMetric(e.target.value as Metric)} aria-label="Metric">
-            <option value="volume">Edge volume</option>
-            <option value="degree">Node count</option>
-            <option value="lines">Lines of code</option>
+            <option value="volume">Request volume</option>
+            <option value="errorRate">Error rate</option>
+            <option value="avgLatency">Avg latency</option>
+            <option value="p95">p95 latency</option>
           </select>
         </div>
       </header>

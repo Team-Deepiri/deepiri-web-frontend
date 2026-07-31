@@ -193,11 +193,49 @@
   text-align: right;
 }
 
-.launchpad-muted,
-.launchpad-error {
+.launchpad-detail h3 {
+  margin: 0.85rem 0 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
   color: #8b949e;
+  text-transform: uppercase;
 }
 
-.launchpad-error {
-  color: #f87171;
+.launchpad-svc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+}
+
+.launchpad-svc-list li {
+  background: #161b22;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+}
+
+.launchpad-svc-list em {
+  display: block;
+  color: #8b949e;
+  font-style: normal;
+  font-size: 0.7rem;
+}
+
+.launchpad-readme {
+  max-height: 180px;
+  overflow: auto;
+  background: #161b22;
+  border-radius: 8px;
+  padding: 0.55rem;
+  font-size: 0.7rem;
+  white-space: pre-wrap;
+  color: #94a3b8;
+}
+
+.launchpad-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }

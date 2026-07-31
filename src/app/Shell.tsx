@@ -6,6 +6,7 @@ import CyrexSidebar from './CyrexSidebar';
 import { useHealthStore } from '../store/healthStore';
 import { useEventStore } from '../store/eventStore';
 import { useUiStore } from '../store/uiStore';
+import { useMetricsStore } from '../store/metricsStore';
 import './Shell.css';
 
 /**
@@ -35,6 +36,10 @@ const Shell: React.FC = () => {
     }, 30_000);
     return () => clearInterval(id);
   }, [setImmersiveLive]);
+
+  useEffect(() => {
+    return useMetricsStore.getState().startTelemetryPolling(30_000);
+  }, []);
 
   return (
     <div

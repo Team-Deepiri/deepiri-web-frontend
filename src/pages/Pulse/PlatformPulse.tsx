@@ -1,42 +1,52 @@
 import React, { useMemo, useState } from 'react';
 import { Area, AreaChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useHealthStore } from '../../store/healthStore';
+import { useMetricsStore } from '../../store/metricsStore';
 import './PlatformPulse.css';
 
 const PlatformPulse: React.FC = () => {
   const services = useHealthStore((s) => s.services);
   const history = useHealthStore((s) => s.history);
+  const recentEvents = useMetricsStore((s) => s.telemetry.recentEvents);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showDeployOverlay, setShowDeployOverlay] = useState(true);
 
   const rows = useMemo(() => {
     return services.map((svc) => {
       const samples = history[svc.serviceId] ?? [];
-      const data = samples.map((s, i) => ({
-        i,
+      const data = samples.map((s) => ({
         ts: new Date(s.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         latency: s.latencyMs ?? 0,
         band: s.healthBand,
         status: s.status,
       }));
       const incidents = samples
-        .filter((s) => s.status === 'down' || s.status === 'degraded' || s.healthBand === 'red')
-        .slice(-8)
-        .reverse();
-      // Synthetic deploy markers at 25% and 70% of series for overlay demo
+        .filter((s) => s.status === 'down' || s.status === 'degraded' || s.healthBand === 'red' || s.message)
+        .slice(-12)
+        .reverse()
+        .map((s) => ({
+          ...s,
+          log:
+            s.message ||
+            recentEvents.find((e) => e.source?.includes(svc.serviceId))?.eventType ||
+            `health band ${s.healthBand} · status ${s.status}`,
+        }));
       const deployAt = [Math.floor(data.length * 0.25), Math.floor(data.length * 0.7)].filter(
         (n) => n > 0 && n < data.length
       );
       return { svc, data, incidents, deployAt };
     });
-  }, [services, history]);
+  }, [services, history, recentEvents]);
 
   return (
     <div className="pulse">
       <header className="pulse-toolbar">
         <div>
           <h1>Platform Pulse</h1>
-          <p>ECG-style health history per service from Hub polls (keeps last ~90 samples).</p>
+          <p>
+            ECG health history per service (seeded + live Hub polls). Expand a row for incident logs.
+            Overlay marks approximate deploy windows.
+          </p>
         </div>
         <label className="pulse-toggle">
           <input
@@ -58,13 +68,13 @@ const PlatformPulse: React.FC = () => {
                 <div>
                   <strong>{svc.name ?? svc.serviceId}</strong>
                   <span>
-                    {svc.status} · {svc.latencyMs ?? '—'} ms
+                    {svc.status} · {svc.latencyMs ?? '—'} ms · {data.length} samples
                   </span>
                 </div>
                 <em>{open ? 'Hide incidents' : `${incidents.length} incidents`}</em>
               </button>
               <div className="pulse-chart">
-                <ResponsiveContainer width="100%" height={88}>
+                <ResponsiveContainer width="100%" height={96}>
                   <AreaChart data={data}>
                     <XAxis dataKey="ts" hide />
                     <YAxis hide domain={[0, 'auto']} />
@@ -99,6 +109,7 @@ const PlatformPulse: React.FC = () => {
                     <div key={`${inc.ts}-${i}`} className="pulse-incident">
                       <strong>{inc.status}</strong>
                       <span>{new Date(inc.ts).toLocaleString()}</span>
+                      <code>{inc.log}</code>
                       <code>
                         latency {inc.latencyMs ?? 'n/a'} · band {inc.healthBand}
                       </code>
