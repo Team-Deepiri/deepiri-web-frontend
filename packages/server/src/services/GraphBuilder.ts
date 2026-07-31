@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import registry from '../config/serviceRegistry.json' with { type: 'json' };
+import { classifyKind, communityFromPath } from '@deepiri/shared/utils/repoGraphMeta';
+import { getRegistry } from './RegistryStore.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '../../../../');
@@ -90,36 +91,6 @@ const COMMUNITY_PALETTE = [
 
 function resolveRepoPath(localPath: string): string {
   return path.isAbsolute(localPath) ? localPath : path.resolve(REPO_ROOT, localPath);
-}
-
-function classifyKind(relPath: string): string {
-  const lower = relPath.toLowerCase();
-  if (lower.includes('/pages/') || lower.includes('/page/')) return 'page';
-  if (lower.includes('/components/') || lower.includes('/component/')) return 'component';
-  if (lower.includes('/hooks/')) return 'hook';
-  if (lower.includes('/api/') || lower.includes('/routes/') || lower.includes('/services/'))
-    return 'service';
-  if (lower.includes('/store/') || lower.includes('/context')) return 'state';
-  if (lower.includes('/utils/') || lower.includes('/lib/') || lower.includes('/helpers/'))
-    return 'util';
-  if (lower.includes('/types/') || lower.endsWith('.d.ts')) return 'type';
-  if (lower.includes('/test') || lower.includes('__tests__') || lower.includes('.spec.'))
-    return 'test';
-  if (lower.endsWith('.py')) return 'python';
-  if (lower.endsWith('.go')) return 'go';
-  if (lower.endsWith('.rb')) return 'ruby';
-  return 'module';
-}
-
-function communityFromPath(relPath: string): string {
-  const parts = relPath.split(/[/\\]/).filter(Boolean);
-  if (parts[0] === 'packages' && parts[1]) return `packages/${parts[1]}`;
-  if (parts[0] === 'src' && parts[1]) return `src/${parts[1]}`;
-  if (parts[0] === 'platform-services' && parts[1] && parts[2]) {
-    return `${parts[1]}/${parts[2]}`;
-  }
-  if (parts.length >= 2) return `${parts[0]}/${parts[1]}`;
-  return parts[0] ?? 'root';
 }
 
 function walkFiles(root: string, relBase = ''): string[] {
@@ -273,8 +244,8 @@ function refineCommunities(
 export class GraphBuilder {
   private cache = new Map<string, { graph: RepoGraph; hash: string }>();
 
-  listRepos(): typeof registry.repos {
-    return registry.repos;
+  listRepos() {
+    return getRegistry().repos;
   }
 
   getCached(repoId: string): RepoGraph | null {
@@ -282,12 +253,14 @@ export class GraphBuilder {
   }
 
   build(repoId: string, force = false): RepoGraph {
-    const repo = registry.repos.find((r) => r.id === repoId);
+    const repo = getRegistry().repos.find((r) => r.id === repoId) as
+      | { id: string; name: string; localPath?: string }
+      | undefined;
     if (!repo) {
       throw Object.assign(new Error(`Unknown repo: ${repoId}`), { statusCode: 404 });
     }
 
-    const root = resolveRepoPath(repo.localPath);
+    const root = resolveRepoPath(String(repo.localPath ?? '.'));
     if (!fs.existsSync(root)) {
       throw Object.assign(new Error(`Repo path missing: ${root}`), { statusCode: 404 });
     }

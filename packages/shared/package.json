@@ -7,6 +7,7 @@
     ".": "./types/index.ts",
     "./types": "./types/index.ts",
     "./utils/colorMap": "./utils/colorMap.ts",
-    "./utils/statusThresholds": "./utils/statusThresholds.ts"
+    "./utils/statusThresholds": "./utils/statusThresholds.ts",
+    "./utils/repoGraphMeta": "./utils/repoGraphMeta.ts"
   }
 }

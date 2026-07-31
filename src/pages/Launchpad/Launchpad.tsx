@@ -75,22 +75,13 @@ const Launchpad: React.FC = () => {
     setDetailLoading(true);
     void (async () => {
       try {
-        const [readmeRes, commitsRes] = await Promise.all([
-          fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/README.md`).catch(() => null),
-          fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=5`).catch(() => null),
+        const [readmeText, commits] = await Promise.all([
+          hubClient.getGithubReadme(owner, repo).catch(() => null),
+          hubClient.getGithubCommits(owner, repo, 5).catch(() => null),
         ]);
         if (cancelled) return;
-        if (readmeRes?.ok) {
-          const text = await readmeRes.text();
-          setReadme(text.slice(0, 2500));
-        } else {
-          setReadme(null);
-        }
-        if (commitsRes?.ok) {
-          setCommits((await commitsRes.json()) as GhCommit[]);
-        } else {
-          setCommits([]);
-        }
+        setReadme(readmeText ? readmeText.slice(0, 2500) : null);
+        setCommits(commits ?? []);
       } finally {
         if (!cancelled) setDetailLoading(false);
       }

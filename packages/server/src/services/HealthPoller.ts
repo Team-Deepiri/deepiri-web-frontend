@@ -1,8 +1,15 @@
 import { getHealthBand } from '@deepiri/shared/utils/statusThresholds';
 import type { ServiceHealth, ServiceStatus } from '@deepiri/shared/types';
-import registry from '../config/serviceRegistry.json' with { type: 'json' };
+import { getRegistry } from './RegistryStore.js';
 
-type ServiceDef = (typeof registry.services)[number];
+type ServiceDef = {
+  id: string;
+  name: string;
+  healthPath: string;
+  port: number;
+  category?: string;
+  launchUrl?: string;
+};
 
 const DEFAULT_API_GATEWAY = process.env.API_GATEWAY_URL ?? 'http://localhost:5100';
 
@@ -38,7 +45,8 @@ export class HealthPoller {
   }
 
   private async pollAll(): Promise<void> {
-    await Promise.all(registry.services.map((svc) => this.pollOne(svc)));
+    const services = getRegistry().services as ServiceDef[];
+    await Promise.all(services.map((svc) => this.pollOne(svc)));
     this.onUpdate?.(this.getAll());
   }
 
@@ -68,7 +76,7 @@ export class HealthPoller {
     }
 
     const healthBand =
-      status === 'down' || status === 'unknown'
+      status === 'down' || status === 'unknown' || latencyMs == null
         ? 'red'
         : getHealthBand(latencyMs);
 

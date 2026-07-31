@@ -93,6 +93,19 @@ export const hubClient = {
 
   getRepoGraph: (repoId: string, force = false) =>
     hubFetch<HubRepoGraph>(`/graph/${encodeURIComponent(repoId)}${force ? '?force=1' : ''}`),
+
+  getGithubReadme: async (owner: string, repo: string, ref = 'main') => {
+    const res = await fetch(
+      `${HUB_BASE}/github/readme/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}?ref=${encodeURIComponent(ref)}`
+    );
+    if (!res.ok) throw new Error(`readme ${res.status}`);
+    return res.text();
+  },
+
+  getGithubCommits: (owner: string, repo: string, perPage = 5) =>
+    hubFetch<Array<{ sha: string; commit: { message: string; author?: { name?: string; date?: string } } }>>(
+      `/github/commits/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}?per_page=${perPage}`
+    ),
 };
 
 export function hubWsUrl(): string {
