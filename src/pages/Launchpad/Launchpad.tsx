@@ -126,7 +126,7 @@ const Launchpad: React.FC = () => {
   };
 
   return (
-    <div className="launchpad">
+    <div className="launchpad" data-tour-id="tour-launchpad">
       <header className="launchpad-toolbar">
         <div>
           <h1>Repo Launchpad</h1>

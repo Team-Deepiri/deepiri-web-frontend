@@ -26,11 +26,12 @@ export default function App() {
   const setParticlesEnabled = useSceneStore((s) => s.setParticlesEnabled);
 
   useEffect(() => {
-    const ok = detectWebGL();
+    const mobile = window.matchMedia('(max-width: 768px)').matches;
+    const ok = !mobile && detectWebGL();
     setWebglOk(ok);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setReducedMotion(reduce);
-    if (reduce) setParticlesEnabled(false);
+    setReducedMotion(reduce || mobile);
+    if (reduce || mobile) setParticlesEnabled(false);
   }, [setWebglOk, setReducedMotion, setParticlesEnabled]);
 
   // Keyboard: Tab cycles nodes, Space selects, Escape clears

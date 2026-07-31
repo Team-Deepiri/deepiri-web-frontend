@@ -7,8 +7,10 @@ import { userApi } from '../api/userApi';
 import { adventureApi } from '../api/adventureApi';
 import { externalApi } from '../api/externalApi';
 import InventoryWidget from '../components/InventoryWidget';
+import HubHealthStrip from '../app/HubHealthStrip';
 import toast from 'react-hot-toast';
 import type { AppLocation } from '../types/common';
+import '../app/HubHealthStrip.css';
 
 interface Adventure {
   _id: string;
@@ -147,6 +149,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-vh-100 bg-gray-50">
       <div className="container px-3 py-4">
+        <HubHealthStrip />
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

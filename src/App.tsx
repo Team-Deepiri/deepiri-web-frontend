@@ -66,15 +66,9 @@ const OpsDashboard = lazy(() => import("./pages/OpsDashboard/OpsDashboard"));
 const PlatformPulse = lazy(() => import("./pages/Pulse/PlatformPulse"));
 const SankeyJourney = lazy(() => import("./pages/Sankey/SankeyJourney"));
 const Launchpad = lazy(() => import("./pages/Launchpad/Launchpad"));
-const AIWorkspacePage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.AIWorkspacePage }))
-);
-const TeamOpsPage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.TeamOpsPage }))
-);
-const OnboardingPage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.OnboardingPage }))
-);
+const AIWorkspacePage = lazy(() => import("./pages/AIWorkspace/AIWorkspace"));
+const TeamOpsPage = lazy(() => import("./pages/TeamOps/TeamOps"));
+const OnboardingPage = lazy(() => import("./pages/Onboarding/OnboardingPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {

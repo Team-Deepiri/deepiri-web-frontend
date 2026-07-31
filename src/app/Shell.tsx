@@ -3,11 +3,13 @@ import { Outlet } from 'react-router-dom';
 import PortalSidebar from './PortalSidebar';
 import PortalTopbar from './PortalTopbar';
 import CyrexSidebar from './CyrexSidebar';
+import TourOverlay from '../components/onboarding/TourOverlay';
 import { useHealthStore } from '../store/healthStore';
 import { useEventStore } from '../store/eventStore';
 import { useUiStore } from '../store/uiStore';
 import { useMetricsStore } from '../store/metricsStore';
 import './Shell.css';
+import '../components/onboarding/TourOverlay.css';
 
 /**
  * Phase 3 Portal Shell — 3-column layout:
@@ -61,6 +63,7 @@ const Shell: React.FC = () => {
         </div>
       </div>
       <CyrexSidebar />
+      <TourOverlay />
     </div>
   );
 };

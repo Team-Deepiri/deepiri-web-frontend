@@ -83,10 +83,36 @@ export const useHealthStore = create<HealthState>((set, get) => ({
       });
       useMetricsStore.getState().ingestHealth(services);
     } catch (err) {
-      set({
-        error: err instanceof Error ? err.message : 'health poll failed',
-        loading: false,
-      });
+      // Phase 8: Hub down → fall back to direct api-gateway health when possible
+      try {
+        const gateway = (import.meta.env?.VITE_API_GATEWAY_URL as string) || 'http://localhost:5100';
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(`${gateway.replace(/\/$/, '')}/api/health`, { signal: controller.signal });
+        clearTimeout(t);
+        const ok = res.ok;
+        const sample: HubServiceHealth = {
+          serviceId: 'api-gateway',
+          name: 'API Gateway',
+          status: ok ? 'up' : 'degraded',
+          latencyMs: null,
+          healthBand: ok ? 'green' : 'amber',
+          lastChecked: new Date().toISOString(),
+          message: 'via direct gateway fallback (Hub unreachable)',
+        };
+        set({
+          services: [sample],
+          immersiveStatus: 'unknown',
+          error: err instanceof Error ? err.message : 'health poll failed',
+          loading: false,
+          lastFetched: new Date().toISOString(),
+        });
+      } catch {
+        set({
+          error: err instanceof Error ? err.message : 'health poll failed',
+          loading: false,
+        });
+      }
     }
   },
 

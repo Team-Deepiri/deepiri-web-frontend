@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useHealthStore } from '../store/healthStore';
 import { useUiStore } from '../store/uiStore';
 import ImmersiveButton from './ImmersiveButton';
+import ProgressTracker from '../components/onboarding/ProgressTracker';
 
 function healthDotClass(status: string): string {
   if (status === 'live' || status === 'up') return 'is-green';
@@ -55,6 +56,7 @@ const PortalTopbar: React.FC = () => {
       </div>
 
       <div className="portal-topbar-right">
+        <ProgressTracker />
         <ImmersiveButton />
         <Link to="/notifications" className="portal-icon-btn" aria-label="Notifications">
           <Bell size={16} />

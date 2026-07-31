@@ -477,4 +477,67 @@
   .portal-search input {
     width: 100px;
   }
+
+  .portal-cyrex {
+    /* bottom sheet on small screens */
+    top: auto;
+    bottom: 0;
+    height: min(70vh, 560px);
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+.portal-cyrex-banner {
+  margin: 0 0.75rem 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 0.75rem;
+}
+
+.portal-cyrex-expand {
+  margin: 0.35rem 0.75rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--portal-border);
+  color: #a5b4fc;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.cyrex-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 480px;
+}
+
+.cyrex-chat-status {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--portal-border);
+  font-size: 0.75rem;
+  color: var(--portal-muted);
+}
+
+.cyrex-chat-messages {
+  flex: 1;
+  overflow: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-shell *,
+  .portal-shell *::before,
+  .portal-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
