@@ -16,10 +16,14 @@ type EventState = {
   byProducer: Record<EventProducer, DeepiriEvent[]>;
   paused: boolean;
   connected: boolean;
+  demoRunning: boolean;
   setPaused: (v: boolean) => void;
   push: (event: DeepiriEvent) => void;
   clear: () => void;
   connect: () => () => void;
+  /** Force-push even when paused (detail inspection / demo). */
+  pushForced: (event: DeepiriEvent) => void;
+  startDemoStream: (intervalMs?: number) => () => void;
 };
 
 function emptyBuffers(): Record<EventProducer, DeepiriEvent[]> {
@@ -36,11 +40,16 @@ export const useEventStore = create<EventState>((set, get) => ({
   byProducer: emptyBuffers(),
   paused: false,
   connected: false,
+  demoRunning: false,
 
   setPaused: (v) => set({ paused: v }),
 
   push: (event) => {
     if (get().paused) return;
+    get().pushForced(event);
+  },
+
+  pushForced: (event) => {
     const producer = PRODUCERS.includes(event.producer) ? event.producer : 'realtimeGateway';
     set((s) => {
       const lane = [...s.byProducer[producer], event].slice(-BUFFER_CAP);
@@ -49,6 +58,28 @@ export const useEventStore = create<EventState>((set, get) => ({
   },
 
   clear: () => set({ byProducer: emptyBuffers() }),
+
+  startDemoStream: (intervalMs = 1_200) => {
+    set({ demoRunning: true });
+    const types = ['message', 'task.updated', 'health.tick', 'inference', 'stream.batch'];
+    const id = setInterval(() => {
+      if (get().paused) return;
+      const producer = PRODUCERS[Math.floor(Math.random() * PRODUCERS.length)];
+      const isError = Math.random() < 0.08;
+      get().pushForced({
+        id: `demo-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        producer,
+        type: isError ? 'error' : types[Math.floor(Math.random() * types.length)],
+        timestamp: new Date().toISOString(),
+        error: isError,
+        payload: { demo: true, latencyMs: Math.round(40 + Math.random() * 400) },
+      });
+    }, intervalMs);
+    return () => {
+      clearInterval(id);
+      set({ demoRunning: false });
+    };
+  },
 
   connect: () => {
     let ws: WebSocket | null = null;

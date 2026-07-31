@@ -60,21 +60,12 @@ const LeaseUpload = lazy(() => import('./pages/LanguageIntelligence/LeaseUpload'
 const LeaseDetail = lazy(() => import('./pages/LanguageIntelligence/LeaseDetail'));
 const ChatWidget = lazy(() => import('./components/ChatWidget/ChatWidget'));
 
-const EventRiverPage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.EventRiverPage }))
-);
-const DependenciesPage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.DependenciesPage }))
-);
-const PulsePage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.PulsePage }))
-);
-const SankeyPage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.SankeyPage }))
-);
-const LaunchpadPage = lazy(() =>
-  import("./pages/placeholders/PortalPages").then((m) => ({ default: m.LaunchpadPage }))
-);
+const EventRiver = lazy(() => import("./pages/EventRiver/EventRiver"));
+const DependencyMap = lazy(() => import("./pages/DependencyMap/DependencyMap"));
+const OpsDashboard = lazy(() => import("./pages/OpsDashboard/OpsDashboard"));
+const PlatformPulse = lazy(() => import("./pages/Pulse/PlatformPulse"));
+const SankeyJourney = lazy(() => import("./pages/Sankey/SankeyJourney"));
+const Launchpad = lazy(() => import("./pages/Launchpad/Launchpad"));
 const AIWorkspacePage = lazy(() =>
   import("./pages/placeholders/PortalPages").then((m) => ({ default: m.AIWorkspacePage }))
 );
@@ -151,18 +142,19 @@ const AppContent: React.FC = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/tasks" element={<TaskManagement />} />
               <Route path="/analytics" element={<AnalyticsDashboard />} />
-              <Route path="/ops" element={<OpsHub />} />
+              <Route path="/ops" element={<OpsDashboard />} />
+              <Route path="/ops/hub" element={<OpsHub />} />
               <Route path="/ops/jobs" element={<JobsDashboard />} />
               <Route path="/ops/registry" element={<RegistryDashboard />} />
               <Route path="/ops/truss" element={<TrussDashboard />} />
               <Route path="/ops/telemetry" element={<TelemetryDashboard />} />
               <Route path="/graph" element={<RepoGraph />} />
               <Route path="/repos/:repoId/graph" element={<RepoGraph />} />
-              <Route path="/events-river" element={<EventRiverPage />} />
-              <Route path="/dependencies" element={<DependenciesPage />} />
-              <Route path="/pulse" element={<PulsePage />} />
-              <Route path="/sankey" element={<SankeyPage />} />
-              <Route path="/launchpad" element={<LaunchpadPage />} />
+              <Route path="/events-river" element={<EventRiver />} />
+              <Route path="/dependencies" element={<DependencyMap />} />
+              <Route path="/pulse" element={<PlatformPulse />} />
+              <Route path="/sankey" element={<SankeyJourney />} />
+              <Route path="/launchpad" element={<Launchpad />} />
               <Route path="/ai" element={<AIWorkspacePage />} />
               <Route path="/team" element={<TeamOpsPage />} />
               <Route path="/onboarding" element={<OnboardingPage />} />

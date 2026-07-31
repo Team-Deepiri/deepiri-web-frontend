@@ -1,8 +1,18 @@
 import { create } from 'zustand';
 import { hubClient, type HubServiceHealth } from '../services/hubClient';
 
+export type HealthSample = {
+  ts: string;
+  latencyMs: number | null;
+  status: string;
+  healthBand: string;
+};
+
+const HISTORY_CAP = 90;
+
 type HealthState = {
   services: HubServiceHealth[];
+  history: Record<string, HealthSample[]>;
   immersiveStatus: 'live' | 'down' | 'unknown';
   lastFetched: string | null;
   error: string | null;
@@ -13,6 +23,7 @@ type HealthState = {
 
 export const useHealthStore = create<HealthState>((set, get) => ({
   services: [],
+  history: {},
   immersiveStatus: 'unknown',
   lastFetched: null,
   error: null,
@@ -22,10 +33,24 @@ export const useHealthStore = create<HealthState>((set, get) => ({
     set({ loading: true });
     try {
       const data = await hubClient.getHealthAll();
+      const services = data.services ?? [];
+      const ts = new Date().toISOString();
+      const history = { ...get().history };
+      for (const svc of services) {
+        const sample: HealthSample = {
+          ts,
+          latencyMs: svc.latencyMs,
+          status: svc.status,
+          healthBand: svc.healthBand,
+        };
+        const prev = history[svc.serviceId] ?? [];
+        history[svc.serviceId] = [...prev, sample].slice(-HISTORY_CAP);
+      }
       set({
-        services: data.services ?? [],
+        services,
+        history,
         immersiveStatus: (data.immersive?.status as 'live' | 'down') ?? 'down',
-        lastFetched: new Date().toISOString(),
+        lastFetched: ts,
         error: null,
         loading: false,
       });

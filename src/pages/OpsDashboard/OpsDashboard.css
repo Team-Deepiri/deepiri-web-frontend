@@ -1,0 +1,133 @@
+.ops-dash {
+  color: #e6edf3;
+}
+
+.ops-dash-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.ops-dash-toolbar h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.ops-dash-toolbar p {
+  margin: 0.25rem 0 0;
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+
+.ops-dash-controls {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ops-dash-controls button,
+.ops-dash-link {
+  background: #161b22;
+  border: 1px solid #21262d;
+  color: #e6edf3;
+  border-radius: 8px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ops-dash-controls button.is-on {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.18);
+}
+
+.ops-dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 0.85rem;
+}
+
+.ops-dash-panel {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 0.85rem;
+}
+
+.ops-dash-span {
+  grid-column: 1 / -1;
+}
+
+.ops-dash-wide {
+  grid-column: 1 / -1;
+}
+
+.ops-dash-panel h2 {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+}
+
+.ops-dash-chart {
+  width: 100%;
+  min-height: 220px;
+}
+
+.ops-dash-services {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 280px;
+  overflow: auto;
+}
+
+.ops-dash-services button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #161b22;
+  border: 1px solid #21262d;
+  color: #e6edf3;
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.ops-dash-services button.is-on {
+  border-color: #6366f1;
+}
+
+.ops-dash-status {
+  font-style: normal;
+  font-size: 0.72rem;
+  color: #8b949e;
+}
+
+.ops-dash-status.is-green {
+  color: #22c55e;
+}
+.ops-dash-status.is-amber {
+  color: #f59e0b;
+}
+.ops-dash-status.is-red {
+  color: #ef4444;
+}
+
+.ops-dash-muted {
+  color: #8b949e;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .ops-dash-grid {
+    grid-template-columns: 1fr;
+  }
+}

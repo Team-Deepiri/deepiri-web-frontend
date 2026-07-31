@@ -1,0 +1,203 @@
+.launchpad {
+  color: #e6edf3;
+}
+
+.launchpad-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.launchpad-toolbar h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.launchpad-toolbar p {
+  margin: 0.25rem 0 0;
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+
+.launchpad-controls {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.launchpad-controls input,
+.launchpad-controls select,
+.launchpad-controls button,
+.launchpad-actions a,
+.launchpad-actions button,
+.launchpad-modal-actions a,
+.launchpad-modal-actions button,
+.launchpad-toggle button {
+  background: #161b22;
+  border: 1px solid #21262d;
+  color: #e6edf3;
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.launchpad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.launchpad-card {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.launchpad-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.launchpad-card h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.launchpad-card p {
+  margin: 0;
+  color: #8b949e;
+  font-size: 0.82rem;
+  min-height: 2.4em;
+}
+
+.launchpad-cat {
+  font-size: 0.7rem;
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+}
+
+.launchpad-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.launchpad-tags span {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  border: 1px solid #21262d;
+  border-radius: 999px;
+  padding: 0.1rem 0.4rem;
+}
+
+.launchpad-docker {
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+
+.launchpad-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+}
+
+.launchpad-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 80;
+  padding: 1rem;
+}
+
+.launchpad-modal-card {
+  width: min(480px, 100%);
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.launchpad-toggle {
+  display: inline-flex;
+  gap: 0.3rem;
+  margin: 0.55rem 0;
+}
+
+.launchpad-toggle button.is-on {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.18);
+}
+
+.launchpad-clone-url {
+  display: block;
+  background: #161b22;
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-size: 0.78rem;
+  word-break: break-all;
+}
+
+.launchpad-modal-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.launchpad-detail {
+  position: fixed;
+  right: 1rem;
+  top: 4.5rem;
+  width: min(320px, 92vw);
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 0.85rem;
+  z-index: 70;
+}
+
+.launchpad-detail dl {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.launchpad-detail dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.launchpad-detail dt {
+  color: #8b949e;
+}
+
+.launchpad-detail dd {
+  margin: 0;
+  word-break: break-all;
+  text-align: right;
+}
+
+.launchpad-muted,
+.launchpad-error {
+  color: #8b949e;
+}
+
+.launchpad-error {
+  color: #f87171;
+}
