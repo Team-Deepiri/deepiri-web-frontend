@@ -6,12 +6,16 @@ interface ProtectedRouteProps {
   children: ReactNode;
 }
 
+/** @deprecated Prefer `src/app/AuthGuard` for Phase 3 portal routes. */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
+  if (loading) {
+    return <div className="portal-auth-loading">Restoring session…</div>;
+  }
+
   if (!isAuthenticated) {
-    // Redirect to login page with return url
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -19,4 +23,3 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 };
 
 export default ProtectedRoute;
-
