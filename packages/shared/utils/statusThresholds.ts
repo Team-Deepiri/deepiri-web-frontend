@@ -1,4 +1,4 @@
-import type { HealthBand } from '../types/index.js';
+import type { HealthBand } from '../types/index';
 
 export const LATENCY_THRESHOLDS_MS = {
   green: 200,

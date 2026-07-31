@@ -24,6 +24,7 @@ const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
   /*{ label: "Challenges", to: "/challenges", icon: "🎮" },*/
   { label: "Analytics", to: "/analytics", icon: "📊" },
   { label: "Ops Hub", to: "/ops", icon: "🛠️" },
+  { label: "Repo Graph", to: "/graph", icon: "🕸️" },
   { label: "Profile", to: "/profile", icon: "👤" },
   { label: "Notifications", to: "/notifications", icon: "🔔" },
   { label: "AI Assistant", to: "/agent", icon: "🤖" },

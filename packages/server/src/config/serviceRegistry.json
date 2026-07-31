@@ -1,0 +1,59 @@
+{
+  "repos": [
+    {
+      "id": "deepiri-web-frontend",
+      "name": "deepiri-web-frontend",
+      "description": "Client Hub — portal, immersive, hub server",
+      "category": "frontend",
+      "tags": ["portal", "react", "vite"],
+      "localPath": ".",
+      "httpsUrl": "https://github.com/Team-Deepiri/deepiri-web-frontend"
+    },
+    {
+      "id": "deepiri-platform",
+      "name": "deepiri-platform",
+      "description": "Platform monorepo — compose, gateways, shared services",
+      "category": "platform",
+      "tags": ["compose", "gateway"],
+      "localPath": "..",
+      "httpsUrl": "https://github.com/Team-Deepiri/deepiri-platform"
+    },
+    {
+      "id": "deepiri-vizult",
+      "name": "deepiri-vizult",
+      "description": "Local-first architecture graph scanner",
+      "category": "tooling",
+      "tags": ["graph", "ruby"],
+      "localPath": "../../deepiri-vizult",
+      "httpsUrl": "https://github.com/Team-Deepiri/deepiri-vizult"
+    },
+    {
+      "id": "diri-cyrex",
+      "name": "diri-cyrex",
+      "description": "Cyrex AGI plane",
+      "category": "ai",
+      "tags": ["cyrex", "agi"],
+      "localPath": "../diri-cyrex",
+      "httpsUrl": "https://github.com/Team-Deepiri/diri-cyrex"
+    },
+    {
+      "id": "deepiri-core-api",
+      "name": "deepiri-core-api",
+      "description": "Core API",
+      "category": "platform",
+      "tags": ["api"],
+      "localPath": "../deepiri-core-api",
+      "httpsUrl": "https://github.com/Team-Deepiri/deepiri-core-api"
+    }
+  ],
+  "services": [
+    { "id": "api-gateway", "name": "API Gateway", "healthPath": "/api/health", "port": 5100, "category": "platform" },
+    { "id": "auth-service", "name": "Auth Service", "healthPath": "/api/auth/health", "port": 5001, "category": "platform" },
+    { "id": "realtime-gateway", "name": "Realtime Gateway", "healthPath": "/health", "port": 5008, "category": "comms" },
+    { "id": "registry", "name": "Registry", "healthPath": "/health", "port": 5010, "category": "platform" },
+    { "id": "jobs", "name": "Jobs", "healthPath": "/health", "port": 5007, "category": "platform" },
+    { "id": "truss", "name": "Truss", "healthPath": "/health", "port": 5002, "category": "platform" },
+    { "id": "telemetry", "name": "Telemetry", "healthPath": "/health", "port": 5011, "category": "platform" },
+    { "id": "cyrex", "name": "Cyrex", "healthPath": "/health", "port": 8000, "category": "ai" }
+  ]
+}

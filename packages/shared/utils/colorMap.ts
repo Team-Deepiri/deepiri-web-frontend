@@ -1,4 +1,4 @@
-import type { EventProducer } from '../types/index.js';
+import type { EventProducer } from '../types/index';
 
 export const colorMap: Record<EventProducer, string> = {
   synapse: '#06B6D4',                       //Teal

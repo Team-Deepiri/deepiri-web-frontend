@@ -1,0 +1,333 @@
+.repo-graph {
+  --rg-bg: #05080f;
+  --rg-panel: #0b1220;
+  --rg-border: #1e293b;
+  --rg-text: #e2e8f0;
+  --rg-muted: #94a3b8;
+  --rg-accent: #38bdf8;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+  min-height: 520px;
+  background: var(--rg-bg);
+  color: var(--rg-text);
+  overflow: hidden;
+}
+
+.repo-graph--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  height: 100vh;
+}
+
+.repo-graph-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--rg-border);
+  background: rgba(11, 18, 32, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.repo-graph-top-left,
+.repo-graph-top-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.repo-graph-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--rg-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.repo-graph-back:hover {
+  color: var(--rg-text);
+}
+
+.repo-graph-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.repo-graph-select,
+.repo-graph-search input,
+.repo-graph-btn {
+  background: #111827;
+  border: 1px solid var(--rg-border);
+  color: var(--rg-text);
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.repo-graph-search {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #111827;
+  border: 1px solid var(--rg-border);
+  border-radius: 8px;
+  padding: 0.25rem 0.55rem;
+  color: var(--rg-muted);
+}
+
+.repo-graph-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  min-width: 160px;
+  padding: 0.2rem 0;
+}
+
+.repo-graph-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.repo-graph-btn:hover:not(:disabled) {
+  border-color: var(--rg-accent);
+}
+
+.repo-graph-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.repo-graph-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr auto;
+  min-height: 0;
+}
+
+.repo-graph-sidebar,
+.repo-graph-detail {
+  background: var(--rg-panel);
+  border-right: 1px solid var(--rg-border);
+  overflow: auto;
+  padding: 0.85rem 0.9rem;
+}
+
+.repo-graph-detail {
+  border-right: none;
+  border-left: 1px solid var(--rg-border);
+  width: min(320px, 40vw);
+}
+
+.repo-graph-sidebar-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--rg-muted);
+}
+
+.repo-graph-meta {
+  letter-spacing: 0;
+  font-weight: 500;
+  text-transform: none;
+  font-size: 0.75rem;
+}
+
+.repo-graph-communities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.repo-graph-community {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.repo-graph-community:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.repo-graph-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.repo-graph-community-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo-graph-count {
+  color: var(--rg-muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+}
+
+.repo-graph-canvas-wrap {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  background: #05080f;
+}
+
+.repo-graph-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+}
+
+.repo-graph-canvas:active {
+  cursor: grabbing;
+}
+
+.repo-graph-tooltip {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.65rem 0.8rem;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid var(--rg-border);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  color: var(--rg-muted);
+  max-width: min(420px, 80%);
+  pointer-events: none;
+}
+
+.repo-graph-tooltip strong {
+  color: var(--rg-text);
+}
+
+.repo-graph-detail h2 {
+  margin: 0.25rem 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.repo-graph-detail h3 {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--rg-muted);
+}
+
+.repo-graph-path {
+  color: var(--rg-muted);
+  font-size: 0.78rem;
+  word-break: break-all;
+}
+
+.repo-graph-detail dl {
+  margin: 0.75rem 0 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.repo-graph-detail dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.repo-graph-detail dt {
+  color: var(--rg-muted);
+}
+
+.repo-graph-detail dd {
+  margin: 0;
+}
+
+.repo-graph-detail-close {
+  float: right;
+  background: transparent;
+  border: 1px solid var(--rg-border);
+  color: var(--rg-muted);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.repo-graph-neighbors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.repo-graph-neighbors button {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--rg-accent);
+  padding: 0.3rem 0;
+  cursor: pointer;
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.repo-graph-neighbors button:hover {
+  text-decoration: underline;
+}
+
+.repo-graph-muted,
+.repo-graph-error {
+  font-size: 0.82rem;
+  color: var(--rg-muted);
+}
+
+.repo-graph-error {
+  color: #f87171;
+}
+
+@media (max-width: 900px) {
+  .repo-graph-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .repo-graph-sidebar,
+  .repo-graph-detail {
+    border-right: none;
+    border-bottom: 1px solid var(--rg-border);
+    width: auto;
+    max-height: 28vh;
+  }
+
+  .repo-graph-detail {
+    border-left: none;
+    border-top: 1px solid var(--rg-border);
+  }
+}

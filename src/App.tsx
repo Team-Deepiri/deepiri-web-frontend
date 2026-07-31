@@ -39,6 +39,7 @@ import JobsDashboard from "./pages/Ops/JobsDashboard";
 import RegistryDashboard from "./pages/Ops/RegistryDashboard";
 import TelemetryDashboard from "./pages/Ops/TelemetryDashboard";
 import TrussDashboard from "./pages/Ops/TrussDashboard";
+import RepoGraph from "./pages/RepoGraph/RepoGraph";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
 import GroupChats from "./pages/GroupChats";
@@ -256,6 +257,22 @@ const AppContent: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <TelemetryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/graph"
+                element={
+                  <ProtectedRoute>
+                    <RepoGraph />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/repos/:repoId/graph"
+                element={
+                  <ProtectedRoute>
+                    <RepoGraph />
                   </ProtectedRoute>
                 }
               />

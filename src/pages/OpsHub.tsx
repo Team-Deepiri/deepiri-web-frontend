@@ -23,6 +23,8 @@ const OPS_ENDPOINTS: Array<{ name: string; path: string; link?: string }> = [
   { name: 'Telemetry', path: '/telemetry/health', link: '/ops/telemetry' },
 ];
 
+const HUB_LINKS = [{ name: 'Repo Graph', path: 'Hub /graph/:repo', link: '/graph' }] as const;
+
 async function checkServices(): Promise<ServiceCard[]> {
   return Promise.all(
     OPS_ENDPOINTS.map(async (ep) => {
@@ -56,7 +58,7 @@ const OpsHub: React.FC = () => {
           <RefreshCw size={14} /> Refresh
         </button>
       </div>
-      <p className="ops-hub-subtitle">Registry, jobs, truss, and telemetry at a glance.</p>
+      <p className="ops-hub-subtitle">Registry, jobs, truss, telemetry, and repo graphs.</p>
       {loading ? (
         <p className="ops-hub-subtitle">Checking services…</p>
       ) : (
@@ -81,6 +83,17 @@ const OpsHub: React.FC = () => {
               <div key={s.name}>{card}</div>
             );
           })}
+          {HUB_LINKS.map((item) => (
+            <Link key={item.name} to={item.link} className="ops-card-link">
+              <div className="ops-card">
+                <div className="ops-card-header">
+                  <span className="ops-card-name">{item.name}</span>
+                  <span className="ops-card-status-ok">open</span>
+                </div>
+                <code className="ops-card-path">{item.path}</code>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>
