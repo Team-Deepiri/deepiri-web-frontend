@@ -7,8 +7,15 @@ import { buildCyrexContext, probeCyrex, streamCyrexChat } from '../../services/c
 
 type Msg = { role: 'user' | 'assistant'; text: string };
 
+type CyrexChatProps = {
+  dense?: boolean;
+  /** Fills the composer when AI Workspace starters fire (does not auto-send). */
+  draftPrompt?: string | null;
+  onDraftConsumed?: () => void;
+};
+
 /** Full-height Cyrex chat used by AI Workspace (and reusable elsewhere). */
-const CyrexChat: React.FC<{ dense?: boolean }> = ({ dense }) => {
+const CyrexChat: React.FC<CyrexChatProps> = ({ dense, draftPrompt, onDraftConsumed }) => {
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [available, setAvailable] = useState<boolean | null>(null);
@@ -29,6 +36,15 @@ const CyrexChat: React.FC<{ dense?: boolean }> = ({ dense }) => {
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
+
+  useEffect(() => {
+    const draft = draftPrompt?.trim();
+    if (!draft) return;
+    queueMicrotask(() => {
+      setInput(draft);
+      onDraftConsumed?.();
+    });
+  }, [draftPrompt, onDraftConsumed]);
 
   const send = async (text: string) => {
     const q = text.trim();
@@ -60,9 +76,10 @@ const CyrexChat: React.FC<{ dense?: boolean }> = ({ dense }) => {
         const copy = [...m];
         copy[copy.length - 1] = {
           role: 'assistant',
-          text: available === false
-            ? 'diri-cyrex is offline. Start it on :8000 or use the sidebar local fallback.'
-            : 'Cyrex request failed.',
+          text:
+            available === false
+              ? 'diri-cyrex is offline. Start it on :8000 or use the sidebar local fallback.'
+              : 'Cyrex request failed.',
         };
         return copy;
       });
@@ -75,6 +92,7 @@ const CyrexChat: React.FC<{ dense?: boolean }> = ({ dense }) => {
     <div className={`cyrex-chat ${dense ? 'is-dense' : ''}`}>
       <div className="cyrex-chat-status">
         {available === false ? 'Cyrex offline' : available ? 'Cyrex live' : 'Checking Cyrex…'}
+        {selectedNode ? ` · focus ${selectedNode}` : ''}
       </div>
       <div className="cyrex-chat-messages" ref={listRef}>
         {messages.map((m, i) => (

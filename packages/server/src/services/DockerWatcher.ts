@@ -2,7 +2,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getRegistry } from './RegistryStore.js';
+import { getSeedRegistry } from './RegistryStore.js';
 
 const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,7 +54,7 @@ export class DockerWatcher {
   }
 
   private async pollAll(): Promise<void> {
-    const repos = getRegistry().repos as Array<{ id: string; localPath?: string }>;
+    const repos = getSeedRegistry().repos as Array<{ id: string; localPath?: string }>;
     await Promise.all(repos.map((repo) => this.pollRepo(repo.id, String(repo.localPath ?? '.'))));
   }
 

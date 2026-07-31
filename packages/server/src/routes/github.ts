@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import { getRegistry, persistRegistry } from '../services/RegistryStore.js';
+import { noteDiscoveredRepo } from '../services/RegistryStore.js';
 
 type GhWebhookBody = {
   repository?: {
@@ -14,34 +14,33 @@ type GhWebhookBody = {
 };
 
 export async function registerGithubRoutes(app: FastifyInstance): Promise<void> {
+  /**
+   * GitHub webhook — does not write local JSON.
+   * deepiri-registry seeds the org catalog from GitHub; Hub only acknowledges.
+   */
   app.post<{ Body: GhWebhookBody }>('/webhook/github', async (req) => {
     const repo = req.body?.repository;
     if (!repo?.name) {
       return { ok: false, reason: 'no repository in payload' };
     }
 
-    const registry = getRegistry();
-    const id = repo.name;
-    const existing = registry.repos.find((r) => r.id === id);
-    if (existing) {
-      return { ok: true, action: 'exists', repo: existing };
-    }
-
-    const entry = {
-      id,
+    const result = await noteDiscoveredRepo({
       name: repo.name,
-      description: repo.description ?? undefined,
-      category: 'discovered',
-      tags: ['github-webhook'],
-      localPath: `../${repo.name}`,
+      description: repo.description,
       httpsUrl: repo.html_url ?? repo.clone_url,
       sshUrl: repo.ssh_url,
+    });
+
+    return {
+      ok: true,
+      action: result.action,
+      repo: result.repo,
+      persisted: false,
+      note:
+        result.action === 'exists'
+          ? 'Already in deepiri-registry catalog'
+          : 'Catalog is owned by deepiri-registry (GitHub org seed); Hub does not persist webhook repos locally',
     };
-
-    registry.repos.push(entry);
-    const persisted = persistRegistry();
-
-    return { ok: true, action: 'created', repo: entry, persisted };
   });
 
   /** Proxy GitHub README (avoids browser rate-limit / CORS). */

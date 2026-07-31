@@ -1,6 +1,6 @@
 import { getHealthBand } from '@deepiri/shared/utils/statusThresholds';
 import type { ServiceHealth, ServiceStatus } from '@deepiri/shared/types';
-import { getRegistry } from './RegistryStore.js';
+import { getSeedRegistry } from './RegistryStore.js';
 
 type ServiceDef = {
   id: string;
@@ -45,14 +45,14 @@ export class HealthPoller {
   }
 
   private async pollAll(): Promise<void> {
-    const services = getRegistry().services as ServiceDef[];
+    const services = getSeedRegistry().services as ServiceDef[];
     await Promise.all(services.map((svc) => this.pollOne(svc)));
     this.onUpdate?.(this.getAll());
   }
 
   private async pollOne(svc: ServiceDef): Promise<void> {
     const started = Date.now();
-    let status: ServiceStatus;
+    let status: ServiceStatus = 'unknown';
     let latencyMs: number | null = null;
     let message: string | undefined;
 
@@ -76,7 +76,7 @@ export class HealthPoller {
     }
 
     const healthBand =
-      status === 'down' || status === 'unknown' || latencyMs == null
+      status === 'down' || status === 'unknown' || latencyMs === null
         ? 'red'
         : getHealthBand(latencyMs);
 

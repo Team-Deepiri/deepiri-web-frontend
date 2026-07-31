@@ -85,7 +85,17 @@ export const hubClient = {
   getImmersiveStatus: () =>
     hubFetch<{ status: 'live' | 'down'; lastChecked: string | null }>('/health/immersive'),
 
-  getRegistry: () => hubFetch<{ repos: HubRepo[]; services: unknown[] }>('/registry'),
+  getRegistry: () =>
+    hubFetch<{
+      repos: HubRepo[];
+      services: unknown[];
+      source?: string;
+      registryReachable?: boolean;
+    }>('/registry'),
+
+  getRegistryTools: () => hubFetch<{ tools: unknown[] }>('/registry/tools'),
+
+  getRegistryEcosystem: () => hubFetch<unknown>('/registry/ecosystem'),
 
   getDockerStatus: () => hubFetch<{ repos: unknown[] }>('/docker/status'),
 

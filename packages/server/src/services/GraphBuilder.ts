@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { classifyKind, communityFromPath } from '@deepiri/shared/utils/repoGraphMeta';
-import { getRegistry } from './RegistryStore.js';
+import { getSeedRegistry } from './RegistryStore.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '../../../../');
@@ -245,7 +245,7 @@ export class GraphBuilder {
   private cache = new Map<string, { graph: RepoGraph; hash: string }>();
 
   listRepos() {
-    return getRegistry().repos;
+    return getSeedRegistry().repos;
   }
 
   getCached(repoId: string): RepoGraph | null {
@@ -253,7 +253,7 @@ export class GraphBuilder {
   }
 
   build(repoId: string, force = false): RepoGraph {
-    const repo = getRegistry().repos.find((r) => r.id === repoId) as
+    const repo = getSeedRegistry().repos.find((r) => r.id === repoId) as
       | { id: string; name: string; localPath?: string }
       | undefined;
     if (!repo) {
