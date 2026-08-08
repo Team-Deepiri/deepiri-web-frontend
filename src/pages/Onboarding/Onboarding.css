@@ -1,0 +1,60 @@
+.onboarding-page h1 {
+  margin: 0 0 0.35rem;
+}
+
+.onboarding-lead {
+  color: var(--portal-muted);
+  max-width: 52rem;
+  margin: 0 0 1rem;
+}
+
+.onboarding-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.onboarding-actions button,
+.onboarding-actions a {
+  border: 1px solid var(--portal-border);
+  background: var(--portal-card);
+  color: var(--portal-text);
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  text-decoration: none;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.onboarding-primary {
+  background: var(--portal-primary) !important;
+  border-color: var(--portal-primary) !important;
+}
+
+.onboarding-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.onboarding-steps li {
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-border);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.onboarding-steps li.is-done {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.onboarding-steps span {
+  color: var(--portal-muted);
+  font-size: 0.85rem;
+}
