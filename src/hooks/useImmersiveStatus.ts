@@ -1,47 +1,14 @@
-import { useEffect, useState } from 'react';
-import { hubClient } from '../services/hubClient';
-import { useUiStore } from '../store/uiStore';
-
-export type ImmersiveLiveState = {
-  live: boolean;
-  loading: boolean;
-  lastChecked: string | null;
-};
+import { useEffect } from "react";
+import { useUIStore } from "@/store/uiStore";
 
 /**
- * Polls Hub Server GET /health/immersive every 30s and mirrors into uiStore.immersiveLive
- * (Enter 3D button gate — Phase 3).
+ * Immersive is a route in this same app (/immersive), so it is always "live".
+ * Replaces hub-server ImmersiveChecker pinging a separate :5174 container.
  */
-export function useImmersiveStatus(intervalMs = 30_000): ImmersiveLiveState {
-  const setImmersiveLive = useUiStore((s) => s.setImmersiveLive);
-  const live = useUiStore((s) => s.immersiveLive);
-  const [loading, setLoading] = useState(true);
-  const [lastChecked, setLastChecked] = useState<string | null>(null);
+export function useImmersiveStatus() {
+  const setImmersiveLive = useUIStore((s) => s.setImmersiveLive);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const tick = async () => {
-      try {
-        const res = await hubClient.getImmersiveStatus();
-        if (cancelled) return;
-        setImmersiveLive(res.status === 'live');
-        setLastChecked(res.lastChecked);
-      } catch {
-        if (cancelled) return;
-        setImmersiveLive(false);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-
-    void tick();
-    const id = setInterval(() => void tick(), intervalMs);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, [intervalMs, setImmersiveLive]);
-
-  return { live, loading, lastChecked };
+    setImmersiveLive(true);
+  }, [setImmersiveLive]);
 }

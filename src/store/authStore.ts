@@ -1,41 +1,34 @@
-import { create } from 'zustand';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-type AuthUser = {
-  _id: string;
+interface User {
+  id: string;
   name: string;
   email: string;
-  [key: string]: unknown;
-};
-
-type AuthState = {
-  user: AuthUser | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  setSession: (user: AuthUser | null, token: string | null) => void;
-  clearSession: () => void;
-};
-
-function normalizeToken(t: string | null | undefined): string | null {
-  if (!t || t === 'null' || t === 'undefined') return null;
-  return t;
+  role?: string; // auth-service login response doesn't currently return this
+  avatar?: string;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: normalizeToken(localStorage.getItem('token')),
-  isAuthenticated: Boolean(normalizeToken(localStorage.getItem('token'))),
-  setSession: (user, token) => {
-    const normalized = normalizeToken(token);
-    if (normalized) localStorage.setItem('token', normalized);
-    else localStorage.removeItem('token');
-    if (user) localStorage.setItem('user', JSON.stringify(user));
-    else localStorage.removeItem('user');
-    set({ user, token: normalized, isAuthenticated: Boolean(normalized) });
-  },
-  clearSession: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('refreshToken');
-    set({ user: null, token: null, isAuthenticated: false });
-  },
-}));
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  setAuth: (user: User, token: string) => void;
+  logout: () => void;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      setAuth: (user, token) => set({ user, token, isAuthenticated: true }),
+      logout: () => set({ user: null, token: null, isAuthenticated: false }),
+    }),
+    {
+      name: "deepiri-auth",
+      partialize: (state) => ({ user: state.user, token: state.token, isAuthenticated: state.isAuthenticated }),
+    }
+  )
+);

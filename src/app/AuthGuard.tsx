@@ -1,29 +1,36 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useSyncExternalStore } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuthStore } from "@/store/authStore";
 
-type AuthGuardProps = {
-  children: React.ReactNode;
-};
+function useAuthHydrated() {
+  return useSyncExternalStore(
+    (onStoreChange) => useAuthStore.persist.onFinishHydration(onStoreChange),
+    () => useAuthStore.persist.hasHydrated(),
+    () => false
+  );
+}
 
-/** Phase 3 AuthGuard — wraps protected portal routes. */
-const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
-  const location = useLocation();
+export function AuthGuard({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const hydrated = useAuthHydrated();
 
-  if (loading) {
+  if (!hydrated) {
     return (
-      <div className="portal-auth-loading" role="status">
-        Restoring session…
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          color: "var(--dim)",
+          fontSize: 13,
+        }}
+      >
+        Loading authentication…
       </div>
     );
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
-};
-
-export default AuthGuard;
+}

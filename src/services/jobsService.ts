@@ -1,6 +1,6 @@
-import axiosInstance from '../api/axiosInstance';
+import { apiClient } from "./platformClient";
 
-export type JobStatus = 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+export type JobStatus = "queued" | "running" | "completed" | "failed" | "cancelled";
 
 export interface JobRecord {
   id: string;
@@ -27,31 +27,31 @@ export interface JobFilters {
 }
 
 export async function listJobs(filters: JobFilters = {}): Promise<JobRecord[]> {
-  const res = await axiosInstance.get<{ jobs: JobRecord[] }>('/jobs', { params: filters });
+  const res = await apiClient.get<{ jobs: JobRecord[] }>("/api/jobs", { params: filters });
   return res.data.jobs;
 }
 
 export async function getJob(id: string): Promise<JobRecord> {
-  const res = await axiosInstance.get<JobRecord>(`/jobs/${id}`);
+  const res = await apiClient.get<JobRecord>(`/api/jobs/${id}`);
   return res.data;
 }
 
 export async function getJobLogs(id: string): Promise<JobLogLine[]> {
-  const res = await axiosInstance.get<{ logs: JobLogLine[] }>(`/jobs/${id}/logs`);
+  const res = await apiClient.get<{ logs: JobLogLine[] }>(`/api/jobs/${id}/logs`);
   return res.data.logs;
 }
 
 export async function cancelJob(id: string): Promise<JobRecord> {
-  const res = await axiosInstance.post<JobRecord>(`/jobs/${id}/cancel`);
+  const res = await apiClient.post<JobRecord>(`/api/jobs/${id}/cancel`);
   return res.data;
 }
 
 export async function retryJob(id: string): Promise<JobRecord> {
-  const res = await axiosInstance.post<JobRecord>(`/jobs/${id}/retry`);
+  const res = await apiClient.post<JobRecord>(`/api/jobs/${id}/retry`);
   return res.data;
 }
 
 export async function getQueueStats(): Promise<Record<string, number>> {
-  const res = await axiosInstance.get<{ stats: Record<string, number> }>('/queues/stats');
+  const res = await apiClient.get<{ stats: Record<string, number> }>("/api/queues/stats");
   return res.data.stats;
 }

@@ -1,7 +1,7 @@
-import axiosInstance from '../api/axiosInstance';
+import { apiClient } from "./platformClient";
 
 export interface EcosystemHealth {
-  status: 'ok' | 'degraded';
+  status: "ok" | "degraded";
   registry?: {
     repos: Array<{ id: string; name: string; status: string; lastChecked: string | null }>;
     services: Array<{ name: string; status: string; lastSeen: string | null }>;
@@ -10,7 +10,7 @@ export interface EcosystemHealth {
 }
 
 export interface JobMetrics {
-  status: 'ok' | 'degraded';
+  status: "ok" | "degraded";
   stats?: Record<string, number>;
   error?: string;
 }
@@ -23,17 +23,17 @@ export interface TelemetryEvent {
 }
 
 export async function getEcosystemHealth(): Promise<EcosystemHealth> {
-  const res = await axiosInstance.get<EcosystemHealth>('/telemetry/health/ecosystem');
+  const res = await apiClient.get<EcosystemHealth>("/api/telemetry/health/ecosystem");
   return res.data;
 }
 
 export async function getJobMetrics(): Promise<JobMetrics> {
-  const res = await axiosInstance.get<JobMetrics>('/telemetry/metrics/jobs');
+  const res = await apiClient.get<JobMetrics>("/api/telemetry/metrics/jobs");
   return res.data;
 }
 
 export async function getRecentEvents(limit = 50): Promise<TelemetryEvent[]> {
-  const res = await axiosInstance.get<{ events: TelemetryEvent[] }>('/telemetry/events/recent', {
+  const res = await apiClient.get<{ events: TelemetryEvent[] }>("/api/telemetry/events/recent", {
     params: { limit },
   });
   return res.data.events;

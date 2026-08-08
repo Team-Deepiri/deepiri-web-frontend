@@ -1,71 +1,11 @@
-import React, { Suspense, lazy, useState } from 'react';
-import { Link } from 'react-router-dom';
-import ErrorBoundary from '../../components/ErrorBoundary';
-import './TeamOps.css';
+import { motion } from "framer-motion";
 
-const TaskManagement = lazy(() => import('../TaskManagement'));
-const Notifications = lazy(() => import('../Notifications'));
-const GroupChats = lazy(() => import('../GroupChats'));
-const AnalyticsDashboard = lazy(() => import('../AnalyticsDashboard'));
-
-const TABS = [
-  { id: 'tasks', label: 'Tasks', hint: 'Open work by role' },
-  { id: 'notifications', label: 'Notifications', hint: 'Alerts & mentions' },
-  { id: 'messages', label: 'Messages', hint: 'Group chats' },
-  { id: 'analytics', label: 'Analytics', hint: 'Team metrics' },
-] as const;
-
-type TabId = (typeof TABS)[number]['id'];
-
-const TeamOps: React.FC = () => {
-  const [tab, setTab] = useState<TabId>('tasks');
-
+export default function TeamOps() {
   return (
-    <div className="team-ops" data-tour-id="tour-team-ops">
-      <header className="team-ops-head">
-        <div>
-          <h1>Team Ops</h1>
-          <p>Tasks, notifications, messages, and analytics — migrated into the portal shell.</p>
-        </div>
-        <div className="team-ops-links">
-          <Link to="/tasks">Open classic Tasks</Link>
-          <Link to="/notifications">Notifications</Link>
-          <Link to="/group-chats">Messages</Link>
-          <Link to="/analytics">Analytics</Link>
-        </div>
-      </header>
-
-      <div className="team-ops-tabs" role="tablist" aria-label="Team Ops sections">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            role="tab"
-            aria-selected={tab === t.id}
-            className={tab === t.id ? 'is-active' : ''}
-            onClick={() => setTab(t.id)}
-          >
-            <strong>{t.label}</strong>
-            <span>{t.hint}</span>
-          </button>
-        ))}
-      </div>
-
-      <div
-        className={`team-ops-body ${tab === 'tasks' ? 'is-highlight' : ''}`}
-        data-tour-id="tour-team-tasks"
-      >
-        <ErrorBoundary>
-          <Suspense fallback={<div className="team-ops-loading">Loading {tab}…</div>}>
-            {tab === 'tasks' && <TaskManagement />}
-            {tab === 'notifications' && <Notifications />}
-            {tab === 'messages' && <GroupChats />}
-            {tab === 'analytics' && <AnalyticsDashboard />}
-          </Suspense>
-        </ErrorBoundary>
-      </div>
-    </div>
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+      <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>Coming in Phase 4</div>
+      <h1 style={{ fontFamily: "var(--font-head)", fontSize: 32, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 12 }}>TeamOps</h1>
+      <p style={{ color: "var(--dim)", fontSize: 13 }}>This page is built in Phase 4.</p>
+    </motion.div>
   );
-};
-
-export default TeamOps;
+}

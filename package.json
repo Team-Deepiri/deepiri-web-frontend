@@ -1,7 +1,7 @@
 {
-  "name": "deepiri-client-hub",
+  "name": "deepiri-web-frontend",
   "version": "3.0.0",
-  "description": "Deepiri Frontend - Productivity Gamification Interface",
+  "description": "Deepiri Web Frontend — single app, single container; backends via deepiri-platform services",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -12,10 +12,6 @@
     "dev:fast": "vite --host 0.0.0.0 --port 5173 --force",
     "dev:turbo": "vite --host 0.0.0.0 --port 5173 --force --clearScreen false",
     "dev:debug": "vite --host 0.0.0.0 --port 5173 --debug",
-    "dev:portal": "npm --prefix packages/portal run dev",
-    "dev:immersive": "npm --prefix packages/immersive run dev",
-    "dev:server": "npm --prefix packages/server run dev",
-    "dev:all": "concurrently -n portal,immersive,server -c blue,magenta,green \"npm run dev:portal\" \"npm run dev:immersive\" \"npm run dev:server\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
@@ -29,12 +25,10 @@
     "@influxdata/influxdb-client": "^1.33.2",
     "@react-three/drei": "^9.92.7",
     "@react-three/fiber": "^8.15.19",
-    "@types/d3-sankey": "^0.12.5",
     "axios": "^1.16.0",
     "bootstrap": "^5.3.5",
     "chart.js": "^4.4.1",
     "d3": "^7.8.5",
-    "d3-sankey": "^0.12.3",
     "date-fns": "^2.30.0",
     "firebase": "^11.6.1",
     "framer-motion": "^11.18.2",
@@ -54,9 +48,9 @@
     "react-router-dom": "^7.15.0",
     "recharts": "^2.10.3",
     "socket.io-client": "^4.7.4",
-    "three": "^0.160.0",
     "web-vitals": "^3.5.0",
-    "zustand": "^4.4.7"
+    "zustand": "^4.5.0",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
@@ -68,7 +62,6 @@
     "@types/node": "^20.19.25",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
-    "@types/three": "^0.160.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-react": "^6.0.2",
@@ -84,7 +77,8 @@
     "typescript-eslint": "^8.59.0",
     "vite": "^8.0.16",
     "vite-plugin-react-inspector": "^0.3.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "@types/three": "^0.160.0"
   },
   "browserslist": {
     "production": [
@@ -103,6 +97,12 @@
     "@rollup/rollup-linux-x64-gnu": "^4.53.3"
   },
   "overrides": {
-    "shell-quote": "^1.8.4"
+    "shell-quote": "^1.8.4",
+    "three": "^0.184.0",
+    "zustand": "^4.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

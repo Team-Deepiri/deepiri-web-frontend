@@ -1,71 +1,44 @@
-import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import PortalSidebar from './PortalSidebar';
-import PortalTopbar from './PortalTopbar';
-import CyrexSidebar from './CyrexSidebar';
-import TourOverlay from '../components/onboarding/TourOverlay';
-import { useHealthStore } from '../store/healthStore';
-import { useEventStore } from '../store/eventStore';
-import { useUiStore } from '../store/uiStore';
-import { useMetricsStore } from '../store/metricsStore';
-import './Shell.css';
-import '../components/onboarding/TourOverlay.css';
+import { Outlet } from "react-router-dom";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { Topbar } from "@/components/layout/Topbar";
+import { CyrexSidebar } from "@/components/layout/CyrexSidebar";
+import { useUIStore } from "@/store/uiStore";
+import { useHealthPoll } from "@/hooks/useHealthPoll";
+import { useImmersiveStatus } from "@/hooks/useImmersiveStatus";
+import { useEventStream } from "@/hooks/useEventStream";
 
-/**
- * Phase 3 Portal Shell — 3-column layout:
- * left nav (220px / 60px collapsed) · main · Cyrex sidebar (320px)
- */
-const Shell: React.FC = () => {
-  const startHealth = useHealthStore((s) => s.startPolling);
-  const immersiveStatus = useHealthStore((s) => s.immersiveStatus);
-  const setImmersiveLive = useUiStore((s) => s.setImmersiveLive);
-  const cyrexOpen = useUiStore((s) => s.cyrexOpen);
-  const sidebarCollapsed = useUiStore((s) => s.sidebarCollapsed);
-  const mobileNavOpen = useUiStore((s) => s.mobileNavOpen);
-  const setMobileNavOpen = useUiStore((s) => s.setMobileNavOpen);
-  const connectEvents = useEventStore((s) => s.connect);
+export function Shell() {
+  // Start all background polling + WebSocket on mount
+  useHealthPoll();
+  useImmersiveStatus();
+  useEventStream();
 
-  useEffect(() => startHealth(10_000), [startHealth]);
-  useEffect(() => connectEvents(), [connectEvents]);
-  useEffect(() => {
-    setImmersiveLive(immersiveStatus === 'live');
-  }, [immersiveStatus, setImmersiveLive]);
-
-  // Also poll immersive on the 30s cadence from the doc (health poll is 10s; this keeps uiStore in sync)
-  useEffect(() => {
-    const id = setInterval(() => {
-      setImmersiveLive(useHealthStore.getState().immersiveStatus === 'live');
-    }, 30_000);
-    return () => clearInterval(id);
-  }, [setImmersiveLive]);
-
-  useEffect(() => {
-    return useMetricsStore.getState().startTelemetryPolling(30_000);
-  }, []);
+  const { cyrexOpen } = useUIStore();
 
   return (
-    <div
-      className={`portal-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''} ${cyrexOpen ? 'cyrex-open' : ''}`}
-    >
-      {mobileNavOpen && (
-        <button
-          type="button"
-          className="portal-scrim"
-          aria-label="Close navigation"
-          onClick={() => setMobileNavOpen(false)}
-        />
-      )}
-      <PortalSidebar />
-      <div className="portal-main">
-        <PortalTopbar />
-        <div className="portal-content">
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "var(--bg)" }}>
+      {/* Left Sidebar */}
+      <Sidebar />
+
+      {/* Main area */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
+        {/* Top Bar */}
+        <Topbar />
+
+        {/* Page content */}
+        <main style={{
+          flex: 1,
+          overflow: "auto",
+          padding: "32px",
+          display: "flex",
+          flexDirection: "column",
+        }}>
           <Outlet />
-        </div>
+        </main>
       </div>
-      <CyrexSidebar />
-      <TourOverlay />
+
+      {/* Right — Cyrex AI Sidebar */}
+      {cyrexOpen && <CyrexSidebar />}
     </div>
   );
-};
-
-export default Shell;
+}
