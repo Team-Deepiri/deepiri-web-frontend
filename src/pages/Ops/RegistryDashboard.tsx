@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { listRepos, listTools, getEcosystemHealth } from '../../services/registryService';
+import { OPS_DASHBOARD_STALE_TIME } from '../../constants/query';
+import { statusBadgeClass as opsStatusBadgeClass } from '../../utils/ui';
 import './RegistryDashboard.css';
 
 type Tab = 'repos' | 'tools' | 'ecosystem';
@@ -13,21 +15,10 @@ const TABS: Array<{ key: Tab; label: string }> = [
   { key: 'ecosystem', label: 'Ecosystem Health' },
 ];
 
-// Matches JobsDashboard's cache window so switching tabs / navigating back
-// doesn't re-run every check each time.
-const REGISTRY_STALE_TIME = 30 * 1000;
+const REGISTRY_STALE_TIME = OPS_DASHBOARD_STALE_TIME;
 
 function statusBadgeClass(status: string): string {
-  switch (status) {
-    case 'healthy':
-    case 'ok':
-      return 'registry-status-healthy';
-    case 'unhealthy':
-    case 'down':
-      return 'registry-status-unhealthy';
-    default:
-      return 'registry-status-unknown';
-  }
+  return opsStatusBadgeClass(status, 'registry');
 }
 
 const RegistryDashboard: React.FC = () => {
