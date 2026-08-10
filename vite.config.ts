@@ -1,9 +1,18 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { fileURLToPath } from "url";
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL("./index.html", import.meta.url)),
+        graph: fileURLToPath(new URL("./graph.html", import.meta.url)),
+      },
+    },
+  },
   server: {
     port: 5173,
     host: "0.0.0.0",

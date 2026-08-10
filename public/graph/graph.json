@@ -209,6 +209,24 @@
       "docstrings": []
     },
     {
+      "id": "config/onboardingSteps.ts",
+      "name": "onboardingSteps",
+      "type": "module",
+      "relPath": "config/onboardingSteps.ts",
+      "exports": [
+        "OnboardingStep",
+        "ONBOARDING_STEPS",
+        "OnboardingProgress",
+        "loadOnboardingProgress",
+        "saveOnboardingProgress"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 83,
+      "docstrings": []
+    },
+    {
       "id": "constants/query.ts",
       "name": "query",
       "type": "module",
@@ -223,6 +241,29 @@
       "docstrings": [
         "Shared Ops dashboard react-query cache window (30s)."
       ]
+    },
+    {
+      "id": "graph/main.ts",
+      "name": "main",
+      "type": "module",
+      "relPath": "graph/main.ts",
+      "exports": [],
+      "externalDeps": [
+        "d3-selection",
+        "d3-force",
+        "d3-drag",
+        "d3-zoom"
+      ],
+      "componentsUsed": [
+        "SVGSVGElement",
+        "GraphData",
+        "GraphNode",
+        "SVGLineElement",
+        "SVGCircleElement"
+      ],
+      "hooksUsed": [],
+      "lines": 320,
+      "docstrings": []
     },
     {
       "id": "hooks/useEventStream.ts",
@@ -247,7 +288,7 @@
       ],
       "lines": 57,
       "docstrings": [
-        "Live events from deepiri-realtime-gateway.\rReplaces hub-server WebSocketRelay (ws://localhost:5200/ws)."
+        "Live events from deepiri-realtime-gateway.\nReplaces hub-server WebSocketRelay (ws://localhost:5200/ws)."
       ]
     },
     {
@@ -296,7 +337,7 @@
       ],
       "lines": 74,
       "docstrings": [
-        "Poll deepiri-registry for service catalog + health.\rReplaces hub-server HealthPoller (/health/all).\rReturns `refresh` so callers (e.g. an Ops dashboard's refresh button) can\rtrigger an on-demand poll using the exact same fetch/fallback logic as the\rbackground interval, instead of duplicating registry calls elsewhere.",
+        "Poll deepiri-registry for service catalog + health.\nReplaces hub-server HealthPoller (/health/all).\nReturns `refresh` so callers (e.g. an Ops dashboard's refresh button) can\ntrigger an on-demand poll using the exact same fetch/fallback logic as the\nbackground interval, instead of duplicating registry calls elsewhere.",
         "If registry returned empty, try poll endpoint to refresh then re-list",
         "Silently fail — UI shows last known state"
       ]
@@ -320,7 +361,7 @@
       ],
       "lines": 15,
       "docstrings": [
-        "Immersive is a route in this same app (/immersive), so it is always \"live\".\rReplaces hub-server ImmersiveChecker pinging a separate :5174 container."
+        "Immersive is a route in this same app (/immersive), so it is always \"live\".\nReplaces hub-server ImmersiveChecker pinging a separate :5174 container."
       ]
     },
     {
@@ -348,7 +389,7 @@
       ],
       "lines": 96,
       "docstrings": [
-        "Multi-user presence via platform realtime-gateway (not a frontend-only multiplayer stack).\rPeers announce themselves; gateway fans out presence:update events.\rRoom / auth hardening belongs in deepiri-realtime-gateway."
+        "Multi-user presence via platform realtime-gateway (not a frontend-only multiplayer stack).\nPeers announce themselves; gateway fans out presence:update events.\nRoom / auth hardening belongs in deepiri-realtime-gateway."
       ]
     },
     {
@@ -394,7 +435,7 @@
       ],
       "lines": 90,
       "docstrings": [
-        "Immersive data plane: registry for health, realtime-gateway for events.\rReplaces hub-server REST + WS relay."
+        "Immersive data plane: registry for health, realtime-gateway for events.\nReplaces hub-server REST + WS relay."
       ]
     },
     {
@@ -1027,7 +1068,7 @@
       "hooksUsed": [],
       "lines": 52,
       "docstrings": [
-        "Clears auth state and API client tokens.\rCallers on protected routes rely on AuthGuard to Navigate to /login\r(SPA navigation — no full page reload)."
+        "Clears auth state and API client tokens.\nCallers on protected routes rely on AuthGuard to Navigate to /login\n(SPA navigation — no full page reload)."
       ]
     },
     {
@@ -1246,10 +1287,10 @@
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 53,
+      "lines": 69,
       "docstrings": [
-        "Safely builds API URLs with encoded path segments.\rEach segment is URI-encoded to prevent path traversal and special-character issues.\rQuery parameters with `undefined` or `null` values are automatically stripped.\r@example\rbuildUrl('/api/users', ['john doe', 'settings'])  → '/api/users/john%20doe/settings'\rbuildUrl('/api/search', [], { q: 'hello world', page: 1 })  → '/api/search?q=hello%20world&page=1'",
-        "Strips `undefined` and `null` values from a params object,\rreturning only defined key-value pairs.\r@example\rcleanQuery({ q: 'test', page: undefined, limit: null, sort: 'asc' })\r→ { q: 'test', sort: 'asc' }"
+        "Safely builds API URLs with encoded path segments.\nEach segment is URI-encoded to prevent path traversal and special-character issues.\nQuery parameters with `undefined` or `null` values are automatically stripped.\n@example\nbuildUrl('/api/users', ['john doe', 'settings'])  → '/api/users/john%20doe/settings'\nbuildUrl('/api/search', [], { q: 'hello world', page: 1 })  → '/api/search?q=hello%20world&page=1'",
+        "Strips `undefined` and `null` values from a params object,\nreturning only defined key-value pairs.\n@example\ncleanQuery({ q: 'test', page: undefined, limit: null, sort: 'asc' })\n→ { q: 'test', sort: 'asc' }"
       ]
     },
     {
@@ -1442,7 +1483,7 @@
     }
   ],
   "meta": {
-    "analyzedAt": "2026-08-08T18:55:41.272Z",
-    "fileCount": 58
+    "analyzedAt": "2026-08-10T23:06:06.865Z",
+    "fileCount": 60
   }
 }

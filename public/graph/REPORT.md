@@ -1,21 +1,21 @@
 # Deepiri Codebase Intelligence Report
 
-Generated: 8/8/2026, 2:55:41 PM
+Generated: 8/10/2026, 7:06:06 PM
 
 ## Overview
 
 | Metric | Value |
 |--------|-------|
-| Total Files | 58 |
+| Total Files | 60 |
 | Total Relationships | 25 |
 | Categories | 5 |
-| External Dependencies | 16 |
+| External Dependencies | 20 |
 
 ## File Distribution
 
 | Category | Count |
 |----------|-------|
-| module | 23 |
+| module | 25 |
 | page | 19 |
 | hook | 7 |
 | utility | 5 |
@@ -66,6 +66,10 @@ Generated: 8/8/2026, 2:55:41 PM
 | zustand/middleware | 2 files |
 | vitest | 1 files |
 | @testing-library/react | 1 files |
+| d3-selection | 1 files |
+| d3-force | 1 files |
+| d3-drag | 1 files |
+| d3-zoom | 1 files |
 | react-dom/client | 1 files |
 
 ## Key Connections
@@ -76,13 +80,13 @@ Generated: 8/8/2026, 2:55:41 PM
 - **AuthGuard** — 37 lines → imports: AuthGuard
 - **Router** — 85 lines → imports: Router, AuthGuard, Shell
 - **Shell** — 45 lines → imports: Shell
+- **onboardingSteps** — 83 lines
 - **query** — 3 lines → imports: query, query, query, query
+- **main** — 320 lines
 - **SceneControls** — 204 lines
 - **ServicePanel** — 70 lines
 - **Planet** — 68 lines → imports: Planet
-- **UniverseScene** — 97 lines → imports: Planet
-- **sceneStore** — 51 lines
-- ...and 13 more
+- ...and 15 more
 
 ### component
 
@@ -118,7 +122,7 @@ Generated: 8/8/2026, 2:55:41 PM
 ### utility
 
 - **api** — 12 lines → imports: api, api
-- **apiHelpers** — 53 lines
+- **apiHelpers** — 69 lines
 - **date** — 11 lines → imports: date
 - **graphConstants** — 27 lines
 - **ui** — 14 lines → imports: ui, ui

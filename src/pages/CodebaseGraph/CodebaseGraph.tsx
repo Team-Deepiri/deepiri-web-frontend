@@ -292,7 +292,7 @@ const StatsBar: React.FC<StatsBarProps> = ({ data, activeFilters, onToggleFilter
       <div className="cg-export-section">
         <h4>Export</h4>
         <div className="cg-export-buttons">
-          <a href="/graph/index.html" target="_blank" rel="noreferrer" className="cg-export-btn">
+          <a href="/graph.html" target="_blank" rel="noreferrer" className="cg-export-btn">
             <ExternalLink size={14} />
             Standalone HTML
           </a>
