@@ -18,7 +18,7 @@ export default function Home() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
         <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>Platform Overview</div>
-        <h1 style={{ fontFamily: "var(--font-head)", fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 8 }}>Deepiri Hub</h1>
+        <h1 style={{ fontFamily: "var(--font-body)", fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 8, marginLeft: -2 }}>Deepiri Hub</h1>
         <p style={{ color: "var(--dim)", fontSize: 13, lineHeight: 1.7 }}>
           One place. Every team, every role, every system — visible and interactive together.
         </p>
@@ -33,7 +33,7 @@ export default function Home() {
         ].map((stat) => (
           <div key={stat.label} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 12, padding: "20px 24px" }}>
             <div style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 8 }}>{stat.label}</div>
-            <div style={{ fontFamily: "var(--font-head)", fontSize: 36, fontWeight: 900, color: stat.color }}>{stat.value}</div>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 36, fontWeight: 900, color: stat.color }}>{stat.value}</div>
           </div>
         ))}
       </motion.div>
@@ -46,7 +46,7 @@ export default function Home() {
           style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.12))", border: "1px solid rgba(99,102,241,0.3)", borderRadius: 14, padding: "24px 28px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}
         >
           <div>
-            <div style={{ fontFamily: "var(--font-head)", fontWeight: 800, fontSize: 18, marginBottom: 4 }}>✦ 3D Universe Ready</div>
+            <div style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 18, marginBottom: 4 }}>✦ 3D Universe Ready</div>
             <div style={{ fontSize: 12, color: "var(--dim)" }}>The immersive scene is live. See every service as a node in 3D space.</div>
           </div>
           <button
