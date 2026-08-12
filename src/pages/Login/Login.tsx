@@ -41,11 +41,17 @@ export default function Login() {
       >
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 9, background: "linear-gradient(135deg, var(--accent), var(--accent-ai))", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-head)", fontWeight: 800, fontSize: 15, color: "#fff" }}>D</div>
-          <span style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 18 }}>deep<span style={{ color: "var(--accent)" }}>iri</span></span>
+          <img
+            src="/favicon.ico"
+            alt="Deepiri logo"
+            style={{ width: 36, height: 36, borderRadius: 9, objectFit: "contain", background: "transparent", display: "block" }}
+          />
+          <span style={{ display: "inline-flex", alignItems: "center", lineHeight: 1, fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 18 }}>
+            deep<span style={{ color: "var(--accent)" }}>iri</span>
+          </span>
         </div>
 
-        <div style={{ fontFamily: "var(--font-head)", fontWeight: 800, fontSize: 22, marginBottom: 6 }}>Welcome back</div>
+        <div style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 22, marginBottom: 6 }}>Welcome back</div>
         <div style={{ fontSize: 12, color: "var(--dim)", marginBottom: 28 }}>Sign in to the Deepiri Hub</div>
 
         <form onSubmit={handleLogin}>
