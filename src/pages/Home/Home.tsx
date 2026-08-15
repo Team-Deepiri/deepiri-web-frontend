@@ -17,12 +17,10 @@ export default function Home() {
   return (
     <div>
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} style={{ marginBottom: 32 }}>
-        <div className="eyebrow" style={{ color: "var(--accent)", marginBottom: 12 }}>Platform Overview</div>
-        <h1 style={{ fontFamily: "var(--font-head)", fontSize: 40, fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 10 }}>
-          Deepiri <span style={{ background: "var(--gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hub</span>
-        </h1>
-        <p style={{ color: "var(--dim)", fontSize: 14, lineHeight: 1.7, maxWidth: 560 }}>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
+        <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>Platform Overview</div>
+        <h1 style={{ fontFamily: "var(--font-body)", fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 8, marginLeft: -2 }}>Deepiri Hub</h1>
+        <p style={{ color: "var(--dim)", fontSize: 13, lineHeight: 1.7 }}>
           One place. Every team, every role, every system — visible and interactive together.
         </p>
       </motion.div>
@@ -34,9 +32,9 @@ export default function Home() {
           { label: "Degraded", value: degraded, color: "var(--warn)" },
           { label: "Down", value: down, color: "var(--error)" },
         ].map((stat) => (
-          <div key={stat.label} className="card card-hover" style={{ padding: "22px 26px" }}>
-            <div className="eyebrow" style={{ marginBottom: 10 }}>{stat.label}</div>
-            <div style={{ fontFamily: "var(--font-head)", fontSize: 38, fontWeight: 700, color: stat.color, textShadow: `0 0 24px ${stat.color}40`, lineHeight: 1.1 }}>{stat.value}</div>
+          <div key={stat.label} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 12, padding: "20px 24px" }}>
+            <div style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 8 }}>{stat.label}</div>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 36, fontWeight: 900, color: stat.color }}>{stat.value}</div>
           </div>
         ))}
       </motion.div>
@@ -49,8 +47,8 @@ export default function Home() {
           style={{ background: "var(--gradient-soft)", border: "1px solid rgba(99,102,241,0.3)", borderRadius: "var(--r-lg)", padding: "26px 30px", marginBottom: 28, display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "var(--shadow-1)" }}
         >
           <div>
-            <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 17, marginBottom: 4 }}>3D Universe Ready</div>
-            <div style={{ fontSize: 12.5, color: "var(--dim)" }}>The immersive scene is live. See every service as a node in 3D space.</div>
+            <div style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 18, marginBottom: 4 }}>✦ 3D Universe Ready</div>
+            <div style={{ fontSize: 12, color: "var(--dim)" }}>The immersive scene is live. See every service as a node in 3D space.</div>
           </div>
           <button
             onClick={() => navigate("/immersive")}

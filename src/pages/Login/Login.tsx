@@ -53,19 +53,19 @@ export default function Login() {
         }}
       >
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 36 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
           <img
             src="/favicon.ico"
             alt="Deepiri logo"
-            style={{ width: 42, height: 42, borderRadius: 12, objectFit: "contain", background: "transparent", display: "block", boxShadow: "0 6px 20px rgba(99,102,241,0.25)" }}
+            style={{ width: 36, height: 36, borderRadius: 9, objectFit: "contain", background: "transparent", display: "block" }}
           />
-          <span style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 19 }}>
-            deep<span style={{ background: "var(--gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>iri</span>
+          <span style={{ display: "inline-flex", alignItems: "center", lineHeight: 1, fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 18 }}>
+            deep<span style={{ color: "var(--accent)" }}>iri</span>
           </span>
         </div>
 
-        <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 24, marginBottom: 6, letterSpacing: "-0.01em" }}>Welcome back</div>
-        <div style={{ fontSize: 13, color: "var(--dim)", marginBottom: 30 }}>Sign in to the Deepiri Hub</div>
+        <div style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 22, marginBottom: 6 }}>Welcome back</div>
+        <div style={{ fontSize: 12, color: "var(--dim)", marginBottom: 28 }}>Sign in to the Deepiri Hub</div>
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: 18 }}>
