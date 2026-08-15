@@ -26,7 +26,7 @@ export default function Ops() {
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-        <h1 style={{ fontFamily: "var(--font-head)", fontSize: 32, fontWeight: 900, letterSpacing: "-0.02em" }}>
+        <h1 style={{ fontFamily: "var(--font-head)", fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>
           Platform Ops Hub
         </h1>
         <button

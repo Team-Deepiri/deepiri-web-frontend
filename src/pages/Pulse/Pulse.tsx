@@ -1,11 +1,13 @@
-import { motion } from "framer-motion";
+import { Activity } from "lucide-react";
+import { PagePreview } from "@/components/ui/PagePreview";
 
 export default function Pulse() {
   return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-      <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>Coming in Phase 4</div>
-      <h1 style={{ fontFamily: "var(--font-head)", fontSize: 32, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 12 }}>Pulse</h1>
-      <p style={{ color: "var(--dim)", fontSize: 13 }}>This page is built in Phase 4.</p>
-    </motion.div>
+    <PagePreview
+      icon={Activity}
+      eyebrow="Platform · Observability"
+      title="Platform Pulse"
+      description="A rolling health dashboard for the whole platform — latency, error rates, throughput, and uptime across every service. Drill from a summary tile into per-service graphs, then to the runbook or repo that fixes it."
+    />
   );
 }

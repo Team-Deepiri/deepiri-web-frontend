@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useHealthStore } from "@/store/healthStore";
 import { useUIStore } from "@/store/uiStore";
 import { STATUS_COLORS } from "@deepiri/shared";
+import { RefreshCw } from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Home() {
       </motion.div>
 
       {/* Stats */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 24 }}>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginBottom: 28 }}>
         {[
           { label: "Healthy", value: healthy, color: "var(--live)" },
           { label: "Degraded", value: degraded, color: "var(--warn)" },
@@ -43,7 +44,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.12))", border: "1px solid rgba(99,102,241,0.3)", borderRadius: 14, padding: "24px 28px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}
+          style={{ background: "var(--gradient-soft)", border: "1px solid rgba(99,102,241,0.3)", borderRadius: "var(--r-lg)", padding: "26px 30px", marginBottom: 28, display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "var(--shadow-1)" }}
         >
           <div>
             <div style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 18, marginBottom: 4 }}>✦ 3D Universe Ready</div>
@@ -51,7 +52,8 @@ export default function Home() {
           </div>
           <button
             onClick={() => navigate("/immersive")}
-            style={{ padding: "10px 20px", borderRadius: 10, background: "linear-gradient(135deg, var(--accent), var(--accent-ai))", border: "none", color: "#fff", fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 13, boxShadow: "0 0 20px rgba(99,102,241,0.3)", whiteSpace: "nowrap" }}
+            className="btn btn-primary"
+            style={{ fontSize: 13, fontWeight: 600 }}
           >
             Enter 3D →
           </button>
@@ -60,22 +62,42 @@ export default function Home() {
 
       {/* Service Grid */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-        <div style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 12 }}>All Services</div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10 }}>
-          {services.length === 0 ? (
-            <div style={{ color: "var(--dim)", fontSize: 12, gridColumn: "1/-1", padding: "32px 0" }}>
-              Waiting for registry health data (deepiri-registry)...
+        <div className="eyebrow" style={{ marginBottom: 12 }}>All Services</div>
+        {services.length === 0 ? (
+          <div
+            style={{
+              border: "1px dashed var(--muted)",
+              borderRadius: "var(--r-lg)",
+              padding: "48px 24px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              textAlign: "center",
+            }}
+          >
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)" }}>
+              <RefreshCw size={18} className="spin" />
             </div>
-          ) : services.map((svc) => (
-            <div key={svc.serviceId} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 16px", display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: STATUS_COLORS[svc.status], flexShrink: 0 }} />
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Waiting for registry health data</div>
+            <div style={{ fontSize: 12.5, color: "var(--dim)", maxWidth: 380, lineHeight: 1.6 }}>
+              Start the platform services (deepiri-registry, api-gateway) and the service catalog will appear here automatically.
+            </div>
+          </div>
+        ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: 12 }}>
+          {services.map((svc) => (
+            <div key={svc.serviceId} className="card card-hover" style={{ padding: "16px 18px", display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 9, height: 9, borderRadius: "50%", background: STATUS_COLORS[svc.status], flexShrink: 0, boxShadow: `0 0 10px ${STATUS_COLORS[svc.status]}` }} />
               <div>
-                <div style={{ fontSize: 12, fontWeight: 600 }}>{svc.name}</div>
-                <div style={{ fontSize: 10, color: "var(--dim)", fontFamily: "var(--font-mono)" }}>:{svc.port}</div>
+                <div style={{ fontSize: 12.5, fontWeight: 600 }}>{svc.name}</div>
+                <div style={{ fontSize: 10.5, color: "var(--dim)", fontFamily: "var(--font-mono)" }}>:{svc.port}</div>
               </div>
             </div>
           ))}
         </div>
+        )}
       </motion.div>
     </div>
   );

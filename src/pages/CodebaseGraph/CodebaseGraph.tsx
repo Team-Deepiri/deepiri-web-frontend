@@ -4,7 +4,7 @@ import {
   Search, Download, Maximize2, Minimize2, 
   RefreshCw, FileText, Database, GitBranch,
   Zap, Link2, Box,
-  ExternalLink, Network
+  ExternalLink, Network, ZoomIn, ZoomOut
 } from 'lucide-react';
 import './CodebaseGraph.css';
 
@@ -326,9 +326,12 @@ const CodebaseGraph: React.FC = () => {
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const [zoomLevel, setZoomLevel] = useState(1);
+
   const nodesRef = useRef<GraphNode[]>([]);
   const linksRef = useRef<ResolvedGraphLink[]>([]);
   const transformRef = useRef({ x: 0, y: 0, k: 1 });
+  const renderRef = useRef<() => void>(() => {});
   const draggingNodeRef = useRef<GraphNode | null>(null);
   const panningRef = useRef(false);
   const panStartRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
@@ -383,7 +386,7 @@ const CodebaseGraph: React.FC = () => {
 
     const tick = () => {
       alpha += (0 - alpha) * decay;
-      if (alpha < 0.001) { animFrameRef.current = requestAnimationFrame(render); return; }
+      if (alpha < 0.001) { animFrameRef.current = requestAnimationFrame(renderRef.current); return; }
 
       for (const node of nodes) {
         node.vx *= velocityDecay;
@@ -434,7 +437,7 @@ const CodebaseGraph: React.FC = () => {
         node.y! += node.vy!;
       }
 
-      render();
+      renderRef.current();
       animFrameRef.current = requestAnimationFrame(tick);
     };
 
@@ -457,6 +460,20 @@ const CodebaseGraph: React.FC = () => {
     const { x: tx, y: ty, k: scale } = transformRef.current;
 
     ctx.clearRect(0, 0, w, h);
+
+    // Subtle dot grid
+    const gridStep = 28;
+    const originX = (tx % (gridStep * scale) + gridStep * scale) % (gridStep * scale);
+    const originY = (ty % (gridStep * scale) + gridStep * scale) % (gridStep * scale);
+    ctx.fillStyle = 'rgba(31,41,55,0.06)';
+    for (let gx = originX; gx < w; gx += gridStep * scale) {
+      for (let gy = originY; gy < h; gy += gridStep * scale) {
+        ctx.beginPath();
+        ctx.arc(gx, gy, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
     ctx.save();
     ctx.translate(tx, ty);
     ctx.scale(scale, scale);
@@ -469,24 +486,53 @@ const CodebaseGraph: React.FC = () => {
       const t = link.target as GraphNode;
       if (!activeFilters.has(s.type) || !activeFilters.has(t.type)) continue;
 
-      let opacity = 0.08;
+      let opacity = 0.18;
       if (selectedNode && (s.id === selectedNode.id || t.id === selectedNode.id)) {
-        opacity = 0.6;
+        opacity = 0.7;
       } else if (hoveredNode && (s.id === hoveredNode.id || t.id === hoveredNode.id)) {
-        opacity = 0.5;
+        opacity = 0.6;
       } else if (isSearching) {
         const sMatch = s.name.toLowerCase().includes(searchLower) || s.relPath.toLowerCase().includes(searchLower);
         const tMatch = t.name.toLowerCase().includes(searchLower) || t.relPath.toLowerCase().includes(searchLower);
-        opacity = (sMatch || tMatch) ? 0.3 : 0.02;
+        opacity = (sMatch || tMatch) ? 0.45 : 0.04;
       }
+
+      const linkColor = link.type === 'imports' ? '99,102,241' :
+        link.type === 'uses-hook' ? '245,158,11' : '249,115,22';
+
+      // Shadow line for depth
+      ctx.beginPath();
+      ctx.moveTo(s.x!, s.y!);
+      ctx.lineTo(t.x!, t.y!);
+      ctx.strokeStyle = `rgba(255,255,255,${opacity * 0.8})`;
+      ctx.lineWidth = 3.5;
+      ctx.stroke();
+
+      // Direction arrow (small triangle near target)
+      const dx = t.x! - s.x!;
+      const dy = t.y! - s.y!;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const targetR = Math.min(Math.sqrt(t.lines || 10) + 3, 16) + 6;
+      const ax = t.x! - (dx / dist) * targetR;
+      const ay = t.y! - (dy / dist) * targetR;
+      const px = -dy / dist;
+      const py = dx / dist;
 
       ctx.beginPath();
       ctx.moveTo(s.x!, s.y!);
       ctx.lineTo(t.x!, t.y!);
-      ctx.strokeStyle = link.type === 'imports' ? `rgba(99,102,241,${opacity})` :
-        link.type === 'uses-hook' ? `rgba(245,158,11,${opacity})` : `rgba(249,115,22,${opacity})`;
-      ctx.lineWidth = (selectedNode && (s.id === selectedNode.id || t.id === selectedNode.id)) ? 1.5 : 0.5;
+      ctx.strokeStyle = `rgba(${linkColor},${opacity})`;
+      ctx.lineWidth = (selectedNode && (s.id === selectedNode.id || t.id === selectedNode.id)) ? 1.6 : 1;
       ctx.stroke();
+
+      // Arrowhead (always drawn so link direction is always visible)
+      ctx.beginPath();
+      ctx.moveTo(ax + px * 4, ay + py * 4);
+      ctx.lineTo(ax + dx * 0.35, ay + dy * 0.35);
+      ctx.lineTo(ax - px * 4, ay - py * 4);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(${linkColor},${Math.min(Math.max(opacity, 0.45), 0.9)})`;
+      ctx.fill();
     }
 
     for (const node of nodesRef.current) {
@@ -545,15 +591,25 @@ const CodebaseGraph: React.FC = () => {
       ctx.globalAlpha = 1;
 
       if ((scale > 0.5 && opacity > 0.3 && radius > 4) || node.id === selectedNode?.id || node.id === hoveredNode?.id) {
-        ctx.fillStyle = `rgba(226,232,240,${opacity})`;
-        ctx.font = `${Math.max(9, 10 / Math.max(scale, 0.5))}px Inter, sans-serif`;
+        const labelOpacity = Math.min(0.92, opacity + 0.25);
+        const fontSize = Math.max(10, 11 / Math.max(scale, 0.5));
+        ctx.font = `500 ${fontSize}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
         ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        // Halo for readability on light background
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = `rgba(255,255,255,${labelOpacity})`;
+        ctx.strokeText(node.name, node.x!, node.y! + radius + 12);
+        ctx.fillStyle = `rgba(31,41,55,${labelOpacity})`;
         ctx.fillText(node.name, node.x!, node.y! + radius + 12);
+        ctx.textBaseline = 'alphabetic';
       }
     }
 
     ctx.restore();
   }, [activeFilters, selectedNode, hoveredNode, searchQuery]);
+
+  renderRef.current = render;
 
   useEffect(() => {
     if (!data) return;
@@ -683,6 +739,7 @@ const CodebaseGraph: React.FC = () => {
       t.x = mx - (mx - t.x) * (newK / t.k);
       t.y = my - (my - t.y) * (newK / t.k);
       t.k = newK;
+      setZoomLevel(newK);
       render();
     };
 
@@ -716,8 +773,56 @@ const CodebaseGraph: React.FC = () => {
 
   const handleRecenter = useCallback(() => {
     transformRef.current = { x: 0, y: 0, k: 1 };
+    setZoomLevel(1);
     render();
   }, [render]);
+
+  const handleZoom = useCallback((direction: 1 | -1) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const factor = direction > 0 ? 1.25 : 0.8;
+    const t = transformRef.current;
+    const newK = Math.min(Math.max(t.k * factor, 0.05), 5);
+    t.x = cx - (cx - t.x) * (newK / t.k);
+    t.y = cy - (cy - t.y) * (newK / t.k);
+    t.k = newK;
+    setZoomLevel(newK);
+    render();
+  }, [render]);
+
+  const handleFit = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    const visible = nodesRef.current.filter(n => activeFilters.has(n.type));
+    if (visible.length === 0) return;
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of visible) {
+      minX = Math.min(minX, n.x!);
+      maxX = Math.max(maxX, n.x!);
+      minY = Math.min(minY, n.y!);
+      maxY = Math.max(maxY, n.y!);
+    }
+    const pad = 80;
+    const gW = Math.max(maxX - minX, 1);
+    const gH = Math.max(maxY - minY, 1);
+    const k = Math.min(Math.max(Math.min((w - pad * 2) / gW, (h - pad * 2) / gH), 0.05), 5);
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+    transformRef.current = {
+      x: w / 2 - cx * k,
+      y: h / 2 - cy * k,
+      k,
+    };
+    setZoomLevel(k);
+    render();
+  }, [activeFilters, render]);
 
   if (isLoading) {
     return (
@@ -763,12 +868,26 @@ const CodebaseGraph: React.FC = () => {
         />
 
         <div className="cg-toolbar">
-          <button onClick={handleRecenter} title="Recenter">
-            <RefreshCw size={16} />
-          </button>
-          <button onClick={() => setIsFullscreen(!isFullscreen)} title="Toggle fullscreen">
-            {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-          </button>
+          <div className="cg-toolbar-row">
+            <button onClick={() => handleZoom(1)} title="Zoom in">
+              <ZoomIn size={16} />
+            </button>
+            <button onClick={() => handleZoom(-1)} title="Zoom out">
+              <ZoomOut size={16} />
+            </button>
+            <button onClick={handleFit} title="Fit to view">
+              <Maximize2 size={16} />
+            </button>
+            <button onClick={handleRecenter} title="Recenter">
+              <RefreshCw size={16} />
+            </button>
+            <button onClick={() => setIsFullscreen(!isFullscreen)} title="Toggle fullscreen">
+              {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
+          </div>
+          <div className="cg-toolbar-row">
+            <span className="cg-zoom-indicator">{Math.round(zoomLevel * 100)}%</span>
+          </div>
         </div>
 
         {hoveredNode && !selectedNode && (

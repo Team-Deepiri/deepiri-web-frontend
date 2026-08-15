@@ -1,11 +1,13 @@
-import { motion } from "framer-motion";
+import { Waves } from "lucide-react";
+import { PagePreview } from "@/components/ui/PagePreview";
 
 export default function EventRiver() {
   return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-      <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>Coming in Phase 4</div>
-      <h1 style={{ fontFamily: "var(--font-head)", fontSize: 32, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 12 }}>EventRiver</h1>
-      <p style={{ color: "var(--dim)", fontSize: 13 }}>This page is built in Phase 4.</p>
-    </motion.div>
+    <PagePreview
+      icon={Waves}
+      eyebrow="Platform · Realtime"
+      title="Event River"
+      description="A live stream of platform events — deployments, service health changes, job lifecycle updates, and user activity flowing through deepiri-realtime. Search, filter by source, and jump straight from an event into the service or repo it belongs to."
+    />
   );
 }

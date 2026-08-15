@@ -1,11 +1,13 @@
-import { motion } from "framer-motion";
+import { Rocket } from "lucide-react";
+import { PagePreview } from "@/components/ui/PagePreview";
 
 export default function Launchpad() {
   return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-      <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>Coming in Phase 4</div>
-      <h1 style={{ fontFamily: "var(--font-head)", fontSize: 32, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 12 }}>Launchpad</h1>
-      <p style={{ color: "var(--dim)", fontSize: 13 }}>This page is built in Phase 4.</p>
-    </motion.div>
+    <PagePreview
+      icon={Rocket}
+      eyebrow="Repos · Onboarding"
+      title="Launchpad"
+      description="Provision new repositories, services, and workspaces from templates. Pick a stack, define the team and permissions, and deepiri-scaffold spins up the repo, CI pipeline, and documentation in one pass."
+    />
   );
 }

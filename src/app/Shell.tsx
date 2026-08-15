@@ -29,9 +29,12 @@ export function Shell() {
         <main style={{
           flex: 1,
           overflow: "auto",
-          padding: "32px",
+          padding: "36px 40px",
           display: "flex",
           flexDirection: "column",
+          maxWidth: 1240,
+          width: "100%",
+          margin: "0 auto",
         }}>
           <Outlet />
         </main>
