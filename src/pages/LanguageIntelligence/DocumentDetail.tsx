@@ -217,7 +217,7 @@ const DocumentDetail: React.FC = () => {
 
   const handleDownload = () => {
     if (!liveDoc) return;
-    documentService.downloadDocument(liveDoc);
+    documentService.downloadDocument(liveDoc).catch(() => {});
   };
 
   const sanitizePreviewUrl = (value?: string): string | undefined => {

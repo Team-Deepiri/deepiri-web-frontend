@@ -71,6 +71,20 @@ export const documentApi = {
     return response.data.data ? mapDtoToDocument(response.data.data) : null;
   },
 
+  /**
+   * Documents are private in storage — the record's own `documentUrl` is
+   * just a storage key now, not a fetchable link. This asks the backend
+   * for a fresh, short-lived presigned URL instead. Call it right before
+   * you need the link (preview/download click), don't cache the result.
+   */
+  getDownloadUrl: async (id: string): Promise<string> => {
+    const response = await axiosInstance.get<{
+      success: boolean;
+      data: { url: string; expiresIn: number };
+    }>(`/contracts/${id}/download-url`);
+    return response.data.data.url;
+  },
+
   upload: async (file: File, title?: string): Promise<DocumentRecord> => {
     const formData = new FormData();
     const stamp = Date.now();

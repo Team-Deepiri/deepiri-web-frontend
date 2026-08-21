@@ -214,8 +214,21 @@ export const documentService = {
     writeStoredDocuments(documents);
   },
 
-  downloadDocument: (doc: DocumentRecord): void => {
-    const url = getSafeDownloadUrl(doc.documentUrl || doc.fileDataUrl);
+  downloadDocument: async (doc: DocumentRecord): Promise<void> => {
+    let url: string | undefined;
+    if (doc.id.startsWith("seed-") || doc.id.startsWith("local-")) {
+      // Mock/local documents — fileDataUrl (or a blob:/data: documentUrl)
+      // is already a directly usable link.
+      url = getSafeDownloadUrl(doc.documentUrl || doc.fileDataUrl);
+    } else {
+      // Real backend documents — documentUrl is a storage key now, not a
+      // fetchable link (objects are private). Fetch a fresh presigned one.
+      try {
+        url = await documentApi.getDownloadUrl(doc.id);
+      } catch {
+        url = getSafeDownloadUrl(doc.fileDataUrl);
+      }
+    }
     if (!url) return;
     const anchor = document.createElement("a");
     anchor.href = url;
