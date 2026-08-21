@@ -31,10 +31,23 @@ import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
 import Profile from "./pages/Profile";
 import Friends from "./pages/Friends";
+import Leaderboard from "./pages/Leaderboard";
 import TaskManagement from "./pages/TaskManagement";
+import Challenges from "./pages/Challenges";
+import GamificationDashboard from "./pages/GamificationDashboard";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
-import Notifications from "./pages/Notifications";
 import OpsHub from "./pages/OpsHub";
+import JobsDashboard from "./pages/Ops/JobsDashboard";
+import RegistryDashboard from "./pages/Ops/RegistryDashboard";
+import TelemetryDashboard from "./pages/Ops/TelemetryDashboard";
+import TrussDashboard from "./pages/Ops/TrussDashboard";
+import Notifications from "./pages/Notifications";
+import Objectives from "./pages/Objectives";
+import Odysseys from "./pages/Odysseys";
+import Seasons from "./pages/Seasons";
+import Progress from "./pages/Progress";
+import Boosts from "./pages/Boosts";
+import Streaks from "./pages/Streaks";
 import AgentChat from "./pages/AgentChat";
 import ProductivityChat from "./pages/ProductivityChat";
 import GroupChats from "./pages/GroupChats";
@@ -47,6 +60,8 @@ import Forgot from './pages/ForgotPassword.tsx'
 import LeaseUpload from './pages/LanguageIntelligence/LeaseUpload';
 import LeaseDetail from './pages/LanguageIntelligence/LeaseDetail';
 import ChatWidget from './components/ChatWidget/ChatWidget';
+import CodebaseGraph from './pages/CodebaseGraph';
+import PRImpact from './pages/PRImpact';
 
 // Public pages
 import About from "./pages/About";
@@ -200,10 +215,34 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <Leaderboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/tasks"
                 element={
                   <ProtectedRoute>
                     <TaskManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/challenges"
+                element={
+                  <ProtectedRoute>
+                    <Challenges />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/gamification"
+                element={
+                  <ProtectedRoute>
+                    <GamificationDashboard />
                   </ProtectedRoute>
                 }
               />
@@ -224,10 +263,90 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route
+                path="/ops/jobs"
+                element={
+                  <ProtectedRoute>
+                    <JobsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/registry"
+                element={
+                  <ProtectedRoute>
+                    <RegistryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/truss"
+                element={
+                  <ProtectedRoute>
+                    <TrussDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/telemetry"
+                element={
+                  <ProtectedRoute>
+                    <TelemetryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/notifications"
                 element={
                   <ProtectedRoute>
                     <Notifications />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/objectives"
+                element={
+                  <ProtectedRoute>
+                    <Objectives />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/odysseys"
+                element={
+                  <ProtectedRoute>
+                    <Odysseys />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/seasons"
+                element={
+                  <ProtectedRoute>
+                    <Seasons />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/progress"
+                element={
+                  <ProtectedRoute>
+                    <Progress />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/boosts"
+                element={
+                  <ProtectedRoute>
+                    <Boosts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/streaks"
+                element={
+                  <ProtectedRoute>
+                    <Streaks />
                   </ProtectedRoute>
                 }
               />
@@ -286,6 +405,14 @@ const AppContent: React.FC = () => {
                     <ImmersiveWorkspace />
                   </ProtectedRoute>
                 }
+              />
+              <Route
+                path="/codebase"
+                element={<CodebaseGraph />}
+              />
+              <Route
+                path="/pr-impact"
+                element={<PRImpact />}
               />
               <Route
                 path="/language-intelligence/leases/upload"

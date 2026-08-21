@@ -1,0 +1,19 @@
+#!/bin/bash
+
+DEEPDIR="$(git rev-parse --show-toplevel)"
+FRONTEND="$DEEPDIR/deepiri-web-frontend"
+
+CHANGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | head -1)
+
+if [ -n "$CHANGED" ]; then
+  echo "Codebase graph: source changes detected, rebuilding..."
+  if [ -f "$FRONTEND/scripts/analyze.mjs" ]; then
+    cd "$FRONTEND" && node scripts/analyze.mjs
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Graph analysis failed. Commit aborted."
+      exit 1
+    fi
+    git add public/graph/graph.json public/graph/index.html public/graph/REPORT.md
+    echo "Codebase graph rebuilt"
+  fi
+fi
