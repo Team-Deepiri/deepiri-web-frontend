@@ -3,7 +3,7 @@ import { useUIStore } from "@/store/uiStore";
 import { motion } from "framer-motion";
 import {
   Home, Waves, Flame, LayoutGrid, Activity, GitBranch,
-  Rocket, Sparkles, Network, GitPullRequest, Users, Compass, Mail,
+  Rocket, Sparkles, Network, GitPullRequest, Users, Compass, Mail, FileText,
   PanelLeftClose, PanelLeftOpen, type LucideIcon,
 } from "lucide-react";
 
@@ -25,6 +25,7 @@ const NAV: { section: string; items: { to: string; icon: LucideIcon; label: stri
   { section: "Intelligence", items: [
     { to: "/codebase",    icon: Network,        label: "Codebase Graph" },
     { to: "/pr-impact",   icon: GitPullRequest, label: "PR Impact" },
+    { to: "/documents",   icon: FileText,       label: "Documents" },
   ]},
   { section: "Team", items: [
     { to: "/team",        icon: Users,          label: "Team Ops" },
