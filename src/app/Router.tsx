@@ -22,6 +22,7 @@ const Onboarding = lazy(() => import("@/pages/Onboarding/Onboarding"));
 const ImmersivePage = lazy(() => import("@/pages/Immersive/ImmersivePage"));
 const CodebaseGraph = lazy(() => import("@/pages/CodebaseGraph/CodebaseGraph"));
 const PRImpact = lazy(() => import("@/pages/PRImpact/PRImpact"));
+const Documents = lazy(() => import("@/pages/Documents/Documents"));
 
 const PageLoader = () => (
   <div
@@ -76,6 +77,7 @@ export function AppRouter() {
           <Route path="onboarding" element={<Onboarding />} />
           <Route path="codebase" element={<CodebaseGraph />} />
           <Route path="pr-impact" element={<PRImpact />} />
+          <Route path="documents" element={<Documents />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
