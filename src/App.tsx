@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "react-hot-toast";
@@ -25,7 +25,6 @@ import AdventureGenerator from "./pages/AdventureGenerator";
 import AdventureDetail from "./pages/AdventureDetail";
 import AdventureHistory from "./pages/AdventureHistory";
 import DocumentsPage from "./pages/Document.tsx";
-import DocumentDetail from './pages/LanguageIntelligence/DocumentDetail';
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
@@ -34,13 +33,6 @@ import Friends from "./pages/Friends";
 import Leaderboard from "./pages/Leaderboard";
 import TaskManagement from "./pages/TaskManagement";
 import Challenges from "./pages/Challenges";
-import GamificationDashboard from "./pages/GamificationDashboard";
-import AnalyticsDashboard from "./pages/AnalyticsDashboard";
-import OpsHub from "./pages/OpsHub";
-import JobsDashboard from "./pages/Ops/JobsDashboard";
-import RegistryDashboard from "./pages/Ops/RegistryDashboard";
-import TelemetryDashboard from "./pages/Ops/TelemetryDashboard";
-import TrussDashboard from "./pages/Ops/TrussDashboard";
 import Notifications from "./pages/Notifications";
 import Objectives from "./pages/Objectives";
 import Odysseys from "./pages/Odysseys";
@@ -54,13 +46,9 @@ import GroupChats from "./pages/GroupChats";
 import GroupChatView from "./pages/GroupChatView";
 import PythonTools from "./pages/PythonTools";
 import UserInventory from "./pages/UserInventory";
-import ImmersiveWorkspace from "./pages/ImmersiveWorkspace";
 import Contact from "./pages/Contact";
 import Forgot from './pages/ForgotPassword.tsx'
-import LeaseUpload from './pages/LanguageIntelligence/LeaseUpload';
-import LeaseDetail from './pages/LanguageIntelligence/LeaseDetail';
 import ChatWidget from './components/ChatWidget/ChatWidget';
-import CodebaseGraph from './pages/CodebaseGraph';
 import PRImpact from './pages/PRImpact';
 
 // Public pages
@@ -68,12 +56,35 @@ import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ComponentShowcase from "./pages/ComponentShowcase.tsx";
+
+// Heavy pages are lazy-loaded to keep the initial bundle small.
+const DocumentDetail = lazy(() => import('./pages/LanguageIntelligence/DocumentDetail'));
+const LeaseUpload = lazy(() => import('./pages/LanguageIntelligence/LeaseUpload'));
+const LeaseDetail = lazy(() => import('./pages/LanguageIntelligence/LeaseDetail'));
+const GamificationDashboard = lazy(() => import("./pages/GamificationDashboard"));
+const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
+const OpsHub = lazy(() => import("./pages/OpsHub"));
+const JobsDashboard = lazy(() => import("./pages/Ops/JobsDashboard"));
+const RegistryDashboard = lazy(() => import("./pages/Ops/RegistryDashboard"));
+const TelemetryDashboard = lazy(() => import("./pages/Ops/TelemetryDashboard"));
+const TrussDashboard = lazy(() => import("./pages/Ops/TrussDashboard"));
+const ImmersiveWorkspace = lazy(() => import("./pages/ImmersiveWorkspace"));
+const CodebaseGraph = lazy(() => import("./pages/CodebaseGraph"));
+
 // React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: 1, refetchOnWindowFocus: false },
   },
 });
+
+const PageLoader: React.FC = () => (
+  <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  </div>
+);
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -123,6 +134,7 @@ const AppContent: React.FC = () => {
       >
         <main className={isAuthRoute ? "app-content auth" : "app-content"}>
           <div className="site-container">
+            <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Public */}
               <Route path="/" element={<Home />} />
@@ -432,6 +444,7 @@ const AppContent: React.FC = () => {
               />
         
             </Routes>
+            </Suspense>
             <ChatWidget />
           </div>
         </main>

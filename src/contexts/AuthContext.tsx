@@ -144,9 +144,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (nameOrData: string | object, email?: string, password?: string): Promise<{ success: boolean; message?: string }> => {
     try {
       setLoading(true);
-      const payload = typeof nameOrData === 'object' && nameOrData !== null 
-        ? (nameOrData as any)
-        : { name: nameOrData as string, email: email || '', password: password || '' };
+      let payload: any;
+      if (typeof nameOrData === 'object' && nameOrData !== null) {
+        payload = nameOrData as any;
+        // Normalize `name` -> `username` for gateway/auth-service validation
+        if (payload.name && !payload.username) {
+          payload.username = payload.name;
+          delete payload.name;
+        }
+      } else {
+        payload = { username: nameOrData as string, email: email || '', password: password || '' };
+      }
 
       const response = await authApi.register(payload);
       

@@ -1,7 +1,8 @@
 
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useEffect, useRef, FormEvent, ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { authApi } from '../api/authApi';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import logo from '../assets/images/logo_squared.png';
@@ -12,10 +13,15 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
+  const [checkingEmail, setCheckingEmail] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const debounceRef = useRef<number | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -27,18 +33,72 @@ const Register = () => {
     if (name === 'email' && emailError) {
       setEmailError('');
     }
+    if (name === 'email') {
+      setEmailAvailable(null);
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+      const trimmed = value.trim();
+      if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+        setCheckingEmail(false);
+        return;
+      }
+      setCheckingEmail(true);
+      debounceRef.current = window.setTimeout(async () => {
+        try {
+          const res = await authApi.checkEmail(trimmed);
+          if (res.available === false) {
+            setEmailError('An account with this email already exists.');
+            setEmailAvailable(false);
+          } else {
+            setEmailError('');
+            setEmailAvailable(true);
+          }
+        } catch {
+          // network error — don't block user, just clear
+          setEmailAvailable(null);
+        } finally {
+          setCheckingEmail(false);
+        }
+      }, 500);
+    }
+    if ((name === 'password' || name === 'confirmPassword') && passwordError) {
+      setPasswordError('');
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.password) {
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
       toast.error('Please fill in all fields');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordError('Passwords do not match');
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setPasswordError('Password must be at least 8 characters');
+      toast.error('Password must be at least 8 characters');
+      return;
+    }
+
+    if (emailAvailable === false) {
+      toast.error('An account with this email already exists.');
       return;
     }
 
     setLoading(true);
     try {
+      // Backend expects `username`, not `name` — gateway validation rejects `name`
       await register(formData.name, formData.email, formData.password);
     } catch (error) {
       // Error is handled in the AuthContext
@@ -267,7 +327,7 @@ const Register = () => {
                     width: '100%',
                     padding: '0.75rem 1rem',
                     background: '#ffffff',
-                    border: emailError ? '1px solid #ef4444' : '1px solid #d0d0d6',
+                    border: emailError ? '1px solid #ef4444' : emailAvailable ? '1px solid #22c55e' : '1px solid #d0d0d6',
                     borderRadius: '0.5rem',
                     color: 'black',
                     fontSize: '1rem',
@@ -281,6 +341,12 @@ const Register = () => {
                     if (!emailError) e.target.style.borderColor = '#d0d0d6';
                   }}
                 />
+                {checkingEmail && (
+                  <p style={{ color: '#71717a', fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>Checking availability…</p>
+                )}
+                {emailAvailable && !emailError && !checkingEmail && (
+                  <p style={{ color: '#22c55e', fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>✓ Email is available</p>
+                )}
                 {emailError && (
                   <p style={{
                     color: '#ef4444',
@@ -380,6 +446,51 @@ const Register = () => {
                   marginTop: '0.25rem'
                 }}>
                   {formData.password.length}/255
+                </div>
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  color: 'black',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem'
+                }}>
+                  Confirm Password <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  placeholder="••••••••••"
+                  maxLength={255}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: '#ffffff',
+                    border: passwordError ? '1px solid #ef4444' : '1px solid #d0d0d6',
+                    borderRadius: '0.5rem',
+                    color: 'black',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                    onFocus={(e) => { if (!passwordError) e.target.style.borderColor = '#733bf6'; }}
+                    onBlur={(e) => { if (!passwordError) e.target.style.borderColor = '#d0d0d6'; }}
+                />
+                {passwordError && (
+                  <p style={{ color: '#ef4444', fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>{passwordError}</p>
+                )}
+                <div style={{
+                  textAlign: 'right',
+                  color: '#71717a',
+                  fontSize: '0.75rem',
+                  marginTop: '0.25rem'
+                }}>
+                  {formData.confirmPassword.length}/255
                 </div>
               </div>
 

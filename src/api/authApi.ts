@@ -121,6 +121,16 @@ export const authApi = {
       const axiosError = error as AxiosError;
       throw axiosError.response?.data || error;
     }
+  },
+
+  checkEmail: async (email: string): Promise<{ available: boolean; message?: string }> => {
+    try {
+      const response = await api.get('/auth/check-email', { params: { email } });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      throw axiosError.response?.data || error;
+    }
   }
 };
 
