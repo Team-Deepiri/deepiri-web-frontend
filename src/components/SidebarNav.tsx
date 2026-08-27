@@ -17,19 +17,36 @@ const PUBLIC_NAV_ITEMS: NavItem[] = [
   { label: "Contact", to: "/contact" },
 ];
 
-const AUTHENTICATED_NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", to: "/dashboard", icon: "🏠" },
-  { label: "Tasks", to: "/tasks", icon: "📋" },
-  /*{ label: "Challenges", to: "/challenges", icon: "🎮" },*/
-  { label: "Analytics", to: "/analytics", icon: "📊" },
+const isHub = import.meta.env.VITE_ENABLE_LIS !== 'true' && import.meta.env.VITE_ENABLE_CYREX !== 'true';
+
+const HUB_NAV_ITEMS: NavItem[] = [
+  { label: "Dashboard", to: "/dashboard", icon: "◈" },
+  { label: "Projects", to: "/dashboard", icon: "▣" },
+  { label: "People", to: "/profile", icon: "◎" },
+  { label: "Events", to: "/events", icon: "◐" },
+  { label: "Artifacts", to: "/dashboard", icon: "⬢" },
+  { label: "Registry", to: "/ops/registry", icon: "⬔" },
+  { label: "Jobs", to: "/ops/jobs", icon: "⬕" },
   { label: "Ops Hub", to: "/ops", icon: "🛠️" },
   { label: "Codebase", to: "/codebase", icon: "🔍" },
   { label: "PR Impact", to: "/pr-impact", icon: "⚡" },
   { label: "Profile", to: "/profile", icon: "👤" },
-  { label: "Notifications", to: "/notifications", icon: "🔔" },
-  { label: "AI Assistant", to: "/agent", icon: "🤖" },
-  { label: "Group Chats", to: "/group-chats", icon: "💬" },
 ];
+
+const AUTHENTICATED_NAV_ITEMS: NavItem[] = isHub
+  ? HUB_NAV_ITEMS
+  : [
+      { label: "Dashboard", to: "/dashboard", icon: "🏠" },
+      { label: "Tasks", to: "/tasks", icon: "📋" },
+      { label: "Analytics", to: "/analytics", icon: "📊" },
+      { label: "Ops Hub", to: "/ops", icon: "🛠️" },
+      { label: "Codebase", to: "/codebase", icon: "🔍" },
+      { label: "PR Impact", to: "/pr-impact", icon: "⚡" },
+      { label: "Profile", to: "/profile", icon: "👤" },
+      { label: "Notifications", to: "/notifications", icon: "🔔" },
+      { label: "AI Assistant", to: "/agent", icon: "🤖" },
+      { label: "Group Chats", to: "/group-chats", icon: "💬" },
+    ];
 
 const SidebarNav: React.FC = () => {
   const [open, setOpen] = useState(false);
