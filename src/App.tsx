@@ -16,46 +16,49 @@ import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/lo
 import './styles/index.css';
 
 
-// Pages
+// Pages actually needed on first paint of the portal home base.
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import AdventureGenerator from "./pages/AdventureGenerator";
-import AdventureDetail from "./pages/AdventureDetail";
-import AdventureHistory from "./pages/AdventureHistory";
-import DocumentsPage from "./pages/Document.tsx";
-import Events from "./pages/Events";
-import EventDetail from "./pages/EventDetail";
-import CreateEvent from "./pages/CreateEvent";
-import Profile from "./pages/Profile";
-import Friends from "./pages/Friends";
-import Leaderboard from "./pages/Leaderboard";
-import TaskManagement from "./pages/TaskManagement";
-import Challenges from "./pages/Challenges";
-import Notifications from "./pages/Notifications";
-import Objectives from "./pages/Objectives";
-import Odysseys from "./pages/Odysseys";
-import Seasons from "./pages/Seasons";
-import Progress from "./pages/Progress";
-import Boosts from "./pages/Boosts";
-import Streaks from "./pages/Streaks";
-import AgentChat from "./pages/AgentChat";
-import ProductivityChat from "./pages/ProductivityChat";
-import GroupChats from "./pages/GroupChats";
-import GroupChatView from "./pages/GroupChatView";
-import PythonTools from "./pages/PythonTools";
-import UserInventory from "./pages/UserInventory";
-import Contact from "./pages/Contact";
-import Forgot from './pages/ForgotPassword.tsx'
 import ChatWidget from './components/ChatWidget/ChatWidget';
-import PRImpact from './pages/PRImpact';
+
+// Everything else is legacy gamification/adventure surface — lazy-loaded so it
+// never lands in the main bundle unless a route is actually visited.
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const AdventureGenerator = lazy(() => import("./pages/AdventureGenerator"));
+const AdventureDetail = lazy(() => import("./pages/AdventureDetail"));
+const AdventureHistory = lazy(() => import("./pages/AdventureHistory"));
+const DocumentsPage = lazy(() => import("./pages/Document.tsx"));
+const Events = lazy(() => import("./pages/Events"));
+const EventDetail = lazy(() => import("./pages/EventDetail"));
+const CreateEvent = lazy(() => import("./pages/CreateEvent"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Friends = lazy(() => import("./pages/Friends"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const TaskManagement = lazy(() => import("./pages/TaskManagement"));
+const Challenges = lazy(() => import("./pages/Challenges"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const Objectives = lazy(() => import("./pages/Objectives"));
+const Odysseys = lazy(() => import("./pages/Odysseys"));
+const Seasons = lazy(() => import("./pages/Seasons"));
+const Progress = lazy(() => import("./pages/Progress"));
+const Boosts = lazy(() => import("./pages/Boosts"));
+const Streaks = lazy(() => import("./pages/Streaks"));
+const AgentChat = lazy(() => import("./pages/AgentChat"));
+const ProductivityChat = lazy(() => import("./pages/ProductivityChat"));
+const GroupChats = lazy(() => import("./pages/GroupChats"));
+const GroupChatView = lazy(() => import("./pages/GroupChatView"));
+const PythonTools = lazy(() => import("./pages/PythonTools"));
+const UserInventory = lazy(() => import("./pages/UserInventory"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Forgot = lazy(() => import('./pages/ForgotPassword.tsx'));
+const PRImpact = lazy(() => import('./pages/PRImpact'));
 
 // Public pages
-import About from "./pages/About";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import ComponentShowcase from "./pages/ComponentShowcase.tsx";
+const About = lazy(() => import("./pages/About"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const ComponentShowcase = lazy(() => import("./pages/ComponentShowcase.tsx"));
 
 // Heavy pages are lazy-loaded to keep the initial bundle small.
 const DocumentDetail = lazy(() => import('./pages/LanguageIntelligence/DocumentDetail'));
