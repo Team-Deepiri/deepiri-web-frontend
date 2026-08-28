@@ -1,427 +1,241 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useAdventure } from '../contexts/AdventureContext';
 import { userApi } from '../api/userApi';
-import { adventureApi } from '../api/adventureApi';
+import { eventApi } from '../api/eventApi';
 import { externalApi } from '../api/externalApi';
-import InventoryWidget from '../components/InventoryWidget';
+import MeetingSchedule from '../components/MeetingSchedule';
+import RoleSelector from '../components/RoleSelector';
+import { getUserRole } from '../utils/roles';
+import type { DeepiriRole } from '../types/roles';
+import { ROLES } from '../types/roles';
+import { Calendar, Megaphone, Users, Clock, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { AppLocation } from '../types/common';
 
-interface Adventure {
-  _id: string;
-  name?: string;
-  totalDuration?: number;
-  steps?: any[];
-  status?: string;
-  metadata?: {
-    generatedAt?: string;
-  };
-  [key: string]: any;
-}
-
-interface Stats {
-  adventureStats?: {
-    completed?: number;
-  };
-  totalPoints?: number;
-  streak?: number;
-  friendsCount?: number;
-  [key: string]: any;
-}
-
-interface Weather {
-  temperature?: number;
-  condition?: string;
-  [key: string]: any;
-}
-
 interface Event {
+  _id?: string;
+  id?: string;
   name?: string;
+  description?: string;
   startTime?: string;
-  [key: string]: any;
+  location?: { address?: string };
+  type?: string;
+  participants?: string[];
 }
 
 const Dashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user, deepiriRole, setDeepiriRole } = useAuth();
   const { userLocation } = useAdventure();
-  const navigate = useNavigate();
-
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [recentAdventures, setRecentAdventures] = useState<Adventure[]>([]);
-  const [weather, setWeather] = useState<Weather | null>(null);
-  const [nearbyEvents, setNearbyEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [showAllMeetings, setShowAllMeetings] = useState(false);
+  const [localRole, setLocalRole] = useState<DeepiriRole | null>(deepiriRole || getUserRole(user));
 
   useEffect(() => {
-    loadDashboardData();
-  }, []);
+    setLocalRole(deepiriRole || getUserRole(user));
+  }, [deepiriRole, user]);
 
-  const loadDashboardData = async (): Promise<void> => {
-    try {
-      setLoading(true);
-      
-      const [statsResponse, adventuresResponse] = await Promise.all([
-        userApi.getStats(),
-        adventureApi.getUserAdventures(null, 5, 0)
-      ]);
+  // Keep showAll in sync with privileged roles
+  useEffect(() => {
+    if (localRole === 'it' || localRole === 'admin' || localRole === 'leadership') setShowAllMeetings(true);
+  }, [localRole]);
 
-      if (statsResponse.success) {
-        setStats(statsResponse.data);
-      }
-
-      if (adventuresResponse.success) {
-        setRecentAdventures(adventuresResponse.data || []);
-      }
-
-      // Load weather if location is available
-      if (userLocation) {
-        try {
-          const lat = 'latitude' in userLocation ? userLocation.latitude : userLocation.lat;
-          const lng = 'longitude' in userLocation ? userLocation.longitude : userLocation.lng;
-          const locationForApi: AppLocation = {
-            latitude: lat as number,
-            longitude: lng as number
-          };
-          const weatherResponse = await externalApi.getCurrentWeather(locationForApi);
-          if (weatherResponse.success) {
-            setWeather(weatherResponse.data);
-          }
-        } catch (error) {
-          console.error('Failed to load weather:', error);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const [statsRes, eventsRes] = await Promise.all([
+          userApi.getStats().catch(() => ({ success: false })),
+          eventApi.getUserEvents().catch(() => ({ success: false, data: [] })),
+        ]);
+        if ((statsRes as any)?.success) setStats((statsRes as any).data);
+        let ev: Event[] = [];
+        if ((eventsRes as any)?.success || (eventsRes as any)?.data) ev = (eventsRes as any).data || [];
+        // also try external if location available
+        if (userLocation) {
+          try {
+            const lat = 'latitude' in userLocation ? (userLocation as any).latitude : (userLocation as any).lat;
+            const lng = 'longitude' in userLocation ? (userLocation as any).longitude : (userLocation as any).lng;
+            const loc: AppLocation = { latitude: lat, longitude: lng };
+            const ext = await externalApi.getNearbyEvents(loc, 5000).catch(() => ({ success: false, data: [] }));
+            if ((ext as any)?.success && Array.isArray((ext as any).data)) ev = [...ev, ...(ext as any).data];
+          } catch {}
         }
+        setEvents(ev.slice(0, 6));
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
       }
+    };
+    load();
+  }, [userLocation]);
 
-      // Load nearby events
-      if (userLocation) {
-        try {
-          const lat = 'latitude' in userLocation ? userLocation.latitude : userLocation.lat;
-          const lng = 'longitude' in userLocation ? userLocation.longitude : userLocation.lng;
-          const locationForApi: AppLocation = {
-            latitude: lat as number,
-            longitude: lng as number
-          };
-          const eventsResponse = await externalApi.getNearbyEvents(locationForApi, 5000);
-          if (eventsResponse.success) {
-            setNearbyEvents((eventsResponse.data || []).slice(0, 3));
-          }
-        } catch (error) {
-          console.error('Failed to load events:', error);
-        }
-      }
-
-    } catch (error) {
-      console.error('Failed to load dashboard data:', error);
-      toast.error('Failed to load dashboard data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getGreeting = (): string => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
+  const greeting = () => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good Morning';
+    if (h < 17) return 'Good Afternoon';
     return 'Good Evening';
-  };
-
-  const getTimeOfDay = (): string => {
-    const hour = new Date().getHours();
-    if (hour < 6) return 'night';
-    if (hour < 12) return 'morning';
-    if (hour < 17) return 'afternoon';
-    if (hour < 22) return 'evening';
-    return 'night';
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-vh-100 bg-gray-50 d-flex align-items-center justify-content-center">
+        <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading…</span></div>
       </div>
     );
   }
 
+  const roleMeta = localRole ? ROLES[localRole] : null;
+
   return (
     <div className="min-vh-100 bg-gray-50">
       <div className="container px-3 py-4">
-        {/* Welcome Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-8"
-        >
-          <div className="bg-gradient-to-r from-purple-600 to-emerald-500 header-hero text-white">
-            <h1
-              style={{
-                fontSize: '4rem',
-                fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #f97316)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                margin: 0,
-                paddingBottom: '1.5rem'
-              }}
-            >
-              {getGreeting()}, {user?.name}!
-            </h1>
-            {weather && (
-              <div className="mt-4 flex items-center space-x-4">
-                <span className="text-2xl">
-                  {weather.condition === 'Clear' ? '☀️' : 
-                   weather.condition === 'Clouds' ? '☁️' : 
-                   weather.condition === 'Rain' ? '🌧️' : '🌤️'}
-                </span>
-                <span className="text-lg">
-                  {weather.temperature}°F • {weather.condition}
-                </span>
+        {/* Welcome */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
+          <div className="card-modern bg-white p-4 d-flex flex-column gap-3">
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <h1 className="h2 mb-1" style={{ fontWeight: 800, letterSpacing: '-0.02em' }}>{greeting()}, {user?.name || 'there'}!</h1>
+                <div className="text-muted small">Home base of Deepiri operations — events, meetings, and your team.</div>
+              </div>
+              <div className="d-flex align-items-center gap-2">
+                {roleMeta ? (
+                  <span className="px-3 py-2 rounded-pill text-white small fw-semibold d-inline-flex align-items-center gap-2" style={{ background: roleMeta.color }}>
+                    <span>{roleMeta.icon}</span> {roleMeta.label}
+                  </span>
+                ) : (
+                  <span className="badge bg-warning text-dark">No role selected</span>
+                )}
+                <Link to="/profile" className="btn btn-outline-secondary btn-sm">Change role</Link>
+              </div>
+            </div>
+
+            {!localRole && (
+              <div className="p-3 rounded-3" style={{ background: '#fffbeb', border: '1px solid #fcd34d' }}>
+                <div className="small fw-semibold mb-2">Pick your Deepiri role to see the right meetings:</div>
+                <RoleSelector value={localRole} onChange={(r) => { setLocalRole(r); setDeepiriRole(r); toast.success(`Role set to ${ROLES[r].label}`); }} />
               </div>
             )}
           </div>
         </motion.div>
 
         <div className="row g-4">
-          {/* Main Content */}
+          {/* Left: Meetings + Events */}
           <div className="col-lg-8 d-flex flex-column gap-4">
-            {/* Quick Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="card-modern bg-white"
-              style={{ paddingBottom: '2rem' }}
-            >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-black text-center">
-                Quick Actions
-              </h2>
-              <div className="row g-3">
-                {/*<Link
-                  to="/adventure/generate"
-                  className="group p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-white transition-all duration-200 col-6"
-                  style={{textDecorationColor: 'transparent'}}
-                >
-                  <div className="flex items-center space-x-4 card-modern">
-                    <div>
-                      <h2 className="text-lg font-semibold text-black">Generate Adventure</h2>
-                      <p className="text-blue-100">Create a new personalized adventure</p>
-                    </div>
-                  </div>
-                </Link>*/}
-
-                <Link
-                  to="/events"
-                  className="group p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg text-white transition-all duration-200 col-6"
-                  style={{textDecorationColor: 'transparent'}}
-                >
-                  <div className="flex items-center space-x-4 card-modern">
-                    <div>
-                      <h2 className="text-lg font-semibold text-black">Browse Events</h2>
-                      <p className="text-purple-100">Discover local events and meetups</p>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  to="/friends"
-                  className="group p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white transition-all duration-200 col-6"
-                  style={{textDecorationColor: 'transparent'}}
-                >
-                  <div className="flex items-center space-x-4 card-modern">
-                    <div>
-                      <h2 className="text-lg font-semibold text-black">Connect</h2>
-                      <p className="text-green-100">Find and invite friends</p>
-                    </div>
-                  </div>
-                </Link>
-
-                {/*<Link
-                  to="/adventures"
-                  className="group p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-white transition-all duration-200 col-6"
-                  style={{textDecorationColor: 'transparent'}}
-                >
-                  <div className="flex items-center space-x-4 text-black card-modern">
-                    <div>
-                      <h2 className="text-lg font-semibold text-black">My Adventures</h2>
-                      <p className="text-orange-100">View your adventure history</p>
-                    </div>
-                  </div>
-                </Link>*/}
+            {/* Meetings */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+              <div className="d-flex align-items-center justify-content-between mb-2">
+                <h2 className="h5 mb-0 d-flex align-items-center gap-2"><Users size={18} /> Team Meetings</h2>
+                {localRole && (
+                  <button className="btn btn-sm btn-outline-secondary" onClick={() => setShowAllMeetings(!showAllMeetings)}>
+                    {showAllMeetings ? 'Show my meetings' : 'Show all meetings'}
+                  </button>
+                )}
               </div>
+              <MeetingSchedule userRole={localRole} showAll={showAllMeetings} />
             </motion.div>
 
-            {/* Recent Adventures */}
-            {/*<motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 10 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="card-modern bg-white"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Recent Adventures
-                </h2>
-                <Link
-                  to="/adventures"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  View All
-                </Link>
+            {/* Upcoming Events */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card-modern bg-white p-4">
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <h3 className="h5 mb-0 d-flex align-items-center gap-2"><Calendar size={18} /> Upcoming Events</h3>
+                <Link to="/events" className="btn btn-sm btn-outline-primary">View all</Link>
               </div>
 
-              {recentAdventures.length > 0 ? (
-                <div className="space-y-4">
-                  {recentAdventures.map((adventure) => (
-                    <div
-                      key={adventure._id}
-                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer"
-                      onClick={() => navigate(`/adventure/${adventure._id}`)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-semibold text-gray-900">
-                            {adventure.name}
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            {adventure.totalDuration} minutes • {adventure.steps?.length || 0} stops
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            adventure.status === 'completed' ? 'bg-green-100 text-green-800' :
-                            adventure.status === 'active' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {adventure.status}
-                          </span>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {adventure.metadata?.generatedAt ? new Date(adventure.metadata.generatedAt).toLocaleDateString() : ''}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+              {events.length === 0 ? (
+                <div className="text-center py-4">
+                  <div className="text-muted small mb-2">No events yet — create one or check back after your next team meeting.</div>
+                  <Link to="/events" className="btn btn-primary btn-sm">Browse Events</Link>
+                  <Link to="/events/create" className="btn btn-outline-secondary btn-sm ms-2">Create Event</Link>
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    No adventures yet
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Generate your first adventure to get started!
-                  </p>
-                  <Link
-                    to="/adventure/generate"
-                    className="inline-flex items-center btn-modern btn-primary px-6 py-3 glow-purple"
-                  >
-                    Generate Adventure
-                  </Link>
-                </div>
-              )}
-            </motion.div>*/}
-          </div>
-
-          {/* Sidebar */}
-          <div className="col-lg-4 d-flex flex-column gap-4">
-            {/* Inventory Widget */}
-            {/*<motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <InventoryWidget />
-            </motion.div>*/}
-
-            {/* Stats */}
-            {stats && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="bg-white rounded-xl shadow-lg p-4"
-              >
-                <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Your Stats
-                </h2>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Adventures Completed</span>
-                    <span className="font-semibold text-gray-900">
-                      {stats.adventureStats?.completed || 0}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Total Points</span>
-                    <span className="font-semibold text-gray-900">
-                      {stats.totalPoints || 0}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Current Streak</span>
-                    <span className="font-semibold text-gray-900">
-                      {stats.streak || 0} days
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Friends</span>
-                    <span className="font-semibold text-gray-900">
-                      {stats.friendsCount || 0}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Nearby Events */}
-            {nearbyEvents.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="bg-white rounded-xl shadow-lg p-4"
-              >
-                <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Nearby Events
-                </h2>
-                <div className="space-y-4">
-                  {nearbyEvents.map((event, index) => (
-                    <div key={index} className="p-3 border border-gray-200 rounded-lg">
-                      <h3 className="font-semibold text-gray-900 text-sm">
-                        {event.name}
-                      </h3>
-                      <p className="text-xs text-gray-600">
-                        {event.startTime ? new Date(event.startTime).toLocaleDateString() : ''}
-                      </p>
-                    </div>
+                <div className="d-flex flex-column gap-3">
+                  {events.map((e, idx) => (
+                    <Link key={e._id || e.id || idx} to={`/events/${e._id || e.id}`} className="text-decoration-none">
+                      <div className="p-3 rounded-3 border d-flex align-items-center justify-content-between gap-3" style={{ background: 'white' }}>
+                        <div>
+                          <div className="fw-semibold text-dark">{e.name || 'Untitled Event'}</div>
+                          <div className="small text-muted d-flex align-items-center gap-2">
+                            <Clock size={12} /> {e.startTime ? new Date(e.startTime).toLocaleString() : 'Time TBD'}
+                            {e.location?.address && <span>· {e.location.address}</span>}
+                          </div>
+                          {e.description && <div className="small text-muted mt-1" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.description}</div>}
+                        </div>
+                        <span className="badge bg-light text-dark border" style={{ whiteSpace: 'nowrap' }}>{e.type || 'event'}</span>
+                      </div>
+                    </Link>
                   ))}
                 </div>
-                <Link
-                  to="/events"
-                  className="block text-center mt-4 text-blue-600 hover:text-blue-700 font-medium text-sm"
-                >
-                  View All Events
-                </Link>
+              )}
+            </motion.div>
+
+            {/* Quick Actions */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="card-modern bg-white p-4">
+              <h3 className="h6 mb-3">Quick Actions</h3>
+              <div className="row g-3">
+                <div className="col-6">
+                  <Link to="/events" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
+                    <div className="fw-semibold text-dark">Browse Events</div><div className="small text-muted">Discover and RSVP</div>
+                  </Link>
+                </div>
+                <div className="col-6">
+                  <Link to="/announcements" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
+                    <div className="fw-semibold text-dark">Announcements</div><div className="small text-muted">Comms to the collective</div>
+                  </Link>
+                </div>
+                <div className="col-6">
+                  <Link to="/documents" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
+                    <div className="fw-semibold text-dark">Documents</div><div className="small text-muted">Shared docs & decks</div>
+                  </Link>
+                </div>
+                <div className="col-6">
+                  <Link to="/profile" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
+                    <div className="fw-semibold text-dark">My Profile</div><div className="small text-muted">Update role & settings</div>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right: Role detail + Stats + Tips */}
+          <div className="col-lg-4 d-flex flex-column gap-4">
+            {localRole && (
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card-modern bg-white p-4" style={{ borderLeft: `4px solid ${roleMeta?.color}` }}>
+                <div className="small text-muted" style={{ letterSpacing: '0.5px' }}>YOUR ROLE</div>
+                <div className="h5 mb-1">{roleMeta?.label}</div>
+                <div className="small text-muted mb-2">{roleMeta?.description}</div>
+                <div className="small">
+                  <strong>GitHub team:</strong> {roleMeta?.githubTeam}<br />
+                  <strong>Meetings for you:</strong> {showAllMeetings ? 'All (IT/Admin/Lead)' : 'Filtered to your team + universal'}
+                </div>
+                {localRole === 'it' && <div className="alert alert-warning py-2 px-3 small mt-3 mb-0">IT can attend any meeting.</div>}
               </motion.div>
             )}
 
-            {/* Quick Tips */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="rounded-xl p-4 card-modern bg-white"
-            >
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Pro Tip
-              </h2>
-              <p className="text-gray-700 text-sm">
-                {getTimeOfDay() === 'morning' && "Perfect time for outdoor adventures and coffee shop visits!"}
-                {getTimeOfDay() === 'afternoon' && "Great time for food tours and cultural experiences!"}
-                {getTimeOfDay() === 'evening' && "Ideal for nightlife, concerts, and social events!"}
-                {getTimeOfDay() === 'night' && "Late night adventures await - bars and nightlife are calling!"}
-              </p>
+            {stats && (
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-3 p-4 border">
+                <div className="h6 mb-3">Your Stats</div>
+                <div className="d-flex flex-column gap-2 small">
+                  <div className="d-flex justify-content-between"><span className="text-muted">Adventures</span><span className="fw-semibold">{stats.adventureStats?.completed || 0}</span></div>
+                  <div className="d-flex justify-content-between"><span className="text-muted">Points</span><span className="fw-semibold">{stats.totalPoints || 0}</span></div>
+                  <div className="d-flex justify-content-between"><span className="text-muted">Streak</span><span className="fw-semibold">{stats.streak || 0} days</span></div>
+                  <div className="d-flex justify-content-between"><span className="text-muted">Friends</span><span className="fw-semibold">{stats.friendsCount || 0}</span></div>
+                </div>
+              </motion.div>
+            )}
+
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-modern bg-white p-4">
+              <div className="h6 d-flex align-items-center gap-2"><Megaphone size={16} /> How meetings work</div>
+              <div className="small text-muted" style={{ lineHeight: 1.6 }}>
+                Weekly team meetings are mandatory for your primary role. Intermittent tri-weekly (AI Research) and monthly management are opt-in for relevant roles. IT/Admin/Leadership may attend any.
+                <br /><br />
+                <Video size={12} className="me-1" /> All meetings on Google Meet / Calendar. Click <strong>Add to Calendar</strong> on each card.
+              </div>
             </motion.div>
           </div>
         </div>
@@ -431,4 +245,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-

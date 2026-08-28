@@ -1,4 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import RoleSelector from '../components/RoleSelector';
+import { getUserRole } from '../utils/roles';
+import type { DeepiriRole } from '../types/roles';
+import { ROLES } from '../types/roles';
 
 type SectionId =
   | 'personal'
@@ -21,9 +26,12 @@ type FieldDef = {
 };
 
 const Profile: React.FC = () => {
+  const { user, deepiriRole, setDeepiriRole } = useAuth();
   const [activeSection, setActiveSection] = useState<SectionId>('personal');
   const [viewMode, setViewMode] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [localRole, setLocalRole] = useState<DeepiriRole | null>(deepiriRole || getUserRole(user));
+  useEffect(() => { setLocalRole(deepiriRole || getUserRole(user)); }, [deepiriRole, user]);
 
   // Personal
   const [savedProfile, setSavedProfile] = useState({
@@ -434,6 +442,20 @@ const Profile: React.FC = () => {
   return (
     <div style={styles.wrapper}>
       <div style={styles.container}>
+        {/* Role banner */}
+        <div className="card-modern bg-white p-4 mb-4 d-flex flex-column gap-3">
+          <div className="d-flex align-items-center justify-content-between">
+            <div>
+              <div className="small text-muted" style={{ letterSpacing: '0.5px' }}>DEEPIRI ROLE</div>
+              <div className="h5 mb-0">{localRole ? ROLES[localRole].label : 'No role selected'}</div>
+              <div className="small text-muted">{localRole ? ROLES[localRole].description : 'Pick your primary team to filter meetings & access.'}</div>
+            </div>
+            {localRole && <span className="px-3 py-2 rounded-pill text-white small fw-bold" style={{ background: ROLES[localRole].color }}>{ROLES[localRole].icon} {ROLES[localRole].shortLabel}</span>}
+          </div>
+          <RoleSelector value={localRole} onChange={(r) => { setLocalRole(r); setDeepiriRole(r); }} />
+          <div className="small text-muted">IT / Admin / Leadership can attend any meeting. Your dashboard filters to <strong>{localRole ? ROLES[localRole].label : 'all'}</strong> meetings.</div>
+        </div>
+
         <div style={styles.header}>
           <div>
             <h1 style={{ fontSize: '32px', fontWeight: 'bold', margin: 0, color: 'black' }}>Profile</h1>

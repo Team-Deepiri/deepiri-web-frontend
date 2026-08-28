@@ -6,6 +6,8 @@ import {
   ClipboardList, BarChart3, Bell, Bot, MessageSquare, type LucideIcon,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { ROLES } from "../types/roles";
+import type { DeepiriRole } from "../types/roles";
 import logo from "../assets/images/logo_squared.png";
 
 type NavItem = {
@@ -60,7 +62,7 @@ const SidebarNav: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user, deepiriRole } = useAuth() as any;
 
   // Handle window resize
   useEffect(() => {
@@ -280,7 +282,9 @@ const SidebarNav: React.FC = () => {
             </div>
             <div className="deepiri-sidebar__user-info">
               <div className="deepiri-sidebar__user-name">{user?.name || "User"}</div>
-              <div className="deepiri-sidebar__user-role">Adventurer</div>
+              <div className="deepiri-sidebar__user-role" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {deepiriRole ? (ROLES[deepiriRole as DeepiriRole]?.shortLabel || String(deepiriRole)) : ((user as any)?.metadata?.deepiriRole ? (ROLES[(user as any).metadata.deepiriRole as DeepiriRole]?.shortLabel || String((user as any).metadata.deepiriRole)) : 'Member')}
+              </div>
             </div>
           </div>
           <button
