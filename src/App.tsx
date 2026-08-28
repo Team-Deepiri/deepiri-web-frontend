@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
@@ -60,6 +60,8 @@ const About = lazy(() => import("./pages/About"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const ComponentShowcase = lazy(() => import("./pages/ComponentShowcase.tsx"));
+const Tools = lazy(() => import("./pages/Tools"));
+const CreateAnnouncementTool = lazy(() => import("./pages/tools/CreateAnnouncementTool"));
 
 // Heavy pages are lazy-loaded to keep the initial bundle small.
 const DocumentDetail = lazy(() => import('./pages/LanguageIntelligence/DocumentDetail'));
@@ -146,7 +148,10 @@ const AppContent: React.FC = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+              {/* Announcements now lives on Dashboard + Tools — keep old route as redirect */}
+              <Route path="/announcements" element={<Navigate to="/dashboard#announcements" replace />} />
+              <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
+              <Route path="/tools/announce" element={<ProtectedRoute><CreateAnnouncementTool /></ProtectedRoute>} />
               <Route path="/documents" element={<ProtectedRoute><CompanyDocuments /></ProtectedRoute>} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
