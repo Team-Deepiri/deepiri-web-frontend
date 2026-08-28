@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi';
 import toast from 'react-hot-toast';
+import type { DeepiriRole } from '../types/roles';
+import { getStoredRole, getUserRole, setStoredRole } from '../utils/roles';
 
 // --- Interfaces ---
 
@@ -9,6 +11,9 @@ interface User {
   _id: string;
   name: string;
   email: string;
+  metadata?: any;
+  role?: string;
+  deepiriRole?: string;
   [key: string]: any;
 }
 
@@ -21,6 +26,8 @@ interface AuthContextType {
   logout: () => void;
   updateUser: (updatedUser: User) => void;
   isAuthenticated: boolean;
+  deepiriRole: DeepiriRole | null;
+  setDeepiriRole: (r: DeepiriRole) => void;
 }
 
 interface AuthProviderProps {
@@ -44,11 +51,22 @@ export const useAuth = (): AuthContextType => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [deepiriRole, setDeepiriRoleState] = useState<DeepiriRole | null>(() => getStoredRole());
   const [token, setToken] = useState<string | null>(() => {
     const storedToken = localStorage.getItem('token') as string | null;
     return storedToken && storedToken !== 'null' && storedToken !== 'undefined' ? storedToken : null;
   });
   const navigate = useNavigate();
+
+  const setDeepiriRole = (r: DeepiriRole) => {
+    setStoredRole(r);
+    setDeepiriRoleState(r);
+    if (user) {
+      const updated = { ...user, metadata: { ...(user.metadata || {}), deepiriRole: r } };
+      setUser(updated);
+      try { localStorage.setItem('user', JSON.stringify(updated)); } catch {}
+    }
+  };
 
   // --- INTERNAL HELPERS ---
 
@@ -61,6 +79,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(userData);
     if (userData) {
       localStorage.setItem('user', JSON.stringify(userData));
+      const r = getUserRole(userData);
+      if (r) {
+        setDeepiriRoleState(r);
+        try { localStorage.setItem('deepiri_role', r); } catch {}
+      }
     } else {
       localStorage.removeItem('user');
     }
@@ -202,7 +225,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     updateUser,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    deepiriRole: deepiriRole || getUserRole(user),
+    setDeepiriRole,
   };
 
   return (
