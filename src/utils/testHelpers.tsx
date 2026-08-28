@@ -6,7 +6,6 @@ import { render, RenderOptions } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
-import { SocketProvider } from '../contexts/SocketContext';
 import { AdventureProvider } from '../contexts/AdventureContext';
 import React from 'react';
 
@@ -60,11 +59,9 @@ export const TestWrapper: React.FC<TestWrapperProps> = ({ children }) => {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <SocketProvider>
-            <AdventureProvider>
-              {children}
-            </AdventureProvider>
-          </SocketProvider>
+          <AdventureProvider>
+            {children}
+          </AdventureProvider>
         </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>
