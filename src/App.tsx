@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { WebPushProvider } from "./contexts/WebPushContext";
-import { SocketProvider } from "./contexts/SocketContext";
 import { AdventureProvider } from "./contexts/AdventureContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -490,11 +489,9 @@ const App: React.FC = () => {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <WebPushProvider>
-            <SocketProvider>
-              <AdventureProvider>
-                <AppContent />
-              </AdventureProvider>
-            </SocketProvider>
+            <AdventureProvider>
+              <AppContent />
+            </AdventureProvider>
           </WebPushProvider>
         </AuthProvider>
       </QueryClientProvider>
