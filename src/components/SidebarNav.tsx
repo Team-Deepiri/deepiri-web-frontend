@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Megaphone, Calendar, FileText, Users, Database,
   ListChecks, Wrench, Code2, Zap, User, Home as HomeIcon,
-  ClipboardList, BarChart3, Bell, Bot, MessageSquare, type LucideIcon,
+  ClipboardList, BarChart3, Bell, Bot, MessageSquare, Hammer, type LucideIcon,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { ROLES } from "../types/roles";
@@ -28,7 +28,7 @@ const isHub = import.meta.env.VITE_ENABLE_LIS !== 'true' && import.meta.env.VITE
 
 const HUB_NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Announcements", to: "/announcements", icon: Megaphone },
+  { label: "Tools", to: "/tools", icon: Hammer },
   { label: "Events", to: "/events", icon: Calendar },
   { label: "Documents", to: "/documents", icon: FileText },
   { label: "People", to: "/profile", icon: Users },

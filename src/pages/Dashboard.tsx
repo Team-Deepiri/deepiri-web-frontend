@@ -11,7 +11,9 @@ import RoleSelector from '../components/RoleSelector';
 import { getUserRole } from '../utils/roles';
 import type { DeepiriRole } from '../types/roles';
 import { ROLES } from '../types/roles';
-import { Calendar, Megaphone, Users, Clock, Video } from 'lucide-react';
+import { getToolsForRole } from '../data/tools';
+import axiosInstance from '../api/axiosInstance';
+import { Calendar, Megaphone, Users, Clock, Video, Wrench, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { AppLocation } from '../types/common';
 
@@ -30,6 +32,7 @@ const Dashboard: React.FC = () => {
   const { user, deepiriRole, setDeepiriRole } = useAuth();
   const { userLocation } = useAdventure();
   const [events, setEvents] = useState<Event[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showAllMeetings, setShowAllMeetings] = useState(false);
@@ -48,14 +51,14 @@ const Dashboard: React.FC = () => {
     const load = async () => {
       try {
         setLoading(true);
-        const [statsRes, eventsRes] = await Promise.all([
+        const [statsRes, eventsRes, annRes] = await Promise.all([
           userApi.getStats().catch(() => ({ success: false })),
           eventApi.getUserEvents().catch(() => ({ success: false, data: [] })),
+          axiosInstance.get('/announcements').then(r => r.data).catch(() => ({ announcements: [] })),
         ]);
         if ((statsRes as any)?.success) setStats((statsRes as any).data);
         let ev: Event[] = [];
         if ((eventsRes as any)?.success || (eventsRes as any)?.data) ev = (eventsRes as any).data || [];
-        // also try external if location available
         if (userLocation) {
           try {
             const lat = 'latitude' in userLocation ? (userLocation as any).latitude : (userLocation as any).lat;
@@ -66,6 +69,8 @@ const Dashboard: React.FC = () => {
           } catch {}
         }
         setEvents(ev.slice(0, 6));
+        const annList = (annRes as any)?.announcements || (annRes as any)?.data || (Array.isArray(annRes) ? annRes : []);
+        setAnnouncements(Array.isArray(annList) ? annList.slice(0, 5) : []);
       } catch (e) {
         console.error(e);
       } finally {
@@ -174,30 +179,52 @@ const Dashboard: React.FC = () => {
               )}
             </motion.div>
 
-            {/* Quick Actions */}
+            {/* Announcements Window — Norozo forwards Discord #announcements */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.13 }} className="card-modern bg-white p-4" id="announcements">
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <h3 className="h5 mb-0 d-flex align-items-center gap-2"><Megaphone size={18} /> Announcements <span className="badge bg-light text-muted border small fw-normal">Norozo → Discord #announcements</span></h3>
+                <Link to="/tools/announce" className="btn btn-sm btn-primary">Create</Link>
+              </div>
+              {announcements.length === 0 ? (
+                <div className="text-center py-3">
+                  <div className="small text-muted mb-2">No announcements yet. Norozo will auto-forward every post from Discord #announcements (1436509524818395156) here.</div>
+                  <div className="small text-muted">Create one via the tool above — it appears here and in Discord.</div>
+                </div>
+              ) : (
+                <div className="d-flex flex-column gap-3">
+                  {announcements.map((a: any) => (
+                    <div key={a.id || a._id} className="p-3 rounded-3 border" style={{ background: '#ffffff' }}>
+                      <div className="fw-semibold text-dark">{a.title}</div>
+                      <div className="small text-muted mt-1" style={{ whiteSpace: 'pre-wrap' }}>{a.body}</div>
+                      <div className="small text-muted mt-2">{a.authorName || a.author || 'Norozo'} · {a.createdAt ? new Date(a.createdAt).toLocaleString() : ''}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="small text-muted mt-3">Forwarded automatically by Norozo bot (DISCORD_BOT_TOKEN). Channel: #announcements → <code>POST /api/webhooks/norozo/announcements</code> with <code>X-Norozo-Secret</code>.</div>
+            </motion.div>
+
+            {/* Tools Preview — role-filtered grid */}
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="card-modern bg-white p-4">
-              <h3 className="h6 mb-3">Quick Actions</h3>
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <h3 className="h6 mb-0 d-flex align-items-center gap-2"><Wrench size={16} /> Your Tools</h3>
+                <Link to="/tools" className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">View all <ArrowRight size={14} /></Link>
+              </div>
               <div className="row g-3">
-                <div className="col-6">
-                  <Link to="/events" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
-                    <div className="fw-semibold text-dark">Browse Events</div><div className="small text-muted">Discover and RSVP</div>
-                  </Link>
-                </div>
-                <div className="col-6">
-                  <Link to="/announcements" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
-                    <div className="fw-semibold text-dark">Announcements</div><div className="small text-muted">Comms to the collective</div>
-                  </Link>
-                </div>
-                <div className="col-6">
-                  <Link to="/documents" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
-                    <div className="fw-semibold text-dark">Documents</div><div className="small text-muted">Shared docs & decks</div>
-                  </Link>
-                </div>
-                <div className="col-6">
-                  <Link to="/profile" className="p-3 rounded-3 d-block text-decoration-none border" style={{ background: '#f8fafc' }}>
-                    <div className="fw-semibold text-dark">My Profile</div><div className="small text-muted">Update role & settings</div>
-                  </Link>
-                </div>
+                {getToolsForRole(localRole).slice(0, 6).map(t => {
+                  const Icon = t.icon;
+                  return (
+                    <div key={t.id} className="col-6">
+                      <Link to={t.route} className="p-3 rounded-3 d-block text-decoration-none border d-flex align-items-center gap-2" style={{ background: '#f8fafc', borderTop: `2px solid ${t.color}` }}>
+                        <span className="d-inline-flex align-items-center justify-content-center rounded-2" style={{ width: 28, height: 28, background: `${t.color}15`, color: t.color }}><Icon size={14} /></span>
+                        <div><div className="small fw-semibold text-dark">{t.label}</div><div className="small text-muted" style={{ lineHeight: 1.2 }}>{t.description.slice(0, 32)}…</div></div>
+                      </Link>
+                    </div>
+                  );
+                })}
+                {(!localRole || getToolsForRole(localRole).length === 0) && (
+                  <div className="col-12 small text-muted">Pick a role in Profile to unlock tools. Admin sees all.</div>
+                )}
               </div>
             </motion.div>
           </div>
