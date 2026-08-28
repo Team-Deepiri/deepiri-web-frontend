@@ -431,6 +431,10 @@
   position: relative;
 }
 
+.deepiri-sidebar__icon {
+  flex-shrink: 0;
+}
+
 .deepiri-sidebar__link:hover {
   color: black;
   background: rgba(255, 255, 255, 0.08);

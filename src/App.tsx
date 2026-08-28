@@ -50,6 +50,8 @@ const GroupChatView = lazy(() => import("./pages/GroupChatView"));
 const PythonTools = lazy(() => import("./pages/PythonTools"));
 const UserInventory = lazy(() => import("./pages/UserInventory"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Announcements = lazy(() => import("./pages/Announcements"));
+const CompanyDocuments = lazy(() => import("./pages/CompanyDocuments"));
 const Forgot = lazy(() => import('./pages/ForgotPassword.tsx'));
 const PRImpact = lazy(() => import('./pages/PRImpact'));
 
@@ -144,6 +146,8 @@ const AppContent: React.FC = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+              <Route path="/documents" element={<ProtectedRoute><CompanyDocuments /></ProtectedRoute>} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />

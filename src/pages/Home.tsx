@@ -131,13 +131,13 @@ const Home: React.FC = () => {
               <div className="row g-3 mt-2">
                 {[
                   { label: "Dashboard", to: "/dashboard", desc: "Hub overview + health", icon: "◈" },
-                  { label: "Projects", to: "/dashboard", desc: "Teams, ownership, catalog", icon: "▣" },
+                  { label: "Announcements", to: "/announcements", desc: "Comms to the collective", icon: "⬣" },
+                  { label: "Events", to: "/events", desc: "Calendar, RSVPs", icon: "◐" },
+                  { label: "Documents", to: "/documents", desc: "Shared docs, decks, wikis", icon: "⬢" },
                   { label: "People", to: "/profile", desc: "Directory + teams", icon: "◎" },
-                  { label: "Events", to: "/events", desc: "Calendar + announcements", icon: "◐" },
-                  { label: "Artifacts", to: "/dashboard", desc: "Datasets, docs, recordings", icon: "⬢" },
-                  { label: "Announcements", to: "/events", desc: "Comms to the collective", icon: "⬣" },
                   { label: "Registry", to: "/ops/registry", desc: "Service catalog + health", icon: "⬔" },
-                  { label: "Jobs", to: "/ops/jobs", desc: "Shared async work", icon: "⬕" },
+                  { label: "Jobs", to: "/ops/jobs", desc: "Shared async work, test runs", icon: "⬕" },
+                  { label: "Ops Hub", to: "/ops", desc: "Truss, telemetry, everything else", icon: "⚙" },
                 ].map((c) => (
                   <div key={c.label} className="col-6 col-md-3">
                     <Link to={c.to} className="deepiri-miniCard h-100 deepiri-cardLift text-decoration-none d-block">

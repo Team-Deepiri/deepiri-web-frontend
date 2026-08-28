@@ -1,15 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import {
+  LayoutDashboard, Megaphone, Calendar, FileText, Users, Database,
+  ListChecks, Wrench, Code2, Zap, User, Home as HomeIcon,
+  ClipboardList, BarChart3, Bell, Bot, MessageSquare, type LucideIcon,
+} from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/images/logo_squared.png";
 
 type NavItem = {
   label: string;
   to: string;
-  icon?: string;
+  icon: LucideIcon;
 };
 
-const PUBLIC_NAV_ITEMS: NavItem[] = [
+const PUBLIC_NAV_ITEMS: Omit<NavItem, "icon">[] = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
   { label: "Codebase", to: "/codebase" },
@@ -20,32 +25,32 @@ const PUBLIC_NAV_ITEMS: NavItem[] = [
 const isHub = import.meta.env.VITE_ENABLE_LIS !== 'true' && import.meta.env.VITE_ENABLE_CYREX !== 'true';
 
 const HUB_NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", to: "/dashboard", icon: "◈" },
-  { label: "Projects", to: "/dashboard", icon: "▣" },
-  { label: "People", to: "/profile", icon: "◎" },
-  { label: "Events", to: "/events", icon: "◐" },
-  { label: "Artifacts", to: "/dashboard", icon: "⬢" },
-  { label: "Registry", to: "/ops/registry", icon: "⬔" },
-  { label: "Jobs", to: "/ops/jobs", icon: "⬕" },
-  { label: "Ops Hub", to: "/ops", icon: "🛠️" },
-  { label: "Codebase", to: "/codebase", icon: "🔍" },
-  { label: "PR Impact", to: "/pr-impact", icon: "⚡" },
-  { label: "Profile", to: "/profile", icon: "👤" },
+  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  { label: "Announcements", to: "/announcements", icon: Megaphone },
+  { label: "Events", to: "/events", icon: Calendar },
+  { label: "Documents", to: "/documents", icon: FileText },
+  { label: "People", to: "/profile", icon: Users },
+  { label: "Registry", to: "/ops/registry", icon: Database },
+  { label: "Jobs", to: "/ops/jobs", icon: ListChecks },
+  { label: "Ops Hub", to: "/ops", icon: Wrench },
+  { label: "Codebase", to: "/codebase", icon: Code2 },
+  { label: "PR Impact", to: "/pr-impact", icon: Zap },
+  { label: "Profile", to: "/profile", icon: User },
 ];
 
 const AUTHENTICATED_NAV_ITEMS: NavItem[] = isHub
   ? HUB_NAV_ITEMS
   : [
-      { label: "Dashboard", to: "/dashboard", icon: "🏠" },
-      { label: "Tasks", to: "/tasks", icon: "📋" },
-      { label: "Analytics", to: "/analytics", icon: "📊" },
-      { label: "Ops Hub", to: "/ops", icon: "🛠️" },
-      { label: "Codebase", to: "/codebase", icon: "🔍" },
-      { label: "PR Impact", to: "/pr-impact", icon: "⚡" },
-      { label: "Profile", to: "/profile", icon: "👤" },
-      { label: "Notifications", to: "/notifications", icon: "🔔" },
-      { label: "AI Assistant", to: "/agent", icon: "🤖" },
-      { label: "Group Chats", to: "/group-chats", icon: "💬" },
+      { label: "Dashboard", to: "/dashboard", icon: HomeIcon },
+      { label: "Tasks", to: "/tasks", icon: ClipboardList },
+      { label: "Analytics", to: "/analytics", icon: BarChart3 },
+      { label: "Ops Hub", to: "/ops", icon: Wrench },
+      { label: "Codebase", to: "/codebase", icon: Code2 },
+      { label: "PR Impact", to: "/pr-impact", icon: Zap },
+      { label: "Profile", to: "/profile", icon: User },
+      { label: "Notifications", to: "/notifications", icon: Bell },
+      { label: "AI Assistant", to: "/agent", icon: Bot },
+      { label: "Group Chats", to: "/group-chats", icon: MessageSquare },
     ];
 
 const SidebarNav: React.FC = () => {
@@ -246,22 +251,26 @@ const SidebarNav: React.FC = () => {
         </div>
 
         <nav className="deepiri-sidebar__nav">
-          {AUTHENTICATED_NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `deepiri-sidebar__link ${isActive ? "is-active" : ""}`
-              }
-              onClick={() => {
-                if (isMobile) {
-                  setSidebarOpen(false);
+          {AUTHENTICATED_NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `deepiri-sidebar__link ${isActive ? "is-active" : ""}`
                 }
-              }}
-            >
-              <span className="deepiri-sidebar__label">{item.label}</span>
-            </NavLink>
-          ))}
+                onClick={() => {
+                  if (isMobile) {
+                    setSidebarOpen(false);
+                  }
+                }}
+              >
+                <Icon size={17} className="deepiri-sidebar__icon" aria-hidden="true" />
+                <span className="deepiri-sidebar__label">{item.label}</span>
+              </NavLink>
+            );
+          })}
         </nav>
 
         <div className="deepiri-sidebar__footer">
