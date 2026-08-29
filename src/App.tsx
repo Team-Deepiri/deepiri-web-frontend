@@ -42,6 +42,7 @@ import RegistryDashboard from "./pages/Ops/RegistryDashboard";
 import TelemetryDashboard from "./pages/Ops/TelemetryDashboard";
 import TrussDashboard from "./pages/Ops/TrussDashboard";
 import Notifications from "./pages/Notifications";
+import Announcements from "./pages/Announcements";
 import Objectives from "./pages/Objectives";
 import Odysseys from "./pages/Odysseys";
 import Seasons from "./pages/Seasons";
@@ -291,6 +292,14 @@ const AppContent: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <TelemetryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/announcements"
+                element={
+                  <ProtectedRoute>
+                    <Announcements />
                   </ProtectedRoute>
                 }
               />
