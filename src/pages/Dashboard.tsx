@@ -12,8 +12,9 @@ import { getUserRole } from '../utils/roles';
 import type { DeepiriRole } from '../types/roles';
 import { ROLES } from '../types/roles';
 import { getToolsForRole } from '../data/tools';
+import { TEAM_MEETINGS } from '../data/meetings';
 import axiosInstance from '../api/axiosInstance';
-import { Calendar, Megaphone, Users, Clock, Video, Wrench, ArrowRight } from 'lucide-react';
+import { Calendar, Megaphone, Users, Clock, Video, Wrench, ArrowRight, Activity, Rocket } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { AppLocation } from '../types/common';
 
@@ -34,6 +35,7 @@ const Dashboard: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
+  const [recentActivity, setRecentActivity] = useState<{ jobs: any[]; registry: any[] }>({ jobs: [], registry: [] });
   const [loading, setLoading] = useState(true);
   const [showAllMeetings, setShowAllMeetings] = useState(false);
   const [localRole, setLocalRole] = useState<DeepiriRole | null>(deepiriRole || getUserRole(user));
@@ -51,12 +53,18 @@ const Dashboard: React.FC = () => {
     const load = async () => {
       try {
         setLoading(true);
-        const [statsRes, eventsRes, annRes] = await Promise.all([
+        const [statsRes, eventsRes, annRes, jobsRes, registryRes] = await Promise.all([
           userApi.getStats().catch(() => ({ success: false })),
           eventApi.getUserEvents().catch(() => ({ success: false, data: [] })),
           axiosInstance.get('/announcements').then(r => r.data).catch(() => ({ announcements: [] })),
+          axiosInstance.get('/jobs').then(r => r.data).catch(() => ({ jobs: [] })),
+          axiosInstance.get('/registry').then(r => r.data).catch(() => ({ entries: [] })),
         ]);
         if ((statsRes as any)?.success) setStats((statsRes as any).data);
+        // recent activity
+        const jobsList = (jobsRes as any)?.jobs || (jobsRes as any)?.data || (Array.isArray(jobsRes) ? jobsRes : []);
+        const regList = (registryRes as any)?.entries || (registryRes as any)?.data || (Array.isArray(registryRes) ? registryRes : []);
+        setRecentActivity({ jobs: Array.isArray(jobsList) ? jobsList.slice(0, 3) : [], registry: Array.isArray(regList) ? regList.slice(0, 3) : [] });
         let ev: Event[] = [];
         if ((eventsRes as any)?.success || (eventsRes as any)?.data) ev = (eventsRes as any).data || [];
         if (userLocation) {
@@ -67,6 +75,19 @@ const Dashboard: React.FC = () => {
             const ext = await externalApi.getNearbyEvents(loc, 5000).catch(() => ({ success: false, data: [] }));
             if ((ext as any)?.success && Array.isArray((ext as any).data)) ev = [...ev, ...(ext as any).data];
           } catch {}
+        }
+        // Next Events: always show something — if empty, use TEAM_MEETINGS as synthetic events
+        if (ev.length === 0) {
+          const synthetic: Event[] = TEAM_MEETINGS.slice(0, 3).map(m => ({
+            id: `meeting-${m.id}`,
+            _id: `meeting-${m.id}`,
+            name: m.title,
+            description: m.description,
+            startTime: new Date(Date.now() + 24*60*60*1000).toISOString(),
+            location: { address: m.location },
+            type: 'team-meeting',
+          }));
+          ev = synthetic;
         }
         setEvents(ev.slice(0, 6));
         const annList = (annRes as any)?.announcements || (annRes as any)?.data || (Array.isArray(annRes) ? annRes : []);
@@ -97,6 +118,8 @@ const Dashboard: React.FC = () => {
 
   const roleMeta = localRole ? ROLES[localRole] : null;
 
+  const firstName = (user?.name || '').trim().split(' ')[0] || 'there';
+
   return (
     <div className="min-vh-100 bg-gray-50">
       <div className="container px-3 py-4">
@@ -105,7 +128,7 @@ const Dashboard: React.FC = () => {
           <div className="card-modern bg-white p-4 d-flex flex-column gap-3">
             <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
               <div>
-                <h1 className="h2 mb-1" style={{ fontWeight: 800, letterSpacing: '-0.02em' }}>{greeting()}, {user?.name || 'there'}!</h1>
+                <h1 className="h2 mb-1" style={{ fontWeight: 800, letterSpacing: '-0.02em' }}>{greeting()}, {firstName}!</h1>
                 <div className="text-muted small">Home base of Deepiri operations — events, meetings, and your team.</div>
               </div>
               <div className="d-flex align-items-center gap-2">
@@ -160,21 +183,31 @@ const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-3">
-                  {events.map((e, idx) => (
-                    <Link key={e._id || e.id || idx} to={`/events/${e._id || e.id}`} className="text-decoration-none">
-                      <div className="p-3 rounded-3 border d-flex align-items-center justify-content-between gap-3" style={{ background: 'white' }}>
-                        <div>
+                  {events.map((e, idx) => {
+                    const cid = e._id || e.id || String(idx);
+                    const isMeeting = String(cid).startsWith('meeting-');
+                    const gcal = e.startTime ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.name || 'Event')}&dates=${new Date(e.startTime).toISOString().replace(/[-:]/g,'').split('.')[0]}Z/${new Date(new Date(e.startTime).getTime()+60*60*1000).toISOString().replace(/[-:]/g,'').split('.')[0]}Z&details=${encodeURIComponent(e.description || '')}` : null;
+                    return (
+                    <div key={cid} className="p-3 rounded-3 border d-flex align-items-center justify-content-between gap-3" style={{ background: 'white' }}>
+                      <div className="flex-grow-1">
+                        {isMeeting ? (
                           <div className="fw-semibold text-dark">{e.name || 'Untitled Event'}</div>
-                          <div className="small text-muted d-flex align-items-center gap-2">
-                            <Clock size={12} /> {e.startTime ? new Date(e.startTime).toLocaleString() : 'Time TBD'}
-                            {e.location?.address && <span>· {e.location.address}</span>}
-                          </div>
-                          {e.description && <div className="small text-muted mt-1" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.description}</div>}
+                        ) : (
+                          <Link to={`/events/${cid}`} className="fw-semibold text-dark text-decoration-none">{e.name || 'Untitled Event'}</Link>
+                        )}
+                        <div className="small text-muted d-flex align-items-center gap-2">
+                          <Clock size={12} /> {e.startTime ? new Date(e.startTime).toLocaleString() : 'Time TBD'}
+                          {e.location?.address && <span>· {e.location.address}</span>}
                         </div>
-                        <span className="badge bg-light text-dark border" style={{ whiteSpace: 'nowrap' }}>{e.type || 'event'}</span>
+                        {e.description && <div className="small text-muted mt-1" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{e.description}</div>}
                       </div>
-                    </Link>
-                  ))}
+                      <div className="d-flex flex-column align-items-end gap-1">
+                        <span className="badge bg-light text-dark border" style={{ whiteSpace: 'nowrap' }}>{e.type || 'event'}</span>
+                        {gcal && <a href={gcal} target="_blank" rel="noreferrer" className="small text-primary">Add to Google Calendar →</a>}
+                      </div>
+                    </div>
+                    );
+                  })}
                 </div>
               )}
             </motion.div>
@@ -227,6 +260,34 @@ const Dashboard: React.FC = () => {
                 )}
               </div>
             </motion.div>
+
+            {/* Recent Activity strip */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }} className="card-modern bg-white p-4">
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <h3 className="h6 mb-0 d-flex align-items-center gap-2"><Activity size={16} /> Recent Activity</h3>
+                <Link to="/ops/jobs" className="small text-primary text-decoration-none">Jobs →</Link>
+              </div>
+              <div className="row g-3 small">
+                <div className="col-md-4">
+                  <div className="fw-semibold mb-2">Jobs</div>
+                  {recentActivity.jobs.length === 0 ? <div className="text-muted">No recent jobs.</div> : recentActivity.jobs.map((j:any, i:number) => (
+                    <div key={j.id||i} className="border rounded-2 p-2 mb-1 bg-light">{j.type || j.name || 'Job'} · <span className="text-muted">{j.status || 'pending'}</span></div>
+                  ))}
+                </div>
+                <div className="col-md-4">
+                  <div className="fw-semibold mb-2">Registry</div>
+                  {recentActivity.registry.length === 0 ? <div className="text-muted">No recent registry entries.</div> : recentActivity.registry.map((r:any,i:number) => (
+                    <div key={r.id||i} className="border rounded-2 p-2 mb-1 bg-light">{r.service || r.name || 'Service'} · <span className="text-muted">{r.status || 'ok'}</span></div>
+                  ))}
+                </div>
+                <div className="col-md-4">
+                  <div className="fw-semibold mb-2">Announcements</div>
+                  {announcements.length === 0 ? <div className="text-muted">No announcements.</div> : announcements.slice(0,3).map((a:any)=> (
+                    <div key={a.id||a._id} className="border rounded-2 p-2 mb-1 bg-light">{a.title}</div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
 
           {/* Right: Role detail + Stats + Tips */}
@@ -244,7 +305,7 @@ const Dashboard: React.FC = () => {
               </motion.div>
             )}
 
-            {stats && (
+            {stats && stats.totalPoints != null && (
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-3 p-4 border">
                 <div className="h6 mb-3">Your Stats</div>
                 <div className="d-flex flex-column gap-2 small">

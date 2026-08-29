@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { WebPushProvider } from "./contexts/WebPushContext";
 import { AdventureProvider } from "./contexts/AdventureContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -62,6 +63,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const ComponentShowcase = lazy(() => import("./pages/ComponentShowcase.tsx"));
 const Tools = lazy(() => import("./pages/Tools"));
 const CreateAnnouncementTool = lazy(() => import("./pages/tools/CreateAnnouncementTool"));
+const People = lazy(() => import("./pages/People"));
 
 // Heavy pages are lazy-loaded to keep the initial bundle small.
 const DocumentDetail = lazy(() => import('./pages/LanguageIntelligence/DocumentDetail'));
@@ -152,6 +154,7 @@ const AppContent: React.FC = () => {
               <Route path="/announcements" element={<Navigate to="/dashboard#announcements" replace />} />
               <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
               <Route path="/tools/announce" element={<ProtectedRoute><CreateAnnouncementTool /></ProtectedRoute>} />
+              <Route path="/people" element={<ProtectedRoute><People /></ProtectedRoute>} />
               <Route path="/documents" element={<ProtectedRoute><CompanyDocuments /></ProtectedRoute>} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
@@ -499,13 +502,15 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <WebPushProvider>
-            <AdventureProvider>
-              <AppContent />
-            </AdventureProvider>
-          </WebPushProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <WebPushProvider>
+              <AdventureProvider>
+                <AppContent />
+              </AdventureProvider>
+            </WebPushProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

@@ -4,7 +4,8 @@ export type DeepiriRole =
   | 'software_developer'
   | 'it'
   | 'admin'
-  | 'leadership';
+  | 'leadership'
+  | 'owner';
 
 export interface RoleMeta {
   id: DeepiriRole;
@@ -71,6 +72,15 @@ export const ROLES: Record<DeepiriRole, RoleMeta> = {
     color: '#111827',
     icon: '👑',
   },
+  owner: {
+    id: 'owner',
+    label: 'Owner',
+    shortLabel: 'Owner',
+    description: 'Platform owner — superset of admin + Platform Secrets',
+    githubTeam: 'Owner',
+    color: '#0f172a',
+    icon: '🔑',
+  },
 };
 
 export const ROLE_OPTIONS: { value: DeepiriRole; label: string; hint: string }[] = [
@@ -80,4 +90,5 @@ export const ROLE_OPTIONS: { value: DeepiriRole; label: string; hint: string }[]
   { value: 'it', label: 'IT / Security & Operations', hint: 'Can attend any meeting' },
   { value: 'admin', label: 'Admin', hint: 'Full platform access' },
   { value: 'leadership', label: 'Leadership', hint: 'Management + all meetings' },
+  { value: 'owner', label: 'Owner', hint: 'Superset of admin + secrets' },
 ];

@@ -959,3 +959,30 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Dark theme — toggled via document.documentElement.classList('dark') */
+.dark body,
+.dark #root {
+  background: #0b1020 !important;
+  color: #e5e7eb;
+}
+.dark .app-shell {
+  background: linear-gradient(to bottom, #0f172a, #020617) !important;
+  color: #e5e7eb;
+}
+.dark .card-modern {
+  background: rgba(30, 41, 59, 0.85) !important;
+  color: #e5e7eb !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+.dark .bg-white {
+  background-color: #1e293b !important;
+  color: #e5e7eb !important;
+}
+.dark .text-dark { color: #e5e7eb !important; }
+.dark .text-muted { color: #94a3b8 !important; }
+.dark .border { border-color: rgba(255,255,255,0.08) !important; }
+.dark .deepiri-sidebar {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border-right-color: rgba(255,255,255,0.06) !important;
+}

@@ -31,7 +31,7 @@ const HUB_NAV_ITEMS: NavItem[] = [
   { label: "Tools", to: "/tools", icon: Hammer },
   { label: "Events", to: "/events", icon: Calendar },
   { label: "Documents", to: "/documents", icon: FileText },
-  { label: "People", to: "/profile", icon: Users },
+  { label: "People", to: "/people", icon: Users },
   { label: "Registry", to: "/ops/registry", icon: Database },
   { label: "Jobs", to: "/ops/jobs", icon: ListChecks },
   { label: "Ops Hub", to: "/ops", icon: Wrench },
@@ -277,9 +277,13 @@ const SidebarNav: React.FC = () => {
 
         <div className="deepiri-sidebar__footer">
           <div className="deepiri-sidebar__user">
-            <div className="deepiri-sidebar__user-avatar">
-              {user?.name?.charAt(0).toUpperCase() || "U"}
-            </div>
+            {user?.avatarUrl || user?.metadata?.avatarUrl ? (
+              <img src={user.avatarUrl || user.metadata.avatarUrl} alt="avatar" className="deepiri-sidebar__user-avatar" style={{ objectFit: 'cover' }} />
+            ) : (
+              <div className="deepiri-sidebar__user-avatar">
+                {user?.name?.charAt(0).toUpperCase() || "U"}
+              </div>
+            )}
             <div className="deepiri-sidebar__user-info">
               <div className="deepiri-sidebar__user-name">{user?.name || "User"}</div>
               <div className="deepiri-sidebar__user-role" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
