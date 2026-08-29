@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useAdventure } from '../contexts/AdventureContext';
 import { eventApi } from '../api/eventApi';
 import { externalApi } from '../api/externalApi';
+import { TEAM_MEETINGS } from '../data/meetings';
 import toast from 'react-hot-toast';
 import type { AppLocation } from '../types/common';
 
@@ -63,6 +64,20 @@ const Events: React.FC = () => {
 
       if (externalEventsResponse.success || externalEventsResponse.data) {
         allEvents = [...allEvents, ...(externalEventsResponse.data || [])];
+      }
+
+      // Synthetic fallback: Team Meetings as events when empty
+      if (allEvents.length === 0) {
+        const synthetic: Event[] = TEAM_MEETINGS.map(m => ({
+          id: `meeting-${m.id}`,
+          _id: `meeting-${m.id}`,
+          name: m.title,
+          description: m.description,
+          type: 'team-meeting',
+          location: { address: m.location },
+          startTime: new Date(Date.now() + 24*60*60*1000).toISOString(),
+        }));
+        allEvents = synthetic;
       }
 
       setEvents(allEvents);
@@ -363,6 +378,13 @@ const Events: React.FC = () => {
                         ) : 'Time TBD'}
                       </span>
                     </div>
+                    {event.startTime && (
+                      <div className="text-xs">
+                        <a
+                          href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name || 'Event')}&dates=${new Date(event.startTime).toISOString().replace(/[-:]/g,'').split('.')[0]}Z/${new Date(new Date(event.startTime).getTime()+60*60*1000).toISOString().replace(/[-:]/g,'').split('.')[0]}Z&details=${encodeURIComponent(event.description || '')}`}
+                          target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Add to Google Calendar →</a>
+                      </div>
+                    )}
                     {event.maxParticipants && (
                       <div className="flex items-center text-sm text-gray-600">
                         <span className="mr-2">👥</span>

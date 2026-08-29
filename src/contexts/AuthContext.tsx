@@ -185,8 +185,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { user, token } = response;
         persistUser(user);
         persistToken(token);
-        toast.success('Account created successfully!');
-        navigate('/home');
+        toast.success('Account created successfully! Complete your profile.');
+        navigate('/profile?onboarding=1');
         return { success: true };
       } else {
         toast.error(response.message || 'Registration failed');

@@ -40,16 +40,16 @@ export function hasRole(user: any, role: DeepiriRole): boolean {
   const r = getUserRole(user);
   if (!r) return false;
   if (r === role) return true;
-  // IT, admin, leadership see all
-  if (r === 'it' || r === 'admin' || r === 'leadership') return true;
+  // IT, admin, leadership, owner see all
+  if (r === 'it' || r === 'admin' || r === 'leadership' || r === 'owner') return true;
   return false;
 }
 
 export function canAttendMeeting(userRole: DeepiriRole | null, meeting: TeamMeeting): boolean {
   if (!userRole) return true; // show all if no role set, with hint
   if (meeting.roles.includes(userRole)) return true;
-  // IT/admin/leadership can attend any
-  if (userRole === 'it' || userRole === 'admin' || userRole === 'leadership') return true;
+  // IT/admin/leadership/owner can attend any
+  if (userRole === 'it' || userRole === 'admin' || userRole === 'leadership' || userRole === 'owner') return true;
   return false;
 }
 
@@ -59,7 +59,7 @@ export function getRelevantMeetings(userRole: DeepiriRole | null): TeamMeeting[]
 }
 
 export function isPrivilegedRole(role: DeepiriRole | null): boolean {
-  return role === 'it' || role === 'admin' || role === 'leadership';
+  return role === 'it' || role === 'admin' || role === 'leadership' || role === 'owner';
 }
 
 export function roleLabel(role: DeepiriRole | null): string {
