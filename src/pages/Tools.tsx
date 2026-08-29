@@ -38,18 +38,30 @@ const Tools: React.FC = () => {
         <div className="row g-3">
           {items.map(t => {
             const Icon = t.icon;
+            const isExternal = t.route.startsWith('http');
+            const CardInner = (
+              <>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="d-inline-flex align-items-center justify-content-center rounded-3" style={{ width: 36, height: 36, background: `${t.color}15`, color: t.color }}>
+                    <Icon size={18} />
+                  </span>
+                  <span className="fw-semibold text-dark small" style={{ lineHeight: 1.2 }}>{t.label}</span>
+                </div>
+                <div className="small text-muted" style={{ lineHeight: 1.5 }}>{t.description}</div>
+                <div className="mt-auto small text-primary fw-semibold">{isExternal ? 'Open ↗' : 'Open →'}</div>
+              </>
+            );
             return (
               <div key={t.id} className="col-6 col-md-4 col-lg-3">
-                <Link to={t.route} className="card-modern bg-white p-4 h-100 text-decoration-none d-flex flex-column gap-2" style={{ borderTop: `3px solid ${t.color}` }}>
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="d-inline-flex align-items-center justify-content-center rounded-3" style={{ width: 36, height: 36, background: `${t.color}15`, color: t.color }}>
-                      <Icon size={18} />
-                    </span>
-                    <span className="fw-semibold text-dark small" style={{ lineHeight: 1.2 }}>{t.label}</span>
-                  </div>
-                  <div className="small text-muted" style={{ lineHeight: 1.5 }}>{t.description}</div>
-                  <div className="mt-auto small text-primary fw-semibold">Open →</div>
-                </Link>
+                {isExternal ? (
+                  <a href={t.route} target="_blank" rel="noreferrer" className="card-modern bg-white p-4 h-100 text-decoration-none d-flex flex-column gap-2" style={{ borderTop: `3px solid ${t.color}` }}>
+                    {CardInner}
+                  </a>
+                ) : (
+                  <Link to={t.route} className="card-modern bg-white p-4 h-100 text-decoration-none d-flex flex-column gap-2" style={{ borderTop: `3px solid ${t.color}` }}>
+                    {CardInner}
+                  </Link>
+                )}
               </div>
             );
           })}

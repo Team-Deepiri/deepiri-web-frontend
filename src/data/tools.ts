@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import {
   Megaphone, Database, ListChecks, Calendar, FileText, Code2, Zap,
   BarChart3, Wrench, GitBranch, MessageSquare, Bot, ClipboardList,
-  Shield, Settings, Users, Rocket, Eye, Lock, Palette, Image as ImageIcon,
+  Shield, Settings, Users, Rocket, Eye, Lock, Palette, Image as ImageIcon, Gamepad2,
 } from 'lucide-react';
 
 export interface DeepiriTool {
@@ -211,6 +211,16 @@ export const TOOLS: DeepiriTool[] = [
     color: '#0f172a',
     roles: ['owner'],
     category: 'ops',
+  },
+  {
+    id: 'games',
+    label: 'Games',
+    description: 'Lyback multiplayer — hosted at games.deepiri.com',
+    route: 'https://games.deepiri.com',
+    icon: Gamepad2,
+    color: '#ec4899',
+    roles: ['ai_ml', 'qa_support', 'software_developer', 'it', 'admin', 'leadership', 'owner'],
+    category: 'dev',
   },
   {
     id: 'profile',
