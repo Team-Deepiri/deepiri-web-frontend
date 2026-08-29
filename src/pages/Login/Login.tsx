@@ -2,12 +2,25 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AuthError, login } from "@/services/authService";
-import { Lock, Mail } from "lucide-react";
+import { Check, Circle, Lock, Mail } from "lucide-react";
+
+// Mirrors the auth-service password validator (commonValidations.password):
+// 8-128 chars AND /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/
+// Each regex is a simple/anchored character class, so evaluation is linear.
+const passwordRules: { label: string; test: (pw: string) => boolean }[] = [
+  { label: "8–128 characters", test: (pw) => pw.length >= 8 && pw.length <= 128 },
+  { label: "One lowercase letter", test: (pw) => /[a-z]/.test(pw) },
+  { label: "One uppercase letter", test: (pw) => /[A-Z]/.test(pw) },
+  { label: "One number", test: (pw) => /\d/.test(pw) },
+  { label: "One special character (@ $ ! % * ? &)", test: (pw) => /[@$!%*?&]/.test(pw) },
+  { label: "Only letters, numbers, and @ $ ! % * ? &", test: (pw) => pw.length > 0 && /^[A-Za-z\d@$!%*?&]+$/.test(pw) },
+];
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordFocused, setPasswordFocused] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -86,11 +99,38 @@ export default function Login() {
               <Lock size={15} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", pointerEvents: "none" }} />
               <input
                 type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
                 placeholder="••••••••" required
                 className="field"
                 style={{ paddingLeft: 36 }}
               />
             </div>
+
+            {(passwordFocused || password.length > 0) && (
+              <ul
+                aria-live="polite"
+                style={{ listStyle: "none", margin: "10px 0 0 0", padding: 0, display: "flex", flexDirection: "column", gap: 4 }}
+              >
+                {passwordRules.map(({ label, test }) => {
+                  const ok = test(password);
+                  return (
+                    <li
+                      key={label}
+                      style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 11.5, color: ok ? "#16a34a" : "var(--dim)" }}
+                    >
+                      {ok ? <Check size={13} aria-hidden="true" /> : <Circle size={13} aria-hidden="true" />}
+                      <span>
+                        {label}
+                        <span style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap", border: 0 }}>
+                          {ok ? " — met" : " — not met"}
+                        </span>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
 
           {error && (
