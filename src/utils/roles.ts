@@ -30,9 +30,14 @@ export function setStoredRole(role: DeepiriRole): void {
 
 export function getUserRole(user: any): DeepiriRole | null {
   if (!user) return getStoredRole();
-  // check metadata, then role field, then stored
-  const metaRole = user.metadata?.deepiriRole || user.metadata?.role || user.deepiriRole || user.role;
-  if (metaRole && (Object.keys(ROLES) as string[]).includes(metaRole)) return metaRole as DeepiriRole;
+  // The server `role` column is authoritative — check it first so a stale
+  // localStorage `metadata.deepiriRole` can never present a higher role than
+  // the backend actually granted. Fall back to the legacy metadata fields for
+  // users the backend hasn't migrated, then to the stored team role.
+  const candidates = [user.role, user.deepiriRole, user.metadata?.deepiriRole, user.metadata?.role];
+  for (const c of candidates) {
+    if (c && (Object.keys(ROLES) as string[]).includes(c)) return c as DeepiriRole;
+  }
   return getStoredRole();
 }
 
