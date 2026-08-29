@@ -7,6 +7,20 @@ import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import logo from '../assets/images/logo_squared.png';
 
+// Mirrors the auth-service password validator (commonValidations.password):
+// 8-128 chars AND /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/
+// Each regex is a simple/anchored character class, so evaluation is linear.
+const passwordRules: { label: string; test: (pw: string) => boolean }[] = [
+  { label: '8–128 characters', test: (pw) => pw.length >= 8 && pw.length <= 128 },
+  { label: 'One lowercase letter', test: (pw) => /[a-z]/.test(pw) },
+  { label: 'One uppercase letter', test: (pw) => /[A-Z]/.test(pw) },
+  { label: 'One number', test: (pw) => /\d/.test(pw) },
+  { label: 'One special character (@ $ ! % * ? &)', test: (pw) => /[@$!%*?&]/.test(pw) },
+  { label: 'Only letters, numbers, and @ $ ! % * ? &', test: (pw) => pw.length > 0 && /^[A-Za-z\d@$!%*?&]+$/.test(pw) },
+];
+
+const passwordMeetsPolicy = (pw: string): boolean => passwordRules.every((rule) => rule.test(pw));
+
 const Register = () => {
   const { register } = useAuth();
   
@@ -21,6 +35,7 @@ const Register = () => {
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
   const [checkingEmail, setCheckingEmail] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const [passwordFocused, setPasswordFocused] = useState(false);
   const debounceRef = useRef<number | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -85,9 +100,9 @@ const Register = () => {
       return;
     }
 
-    if (formData.password.length < 8) {
-      setPasswordError('Password must be at least 8 characters');
-      toast.error('Password must be at least 8 characters');
+    if (!passwordMeetsPolicy(formData.password)) {
+      setPasswordError('Password does not meet all the requirements below');
+      toast.error('Password does not meet all the requirements');
       return;
     }
 
@@ -435,8 +450,8 @@ const Register = () => {
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
-                    onFocus={(e) => e.target.style.borderColor = '#733bf6'}
-                    onBlur={(e) => e.target.style.borderColor = '#d0d0d6'}
+                    onFocus={(e) => { e.target.style.borderColor = '#733bf6'; setPasswordFocused(true); }}
+                    onBlur={(e) => { e.target.style.borderColor = '#d0d0d6'; setPasswordFocused(false); }}
                 />
 
                 <div style={{
@@ -447,6 +462,46 @@ const Register = () => {
                 }}>
                   {formData.password.length}/255
                 </div>
+
+                {(passwordFocused || formData.password.length > 0) && (
+                  <ul
+                    aria-live="polite"
+                    style={{
+                      listStyle: 'none',
+                      margin: '0.5rem 0 0 0',
+                      padding: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.25rem',
+                    }}
+                  >
+                    {passwordRules.map(({ label, test }) => {
+                      const ok = test(formData.password);
+                      return (
+                        <li
+                          key={label}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            fontSize: '0.8125rem',
+                            color: ok ? '#16a34a' : '#71717a',
+                          }}
+                        >
+                          <span aria-hidden="true" style={{ width: '1rem', textAlign: 'center' }}>
+                            {ok ? '✓' : '○'}
+                          </span>
+                          <span>
+                            {label}
+                            <span style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0 }}>
+                              {ok ? ' — met' : ' — not met'}
+                            </span>
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
 
               <div>
