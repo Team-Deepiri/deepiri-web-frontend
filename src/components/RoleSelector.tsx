@@ -18,6 +18,8 @@ const RoleSelector: React.FC<Props> = ({ value, onChange }) => {
     <div className="d-flex flex-column gap-2">
       <label className="small fw-semibold text-muted" style={{ letterSpacing: '0.5px' }}>DEEPIRI ROLE</label>
       <div className="d-flex flex-wrap gap-2">
+        {/* Only team roles are self-selectable. Admin / Leadership / Owner are granted by an
+            administrator from the People page and can't be chosen here. */}
         {ROLE_OPTIONS.map(o => {
           const active = value === o.value;
           return (
@@ -37,6 +39,9 @@ const RoleSelector: React.FC<Props> = ({ value, onChange }) => {
             </button>
           );
         })}
+      </div>
+      <div className="text-muted" style={{ fontSize: '0.72rem' }}>
+        Admin, Leadership &amp; Owner are assigned by an administrator — not chosen here.
       </div>
     </div>
   );
