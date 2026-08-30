@@ -76,7 +76,7 @@ const MeetingSchedule: React.FC<Props> = ({ userRole, showAll }) => {
                   <Clock size={12} /> {m.dayLabel} · {m.timeEST}
                 </span>
                 <span className="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill" style={{ background: '#f3f4f6' }}>
-                  {m.timeCST} · {m.timePST}
+                  {m.timeCST} · {m.timeMST} · {m.timePST}
                 </span>
               </div>
 
