@@ -1,0 +1,283 @@
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { 
+  ArrowRightIcon, 
+  SparklesIcon, 
+  HeartIcon,
+  PlusIcon,
+  EyeIcon
+} from '@heroicons/react/24/outline';
+import { userItemsApi, RARITY_LEVELS } from '../api/userItemsApi';
+
+interface Item {
+  _id: string;
+  name?: string;
+  category?: string;
+  rarity?: string;
+  value?: {
+    points?: number;
+  };
+  metadata?: {
+    isFavorite?: boolean;
+  };
+  [key: string]: any;
+}
+
+interface Stats {
+  totalItems?: number;
+  totalValue?: number;
+  favoriteCount?: number;
+  categoryStats?: Array<{
+    _id: string;
+    count?: number;
+  }>;
+  [key: string]: any;
+}
+
+const InventoryWidget: React.FC = () => {
+  // Fetch user item stats
+  const { data: statsResponse, isLoading: statsLoading } = useQuery<{ data?: Stats }>(
+    ['userItemStats'],
+    userItemsApi.getStats,
+    {
+      staleTime: 10 * 60 * 1000, // 10 minutes
+    }
+  );
+
+
+  const navigate = useNavigate();
+
+  // Fetch recent items
+  const { data: recentItemsResponse, isLoading: itemsLoading } = useQuery<{ data?: Item[] }>(
+    ['userItems', 'recent'],
+    () => userItemsApi.getItems({ 
+      sort: 'createdAt', 
+      order: 'desc', 
+      limit: 4 
+    }),
+    {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
+
+  const stats: Stats = statsResponse?.data || {};
+  const recentItems: Item[] = recentItemsResponse?.data || [];
+
+  const getRarityInfo = (rarity?: string) => {
+    return RARITY_LEVELS.find(r => r.value === rarity) || RARITY_LEVELS[0];
+  };
+
+  const getCategoryIcon = (category?: string): string => {
+    const categoryIcons: Record<string, string> = {
+      adventure_gear: '🎒',
+      collectible: '💎',
+      badge: '🏆',
+      achievement: '🥇',
+      souvenir: '🎁',
+      memory: '💭',
+      photo: '📸',
+      ticket: '🎫',
+      certificate: '📜',
+      virtual_item: '💻',
+      reward: '🎖️',
+      token: '🪙',
+      other: '📦'
+    };
+    return categoryIcons[category || 'other'] || '📦';
+  };
+
+  if (statsLoading && itemsLoading) {
+    return (
+      <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-white/20 rounded w-1/3"></div>
+          <div className="space-y-3">
+            <div className="h-4 bg-white/20 rounded"></div>
+            <div className="h-4 bg-white/20 rounded w-2/3"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card-modern bg-white">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="text-2xl"></div>
+          <div>
+            <h3 className="text-xl font-bold text-center pb-2"> Inventory</h3>
+            <p className="text-gray-400 text-sm text-center">Adventure collection</p>
+          </div>
+        </div>
+        <div className='row pb-4'>
+          <div className="col text-center">
+            <div className="text-2xl font-bold">{stats.totalItems || 0}</div>
+            <div className="text-xs text-gray-400">Items</div>
+          </div>
+          <div className="col text-center">
+            <div className="text-2xl font-bold text-yellow-400">{stats.totalValue || 0}</div>
+            <div className="text-xs text-gray-400">Points</div>
+          </div>
+          <div className="col text-center">
+            <div className="text-2xl font-bold text-red-400">{stats.favoriteCount || 0}</div>
+            <div className="text-xs text-gray-400">Favorites</div>
+          </div>
+        </div>
+        <div className="flex text-center">
+          <button 
+            className='deepiri-btn text-white' 
+            style={{backgroundColor: '#f59e0b', gap: '20px', width: '50%'}}
+            onClick={() => navigate('/inventory')}
+          >
+            <span style={{whiteSpace:'nowrap'}}>View all items</span>
+            <ArrowRightIcon style={{width: '20%', height: '20%'}} />
+          </button>
+        </div>
+
+      </div>
+
+
+
+      {/* Stats Grid */}
+      {/*<div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="text-center">
+          <div className="text-2xl font-bold">{stats.totalItems || 0}</div>
+          <div className="text-xs text-gray-400">Items</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-yellow-400">{stats.totalValue || 0}</div>
+          <div className="text-xs text-gray-400">Points</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-red-400">{stats.favoriteCount || 0}</div>
+          <div className="text-xs text-gray-400">Favorites</div>
+        </div>
+      </div>*/}
+
+      {/* Recent Items */}
+      <div className="space-y-3">
+        <h4 className="text-sm font-semibold text-gray-300 text-center pb-2">Recent Items</h4>
+        <div className="row">
+          <div className="flex items-center justify-between">
+            {recentItems.length > 0 && (
+              <Link
+                to="/inventory"
+                className="text-xs text-black hover:text-purple-300 transition-colors"
+              >
+                View all
+              </Link>
+          )}
+
+        </div>
+      </div>
+
+
+        {recentItems.length > 0 ? (
+          <div className="space-y-2 col">
+            {recentItems.map((item) => {
+              const rarityInfo = getRarityInfo(item.rarity);
+              return (
+                <div
+                  key={item._id}
+                  className="flex items-center gap-3 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors group cursor-pointer"
+                >
+                  {/* Item Icon */}
+                  <div className="text-lg">{getCategoryIcon(item.category)}</div>
+                  
+                  {/* Item Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-black text-sm font-medium truncate">
+                        {item.name}
+                      </p>
+                      {item.metadata?.isFavorite && (
+                        <HeartIcon className="w-3 h-3 text-red-400 fill-current" />
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-black">
+                      <span className={rarityInfo.color || 'text-black'}>
+                        <SparklesIcon className="w-3 h-3 inline mr-1" />
+                        {rarityInfo.label}
+                      </span>
+                      {item.value?.points && item.value.points > 0 && (
+                        <>
+                          <span>•</span>
+                          <span className="text-black">{item.value.points} pts</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* View Button */}
+                  <Link
+                    to="/inventory"
+                    className="opacity-0 group-hover:opacity-100 p-1 bg-white/10 hover:bg-white/20 rounded transition-all"
+                  >
+                    <EyeIcon className="w-4 h-4 text-black" />
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-6 col">
+            <p className="text-black text-sm mb-3">No items yet</p>
+            <Link
+              to="/inventory"
+              className="inline-flex text-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-black text-sm rounded-lg transition-colors"
+            >
+              <PlusIcon className="w-50 h-50 text-black" />
+              <p>Add First Item</p>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      {/* Category Breakdown */}
+      {stats.categoryStats && stats.categoryStats.length > 0 && (
+        <div className="mt-6 pt-4 border-t border-white/10">
+          <h4 className="text-sm font-semibold text-gray-300 mb-3">Top Categories</h4>
+          <div className="space-y-2">
+            {stats.categoryStats.slice(0, 3).map((category) => (
+              <div key={category._id} className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <span>{getCategoryIcon(category._id)}</span>
+                  <span className="text-gray-300 capitalize">
+                    {category._id.replace('_', ' ')}
+                  </span>
+                </div>
+                <span className="text-gray-400">{category.count || 0}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quick Actions */}
+      <div className="mt-6 pt-4 border-t border-white/10">
+        <div className="row">
+          <Link
+            to="/inventory"
+            className="flex items-center text-center justify-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 text-black text-sm rounded-lg transition-colors col"
+          >
+            <EyeIcon className="w-4 h-4" />
+            View All
+          </Link>
+          <Link
+            to="/inventory"
+            className="flex items-center text-center justify-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-black text-sm rounded-lg transition-colors col"
+          >
+            <PlusIcon className="w-4 h-4" />
+            Add Item
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default InventoryWidget;
+

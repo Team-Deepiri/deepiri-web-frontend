@@ -1,6 +1,6 @@
-import { apiClient } from "./platformClient";
+import axiosInstance from '../api/axiosInstance';
 
-export type TrussRunStatus = "queued" | "running" | "waiting" | "completed" | "failed" | "cancelled";
+export type TrussRunStatus = 'queued' | 'running' | 'waiting' | 'completed' | 'failed' | 'cancelled';
 
 export interface TrussDefinition {
   id: string;
@@ -16,7 +16,7 @@ export interface TrussDefinition {
 
 export interface TrussDefinitionStep {
   id: string;
-  kind: "jobStep" | "conditionStep" | "waitEventStep" | string;
+  kind: 'jobStep' | 'conditionStep' | 'waitEventStep' | string;
   name?: string;
   job?: {
     type: string;
@@ -75,30 +75,26 @@ export interface TrussTemplateLaunchResponse {
 }
 
 export async function listTrussDefinitions(): Promise<TrussDefinition[]> {
-  const res = await apiClient.get<{ definitions: TrussDefinition[] }>("/api/truss/definitions");
+  const res = await axiosInstance.get<{ definitions: TrussDefinition[] }>('/truss/definitions');
   return res.data.definitions;
 }
 
 export async function listTrussRuns(): Promise<TrussRun[]> {
-  const res = await apiClient.get<{ runs: TrussRun[] }>("/api/truss/runs");
+  const res = await axiosInstance.get<{ runs: TrussRun[] }>('/truss/runs');
   return res.data.runs;
 }
 
 export async function getTrussRun(id: string): Promise<TrussRun> {
-  const res = await apiClient.get<TrussRun>(`/api/truss/runs/${id}`);
+  const res = await axiosInstance.get<TrussRun>(`/truss/runs/${id}`);
   return res.data;
 }
 
-export async function launchTrainPublishTemplate(
-  input: Record<string, unknown>
-): Promise<TrussTemplateLaunchResponse> {
-  const res = await apiClient.post<TrussTemplateLaunchResponse>("/api/truss/templates/ml.train-publish", {
-    input,
-  });
+export async function launchTrainPublishTemplate(input: Record<string, unknown>): Promise<TrussTemplateLaunchResponse> {
+  const res = await axiosInstance.post<TrussTemplateLaunchResponse>('/truss/templates/ml.train-publish', { input });
   return res.data;
 }
 
 export async function cancelTrussRun(id: string): Promise<TrussRun> {
-  const res = await apiClient.post<TrussRun>(`/api/truss/runs/${id}/cancel`);
+  const res = await axiosInstance.post<TrussRun>(`/truss/runs/${id}/cancel`);
   return res.data;
 }
