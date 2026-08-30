@@ -1,0 +1,519 @@
+import React, { Suspense, lazy, useEffect } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import { WebPushProvider } from "./contexts/WebPushContext";
+import { AdventureProvider } from "./contexts/AdventureContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
+import SidebarNav from "./components/SidebarNav.tsx";
+import "./components/SidebarNav.css";
+import Footer from "./components/Footer";
+import HMRStatus from "./components/HMRStatus";
+import { setupGlobalErrorHandling, setupPerformanceMonitoring } from "./utils/logger";
+import './styles/index.css';
+
+
+// Pages actually needed on first paint of the portal home base.
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ChatWidget from './components/ChatWidget/ChatWidget';
+
+// Everything else is legacy gamification/adventure surface — lazy-loaded so it
+// never lands in the main bundle unless a route is actually visited.
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const AdventureGenerator = lazy(() => import("./pages/AdventureGenerator"));
+const AdventureDetail = lazy(() => import("./pages/AdventureDetail"));
+const AdventureHistory = lazy(() => import("./pages/AdventureHistory"));
+const DocumentsPage = lazy(() => import("./pages/Document.tsx"));
+const Events = lazy(() => import("./pages/Events"));
+const EventDetail = lazy(() => import("./pages/EventDetail"));
+const CreateEvent = lazy(() => import("./pages/CreateEvent"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Friends = lazy(() => import("./pages/Friends"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const TaskManagement = lazy(() => import("./pages/TaskManagement"));
+const Challenges = lazy(() => import("./pages/Challenges"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const Objectives = lazy(() => import("./pages/Objectives"));
+const Odysseys = lazy(() => import("./pages/Odysseys"));
+const Seasons = lazy(() => import("./pages/Seasons"));
+const Progress = lazy(() => import("./pages/Progress"));
+const Boosts = lazy(() => import("./pages/Boosts"));
+const Streaks = lazy(() => import("./pages/Streaks"));
+const AgentChat = lazy(() => import("./pages/AgentChat"));
+const ProductivityChat = lazy(() => import("./pages/ProductivityChat"));
+const GroupChats = lazy(() => import("./pages/GroupChats"));
+const GroupChatView = lazy(() => import("./pages/GroupChatView"));
+const PythonTools = lazy(() => import("./pages/PythonTools"));
+const UserInventory = lazy(() => import("./pages/UserInventory"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Announcements = lazy(() => import("./pages/Announcements"));
+const CompanyDocuments = lazy(() => import("./pages/CompanyDocuments"));
+const Forgot = lazy(() => import('./pages/ForgotPassword.tsx'));
+const PRImpact = lazy(() => import('./pages/PRImpact'));
+
+// Public pages
+const About = lazy(() => import("./pages/About"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const ComponentShowcase = lazy(() => import("./pages/ComponentShowcase.tsx"));
+const Tools = lazy(() => import("./pages/Tools"));
+const CreateAnnouncementTool = lazy(() => import("./pages/tools/CreateAnnouncementTool"));
+const People = lazy(() => import("./pages/People"));
+
+// Heavy pages are lazy-loaded to keep the initial bundle small.
+const DocumentDetail = lazy(() => import('./pages/LanguageIntelligence/DocumentDetail'));
+const LeaseUpload = lazy(() => import('./pages/LanguageIntelligence/LeaseUpload'));
+const LeaseDetail = lazy(() => import('./pages/LanguageIntelligence/LeaseDetail'));
+const GamificationDashboard = lazy(() => import("./pages/GamificationDashboard"));
+const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
+const OpsHub = lazy(() => import("./pages/OpsHub"));
+const JobsDashboard = lazy(() => import("./pages/Ops/JobsDashboard"));
+const RegistryDashboard = lazy(() => import("./pages/Ops/RegistryDashboard"));
+const TelemetryDashboard = lazy(() => import("./pages/Ops/TelemetryDashboard"));
+const TrussDashboard = lazy(() => import("./pages/Ops/TrussDashboard"));
+const ImmersiveWorkspace = lazy(() => import("./pages/ImmersiveWorkspace"));
+const CodebaseGraph = lazy(() => import("./pages/CodebaseGraph"));
+
+// React Query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, refetchOnWindowFocus: false },
+  },
+});
+
+const PageLoader: React.FC = () => (
+  <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  </div>
+);
+
+const AppContent: React.FC = () => {
+  const location = useLocation();
+  const pathname = location?.pathname || "/";
+  const isAuthRoute =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot" ||
+    pathname === "/contact";
+  const { isAuthenticated } = useAuth();
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    <div className="app-shell">
+      {/* Background layers */}
+      <div className="fixed inset-0 animated-bg opacity-30" />
+      <div className="fixed inset-0 bg-pattern-overlay opacity-10" />
+
+      <div className="fixed top-[-4rem] left-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse" />
+      <div
+        className="fixed top-[10%] right-1/5 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+      <div
+        className="fixed bottom-[-4rem] left-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse"
+        style={{ animationDelay: "4s" }}
+      />
+
+      {/* Sidebar */}
+      <SidebarNav />
+
+      {/* Main area */}
+      <div
+        className="app-main"
+        style={{
+          marginLeft: isAuthenticated && !isMobile ? "280px" : "0",
+          transition: "margin-left 0.3s ease",
+        }}
+      >
+        <main className={isAuthRoute ? "app-content auth" : "app-content"}>
+          <div className="site-container">
+            <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Public */}
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/contact" element={<Contact />} />
+              {/* Announcements now lives on Dashboard + Tools — keep old route as redirect */}
+              <Route path="/announcements" element={<Navigate to="/dashboard#announcements" replace />} />
+              <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
+              <Route path="/tools/announce" element={<ProtectedRoute><CreateAnnouncementTool /></ProtectedRoute>} />
+              <Route path="/people" element={<ProtectedRoute><People /></ProtectedRoute>} />
+              <Route path="/documents" element={<ProtectedRoute><CompanyDocuments /></ProtectedRoute>} />
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/ui-test" element={<ComponentShowcase />} />
+              <Route path="/forgot" element={<Forgot />} />
+
+              {/* Protected */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventure/generate"
+                element={
+                  <ProtectedRoute>
+                    <AdventureGenerator />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventure/:id"
+                element={
+                  <ProtectedRoute>
+                    <AdventureDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/adventures"
+                element={
+                  <ProtectedRoute>
+                    <AdventureHistory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/language-intelligence/documents" element={<DocumentsPage />} />
+              <Route
+                 path="/language-intelligence/documents/:id"
+                element={<DocumentDetail />}
+                    />
+              <Route
+                path="/events"
+                element={
+                  <ProtectedRoute>
+                    <Events />
+                  </ProtectedRoute>
+                }
+              />
+            
+              <Route
+                path="/events/:id"
+                element={
+                  <ProtectedRoute>
+                    <EventDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateEvent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                    <Profile />
+                
+                }
+              />
+              <Route
+                path="/friends"
+                element={
+                  <ProtectedRoute>
+                    <Friends />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <Leaderboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tasks"
+                element={
+                  <ProtectedRoute>
+                    <TaskManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/challenges"
+                element={
+                  <ProtectedRoute>
+                    <Challenges />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/gamification"
+                element={
+                  <ProtectedRoute>
+                    <GamificationDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute>
+                    <AnalyticsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops"
+                element={
+                  <ProtectedRoute>
+                    <OpsHub />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/jobs"
+                element={
+                  <ProtectedRoute>
+                    <JobsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/registry"
+                element={
+                  <ProtectedRoute>
+                    <RegistryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/truss"
+                element={
+                  <ProtectedRoute>
+                    <TrussDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ops/telemetry"
+                element={
+                  <ProtectedRoute>
+                    <TelemetryDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <ProtectedRoute>
+                    <Notifications />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/objectives"
+                element={
+                  <ProtectedRoute>
+                    <Objectives />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/odysseys"
+                element={
+                  <ProtectedRoute>
+                    <Odysseys />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/seasons"
+                element={
+                  <ProtectedRoute>
+                    <Seasons />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/progress"
+                element={
+                  <ProtectedRoute>
+                    <Progress />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/boosts"
+                element={
+                  <ProtectedRoute>
+                    <Boosts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/streaks"
+                element={
+                  <ProtectedRoute>
+                    <Streaks />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/agent"
+                element={
+                  <ProtectedRoute>
+                    <AgentChat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute>
+                    <ProductivityChat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/group-chats"
+                element={
+                  <ProtectedRoute>
+                    <GroupChats />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/group-chats/:groupChatId"
+                element={
+                  <ProtectedRoute>
+                    <GroupChatView />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/python-tools"
+                element={
+                  <ProtectedRoute>
+                    <PythonTools />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/inventory"
+                element={
+                  <ProtectedRoute>
+                    <UserInventory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/workspace"
+                element={
+                  <ProtectedRoute>
+                    <ImmersiveWorkspace />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/codebase"
+                element={<CodebaseGraph />}
+              />
+              <Route
+                path="/pr-impact"
+                element={<PRImpact />}
+              />
+              <Route
+                path="/language-intelligence/leases/upload"
+                element={
+                  
+                    <LeaseUpload />
+                  
+                }
+              />
+              <Route
+                path="/language-intelligence/leases/:id"
+                element={
+          
+                    <LeaseDetail />
+
+                }
+              />
+        
+            </Routes>
+            </Suspense>
+            <ChatWidget />
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(10px)",
+            color: "#000000",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "12px",
+          },
+          success: {
+            duration: 3000,
+            iconTheme: { primary: "#10B981", secondary: "#fff" },
+          },
+          error: {
+            duration: 5000,
+            iconTheme: { primary: "#EF4444", secondary: "#fff" },
+          },
+        }}
+      />
+
+      <HMRStatus />
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  useEffect(() => {
+    setupGlobalErrorHandling();
+    setupPerformanceMonitoring();
+  }, []);
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider>
+            <WebPushProvider>
+              <AdventureProvider>
+                <AppContent />
+              </AdventureProvider>
+            </WebPushProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
+
+export default App;

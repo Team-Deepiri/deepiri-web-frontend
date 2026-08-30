@@ -13,7 +13,7 @@ if [ -n "$CHANGED" ]; then
       echo "ERROR: Graph analysis failed. Commit aborted."
       exit 1
     fi
-    git add public/graph/graph.json public/graph/REPORT.md
+    git add public/graph/graph.json public/graph/index.html public/graph/REPORT.md
     echo "Codebase graph rebuilt"
   fi
 fi

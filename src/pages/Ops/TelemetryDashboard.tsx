@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { getEcosystemHealth, getJobMetrics, getRecentEvents } from '../../services/telemetryService';
-import { OPS_DASHBOARD_STALE_TIME } from '../../constants/query';
-import { statusBadgeClass as opsStatusBadgeClass } from '../../utils/ui';
 import './TelemetryDashboard.css';
 
 type Tab = 'ecosystem' | 'jobs' | 'events';
@@ -15,12 +13,23 @@ const TABS: Array<{ key: Tab; label: string }> = [
   { key: 'events', label: 'Recent Events' },
 ];
 
-const TELEMETRY_STALE_TIME = OPS_DASHBOARD_STALE_TIME;
+// Matches the other Ops dashboards' cache window so switching tabs / hopping
+// back from /ops doesn't re-poll every check each time.
+const TELEMETRY_STALE_TIME = 30 * 1000;
 const DEFAULT_RECENT_EVENTS_LIMIT = 50;
 const MAX_EVENT_DATA_LENGTH = 180;
 
 function statusBadgeClass(status: string): string {
-  return opsStatusBadgeClass(status, 'telemetry');
+  switch (status) {
+    case 'healthy':
+    case 'ok':
+      return 'telemetry-status-healthy';
+    case 'unhealthy':
+    case 'down':
+      return 'telemetry-status-unhealthy';
+    default:
+      return 'telemetry-status-unknown';
+  }
 }
 
 function formatEventData(data: unknown): string {

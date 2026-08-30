@@ -1,4 +1,4 @@
-import { apiClient } from "./platformClient";
+import axiosInstance from '../api/axiosInstance';
 
 export interface Repo {
   id: string;
@@ -29,16 +29,16 @@ export interface EcosystemHealth {
 }
 
 export async function listRepos(): Promise<Repo[]> {
-  const res = await apiClient.get<{ repos: Repo[] }>("/api/registry/repos");
+  const res = await axiosInstance.get<{ repos: Repo[] }>('/registry/repos');
   return res.data.repos;
 }
 
 export async function listTools(): Promise<Tool[]> {
-  const res = await apiClient.get<{ tools: Tool[] }>("/api/registry/tools");
+  const res = await axiosInstance.get<{ tools: Tool[] }>('/registry/tools');
   return res.data.tools;
 }
 
 export async function getEcosystemHealth(): Promise<EcosystemHealth> {
-  const res = await apiClient.get<EcosystemHealth>("/api/registry/health/ecosystem");
+  const res = await axiosInstance.get<EcosystemHealth>('/registry/health/ecosystem');
   return res.data;
 }

@@ -11,8 +11,6 @@ import {
   type JobRecord,
   type JobStatus,
 } from '../../services/jobsService';
-import { OPS_DASHBOARD_STALE_TIME } from '../../constants/query';
-import { getActionErrorMessage } from '../../utils/api';
 import './JobsDashboard.css';
 
 const STATUS_STYLES: Record<JobStatus, string> = {
@@ -25,7 +23,20 @@ const STATUS_STYLES: Record<JobStatus, string> = {
 
 const STATUS_FILTERS: (JobStatus | 'all')[] = ['all', 'queued', 'running', 'completed', 'failed', 'cancelled'];
 
-const JOBS_STALE_TIME = OPS_DASHBOARD_STALE_TIME;
+// Cached for this long before a background refetch kicks in on remount --
+// keeps "go back to /ops/jobs" instant instead of re-hitting the gateway
+// and flashing a loading state every time.
+const JOBS_STALE_TIME = 30 * 1000;
+
+function getActionErrorMessage(err: unknown, fallback: string): string {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const message = (err as { response?: { data?: { error?: string } } }).response?.data?.error;
+    if (message) {
+      return message;
+    }
+  }
+  return fallback;
+}
 
 const JobsDashboard: React.FC = () => {
   const queryClient = useQueryClient();
