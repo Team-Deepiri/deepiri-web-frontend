@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import RoleSelector from '../components/RoleSelector';
 import { getUserRole } from '../utils/roles';
 import type { DeepiriRole } from '../types/roles';
-import { ROLES } from '../types/roles';
+import { ROLES, SELF_ASSIGNABLE_ROLES } from '../types/roles';
 import { useTheme } from '../contexts/ThemeContext';
 import { userApi } from '../api/userApi';
 import axiosInstance from '../api/axiosInstance';
@@ -175,7 +175,9 @@ const Profile: React.FC = () => {
       { key: 'department', label: 'Department', type: 'text' },
     ],
     professional: [
-      { key: 'roleAppRole', label: 'Role (app role)', type: 'select', options: Object.keys(ROLES) },
+      // Only team roles are self-selectable. admin / leadership / owner are granted
+      // from the People page by an administrator (see rolesGrantableBy).
+      { key: 'roleAppRole', label: 'Role (app role)', type: 'select', options: SELF_ASSIGNABLE_ROLES as string[] },
       { key: 'specializedTitle', label: 'Specialized Title (from Deepiri)', type: 'text', description: 'e.g. MLOps Architect — use Generate button' },
       { key: 'skills', label: 'Skills', type: 'text' },
       { key: 'githubUsername', label: 'GitHub Username', type: 'text' },
@@ -280,10 +282,16 @@ const Profile: React.FC = () => {
         // allow but warn
       }
       setSavedProfessional(draftProfessional);
-      if (draftProfessional.roleAppRole) setDeepiriRole(draftProfessional.roleAppRole as DeepiriRole);
+      // Only a team role may be set from here. A privileged role (admin/leadership/owner)
+      // is never touched by this form — it's granted from the People page and the server
+      // rejects it on this endpoint anyway.
+      const selfRole = SELF_ASSIGNABLE_ROLES.includes(draftProfessional.roleAppRole as DeepiriRole)
+        ? (draftProfessional.roleAppRole as DeepiriRole)
+        : null;
+      if (selfRole) setDeepiriRole(selfRole);
       try {
-        await userApi.updateProfile({ metadata: { specializedTitle: draftProfessional.specializedTitle, skills: draftProfessional.skills, githubUsername: draftProfessional.githubUsername, yearsExperience: draftProfessional.yearsExperience, workPreference: draftProfessional.workPreference, location: draftProfessional.location, linkedin: draftProfessional.linkedin, portfolio: draftProfessional.portfolio } } as any);
-        updateUser({ ...user!, metadata: { ...(user?.metadata||{}), specializedTitle: draftProfessional.specializedTitle, skills: draftProfessional.skills, githubUsername: draftProfessional.githubUsername, deepiriRole: draftProfessional.roleAppRole } } as any);
+        await userApi.updateProfile({ ...(selfRole ? { role: selfRole } : {}), metadata: { specializedTitle: draftProfessional.specializedTitle, skills: draftProfessional.skills, githubUsername: draftProfessional.githubUsername, yearsExperience: draftProfessional.yearsExperience, workPreference: draftProfessional.workPreference, location: draftProfessional.location, linkedin: draftProfessional.linkedin, portfolio: draftProfessional.portfolio } } as any);
+        updateUser({ ...user!, ...(selfRole ? { role: selfRole } : {}), metadata: { ...(user?.metadata||{}), specializedTitle: draftProfessional.specializedTitle, skills: draftProfessional.skills, githubUsername: draftProfessional.githubUsername, ...(selfRole ? { deepiriRole: selfRole } : {}) } } as any);
         toast.success('Professional info saved');
       } catch { toast.success('Saved locally'); }
     }
@@ -501,14 +509,23 @@ const Profile: React.FC = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                   {fieldsBySection[activeSection].map((field) => {
                     const value = (currentData as any)[field.key];
-                    // show Role selector nicer
+                    // A privileged role (admin / leadership / owner) is never editable here —
+                    // it's granted from the People page. Show it read-only so the limited
+                    // <select> below can't silently downgrade the user on save.
+                    const managedRoleField =
+                      field.key === 'roleAppRole' &&
+                      !!savedProfessional.roleAppRole &&
+                      !SELF_ASSIGNABLE_ROLES.includes(savedProfessional.roleAppRole as DeepiriRole);
                     return (
                       <div key={field.key}>
                         <label style={styles.label}>{field.label}</label>
-                        {viewMode && (
+                        {(viewMode || managedRoleField) && (
                           <p style={styles.valueBox as React.CSSProperties}>{field.key==='roleAppRole' && value ? (ROLES[value as DeepiriRole]?.label || value) : formatValue(value)}</p>
                         )}
-                        {!viewMode && (
+                        {managedRoleField && !viewMode && (
+                          <div style={styles.helper as React.CSSProperties}>Managed by an administrator — assigned from the People page.</div>
+                        )}
+                        {!viewMode && !managedRoleField && (
                           <>
                             {field.type === 'toggle' && (
                               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>

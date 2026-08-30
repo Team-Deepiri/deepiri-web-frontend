@@ -2,8 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { githubApi, type GhOverview, type GhMemberActivity } from '../api/githubApi';
-import { ROLES } from '../types/roles';
+import { ROLES, rolesGrantableBy } from '../types/roles';
 import type { DeepiriRole } from '../types/roles';
+import { userApi } from '../api/userApi';
+import { useAuth } from '../contexts/AuthContext';
+import { roleFromUser } from '../utils/roles';
 import { Users, Sparkles, Github, ExternalLink, GitPullRequest, Eye, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -33,6 +36,10 @@ function ghLogin(p: Person): string {
   return String(p.githubUsername || p.metadata?.githubUsername || '').trim();
 }
 
+function personId(p: Person): string {
+  return String(p._id || p.id || '');
+}
+
 const chip = (bg: string): React.CSSProperties => ({ background: bg, fontSize: 11 });
 
 const People: React.FC = () => {
@@ -41,6 +48,13 @@ const People: React.FC = () => {
   const [usersError, setUsersError] = useState<string | null>(null);
   const [summaries, setSummaries] = useState<Record<string, string>>({});
   const [generating, setGenerating] = useState<string | null>(null);
+
+  // Role granting (from #162): who is looking, and what may they hand out.
+  const { user, deepiriRole } = useAuth();
+  const myId = String(user?._id || (user as any)?.id || '');
+  const myRole = deepiriRole;
+  const grantableRoles = rolesGrantableBy(myRole);
+  const [savingRole, setSavingRole] = useState<string | null>(null);
 
   const [gh, setGh] = useState<GhOverview | null>(null);
   const [ghNotConfigured, setGhNotConfigured] = useState(false);
@@ -159,6 +173,31 @@ const People: React.FC = () => {
 
   if (loading) return <div className="min-vh-100 bg-gray-50 d-flex align-items-center justify-content-center"><div className="spinner-border text-primary" /></div>;
 
+  const canAssignRoleFor = (p: Person): boolean => {
+    if (grantableRoles.length === 0) return false;       // not owner/admin
+    const uid = personId(p);
+    if (!uid || uid === myId) return false;              // never your own role
+    const targetRole = roleFromUser(p);
+    if (targetRole === 'owner') return false;            // an owner is never reassigned in-app
+    if (targetRole === 'admin' && myRole !== 'owner') return false; // only an owner touches an admin
+    return true;
+  };
+
+  const changeRole = async (p: Person, nextRole: DeepiriRole) => {
+    const uid = personId(p);
+    const prevRole = roleFromUser(p);
+    if (!uid || nextRole === prevRole) return;
+    setSavingRole(uid);
+    setPeople(prev => prev.map(x => personId(x) === uid ? { ...x, role: nextRole, deepiriRole: nextRole } : x));
+    try {
+      await userApi.setUserRole(uid, nextRole);
+      toast.success(`${p.name || 'User'} is now ${ROLES[nextRole]?.label || nextRole}`);
+    } catch (e: any) {
+      setPeople(prev => prev.map(x => personId(x) === uid ? { ...x, role: prevRole || undefined, deepiriRole: prevRole || undefined } : x));
+      toast.error(e?.error || e?.message || 'Could not change role — you may not have permission.');
+    } finally { setSavingRole(null); }
+  };
+
   return (
     <div className="min-vh-100 bg-gray-50">
       <div className="container px-3 py-4">
@@ -229,6 +268,7 @@ const People: React.FC = () => {
               // handle, then a neutral placeholder.
               const displayName = (p.name || '').trim() || (p.username || '').trim() || (login ? `@${login}` : 'Unnamed member');
               const displayInitial = (displayName.replace(/^@/, '')[0] || '?').toUpperCase();
+              const showRoleControl = canAssignRoleFor(p);
               return (
                 <div key={String(uid)} className="col-md-6 col-lg-4">
                   <div className="card-modern bg-white p-4 h-100 d-flex flex-column gap-2" style={{ borderLeft: `3px solid ${meta?.color || '#e5e7eb'}` }}>
@@ -248,6 +288,24 @@ const People: React.FC = () => {
                     <div className="small text-break"><strong>Specialized Title (from Deepiri):</strong> {title || <span className="text-muted">—</span>}</div>
                     {p.bio && <div className="small text-muted text-break" style={{ lineHeight: 1.5 }}>{p.bio}</div>}
                     {summaries[String(p._id || p.id)] && <div className="small p-2 rounded-3 border bg-light text-break"><strong>Summary (OpenRouter):</strong> {summaries[String(p._id || p.id)]}</div>}
+
+                    {showRoleControl && (
+                      <div className="d-flex align-items-center gap-2 mt-1">
+                        <label className="small fw-semibold text-muted mb-0">Set role</label>
+                        <select
+                          className="form-select form-select-sm"
+                          style={{ maxWidth: 200 }}
+                          value={role && grantableRoles.includes(role) ? role : ''}
+                          disabled={savingRole === personId(p)}
+                          onChange={(e) => { const v = e.target.value as DeepiriRole; if (v) changeRole(p, v); }}
+                        >
+                          <option value="" disabled>{role ? `${ROLES[role]?.label || role} (change…)` : 'Choose…'}</option>
+                          {grantableRoles.map(r => (
+                            <option key={r} value={r}>{ROLES[r]?.label || r}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
                     <div className="d-flex flex-wrap gap-2 mt-2">
                       <button className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 flex-shrink-0" onClick={() => generateTitle(p)} disabled={!realId || generating === realId}>

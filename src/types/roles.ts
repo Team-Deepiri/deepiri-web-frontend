@@ -83,12 +83,27 @@ export const ROLES: Record<DeepiriRole, RoleMeta> = {
   },
 };
 
+// Roles a user is allowed to pick for themselves (onboarding + Profile).
+// admin / leadership / owner are NOT here — they are granted, never self-selected.
+export const SELF_ASSIGNABLE_ROLES: DeepiriRole[] = ['ai_ml', 'qa_support', 'software_developer', 'it'];
+
+// Extra roles an admin may grant to other people.
+export const ADMIN_GRANTABLE_ROLES: DeepiriRole[] = [...SELF_ASSIGNABLE_ROLES, 'leadership'];
+
+// Extra roles an owner may grant to other people. 'owner' is never grantable in-app.
+export const OWNER_GRANTABLE_ROLES: DeepiriRole[] = [...ADMIN_GRANTABLE_ROLES, 'admin'];
+
+// The set of roles `actorRole` is allowed to assign to someone else. Empty for
+// everyone below admin — the People-page role control is hidden for them.
+export function rolesGrantableBy(actorRole: DeepiriRole | null | undefined): DeepiriRole[] {
+  if (actorRole === 'owner') return OWNER_GRANTABLE_ROLES;
+  if (actorRole === 'admin') return ADMIN_GRANTABLE_ROLES;
+  return [];
+}
+
 export const ROLE_OPTIONS: { value: DeepiriRole; label: string; hint: string }[] = [
   { value: 'ai_ml', label: 'AI / ML', hint: 'AI Systems, ML, MLOps, Data Eng' },
   { value: 'qa_support', label: 'QA / Support Engineer', hint: 'QA, DevOps, Support' },
   { value: 'software_developer', label: 'Software Developer', hint: 'Full Stack, Backend, Frontend, Infra' },
   { value: 'it', label: 'IT / Security & Operations', hint: 'Can attend any meeting' },
-  { value: 'admin', label: 'Admin', hint: 'Full platform access' },
-  { value: 'leadership', label: 'Leadership', hint: 'Management + all meetings' },
-  { value: 'owner', label: 'Owner', hint: 'Superset of admin + secrets' },
 ];
