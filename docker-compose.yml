@@ -1,35 +1,52 @@
-# Deepiri Web Frontend — optional UI-only compose
-#
-# PRIMARY PATH: from deepiri-platform repo root use
-#   docker compose -f docker-compose.dev.yml up -d frontend-dev
-# (with auth-service, api-gateway, realtime-gateway as needed).
-#
-# This file is only for rare UI-only bring-up when the platform
-# deepiri-dev-network is already running. Do not treat it as the
-# normal developer workflow.
-
 services:
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: dev
+  deps:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm ci"
+
+  portal:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
     ports:
       - "5173:5173"
     environment:
       NODE_ENV: development
       CHOKIDAR_USEPOLLING: "true"
-      VITE_API_GATEWAY_URL: ${VITE_API_GATEWAY_URL:-http://localhost:5100}
-      VITE_REGISTRY_URL: ${VITE_REGISTRY_URL:-http://localhost:5003}
-      VITE_REALTIME_GATEWAY_URL: ${VITE_REALTIME_GATEWAY_URL:-http://localhost:5008}
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+    command: npm run dev:portal
+
+  immersive:
+    image: node:20-alpine
+    working_dir: /app
     volumes:
       - .:/app
-      - /app/node_modules
-    command: npm run dev:turbo
-    networks:
-      - deepiri-dev-network
+    ports:
+      - "5174:5174"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+    command: npm run dev:immersive
 
-networks:
-  deepiri-dev-network:
-    external: true
-    name: deepiri-dev-network
+  hub-server:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5200:5200"
+    environment:
+      NODE_ENV: development
+      PORT: "5200"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+    command: npm run dev:server

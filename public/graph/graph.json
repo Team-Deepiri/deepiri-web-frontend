@@ -1,294 +1,1340 @@
 {
   "nodes": [
     {
-      "id": "app/App.test.tsx",
+      "id": "App.test.jsx",
       "name": "App.test",
       "type": "module",
-      "relPath": "app/App.test.tsx",
+      "relPath": "App.test.jsx",
       "exports": [],
       "externalDeps": [
-        "vitest",
-        "@testing-library/react",
-        "react-router-dom"
+        "vitest"
       ],
-      "componentsUsed": [
-        "MemoryRouter",
-        "App"
-      ],
+      "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 19,
-      "docstrings": [
-        "AuthGuard should redirect \"/\" -> \"/login\" for a signed-out user,",
-        "and the lazy-loaded Login page should resolve past the Suspense fallback."
-      ]
+      "lines": 22,
+      "docstrings": []
     },
     {
-      "id": "app/App.tsx",
+      "id": "App.tsx",
       "name": "App",
-      "type": "component",
-      "relPath": "app/App.tsx",
+      "type": "module",
+      "relPath": "App.tsx",
       "exports": [
-        "App",
         "default"
       ],
       "externalDeps": [
-        "react-query"
+        "react",
+        "react-router-dom",
+        "react-query",
+        "react-hot-toast"
       ],
       "componentsUsed": [
+        "SidebarNav",
+        "Routes",
+        "Route",
+        "Home",
+        "Login",
+        "Register",
+        "Contact",
+        "About",
+        "Privacy",
+        "Terms",
+        "ComponentShowcase",
+        "Forgot",
+        "ProtectedRoute",
+        "Dashboard",
+        "AdventureGenerator",
+        "AdventureDetail",
+        "AdventureHistory",
+        "DocumentsPage",
+        "DocumentDetail",
+        "Events",
+        "EventDetail",
+        "CreateEvent",
+        "Profile",
+        "Friends",
+        "Leaderboard",
+        "TaskManagement",
+        "Challenges",
+        "GamificationDashboard",
+        "AnalyticsDashboard",
+        "Notifications",
+        "Objectives",
+        "Odysseys",
+        "Seasons",
+        "Progress",
+        "Boosts",
+        "Streaks",
+        "AgentChat",
+        "ProductivityChat",
+        "GroupChats",
+        "GroupChatView",
+        "PythonTools",
+        "UserInventory",
+        "ImmersiveWorkspace",
+        "CodebaseGraph",
+        "PRImpact",
+        "LeaseUpload",
+        "LeaseDetail",
+        "ChatWidget",
+        "Footer",
+        "Toaster",
+        "HMRStatus",
+        "ErrorBoundary",
         "QueryClientProvider",
-        "AppRouter"
+        "AuthProvider",
+        "WebPushProvider",
+        "SocketProvider",
+        "AdventureProvider",
+        "AppContent"
+      ],
+      "hooksUsed": [
+        "useLocation",
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 447,
+      "docstrings": []
+    },
+    {
+      "id": "api/adventureApi.ts",
+      "name": "adventureApi",
+      "type": "api-module",
+      "relPath": "api/adventureApi.ts",
+      "exports": [
+        "adventureApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "AdventureResponse"
+      ],
+      "hooksUsed": [],
+      "lines": 195,
+      "docstrings": [
+        "localhost:5100/api';",
+        "Add token to requests"
+      ]
+    },
+    {
+      "id": "api/agentApi.ts",
+      "name": "agentApi",
+      "type": "api-module",
+      "relPath": "api/agentApi.ts",
+      "exports": [
+        "agentApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "AgentResponse"
+      ],
+      "hooksUsed": [],
+      "lines": 69,
+      "docstrings": [
+        "localhost:5100/api';"
+      ]
+    },
+    {
+      "id": "api/authApi.ts",
+      "name": "authApi",
+      "type": "api-module",
+      "relPath": "api/authApi.ts",
+      "exports": [
+        "authApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "AuthResponse"
+      ],
+      "hooksUsed": [],
+      "lines": 127,
+      "docstrings": [
+        "localhost:5100/api';",
+        "Add token to requests",
+        "DISABLED: Handle token expiration (causing infinite loops)"
+      ]
+    },
+    {
+      "id": "api/axiosInstance.ts",
+      "name": "axiosInstance",
+      "type": "api-module",
+      "relPath": "api/axiosInstance.ts",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 42,
+      "docstrings": [
+        "localhost:5100/api',"
+      ]
+    },
+    {
+      "id": "api/documentApi.ts",
+      "name": "documentApi",
+      "type": "api-module",
+      "relPath": "api/documentApi.ts",
+      "exports": [
+        "documentApi"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [
+        "DocumentRecord"
+      ],
+      "hooksUsed": [],
+      "lines": 121,
+      "docstrings": [
+        "Payload shape from language-intelligence `/api/contracts` (legacy route name).",
+        "Language Intelligence document API (proxied at `/api/contracts` until backend route rename)."
+      ]
+    },
+    {
+      "id": "api/eventApi.ts",
+      "name": "eventApi",
+      "type": "api-module",
+      "relPath": "api/eventApi.ts",
+      "exports": [
+        "eventApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "AxiosErrorResponse",
+        "ApiResponse",
+        "EventData"
+      ],
+      "hooksUsed": [],
+      "lines": 147,
+      "docstrings": [
+        "Helper to extract error message from axios error",
+        "Cancel RSVP to an event"
+      ]
+    },
+    {
+      "id": "api/externalApi.ts",
+      "name": "externalApi",
+      "type": "api-module",
+      "relPath": "api/externalApi.ts",
+      "exports": [
+        "externalApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "AxiosErrorResponse",
+        "ApiResponse"
+      ],
+      "hooksUsed": [],
+      "lines": 113,
+      "docstrings": [
+        "Helper to extract error message from axios error",
+        "Get current weather for location",
+        "Get nearby events from external sources"
+      ]
+    },
+    {
+      "id": "api/firebaseApi.ts",
+      "name": "firebaseApi",
+      "type": "api-module",
+      "relPath": "api/firebaseApi.ts",
+      "exports": [
+        "createData",
+        "getAllData",
+        "getDataById",
+        "updateData",
+        "deleteData"
+      ],
+      "externalDeps": [
+        "firebase/firestore"
+      ],
+      "componentsUsed": [
+        "Array",
+        "DocumentData"
+      ],
+      "hooksUsed": [],
+      "lines": 36,
+      "docstrings": [
+        "src/api/firebaseApi.ts"
+      ]
+    },
+    {
+      "id": "api/gamificationApi.ts",
+      "name": "gamificationApi",
+      "type": "api-module",
+      "relPath": "api/gamificationApi.ts",
+      "exports": [
+        "MomentumProfile",
+        "StreakData",
+        "BoostProfile",
+        "Objective",
+        "Odyssey",
+        "Season",
+        "Reward",
+        "gamificationApi"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [
+        "Objective",
+        "Odyssey",
+        "Season",
+        "Reward"
+      ],
+      "hooksUsed": [],
+      "lines": 451,
+      "docstrings": []
+    },
+    {
+      "id": "api/groupChatApi.ts",
+      "name": "groupChatApi",
+      "type": "api-module",
+      "relPath": "api/groupChatApi.ts",
+      "exports": [],
+      "externalDeps": [],
+      "componentsUsed": [
+        "GroupChat"
       ],
       "hooksUsed": [],
       "lines": 17,
       "docstrings": []
     },
     {
-      "id": "app/AuthGuard.tsx",
-      "name": "AuthGuard",
-      "type": "module",
-      "relPath": "app/AuthGuard.tsx",
+      "id": "api/notificationApi.ts",
+      "name": "notificationApi",
+      "type": "api-module",
+      "relPath": "api/notificationApi.ts",
       "exports": [
-        "AuthGuard"
+        "notificationApi"
       ],
       "externalDeps": [
-        "react",
-        "react-router-dom"
+        "axios"
       ],
       "componentsUsed": [
-        "Navigate"
-      ],
-      "hooksUsed": [
-        "useAuthHydrated",
-        "useSyncExternalStore",
-        "useAuthStore"
-      ],
-      "lines": 37,
-      "docstrings": []
-    },
-    {
-      "id": "app/Router.tsx",
-      "name": "Router",
-      "type": "module",
-      "relPath": "app/Router.tsx",
-      "exports": [
-        "AppRouter"
-      ],
-      "externalDeps": [
-        "react",
-        "react-router-dom"
-      ],
-      "componentsUsed": [
-        "Suspense",
-        "PageLoader",
-        "Routes",
-        "Route",
-        "Login",
-        "Contact",
-        "AuthGuard",
-        "ImmersivePage",
-        "Shell",
-        "Home",
-        "EventRiver",
-        "DependencyMap",
-        "Ops",
-        "JobsDashboard",
-        "RegistryDashboard",
-        "TrussDashboard",
-        "TelemetryDashboard",
-        "Pulse",
-        "Sankey",
-        "Launchpad",
-        "AIWorkspace",
-        "TeamOps",
-        "Onboarding",
-        "CodebaseGraph",
-        "PRImpact",
-        "Navigate"
+        "AxiosErrorResponse",
+        "ApiResponse",
+        "NotificationSettings"
       ],
       "hooksUsed": [],
-      "lines": 85,
-      "docstrings": []
-    },
-    {
-      "id": "app/Shell.tsx",
-      "name": "Shell",
-      "type": "module",
-      "relPath": "app/Shell.tsx",
-      "exports": [
-        "Shell"
-      ],
-      "externalDeps": [
-        "react-router-dom"
-      ],
-      "componentsUsed": [
-        "Sidebar",
-        "Topbar",
-        "Outlet",
-        "CyrexSidebar"
-      ],
-      "hooksUsed": [
-        "useHealthPoll",
-        "useImmersiveStatus",
-        "useEventStream",
-        "useUIStore"
-      ],
-      "lines": 45,
+      "lines": 187,
       "docstrings": [
-        "Start all background polling + WebSocket on mount"
+        "Helper to extract error message from axios error",
+        "Get all notifications for the user",
+        "Mark notification as read"
       ]
     },
     {
-      "id": "components/layout/CyrexSidebar.tsx",
-      "name": "CyrexSidebar",
-      "type": "component",
-      "relPath": "components/layout/CyrexSidebar.tsx",
+      "id": "api/pythonApi.ts",
+      "name": "pythonApi",
+      "type": "api-module",
+      "relPath": "api/pythonApi.ts",
       "exports": [
-        "CyrexSidebar"
+        "pythonApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "AxiosErrorResponse",
+        "ApiResponse"
+      ],
+      "hooksUsed": [],
+      "lines": 91,
+      "docstrings": [
+        "Helper to extract error message from axios error",
+        "GET /api/python/weather?lat=..&lng=..&units=imperial|metric",
+        "POST /api/python/directions { origin, destination, mode }"
+      ]
+    },
+    {
+      "id": "api/userApi.ts",
+      "name": "userApi",
+      "type": "api-module",
+      "relPath": "api/userApi.ts",
+      "exports": [
+        "userApi"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "UserResponse"
+      ],
+      "hooksUsed": [],
+      "lines": 195,
+      "docstrings": [
+        "localhost:5100/api';",
+        "Add token to requests"
+      ]
+    },
+    {
+      "id": "api/userItemsApi.ts",
+      "name": "userItemsApi",
+      "type": "api-module",
+      "relPath": "api/userItemsApi.ts",
+      "exports": [
+        "userItemsApi",
+        "ITEM_CATEGORIES",
+        "ITEM_TYPES",
+        "RARITY_LEVELS",
+        "EMOTIONS"
+      ],
+      "externalDeps": [
+        "axios"
+      ],
+      "componentsUsed": [
+        "UserItemsResponse",
+        "ItemData"
+      ],
+      "hooksUsed": [],
+      "lines": 257,
+      "docstrings": [
+        "localhost:5100/api';",
+        "Add token to requests",
+        "Get user items with filters"
+      ]
+    },
+    {
+      "id": "components/AccessibleModal.tsx",
+      "name": "AccessibleModal",
+      "type": "component",
+      "relPath": "components/AccessibleModal.tsx",
+      "exports": [
+        "AccessibleModal",
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "AccessibleModalProps",
+        "HTMLDivElement",
+        "HTMLElement"
+      ],
+      "hooksUsed": [
+        "useCallback",
+        "useEffect"
+      ],
+      "lines": 116,
+      "docstrings": []
+    },
+    {
+      "id": "components/AddItemModal.tsx",
+      "name": "AddItemModal",
+      "type": "component",
+      "relPath": "components/AddItemModal.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "@heroicons/react"
+      ],
+      "componentsUsed": [
+        "AddItemModalProps",
+        "ItemFormData",
+        "FormErrors",
+        "HTMLFormElement",
+        "XMarkIcon",
+        "HTMLInputElement",
+        "HTMLTextAreaElement",
+        "HTMLSelectElement",
+        "SparklesIcon",
+        "MapPinIcon",
+        "PlusIcon",
+        "TagIcon"
+      ],
+      "hooksUsed": [],
+      "lines": 649,
+      "docstrings": [
+        "Clear error when user starts typing"
+      ]
+    },
+    {
+      "id": "components/Alert.tsx",
+      "name": "Alert",
+      "type": "component",
+      "relPath": "components/Alert.tsx",
+      "exports": [
+        "AlertType",
+        "AlertPosition",
+        "AlertAction",
+        "AlertProps",
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "SuccessIcon",
+        "ErrorIcon",
+        "WarningIcon",
+        "InfoIcon",
+        "AlertProps",
+        "DefaultIcon",
+        "XIcon"
+      ],
+      "hooksUsed": [
+        "useState",
+        "useEffect"
+      ],
+      "lines": 183,
+      "docstrings": [
+        "Auto-dismiss after duration"
+      ]
+    },
+    {
+      "id": "components/Button.tsx",
+      "name": "Button",
+      "type": "component",
+      "relPath": "components/Button.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "ButtonHTMLAttributes",
+        "HTMLButtonElement",
+        "ButtonProps"
+      ],
+      "hooksUsed": [],
+      "lines": 69,
+      "docstrings": []
+    },
+    {
+      "id": "components/Card.tsx",
+      "name": "Card",
+      "type": "component",
+      "relPath": "components/Card.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "CardProps"
+      ],
+      "hooksUsed": [
+        "useState"
+      ],
+      "lines": 67,
+      "docstrings": []
+    },
+    {
+      "id": "components/ChatWidget/ChatWidget.tsx",
+      "name": "ChatWidget",
+      "type": "chat-widget",
+      "relPath": "components/ChatWidget/ChatWidget.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 11,
+      "docstrings": []
+    },
+    {
+      "id": "components/ErrorBoundary.tsx",
+      "name": "ErrorBoundary",
+      "type": "component",
+      "relPath": "components/ErrorBoundary.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "Props",
+        "State"
+      ],
+      "hooksUsed": [],
+      "lines": 104,
+      "docstrings": [
+        "Update state so the next render will show the fallback UI"
+      ]
+    },
+    {
+      "id": "components/Footer.tsx",
+      "name": "Footer",
+      "type": "component",
+      "relPath": "components/Footer.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "HTMLElement",
+        "Link"
+      ],
+      "hooksUsed": [
+        "useAuth"
+      ],
+      "lines": 150,
+      "docstrings": []
+    },
+    {
+      "id": "components/GoogleSignInButton.tsx",
+      "name": "GoogleSignInButton",
+      "type": "component",
+      "relPath": "components/GoogleSignInButton.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "GoogleSignInButtonProps",
+        "HTMLDivElement"
+      ],
+      "hooksUsed": [
+        "useRef",
+        "useEffect"
+      ],
+      "lines": 99,
+      "docstrings": [
+        "Google Sign-In Button Component\rFrontend OAuth: Uses Google Identity Services to render a Google sign-in button\rWhen clicked, it triggers Google OAuth and passes the ID token to the callback\rDocker Integration: Client ID comes from VITE_GOOGLE_CLIENT_ID environment variable",
+        "Google Sign-In Button Component\rRenders a Google sign-in button using Google Identity Services",
+        "Load Google Identity Services script"
+      ]
+    },
+    {
+      "id": "components/HMRStatus.tsx",
+      "name": "HMRStatus",
+      "type": "component",
+      "relPath": "components/HMRStatus.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "Date"
+      ],
+      "hooksUsed": [
+        "useEffect"
+      ],
+      "lines": 39,
+      "docstrings": [
+        "Update counter when component re-renders due to HMR",
+        "Don't show in production"
+      ]
+    },
+    {
+      "id": "components/IconManager.tsx",
+      "name": "IconManager",
+      "type": "component",
+      "relPath": "components/IconManager.tsx",
+      "exports": [
+        "IconName",
+        "Icon",
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-icons/fi"
+      ],
+      "componentsUsed": [
+        "IconProps",
+        "Component"
+      ],
+      "hooksUsed": [],
+      "lines": 75,
+      "docstrings": [
+        "Renders a Lucide icon by string name.\nFalls back to a generic dot if the name isn't recognized."
+      ]
+    },
+    {
+      "id": "components/Input.tsx",
+      "name": "Input",
+      "type": "component",
+      "relPath": "components/Input.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "HTMLInputElement",
+        "InputProps"
+      ],
+      "hooksUsed": [],
+      "lines": 72,
+      "docstrings": []
+    },
+    {
+      "id": "components/InventoryWidget.tsx",
+      "name": "InventoryWidget",
+      "type": "component",
+      "relPath": "components/InventoryWidget.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "react-query",
+        "@heroicons/react"
+      ],
+      "componentsUsed": [
+        "ArrowRightIcon",
+        "Link",
+        "HeartIcon",
+        "SparklesIcon",
+        "EyeIcon",
+        "PlusIcon"
+      ],
+      "hooksUsed": [
+        "useNavigate"
+      ],
+      "lines": 284,
+      "docstrings": [
+        "Fetch user item stats"
+      ]
+    },
+    {
+      "id": "components/ItemCard.tsx",
+      "name": "ItemCard",
+      "type": "component",
+      "relPath": "components/ItemCard.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "@heroicons/react"
+      ],
+      "componentsUsed": [
+        "ItemCardProps",
+        "HTMLImageElement",
+        "SparklesIcon",
+        "HeartSolidIcon",
+        "HeartIcon",
+        "EyeIcon",
+        "PencilIcon",
+        "ShareIcon",
+        "TrashIcon",
+        "TagIcon",
+        "MapPinIcon",
+        "CalendarIcon"
+      ],
+      "hooksUsed": [],
+      "lines": 303,
+      "docstrings": []
+    },
+    {
+      "id": "components/ItemDetailModal.tsx",
+      "name": "ItemDetailModal",
+      "type": "component",
+      "relPath": "components/ItemDetailModal.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "@heroicons/react"
+      ],
+      "componentsUsed": [
+        "ItemDetailModalProps",
+        "Memory",
+        "SparklesIcon",
+        "HeartSolidIcon",
+        "HeartIcon",
+        "PencilIcon",
+        "ShareIcon",
+        "TrashIcon",
+        "XMarkIcon",
+        "PhotoIcon",
+        "CalendarIcon",
+        "MapPinIcon",
+        "TagIcon",
+        "HTMLInputElement",
+        "HTMLTextAreaElement",
+        "HTMLSelectElement"
+      ],
+      "hooksUsed": [],
+      "lines": 531,
+      "docstrings": []
+    },
+    {
+      "id": "components/KPICard.tsx",
+      "name": "KPICard",
+      "type": "component",
+      "relPath": "components/KPICard.tsx",
+      "exports": [
+        "TrendData",
+        "KPIVariant",
+        "BaseKPICardProps",
+        "KPICardWithProgressProps",
+        "KPICard",
+        "KPICardGradient",
+        "KPICardCompact",
+        "KPICardMinimal",
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "lucide-react"
+      ],
+      "componentsUsed": [
+        "BaseKPICardProps",
+        "LoadingSkeleton",
+        "TrendingUp",
+        "TrendingDown",
+        "KPICardWithProgressProps",
+        "FileText",
+        "KPICard"
+      ],
+      "hooksUsed": [
+        "useState"
+      ],
+      "lines": 380,
+      "docstrings": [
+        "Creates labels for different variants for styling the KPICard component, can be referred to by label to determine style for card in use",
+        "STANDARD KPI CARD format with title, value, icon, trend, and subtitle",
+        "GRADIENT KPI CARD format with progress bar at bottom for more appealing visual"
+      ]
+    },
+    {
+      "id": "components/MultiplayerCollaboration.tsx",
+      "name": "MultiplayerCollaboration",
+      "type": "component",
+      "relPath": "components/MultiplayerCollaboration.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "MultiplayerCollaborationProps",
+        "Invitation",
+        "CollaboratorAvatar",
+        "DuelProgress",
+        "TeamMission"
+      ],
+      "hooksUsed": [
+        "useMultiplayer",
+        "useEffect"
+      ],
+      "lines": 370,
+      "docstrings": [
+        "Collaborator Avatar Component",
+        "Duel Progress Component",
+        "Team Mission Component"
+      ]
+    },
+    {
+      "id": "components/Navbar.tsx",
+      "name": "Navbar",
+      "type": "component",
+      "relPath": "components/Navbar.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "Link",
+        "AnimatePresence"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useNavigate",
+        "useEffect"
+      ],
+      "lines": 407,
+      "docstrings": []
+    },
+    {
+      "id": "components/NewComponent.tsx",
+      "name": "NewComponent",
+      "type": "component",
+      "relPath": "components/NewComponent.tsx",
+      "exports": [
+        "default"
       ],
       "externalDeps": [
         "react",
         "framer-motion"
       ],
       "componentsUsed": [],
-      "hooksUsed": [
-        "useUIStore",
-        "useState"
+      "hooksUsed": [],
+      "lines": 23,
+      "docstrings": []
+    },
+    {
+      "id": "components/ProtectedRoute.tsx",
+      "name": "ProtectedRoute",
+      "type": "component",
+      "relPath": "components/ProtectedRoute.tsx",
+      "exports": [
+        "default"
       ],
-      "lines": 121,
+      "externalDeps": [
+        "react",
+        "react-router-dom"
+      ],
+      "componentsUsed": [
+        "ProtectedRouteProps",
+        "Navigate"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useLocation"
+      ],
+      "lines": 23,
       "docstrings": [
-        "localhost:8000/chat\", {"
+        "Redirect to login page with return url"
       ]
     },
     {
-      "id": "components/layout/Sidebar.tsx",
-      "name": "Sidebar",
+      "id": "components/SearchBar.tsx",
+      "name": "SearchBar",
       "type": "component",
-      "relPath": "components/layout/Sidebar.tsx",
+      "relPath": "components/SearchBar.tsx",
       "exports": [
-        "Sidebar"
+        "default"
       ],
       "externalDeps": [
-        "react-router-dom",
+        "react",
         "framer-motion"
       ],
       "componentsUsed": [
+        "SearchBarProps",
+        "HTMLFormElement",
+        "HTMLInputElement"
+      ],
+      "hooksUsed": [],
+      "lines": 62,
+      "docstrings": [
+        "Optional: Call onSearch on every keystroke for real-time search",
+        "onSearch(e.target.value);"
+      ]
+    },
+    {
+      "id": "components/SectionDivider.tsx",
+      "name": "SectionDivider",
+      "type": "component",
+      "relPath": "components/SectionDivider.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 14,
+      "docstrings": []
+    },
+    {
+      "id": "components/SidebarNav.tsx",
+      "name": "SidebarNav",
+      "type": "component",
+      "relPath": "components/SidebarNav.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom"
+      ],
+      "componentsUsed": [
+        "HTMLDivElement",
         "NavLink"
       ],
       "hooksUsed": [
-        "useUIStore"
-      ],
-      "lines": 100,
-      "docstrings": []
-    },
-    {
-      "id": "components/layout/Topbar.tsx",
-      "name": "Topbar",
-      "type": "component",
-      "relPath": "components/layout/Topbar.tsx",
-      "exports": [
-        "Topbar"
-      ],
-      "externalDeps": [
-        "react-router-dom",
-        "framer-motion"
-      ],
-      "componentsUsed": [
-        "AnimatePresence",
-        "HealthDots",
-        "ImmersiveButton"
-      ],
-      "hooksUsed": [
-        "useHealthStore",
-        "useUIStore",
-        "useNavigate",
+        "useState",
         "useLocation",
-        "useAuthStore",
-        "usePresence"
+        "useAuth",
+        "useEffect"
       ],
-      "lines": 185,
-      "docstrings": []
-    },
-    {
-      "id": "config/onboardingSteps.ts",
-      "name": "onboardingSteps",
-      "type": "module",
-      "relPath": "config/onboardingSteps.ts",
-      "exports": [
-        "OnboardingStep",
-        "ONBOARDING_STEPS",
-        "OnboardingProgress",
-        "loadOnboardingProgress",
-        "saveOnboardingProgress"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 83,
-      "docstrings": []
-    },
-    {
-      "id": "constants/query.ts",
-      "name": "query",
-      "type": "module",
-      "relPath": "constants/query.ts",
-      "exports": [
-        "OPS_DASHBOARD_STALE_TIME"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 3,
+      "lines": 272,
       "docstrings": [
-        "Shared Ops dashboard react-query cache window (30s)."
+        "Handle window resize",
+        "Close menu when route changes",
+        "Handle scroll effect"
       ]
     },
     {
-      "id": "graph/main.ts",
-      "name": "main",
-      "type": "module",
-      "relPath": "graph/main.ts",
-      "exports": [],
+      "id": "components/Signup.tsx",
+      "name": "Signup",
+      "type": "component",
+      "relPath": "components/Signup.tsx",
+      "exports": [
+        "default"
+      ],
       "externalDeps": [
-        "d3-selection",
-        "d3-force",
-        "d3-drag",
-        "d3-zoom"
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
       ],
       "componentsUsed": [
-        "SVGSVGElement",
-        "GraphData",
-        "GraphNode",
-        "SVGLineElement",
-        "SVGCircleElement"
+        "HTMLInputElement",
+        "HTMLFormElement",
+        "Link"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState"
+      ],
+      "lines": 169,
+      "docstrings": [
+        "Error is handled in the AuthContext"
+      ]
+    },
+    {
+      "id": "components/VirtualEnvironment.tsx",
+      "name": "VirtualEnvironment",
+      "type": "component",
+      "relPath": "components/VirtualEnvironment.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "@react-three/fiber",
+        "@react-three/drei"
+      ],
+      "componentsUsed": [
+        "Cloud",
+        "Stars",
+        "Sky",
+        "WeatherSystem",
+        "ParticleSystem",
+        "Text",
+        "VirtualEnvironmentProps",
+        "Canvas",
+        "Suspense",
+        "EnvironmentScene",
+        "OrbitControls"
+      ],
+      "hooksUsed": [
+        "useFrame",
+        "useVirtualEnvironment",
+        "useEffect"
+      ],
+      "lines": 271,
+      "docstrings": [
+        "Particle System Component",
+        "Weather System Component",
+        "Environment Scene"
+      ]
+    },
+    {
+      "id": "components/chat/GroupChatItem.tsx",
+      "name": "GroupChatItem",
+      "type": "chat-component",
+      "relPath": "components/chat/GroupChatItem.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "GroupChatItemProps"
       ],
       "hooksUsed": [],
-      "lines": 320,
+      "lines": 30,
       "docstrings": []
     },
     {
-      "id": "hooks/useEventStream.ts",
-      "name": "useEventStream",
-      "type": "hook",
-      "relPath": "hooks/useEventStream.ts",
+      "id": "components/chat/MessageInput.tsx",
+      "name": "MessageInput",
+      "type": "chat-component",
+      "relPath": "components/chat/MessageInput.tsx",
       "exports": [
-        "useEventStream"
+        "MessageInputProps",
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "MessageInputProps",
+        "HTMLInputElement",
+        "Button"
+      ],
+      "hooksUsed": [],
+      "lines": 54,
+      "docstrings": []
+    },
+    {
+      "id": "components/gamification/BoostCard.tsx",
+      "name": "BoostCard",
+      "type": "gamification-component",
+      "relPath": "components/gamification/BoostCard.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "BoostCardProps"
+      ],
+      "hooksUsed": [
+        "useState",
+        "useEffect"
+      ],
+      "lines": 122,
+      "docstrings": []
+    },
+    {
+      "id": "components/gamification/MomentumBar.tsx",
+      "name": "MomentumBar",
+      "type": "gamification-component",
+      "relPath": "components/gamification/MomentumBar.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "MomentumBarProps"
+      ],
+      "hooksUsed": [],
+      "lines": 44,
+      "docstrings": []
+    },
+    {
+      "id": "components/gamification/StreakCard.tsx",
+      "name": "StreakCard",
+      "type": "gamification-component",
+      "relPath": "components/gamification/StreakCard.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "StreakCardProps"
+      ],
+      "hooksUsed": [],
+      "lines": 89,
+      "docstrings": []
+    },
+    {
+      "id": "contexts/AdventureContext.tsx",
+      "name": "AdventureContext",
+      "type": "context",
+      "relPath": "contexts/AdventureContext.tsx",
+      "exports": [
+        "useAdventure",
+        "AdventureProvider"
+      ],
+      "externalDeps": [
+        "react",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "AdventureContextType",
+        "AdventureProviderProps",
+        "Adventure",
+        "AppLocationLatLng",
+        "AdventureContext"
+      ],
+      "hooksUsed": [
+        "useContext",
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 309,
+      "docstrings": [
+        "Provide user-friendly feedback based on error type",
+        "Default to New York City if location access fails",
+        "Default to New York City if geolocation is not supported"
+      ]
+    },
+    {
+      "id": "contexts/AuthContext.tsx",
+      "name": "AuthContext",
+      "type": "context",
+      "relPath": "contexts/AuthContext.tsx",
+      "exports": [
+        "useAuth",
+        "AuthProvider"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "AuthContextType",
+        "AuthProviderProps",
+        "User",
+        "AuthContext"
+      ],
+      "hooksUsed": [
+        "useContext",
+        "useNavigate",
+        "useEffect"
+      ],
+      "lines": 205,
+      "docstrings": [
+        "--- Context Setup ---",
+        "--- Provider Component ---",
+        "--- INTERNAL HELPERS ---"
+      ]
+    },
+    {
+      "id": "contexts/SocketContext.tsx",
+      "name": "SocketContext",
+      "type": "context",
+      "relPath": "contexts/SocketContext.tsx",
+      "exports": [
+        "useSocket",
+        "SocketProvider"
       ],
       "externalDeps": [
         "react",
         "socket.io-client",
-        "@deepiri/shared"
+        "react-hot-toast"
       ],
       "componentsUsed": [
-        "Socket"
+        "SocketContextType",
+        "SocketProviderProps",
+        "Socket",
+        "SocketContext"
       ],
       "hooksUsed": [
-        "useEventStream",
-        "useEventStore",
+        "useContext",
+        "useAuth",
         "useEffect"
       ],
-      "lines": 57,
+      "lines": 193,
       "docstrings": [
-        "Live events from deepiri-realtime-gateway.\nReplaces hub-server WebSocketRelay (ws://localhost:5200/ws)."
+        "/ <reference path=\"../types/react-hot-toast.d.ts\" />",
+        "Extract base URL without /api suffix for Socket.IO",
+        "localhost:5100/api').replace('/api', '');"
+      ]
+    },
+    {
+      "id": "contexts/WebPushContext.tsx",
+      "name": "WebPushContext",
+      "type": "context",
+      "relPath": "contexts/WebPushContext.tsx",
+      "exports": [
+        "useWebPush",
+        "WebPushProvider"
+      ],
+      "externalDeps": [
+        "react",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "WebPushContextType",
+        "WebPushProviderProps",
+        "NotificationPermission",
+        "ServiceWorkerRegistration",
+        "WebPushContext"
+      ],
+      "hooksUsed": [
+        "useContext",
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 182,
+      "docstrings": [
+        "Check if Web Push is supported",
+        "Check current permission status",
+        "Register service worker"
+      ]
+    },
+    {
+      "id": "declarations.d.ts",
+      "name": "declarations.d",
+      "type": "module",
+      "relPath": "declarations.d.ts",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 43,
+      "docstrings": [
+        "Image asset type declarations"
+      ]
+    },
+    {
+      "id": "firebase.ts",
+      "name": "firebase",
+      "type": "module",
+      "relPath": "firebase.ts",
+      "exports": [],
+      "externalDeps": [
+        "firebase/app",
+        "firebase/analytics",
+        "firebase/firestore",
+        "firebase/auth",
+        "firebase/storage"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 44,
+      "docstrings": [
+        "import { initializeApp } from \"firebase/app\";",
+        "import { getFirestore } from \"firebase/firestore\";",
+        "import { getAuth } from \"firebase/auth\";"
+      ]
+    },
+    {
+      "id": "firebaseClient.ts",
+      "name": "firebaseClient",
+      "type": "module",
+      "relPath": "firebaseClient.ts",
+      "exports": [],
+      "externalDeps": [
+        "firebase/app",
+        "firebase/auth"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 21,
+      "docstrings": [
+        "client/src/firebaseClient.ts",
+        "Initialize Firebase only if it hasn't been initialized already"
       ]
     },
     {
@@ -317,256 +1363,54 @@
       "docstrings": []
     },
     {
-      "id": "hooks/useHealthPoll.ts",
-      "name": "useHealthPoll",
+      "id": "hooks/useMultiplayer.ts",
+      "name": "useMultiplayer",
       "type": "hook",
-      "relPath": "hooks/useHealthPoll.ts",
+      "relPath": "hooks/useMultiplayer.ts",
       "exports": [
-        "useHealthPoll"
-      ],
-      "externalDeps": [
-        "react",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [
-        "useHealthPoll",
-        "useHealthStore",
-        "useCallback",
-        "useEffect"
-      ],
-      "lines": 74,
-      "docstrings": [
-        "Poll deepiri-registry for service catalog + health.\nReplaces hub-server HealthPoller (/health/all).\nReturns `refresh` so callers (e.g. an Ops dashboard's refresh button) can\ntrigger an on-demand poll using the exact same fetch/fallback logic as the\nbackground interval, instead of duplicating registry calls elsewhere.",
-        "If registry returned empty, try poll endpoint to refresh then re-list",
-        "Silently fail — UI shows last known state"
-      ]
-    },
-    {
-      "id": "hooks/useImmersiveStatus.ts",
-      "name": "useImmersiveStatus",
-      "type": "hook",
-      "relPath": "hooks/useImmersiveStatus.ts",
-      "exports": [
-        "useImmersiveStatus"
+        "useMultiplayer"
       ],
       "externalDeps": [
         "react"
       ],
-      "componentsUsed": [],
-      "hooksUsed": [
-        "useImmersiveStatus",
-        "useUIStore",
-        "useEffect"
+      "componentsUsed": [
+        "Collaborator",
+        "DuelState",
+        "TeamState"
       ],
-      "lines": 15,
+      "hooksUsed": [
+        "useMultiplayer",
+        "useEffect",
+        "useCallback"
+      ],
+      "lines": 149,
       "docstrings": [
-        "Immersive is a route in this same app (/immersive), so it is always \"live\".\nReplaces hub-server ImmersiveChecker pinging a separate :5174 container."
+        "Hook for managing multiplayer state",
+        "Set up event listeners"
       ]
     },
     {
-      "id": "hooks/usePresence.ts",
-      "name": "usePresence",
+      "id": "hooks/useVirtualEnvironment.ts",
+      "name": "useVirtualEnvironment",
       "type": "hook",
-      "relPath": "hooks/usePresence.ts",
+      "relPath": "hooks/useVirtualEnvironment.ts",
       "exports": [
-        "PresencePeer",
-        "usePresence"
-      ],
-      "externalDeps": [
-        "react",
-        "socket.io-client"
-      ],
-      "componentsUsed": [
-        "PresencePeer",
-        "Socket"
-      ],
-      "hooksUsed": [
-        "usePresence",
-        "useAuthStore",
-        "useState",
-        "useEffect"
-      ],
-      "lines": 96,
-      "docstrings": [
-        "Multi-user presence via platform realtime-gateway (not a frontend-only multiplayer stack).\nPeers announce themselves; gateway fans out presence:update events.\nRoom / auth hardening belongs in deepiri-realtime-gateway."
-      ]
-    },
-    {
-      "id": "immersive/controls/SceneControls.tsx",
-      "name": "SceneControls",
-      "type": "module",
-      "relPath": "immersive/controls/SceneControls.tsx",
-      "exports": [
-        "SceneControls"
-      ],
-      "externalDeps": [
-        "react-router-dom"
-      ],
-      "componentsUsed": [
-        "Link"
-      ],
-      "hooksUsed": [
-        "useSceneStore"
-      ],
-      "lines": 204,
-      "docstrings": []
-    },
-    {
-      "id": "immersive/hooks/useHubConnection.ts",
-      "name": "useHubConnection",
-      "type": "hook",
-      "relPath": "immersive/hooks/useHubConnection.ts",
-      "exports": [
-        "useHubConnection"
-      ],
-      "externalDeps": [
-        "react",
-        "socket.io-client",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [
-        "Socket"
-      ],
-      "hooksUsed": [
-        "useHubConnection",
-        "useSceneStore",
-        "useEffect"
-      ],
-      "lines": 90,
-      "docstrings": [
-        "Immersive data plane: registry for health, realtime-gateway for events.\nReplaces hub-server REST + WS relay."
-      ]
-    },
-    {
-      "id": "immersive/hooks/usePortalAuth.ts",
-      "name": "usePortalAuth",
-      "type": "hook",
-      "relPath": "immersive/hooks/usePortalAuth.ts",
-      "exports": [
-        "usePortalAuth"
+        "useVirtualEnvironment"
       ],
       "externalDeps": [
         "react"
       ],
-      "componentsUsed": [],
-      "hooksUsed": [
-        "usePortalAuth",
-        "useSceneStore",
-        "useAuthStore",
-        "useEffect"
-      ],
-      "lines": 16,
-      "docstrings": [
-        "Same-app auth: read JWT from portal auth store (no postMessage / second origin)."
-      ]
-    },
-    {
-      "id": "immersive/panels/ServicePanel.tsx",
-      "name": "ServicePanel",
-      "type": "module",
-      "relPath": "immersive/panels/ServicePanel.tsx",
-      "exports": [
-        "ServicePanel"
-      ],
-      "externalDeps": [
-        "react-router-dom",
-        "@deepiri/shared"
-      ],
       "componentsUsed": [
-        "Link"
+        "Environment"
       ],
       "hooksUsed": [
-        "useSceneStore"
+        "useVirtualEnvironment",
+        "useCallback"
       ],
-      "lines": 70,
-      "docstrings": []
-    },
-    {
-      "id": "immersive/scene/Planet.tsx",
-      "name": "Planet",
-      "type": "module",
-      "relPath": "immersive/scene/Planet.tsx",
-      "exports": [
-        "PlanetProps",
-        "Planet"
-      ],
-      "externalDeps": [
-        "react",
-        "@react-three/fiber",
-        "@react-three/drei",
-        "three",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [
-        "THREE",
-        "Billboard",
-        "Text"
-      ],
-      "hooksUsed": [
-        "useRef",
-        "useFrame"
-      ],
-      "lines": 68,
+      "lines": 73,
       "docstrings": [
-        "support both old + new formats",
-        "Map old health strings to new status colors"
-      ]
-    },
-    {
-      "id": "immersive/scene/UniverseScene.tsx",
-      "name": "UniverseScene",
-      "type": "module",
-      "relPath": "immersive/scene/UniverseScene.tsx",
-      "exports": [
-        "UniverseScene"
-      ],
-      "externalDeps": [
-        "react",
-        "@react-three/fiber",
-        "@react-three/drei",
-        "three"
-      ],
-      "componentsUsed": [
-        "THREE",
-        "Canvas",
-        "Stars",
-        "Planet",
-        "OrbitControls"
-      ],
-      "hooksUsed": [
-        "useHubConnection",
-        "usePortalAuth",
-        "useSceneStore"
-      ],
-      "lines": 97,
-      "docstrings": [
-        "Map service category to orbit ring",
-        "Connect to Hub Server on mount",
-        "Stagger orbit radius slightly per service to avoid overlap"
-      ]
-    },
-    {
-      "id": "immersive/store/sceneStore.ts",
-      "name": "sceneStore",
-      "type": "module",
-      "relPath": "immersive/store/sceneStore.ts",
-      "exports": [
-        "useSceneStore"
-      ],
-      "externalDeps": [
-        "zustand",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [
-        "SceneState"
-      ],
-      "hooksUsed": [],
-      "lines": 51,
-      "docstrings": [
-        "Services from deepiri-registry",
-        "Events for particles (realtime-gateway)",
-        "Auth from portal auth store"
+        "Hook for managing virtual environment state",
+        "If setEnvironment returns null, keep current environment"
       ]
     },
     {
@@ -590,27 +1434,215 @@
       "docstrings": []
     },
     {
-      "id": "pages/AIWorkspace/AIWorkspace.tsx",
-      "name": "AIWorkspace",
+      "id": "pages/About.tsx",
+      "name": "About",
       "type": "page",
-      "relPath": "pages/AIWorkspace/AIWorkspace.tsx",
+      "relPath": "pages/About.tsx",
       "exports": [
-        "AIWorkspace",
         "default"
       ],
       "externalDeps": [
+        "react",
+        "react-router-dom",
         "framer-motion"
       ],
-      "componentsUsed": [],
+      "componentsUsed": [
+        "Link"
+      ],
       "hooksUsed": [],
-      "lines": 12,
+      "lines": 171,
       "docstrings": []
     },
     {
-      "id": "pages/CodebaseGraph/CodebaseGraph.tsx",
+      "id": "pages/AdventureDetail.tsx",
+      "name": "AdventureDetail",
+      "type": "page",
+      "relPath": "pages/AdventureDetail.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Adventure",
+        "HTMLTextAreaElement"
+      ],
+      "hooksUsed": [
+        "useNavigate",
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 519,
+      "docstrings": []
+    },
+    {
+      "id": "pages/AdventureGenerator.tsx",
+      "name": "AdventureGenerator",
+      "type": "page",
+      "relPath": "pages/AdventureGenerator.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "FormData",
+        "Weather",
+        "HTMLInputElement",
+        "AnimatePresence"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useAdventure",
+        "useNavigate",
+        "useEffect"
+      ],
+      "lines": 518,
+      "docstrings": [
+        "Load available interests",
+        "Note: This API call might not be correct - adjust based on actual API",
+        "Request location permission"
+      ]
+    },
+    {
+      "id": "pages/AdventureHistory.tsx",
+      "name": "AdventureHistory",
+      "type": "page",
+      "relPath": "pages/AdventureHistory.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Adventure",
+        "Link",
+        "HTMLInputElement",
+        "HTMLSelectElement"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 398,
+      "docstrings": []
+    },
+    {
+      "id": "pages/AgentChat.tsx",
+      "name": "AgentChat",
+      "type": "page",
+      "relPath": "pages/AgentChat.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "Message",
+        "HTMLDivElement",
+        "HTMLFormElement",
+        "MessageInput",
+        "HTMLInputElement"
+      ],
+      "hooksUsed": [
+        "useEffect"
+      ],
+      "lines": 152,
+      "docstrings": []
+    },
+    {
+      "id": "pages/AnalyticsDashboard.tsx",
+      "name": "AnalyticsDashboard",
+      "type": "page",
+      "relPath": "pages/AnalyticsDashboard.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "axios",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "AnalyticsEntry",
+        "Stats"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 247,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Boosts.tsx",
+      "name": "Boosts",
+      "type": "page",
+      "relPath": "pages/Boosts.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "BoostProfile",
+        "BoostCard"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 144,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Challenges.tsx",
+      "name": "Challenges",
+      "type": "page",
+      "relPath": "pages/Challenges.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "axios",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Challenge",
+        "Task"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 333,
+      "docstrings": []
+    },
+    {
+      "id": "pages/CodebaseGraph.tsx",
       "name": "CodebaseGraph",
       "type": "page",
-      "relPath": "pages/CodebaseGraph/CodebaseGraph.tsx",
+      "relPath": "pages/CodebaseGraph.tsx",
       "exports": [
         "default"
       ],
@@ -637,7 +1669,6 @@
         "GraphData",
         "GraphNode",
         "Set",
-        "ResolvedGraphLink",
         "StatsBar",
         "RefreshCw",
         "Minimize2",
@@ -652,16 +1683,34 @@
         "useEffect",
         "useCallback"
       ],
-      "lines": 803,
+      "lines": 797,
       "docstrings": []
     },
     {
-      "id": "pages/Contact/Contact.tsx",
+      "id": "pages/ComponentShowcase.tsx",
+      "name": "ComponentShowcase",
+      "type": "page",
+      "relPath": "pages/ComponentShowcase.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "SectionDivider",
+        "Card"
+      ],
+      "hooksUsed": [],
+      "lines": 47,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Contact.tsx",
       "name": "Contact",
       "type": "page",
-      "relPath": "pages/Contact/Contact.tsx",
+      "relPath": "pages/Contact.tsx",
       "exports": [
-        "Contact",
         "default"
       ],
       "externalDeps": [
@@ -672,295 +1721,607 @@
       "hooksUsed": [
         "useState"
       ],
-      "lines": 151,
-      "docstrings": []
-    },
-    {
-      "id": "pages/DependencyMap/DependencyMap.tsx",
-      "name": "DependencyMap",
-      "type": "page",
-      "relPath": "pages/DependencyMap/DependencyMap.tsx",
-      "exports": [
-        "DependencyMap",
-        "default"
-      ],
-      "externalDeps": [
-        "framer-motion"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 12,
-      "docstrings": []
-    },
-    {
-      "id": "pages/EventRiver/EventRiver.tsx",
-      "name": "EventRiver",
-      "type": "page",
-      "relPath": "pages/EventRiver/EventRiver.tsx",
-      "exports": [
-        "EventRiver",
-        "default"
-      ],
-      "externalDeps": [
-        "framer-motion"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 12,
-      "docstrings": []
-    },
-    {
-      "id": "pages/Home/Home.tsx",
-      "name": "Home",
-      "type": "page",
-      "relPath": "pages/Home/Home.tsx",
-      "exports": [
-        "Home",
-        "default"
-      ],
-      "externalDeps": [
-        "framer-motion",
-        "react-router-dom",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [
-        "useNavigate",
-        "useHealthStore",
-        "useUIStore"
-      ],
-      "lines": 83,
-      "docstrings": []
-    },
-    {
-      "id": "pages/Immersive/ImmersivePage.tsx",
-      "name": "ImmersivePage",
-      "type": "page",
-      "relPath": "pages/Immersive/ImmersivePage.tsx",
-      "exports": [
-        "ImmersivePage",
-        "default"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [
-        "UniverseScene",
-        "SceneControls",
-        "ServicePanel"
-      ],
-      "hooksUsed": [],
-      "lines": 27,
+      "lines": 402,
       "docstrings": [
-        "Immersive 3D universe — same app, same container, route /immersive.\rPreviously a separate Vite app on :5174."
+        "const [emailError, setEmailError] = useState('');"
       ]
     },
     {
-      "id": "pages/Launchpad/Launchpad.tsx",
-      "name": "Launchpad",
+      "id": "pages/CreateEvent.tsx",
+      "name": "CreateEvent",
       "type": "page",
-      "relPath": "pages/Launchpad/Launchpad.tsx",
-      "exports": [
-        "Launchpad",
-        "default"
-      ],
-      "externalDeps": [
-        "framer-motion"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 12,
-      "docstrings": []
-    },
-    {
-      "id": "pages/Login/Login.tsx",
-      "name": "Login",
-      "type": "page",
-      "relPath": "pages/Login/Login.tsx",
-      "exports": [
-        "Login",
-        "default"
-      ],
-      "externalDeps": [
-        "react",
-        "react-router-dom",
-        "framer-motion"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [
-        "useNavigate",
-        "useState"
-      ],
-      "lines": 91,
-      "docstrings": []
-    },
-    {
-      "id": "pages/Onboarding/Onboarding.tsx",
-      "name": "Onboarding",
-      "type": "page",
-      "relPath": "pages/Onboarding/Onboarding.tsx",
-      "exports": [
-        "Onboarding",
-        "default"
-      ],
-      "externalDeps": [
-        "framer-motion"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 12,
-      "docstrings": []
-    },
-    {
-      "id": "pages/Ops/JobsDashboard.tsx",
-      "name": "JobsDashboard",
-      "type": "page",
-      "relPath": "pages/Ops/JobsDashboard.tsx",
+      "relPath": "pages/CreateEvent.tsx",
       "exports": [
         "default"
       ],
       "externalDeps": [
         "react",
-        "react-router-dom",
-        "react-query",
-        "lucide-react"
-      ],
-      "componentsUsed": [
-        "JobStatus",
-        "JobRecord",
-        "Record",
-        "Link",
-        "ArrowLeft",
-        "RefreshCw",
-        "ChevronUp",
-        "ChevronDown",
-        "XCircle",
-        "RotateCcw"
-      ],
-      "hooksUsed": [
-        "useQueryClient",
-        "useQuery"
-      ],
-      "lines": 185,
-      "docstrings": []
-    },
-    {
-      "id": "pages/Ops/Ops.tsx",
-      "name": "Ops",
-      "type": "page",
-      "relPath": "pages/Ops/Ops.tsx",
-      "exports": [
-        "Ops",
-        "default"
-      ],
-      "externalDeps": [
         "react-router-dom",
         "framer-motion",
-        "lucide-react",
-        "@deepiri/shared"
+        "react-hot-toast"
       ],
       "componentsUsed": [
-        "RefreshCw",
+        "FormData",
+        "HTMLFormElement",
+        "HTMLInputElement",
+        "HTMLTextAreaElement"
+      ],
+      "hooksUsed": [
+        "useNavigate",
+        "useAuth",
+        "useAdventure",
+        "useEffect"
+      ],
+      "lines": 356,
+      "docstrings": [
+        "/ <reference path=\"../types/react-hot-toast.d.ts\" />",
+        "Set default location if available",
+        "Set default start time to next hour"
+      ]
+    },
+    {
+      "id": "pages/Dashboard.tsx",
+      "name": "Dashboard",
+      "type": "page",
+      "relPath": "pages/Dashboard.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Stats",
+        "Adventure",
+        "Weather",
+        "Event",
+        "Link",
+        "InventoryWidget"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useAdventure",
+        "useNavigate",
+        "useEffect"
+      ],
+      "lines": 435,
+      "docstrings": [
+        "Load weather if location is available"
+      ]
+    },
+    {
+      "id": "pages/Document.tsx",
+      "name": "Document",
+      "type": "page",
+      "relPath": "pages/Document.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "componentsUsed": [
+        "File",
+        "HTMLInputElement",
+        "DocumentRecord",
+        "Upload",
+        "Plus",
+        "Search",
+        "FileText",
+        "Eye",
+        "CheckCircle"
+      ],
+      "hooksUsed": [
+        "useState",
+        "useNavigate",
+        "useEffect",
+        "useMemo"
+      ],
+      "lines": 395,
+      "docstrings": []
+    },
+    {
+      "id": "pages/EventDetail.tsx",
+      "name": "EventDetail",
+      "type": "page",
+      "relPath": "pages/EventDetail.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Event"
+      ],
+      "hooksUsed": [
+        "useNavigate",
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 464,
+      "docstrings": [
+        "twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`);"
+      ]
+    },
+    {
+      "id": "pages/Events.tsx",
+      "name": "Events",
+      "type": "page",
+      "relPath": "pages/Events.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Event",
+        "HTMLInputElement",
+        "HTMLSelectElement",
         "Link"
       ],
       "hooksUsed": [
-        "useHealthPoll",
-        "useHealthStore"
+        "useAuth",
+        "useAdventure",
+        "useEffect"
       ],
-      "lines": 134,
-      "docstrings": []
+      "lines": 477,
+      "docstrings": [
+        "Load both user-created events and external events",
+        "Reload events to update RSVP status",
+        "Reload events to update RSVP status"
+      ]
     },
     {
-      "id": "pages/Ops/RegistryDashboard.tsx",
-      "name": "RegistryDashboard",
+      "id": "pages/ForgotPassword.tsx",
+      "name": "ForgotPassword",
       "type": "page",
-      "relPath": "pages/Ops/RegistryDashboard.tsx",
+      "relPath": "pages/ForgotPassword.tsx",
       "exports": [
         "default"
       ],
       "externalDeps": [
         "react",
         "react-router-dom",
-        "react-query",
-        "lucide-react"
+        "react-hot-toast",
+        "framer-motion"
       ],
       "componentsUsed": [
-        "Tab",
-        "Link",
-        "ArrowLeft",
-        "RefreshCw"
+        "HTMLFormElement",
+        "HTMLInputElement",
+        "Link"
       ],
       "hooksUsed": [
-        "useQueryClient",
-        "useQuery"
+        "useState"
       ],
-      "lines": 177,
+      "lines": 211,
       "docstrings": []
     },
     {
-      "id": "pages/Ops/TelemetryDashboard.tsx",
-      "name": "TelemetryDashboard",
+      "id": "pages/Friends.tsx",
+      "name": "Friends",
       "type": "page",
-      "relPath": "pages/Ops/TelemetryDashboard.tsx",
+      "relPath": "pages/Friends.tsx",
       "exports": [
         "default"
       ],
       "externalDeps": [
         "react",
-        "react-router-dom",
-        "react-query",
-        "lucide-react"
+        "framer-motion",
+        "react-hot-toast"
       ],
       "componentsUsed": [
-        "Tab",
-        "Link",
-        "ArrowLeft",
-        "RefreshCw"
+        "User",
+        "HTMLInputElement"
       ],
       "hooksUsed": [
-        "useQueryClient",
-        "useQuery"
+        "useAuth",
+        "useEffect"
       ],
-      "lines": 207,
-      "docstrings": []
+      "lines": 341,
+      "docstrings": [
+        "/ <reference path=\"../types/react-hot-toast.d.ts\" />",
+        "Filter out current user and existing friends",
+        "Navigate to friend's profile or start a shared adventure"
+      ]
     },
     {
-      "id": "pages/Ops/TrussDashboard.tsx",
-      "name": "TrussDashboard",
+      "id": "pages/GamificationDashboard.tsx",
+      "name": "GamificationDashboard",
       "type": "page",
-      "relPath": "pages/Ops/TrussDashboard.tsx",
+      "relPath": "pages/GamificationDashboard.tsx",
       "exports": [
         "default"
       ],
       "externalDeps": [
         "react",
-        "react-router-dom",
-        "react-query",
-        "lucide-react"
+        "framer-motion",
+        "axios",
+        "react-hot-toast"
       ],
       "componentsUsed": [
-        "TrussRunStatus",
-        "Record",
-        "Link",
-        "ArrowLeft",
-        "RefreshCw",
-        "Play",
-        "ChevronUp",
-        "ChevronDown",
-        "XCircle"
+        "Profile"
       ],
       "hooksUsed": [
-        "useQueryClient",
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 268,
+      "docstrings": []
+    },
+    {
+      "id": "pages/GroupChatView.tsx",
+      "name": "GroupChatView",
+      "type": "page",
+      "relPath": "pages/GroupChatView.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 16,
+      "docstrings": []
+    },
+    {
+      "id": "pages/GroupChats.tsx",
+      "name": "GroupChats",
+      "type": "page",
+      "relPath": "pages/GroupChats.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom"
+      ],
+      "componentsUsed": [
+        "GroupChat",
+        "GroupChatItem"
+      ],
+      "hooksUsed": [
+        "useNavigate",
         "useState",
-        "useQuery",
-        "useMemo"
+        "useEffect"
       ],
-      "lines": 294,
+      "lines": 82,
+      "docstrings": [
+        "TODO: remove mock data when API is available"
+      ]
+    },
+    {
+      "id": "pages/Home.tsx",
+      "name": "Home",
+      "type": "page",
+      "relPath": "pages/Home.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "Link",
+        "SectionDivider",
+        "SectionHeader",
+        "Panel"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 445,
       "docstrings": []
     },
     {
-      "id": "pages/PRImpact/PRImpact.tsx",
+      "id": "pages/ImmersiveWorkspace.tsx",
+      "name": "ImmersiveWorkspace",
+      "type": "page",
+      "relPath": "pages/ImmersiveWorkspace.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "HTMLSelectElement",
+        "VirtualEnvironment",
+        "MultiplayerCollaboration"
+      ],
+      "hooksUsed": [
+        "useVirtualEnvironment"
+      ],
+      "lines": 98,
+      "docstrings": [
+        "Immersive Workspace Page\rCombines 3D virtual environments with multiplayer collaboration"
+      ]
+    },
+    {
+      "id": "pages/LanguageIntelligence/ContractDetail.tsx",
+      "name": "ContractDetail",
+      "type": "page",
+      "relPath": "pages/LanguageIntelligence/ContractDetail.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 12,
+      "docstrings": []
+    },
+    {
+      "id": "pages/LanguageIntelligence/ContractUpload.tsx",
+      "name": "ContractUpload",
+      "type": "page",
+      "relPath": "pages/LanguageIntelligence/ContractUpload.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 11,
+      "docstrings": []
+    },
+    {
+      "id": "pages/LanguageIntelligence/DocumentDetail.tsx",
+      "name": "DocumentDetail",
+      "type": "page",
+      "relPath": "pages/LanguageIntelligence/DocumentDetail.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "lucide-react"
+      ],
+      "componentsUsed": [
+        "DocumentRecord",
+        "EditForm",
+        "FileText",
+        "ArrowLeft",
+        "Share2",
+        "Download",
+        "Edit",
+        "Trash2",
+        "CheckCircle",
+        "Plus"
+      ],
+      "hooksUsed": [
+        "useNavigate",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 975,
+      "docstrings": [
+        "Blob URLs are safe for local previews generated by the app.",
+        "Only allow same-origin PDF documents over http/https."
+      ]
+    },
+    {
+      "id": "pages/LanguageIntelligence/LeaseDetail.tsx",
+      "name": "LeaseDetail",
+      "type": "page",
+      "relPath": "pages/LanguageIntelligence/LeaseDetail.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 11,
+      "docstrings": []
+    },
+    {
+      "id": "pages/LanguageIntelligence/LeaseUpload.tsx",
+      "name": "LeaseUpload",
+      "type": "page",
+      "relPath": "pages/LanguageIntelligence/LeaseUpload.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 11,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Leaderboard.tsx",
+      "name": "Leaderboard",
+      "type": "page",
+      "relPath": "pages/Leaderboard.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "axios",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "LeaderboardEntry"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 238,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Login.tsx",
+      "name": "Login",
+      "type": "page",
+      "relPath": "pages/Login.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "HTMLInputElement",
+        "HTMLFormElement",
+        "Link"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState"
+      ],
+      "lines": 287,
+      "docstrings": []
+    },
+    {
+      "id": "pages/NewPage.tsx",
+      "name": "NewPage",
+      "type": "page",
+      "relPath": "pages/NewPage.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 26,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Notifications.tsx",
+      "name": "Notifications",
+      "type": "page",
+      "relPath": "pages/Notifications.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Notification"
+      ],
+      "hooksUsed": [
+        "useEffect"
+      ],
+      "lines": 332,
+      "docstrings": [
+        "Hardcoded notifications for demo"
+      ]
+    },
+    {
+      "id": "pages/Objectives.tsx",
+      "name": "Objectives",
+      "type": "page",
+      "relPath": "pages/Objectives.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast",
+        "react-router-dom"
+      ],
+      "componentsUsed": [
+        "Objective"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 306,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Odysseys.tsx",
+      "name": "Odysseys",
+      "type": "page",
+      "relPath": "pages/Odysseys.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Odyssey",
+        "Objective",
+        "AccessibleModal"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 387,
+      "docstrings": []
+    },
+    {
+      "id": "pages/OpsHub.tsx",
+      "name": "OpsHub",
+      "type": "page",
+      "relPath": "pages/OpsHub.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [
+        "ServiceCard"
+      ],
+      "hooksUsed": [
+        "useState",
+        "useEffect"
+      ],
+      "lines": 64,
+      "docstrings": []
+    },
+    {
+      "id": "pages/PRImpact.tsx",
       "name": "PRImpact",
       "type": "page",
-      "relPath": "pages/PRImpact/PRImpact.tsx",
+      "relPath": "pages/PRImpact.tsx",
       "exports": [
         "default"
       ],
@@ -988,291 +2349,459 @@
       "docstrings": []
     },
     {
-      "id": "pages/Pulse/Pulse.tsx",
-      "name": "Pulse",
+      "id": "pages/Privacy.tsx",
+      "name": "Privacy",
       "type": "page",
-      "relPath": "pages/Pulse/Pulse.tsx",
+      "relPath": "pages/Privacy.tsx",
       "exports": [
-        "Pulse",
         "default"
       ],
       "externalDeps": [
-        "framer-motion"
+        "react"
       ],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 12,
+      "lines": 32,
       "docstrings": []
     },
     {
-      "id": "pages/Sankey/Sankey.tsx",
-      "name": "Sankey",
+      "id": "pages/ProductivityChat.tsx",
+      "name": "ProductivityChat",
       "type": "page",
-      "relPath": "pages/Sankey/Sankey.tsx",
+      "relPath": "pages/ProductivityChat.tsx",
       "exports": [
-        "Sankey",
         "default"
       ],
       "externalDeps": [
-        "framer-motion"
+        "react",
+        "axios"
       ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 12,
-      "docstrings": []
+      "componentsUsed": [
+        "Message",
+        "Challenge",
+        "HTMLDivElement",
+        "HTMLFormElement",
+        "MessageResponse",
+        "MessageInput"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 294,
+      "docstrings": [
+        "localhost:5100/api';"
+      ]
     },
     {
-      "id": "pages/TeamOps/TeamOps.tsx",
-      "name": "TeamOps",
+      "id": "pages/Profile.tsx",
+      "name": "Profile",
       "type": "page",
-      "relPath": "pages/TeamOps/TeamOps.tsx",
+      "relPath": "pages/Profile.tsx",
       "exports": [
-        "TeamOps",
         "default"
       ],
       "externalDeps": [
-        "framer-motion"
+        "react"
       ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 12,
+      "componentsUsed": [
+        "SectionId",
+        "Record",
+        "Toggle"
+      ],
+      "hooksUsed": [
+        "useState",
+        "useMemo"
+      ],
+      "lines": 566,
+      "docstrings": [
+        "Preferences (toggles + selects)",
+        "Notifications (toggles)",
+        "Integrations (toggles + text)"
+      ]
+    },
+    {
+      "id": "pages/Progress.tsx",
+      "name": "Progress",
+      "type": "page",
+      "relPath": "pages/Progress.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "MomentumProfile",
+        "MomentumBar"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 149,
       "docstrings": []
     },
     {
-      "id": "services/apiClient.ts",
-      "name": "apiClient",
+      "id": "pages/PythonTools.tsx",
+      "name": "PythonTools",
+      "type": "page",
+      "relPath": "pages/PythonTools.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "Coords",
+        "DirectionsForm",
+        "AdventureForm",
+        "LoadingState",
+        "HTMLInputElement",
+        "HTMLSelectElement"
+      ],
+      "hooksUsed": [
+        "useEffect"
+      ],
+      "lines": 148,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Register.tsx",
+      "name": "Register",
+      "type": "page",
+      "relPath": "pages/Register.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "react-router-dom",
+        "react-hot-toast",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "HTMLInputElement",
+        "HTMLFormElement",
+        "Link"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState"
+      ],
+      "lines": 439,
+      "docstrings": [
+        "Error is handled in the AuthContext"
+      ]
+    },
+    {
+      "id": "pages/Seasons.tsx",
+      "name": "Seasons",
+      "type": "page",
+      "relPath": "pages/Seasons.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Season"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 339,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Streaks.tsx",
+      "name": "Streaks",
+      "type": "page",
+      "relPath": "pages/Streaks.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "StreakData",
+        "StreakCard"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useState",
+        "useEffect"
+      ],
+      "lines": 122,
+      "docstrings": []
+    },
+    {
+      "id": "pages/TaskManagement.tsx",
+      "name": "TaskManagement",
+      "type": "page",
+      "relPath": "pages/TaskManagement.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion",
+        "axios",
+        "react-hot-toast"
+      ],
+      "componentsUsed": [
+        "Task",
+        "NewTask",
+        "HTMLFormElement",
+        "HTMLInputElement",
+        "HTMLTextAreaElement",
+        "HTMLSelectElement"
+      ],
+      "hooksUsed": [
+        "useAuth",
+        "useEffect"
+      ],
+      "lines": 371,
+      "docstrings": []
+    },
+    {
+      "id": "pages/Terms.tsx",
+      "name": "Terms",
+      "type": "page",
+      "relPath": "pages/Terms.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 32,
+      "docstrings": []
+    },
+    {
+      "id": "pages/UserInventory.tsx",
+      "name": "UserInventory",
+      "type": "page",
+      "relPath": "pages/UserInventory.tsx",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "react",
+        "framer-motion"
+      ],
+      "componentsUsed": [
+        "HTMLInputElement",
+        "HTMLSelectElement"
+      ],
+      "hooksUsed": [
+        "useMemo"
+      ],
+      "lines": 173,
+      "docstrings": []
+    },
+    {
+      "id": "reportWebVitals.ts",
+      "name": "reportWebVitals",
       "type": "module",
-      "relPath": "services/apiClient.ts",
+      "relPath": "reportWebVitals.ts",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "web-vitals"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 17,
+      "docstrings": []
+    },
+    {
+      "id": "services/documentService.ts",
+      "name": "documentService",
+      "type": "module",
+      "relPath": "services/documentService.ts",
+      "exports": [
+        "documentService"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [
+        "DocumentRecord"
+      ],
+      "hooksUsed": [],
+      "lines": 230,
+      "docstrings": [
+        "Invalid URL: reject.",
+        "Fall back to local cache when API is unavailable or user is unauthenticated.",
+        "Use cached copy when detail fetch fails."
+      ]
+    },
+    {
+      "id": "services/multiplayerService.ts",
+      "name": "multiplayerService",
+      "type": "module",
+      "relPath": "services/multiplayerService.ts",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [
+        "socket.io-client"
+      ],
+      "componentsUsed": [
+        "DuelState"
+      ],
+      "hooksUsed": [],
+      "lines": 313,
+      "docstrings": [
+        "Multiplayer Collaboration Service\rHandles real-time collaboration, duels, and team features",
+        "Initialize connection",
+        "Disconnect"
+      ]
+    },
+    {
+      "id": "services/virtualEnvironmentService.ts",
+      "name": "virtualEnvironmentService",
+      "type": "module",
+      "relPath": "services/virtualEnvironmentService.ts",
+      "exports": [
+        "default"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 276,
+      "docstrings": [
+        "Virtual Environment Service\rManages 3D environments, themes, and immersive experiences",
+        "Get available environments",
+        "Set current environment"
+      ]
+    },
+    {
+      "id": "setupTests.js",
+      "name": "setupTests",
+      "type": "module",
+      "relPath": "setupTests.js",
+      "exports": [],
+      "externalDeps": [
+        "@testing-library/react",
+        "vitest"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 7,
+      "docstrings": []
+    },
+    {
+      "id": "tests/setup.js",
+      "name": "setup",
+      "type": "module",
+      "relPath": "tests/setup.js",
       "exports": [],
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 3,
-      "docstrings": [
-        "@deprecated Prefer importing from platformClient — kept for existing portal imports"
-      ]
+      "lines": 1,
+      "docstrings": []
     },
     {
-      "id": "services/authService.ts",
-      "name": "authService",
+      "id": "tests/setupTests.ts",
+      "name": "setupTests",
       "type": "module",
-      "relPath": "services/authService.ts",
-      "exports": [
-        "AuthError",
-        "logout"
-      ],
-      "externalDeps": [
-        "axios"
-      ],
+      "relPath": "tests/setupTests.ts",
+      "exports": [],
+      "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 52,
+      "lines": 75,
       "docstrings": [
-        "Clears auth state and API client tokens.\nCallers on protected routes rely on AuthGuard to Navigate to /login\n(SPA navigation — no full page reload)."
+        "Test environment setup: provide browser-like globals and common stubs",
+        "Set up a simple in-memory localStorage for tests",
+        "Provide minimal geolocation stub"
       ]
     },
     {
-      "id": "services/jobsService.ts",
-      "name": "jobsService",
-      "type": "module",
-      "relPath": "services/jobsService.ts",
+      "id": "types/chat.ts",
+      "name": "chat",
+      "type": "type-definition",
+      "relPath": "types/chat.ts",
       "exports": [
-        "JobStatus",
-        "JobRecord",
-        "JobLogLine",
-        "JobFilters"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [
-        "JobRecord",
-        "JobLogLine",
-        "Record"
-      ],
-      "hooksUsed": [],
-      "lines": 58,
-      "docstrings": []
-    },
-    {
-      "id": "services/platformClient.ts",
-      "name": "platformClient",
-      "type": "module",
-      "relPath": "services/platformClient.ts",
-      "exports": [
-        "API_GATEWAY_URL",
-        "REGISTRY_URL",
-        "REALTIME_GATEWAY_URL",
-        "apiClient",
-        "registryClient",
-        "clearAuthToken"
-      ],
-      "externalDeps": [
-        "axios"
-      ],
-      "componentsUsed": [],
-      "hooksUsed": [],
-      "lines": 65,
-      "docstrings": [
-        "Platform service URLs — backends live in deepiri-platform, not this repo.\r- api-gateway (:5100) — auth + proxied APIs\r- registry (:5003) — service catalog + health aggregation\r- realtime-gateway (:5008) — live event stream (socket.io)",
-        "Auth + general API traffic via api-gateway",
-        "Service catalog + health via deepiri-registry.\rPrefer gateway proxy when available; direct registry URL works in local platform compose."
-      ]
-    },
-    {
-      "id": "services/registryService.ts",
-      "name": "registryService",
-      "type": "module",
-      "relPath": "services/registryService.ts",
-      "exports": [
-        "Repo",
-        "Tool",
-        "EcosystemHealth"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [
-        "Repo",
-        "Tool",
-        "EcosystemHealth"
-      ],
-      "hooksUsed": [],
-      "lines": 45,
-      "docstrings": []
-    },
-    {
-      "id": "services/telemetryService.ts",
-      "name": "telemetryService",
-      "type": "module",
-      "relPath": "services/telemetryService.ts",
-      "exports": [
-        "EcosystemHealth",
-        "JobMetrics",
-        "TelemetryEvent"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [
-        "EcosystemHealth",
-        "JobMetrics",
-        "TelemetryEvent"
-      ],
-      "hooksUsed": [],
-      "lines": 41,
-      "docstrings": []
-    },
-    {
-      "id": "services/trussService.ts",
-      "name": "trussService",
-      "type": "module",
-      "relPath": "services/trussService.ts",
-      "exports": [
-        "TrussRunStatus",
-        "TrussDefinition",
-        "TrussDefinitionStep",
-        "TrussStepRun",
-        "TrussRun",
-        "TrussTemplateLaunchResponse"
-      ],
-      "externalDeps": [],
-      "componentsUsed": [
-        "TrussDefinition",
-        "TrussRun",
-        "TrussTemplateLaunchResponse"
-      ],
-      "hooksUsed": [],
-      "lines": 105,
-      "docstrings": []
-    },
-    {
-      "id": "store/authStore.ts",
-      "name": "authStore",
-      "type": "module",
-      "relPath": "store/authStore.ts",
-      "exports": [
-        "useAuthStore"
-      ],
-      "externalDeps": [
-        "zustand",
-        "zustand/middleware"
-      ],
-      "componentsUsed": [
-        "AuthState"
-      ],
-      "hooksUsed": [],
-      "lines": 35,
-      "docstrings": [
-        "auth-service login response doesn't currently return this"
-      ]
-    },
-    {
-      "id": "store/eventStore.ts",
-      "name": "eventStore",
-      "type": "module",
-      "relPath": "store/eventStore.ts",
-      "exports": [
-        "useEventStore"
-      ],
-      "externalDeps": [
-        "zustand",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [
-        "EventProducer",
-        "EventState"
-      ],
-      "hooksUsed": [],
-      "lines": 40,
-      "docstrings": []
-    },
-    {
-      "id": "store/healthStore.ts",
-      "name": "healthStore",
-      "type": "module",
-      "relPath": "store/healthStore.ts",
-      "exports": [
-        "useHealthStore"
-      ],
-      "externalDeps": [
-        "zustand",
-        "@deepiri/shared"
-      ],
-      "componentsUsed": [
-        "HealthState"
-      ],
-      "hooksUsed": [],
-      "lines": 21,
-      "docstrings": []
-    },
-    {
-      "id": "store/uiStore.ts",
-      "name": "uiStore",
-      "type": "module",
-      "relPath": "store/uiStore.ts",
-      "exports": [
-        "useUIStore"
-      ],
-      "externalDeps": [
-        "zustand",
-        "zustand/middleware"
-      ],
-      "componentsUsed": [
-        "UIState"
-      ],
-      "hooksUsed": [],
-      "lines": 44,
-      "docstrings": []
-    },
-    {
-      "id": "utils/api.ts",
-      "name": "api",
-      "type": "utility",
-      "relPath": "utils/api.ts",
-      "exports": [
-        "getActionErrorMessage"
+        "GroupChat"
       ],
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 12,
+      "lines": 6,
+      "docstrings": []
+    },
+    {
+      "id": "types/common.ts",
+      "name": "common",
+      "type": "type-definition",
+      "relPath": "types/common.ts",
+      "exports": [
+        "ApiResponse",
+        "AppLocation",
+        "AppLocationLatLng",
+        "AxiosErrorResponse"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 32,
       "docstrings": [
-        "Extract API error message from axios-style errors."
+        "Shared type definitions",
+        "Custom Location type (to avoid conflict with browser Location)",
+        "Alternative location format (lat/lng)"
+      ]
+    },
+    {
+      "id": "types/document.ts",
+      "name": "document",
+      "type": "type-definition",
+      "relPath": "types/document.ts",
+      "exports": [
+        "DocumentStatus",
+        "DocumentRecord",
+        "NewDocumentInput"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 28,
+      "docstrings": []
+    },
+    {
+      "id": "types/react-hot-toast.d.ts",
+      "name": "react-hot-toast.d",
+      "type": "type-definition",
+      "relPath": "types/react-hot-toast.d.ts",
+      "exports": [
+        "Toaster",
+        "default"
+      ],
+      "externalDeps": [
+        "react"
+      ],
+      "componentsUsed": [],
+      "hooksUsed": [],
+      "lines": 22,
+      "docstrings": [
+        "Type augmentation for react-hot-toast"
       ]
     },
     {
@@ -1287,26 +2816,26 @@
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 69,
+      "lines": 53,
       "docstrings": [
         "Safely builds API URLs with encoded path segments.\nEach segment is URI-encoded to prevent path traversal and special-character issues.\nQuery parameters with `undefined` or `null` values are automatically stripped.\n@example\nbuildUrl('/api/users', ['john doe', 'settings'])  → '/api/users/john%20doe/settings'\nbuildUrl('/api/search', [], { q: 'hello world', page: 1 })  → '/api/search?q=hello%20world&page=1'",
         "Strips `undefined` and `null` values from a params object,\nreturning only defined key-value pairs.\n@example\ncleanQuery({ q: 'test', page: undefined, limit: null, sort: 'asc' })\n→ { q: 'test', sort: 'asc' }"
       ]
     },
     {
-      "id": "utils/date.ts",
-      "name": "date",
+      "id": "utils/googleOAuth.ts",
+      "name": "googleOAuth",
       "type": "utility",
-      "relPath": "utils/date.ts",
-      "exports": [
-        "formatTimestamp"
-      ],
+      "relPath": "utils/googleOAuth.ts",
+      "exports": [],
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 11,
+      "lines": 161,
       "docstrings": [
-        "Short, locale-aware timestamp for Ops dashboards."
+        "Google OAuth Utility using Google Identity Services\rFrontend OAuth: Uses Google Identity Services to authenticate with Google\rGets the Google ID token and sends it to backend for verification\rDocker Integration: Client ID comes from VITE_GOOGLE_CLIENT_ID environment variable",
+        "Load Google Identity Services script if not already loaded",
+        "Initialize Google Identity Services and trigger sign-in via popup\rReturns a promise that resolves with the Google ID token"
       ]
     },
     {
@@ -1325,19 +2854,116 @@
       "docstrings": []
     },
     {
-      "id": "utils/ui.ts",
-      "name": "ui",
+      "id": "utils/logger.ts",
+      "name": "logger",
       "type": "utility",
-      "relPath": "utils/ui.ts",
+      "relPath": "utils/logger.ts",
       "exports": [
-        "statusBadgeClass"
+        "AuthLogger",
+        "AdventureLogger",
+        "EventLogger",
+        "APILogger",
+        "PerformanceLogger",
+        "ErrorLogger",
+        "authLogger",
+        "adventureLogger",
+        "eventLogger",
+        "apiLogger",
+        "performanceLogger",
+        "errorLogger",
+        "setupGlobalErrorHandling",
+        "setupPerformanceMonitoring",
+        "logErrorBoundary",
+        "default"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [
+        "LogLevel"
+      ],
+      "hooksUsed": [],
+      "lines": 395,
+      "docstrings": [
+        "Ignore token parsing errors"
+      ]
+    },
+    {
+      "id": "utils/secureLogger.ts",
+      "name": "secureLogger",
+      "type": "utility",
+      "relPath": "utils/secureLogger.ts",
+      "exports": [
+        "secureLog"
       ],
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 14,
+      "lines": 58,
       "docstrings": [
-        "Map health-ish status strings to a CSS class with a dashboard-specific prefix."
+        "List of sensitive field names",
+        "Check if string looks like a secret (long random string)"
+      ]
+    },
+    {
+      "id": "utils/testHelpers.tsx",
+      "name": "testHelpers",
+      "type": "utility",
+      "relPath": "utils/testHelpers.tsx",
+      "exports": [
+        "mockUser",
+        "mockAdventure",
+        "mockEvent",
+        "TestWrapper",
+        "renderWithProviders",
+        "debugUtils",
+        "mockApiResponses",
+        "testHelpers",
+        "default"
+      ],
+      "externalDeps": [
+        "@testing-library/react",
+        "react-query",
+        "react-router-dom",
+        "react"
+      ],
+      "componentsUsed": [
+        "TestWrapperProps",
+        "BrowserRouter",
+        "QueryClientProvider",
+        "AuthProvider",
+        "SocketProvider",
+        "AdventureProvider",
+        "TestWrapper",
+        "Element"
+      ],
+      "hooksUsed": [],
+      "lines": 268,
+      "docstrings": [
+        "Frontend Testing and Debugging Utilities",
+        "Mock data for testing",
+        "Test wrapper with all providers"
+      ]
+    },
+    {
+      "id": "utils/webPush.ts",
+      "name": "webPush",
+      "type": "utility",
+      "relPath": "utils/webPush.ts",
+      "exports": [
+        "urlBase64ToUint8Array",
+        "subscriptionToJSON"
+      ],
+      "externalDeps": [],
+      "componentsUsed": [
+        "NotificationPermission",
+        "ServiceWorkerRegistration",
+        "PushSubscription"
+      ],
+      "hooksUsed": [],
+      "lines": 141,
+      "docstrings": [
+        "Web Push subscription utility",
+        "Converts VAPID public key from base64 URL-safe format to Uint8Array",
+        "Get VAPID public key from notification service"
       ]
     },
     {
@@ -1349,141 +2975,997 @@
       "externalDeps": [],
       "componentsUsed": [],
       "hooksUsed": [],
-      "lines": 13,
+      "lines": 21,
       "docstrings": [
-        "/ <reference types=\"vite/client\" />"
+        "/ <reference types=\"vite/client\" />",
+        "Add more environment variables as needed"
       ]
     }
   ],
   "links": [
     {
-      "source": "app/App.test.tsx",
-      "target": "app/App.tsx",
+      "source": "App.test.jsx",
+      "target": "services/documentService.ts",
       "type": "imports"
     },
     {
-      "source": "app/App.tsx",
-      "target": "app/Router.tsx",
+      "source": "App.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "app/Router.tsx",
-      "target": "app/AuthGuard.tsx",
+      "source": "App.tsx",
+      "target": "contexts/WebPushContext.tsx",
       "type": "imports"
     },
     {
-      "source": "app/Router.tsx",
-      "target": "app/Shell.tsx",
+      "source": "App.tsx",
+      "target": "contexts/SocketContext.tsx",
       "type": "imports"
     },
     {
-      "source": "immersive/scene/UniverseScene.tsx",
-      "target": "immersive/scene/Planet.tsx",
+      "source": "App.tsx",
+      "target": "contexts/AdventureContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "components/ProtectedRoute.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "components/ErrorBoundary.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "components/SidebarNav.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "components/Footer.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "components/HMRStatus.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "utils/logger.ts",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Home.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Login.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Register.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Dashboard.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/AdventureGenerator.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/AdventureDetail.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/AdventureHistory.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Document.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/LanguageIntelligence/DocumentDetail.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Events.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/EventDetail.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/CreateEvent.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Profile.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Friends.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Leaderboard.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/TaskManagement.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Challenges.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/GamificationDashboard.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/AnalyticsDashboard.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Notifications.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Objectives.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Odysseys.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Seasons.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Progress.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Boosts.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Streaks.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/AgentChat.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/ProductivityChat.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/GroupChats.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/GroupChatView.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/PythonTools.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/UserInventory.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/ImmersiveWorkspace.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Contact.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/ForgotPassword.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/LanguageIntelligence/LeaseUpload.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/LanguageIntelligence/LeaseDetail.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "components/ChatWidget/ChatWidget.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/CodebaseGraph.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/PRImpact.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/About.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Privacy.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/Terms.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "App.tsx",
+      "target": "pages/ComponentShowcase.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "api/adventureApi.ts",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/documentApi.ts",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/documentApi.ts",
+      "target": "types/document.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/eventApi.ts",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/eventApi.ts",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/externalApi.ts",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/externalApi.ts",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/firebaseApi.ts",
+      "target": "firebase.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/gamificationApi.ts",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/groupChatApi.ts",
+      "target": "types/chat.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/notificationApi.ts",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/notificationApi.ts",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/pythonApi.ts",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "api/pythonApi.ts",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/AddItemModal.tsx",
+      "target": "api/userItemsApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/ErrorBoundary.tsx",
+      "target": "utils/logger.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/Footer.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "components/Footer.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "components/InventoryWidget.tsx",
+      "target": "api/userItemsApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/ItemCard.tsx",
+      "target": "api/userItemsApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/ItemDetailModal.tsx",
+      "target": "api/userItemsApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/MultiplayerCollaboration.tsx",
+      "target": "hooks/useMultiplayer.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/MultiplayerCollaboration.tsx",
+      "target": "services/multiplayerService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/MultiplayerCollaboration.tsx",
+      "target": "components/MultiplayerCollaboration.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "components/Navbar.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "components/Navbar.tsx",
+      "target": "assets/images/logo.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "components/Navbar.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "components/ProtectedRoute.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "components/SidebarNav.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "components/SidebarNav.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "components/Signup.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "components/VirtualEnvironment.tsx",
+      "target": "hooks/useVirtualEnvironment.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/VirtualEnvironment.tsx",
+      "target": "components/VirtualEnvironment.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "components/chat/GroupChatItem.tsx",
+      "target": "types/chat.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/chat/MessageInput.tsx",
+      "target": "components/Button.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "components/gamification/BoostCard.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "components/gamification/StreakCard.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/AdventureContext.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/AdventureContext.tsx",
+      "target": "api/adventureApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/AdventureContext.tsx",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/AuthContext.tsx",
+      "target": "api/authApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/SocketContext.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/WebPushContext.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/WebPushContext.tsx",
+      "target": "api/notificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "contexts/WebPushContext.tsx",
+      "target": "utils/webPush.ts",
+      "type": "imports"
+    },
+    {
+      "source": "hooks/useMultiplayer.ts",
+      "target": "services/multiplayerService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "hooks/useVirtualEnvironment.ts",
+      "target": "services/virtualEnvironmentService.ts",
       "type": "imports"
     },
     {
       "source": "main.tsx",
-      "target": "app/App.tsx",
+      "target": "App.tsx",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/JobsDashboard.tsx",
-      "target": "services/jobsService.ts",
+      "source": "main.tsx",
+      "target": "styles/index.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/About.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/AdventureDetail.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/JobsDashboard.tsx",
-      "target": "constants/query.ts",
+      "source": "pages/AdventureDetail.tsx",
+      "target": "api/adventureApi.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/JobsDashboard.tsx",
-      "target": "utils/api.ts",
+      "source": "pages/AdventureDetail.tsx",
+      "target": "api/eventApi.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/RegistryDashboard.tsx",
-      "target": "services/registryService.ts",
+      "source": "pages/AdventureGenerator.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/RegistryDashboard.tsx",
-      "target": "constants/query.ts",
+      "source": "pages/AdventureGenerator.tsx",
+      "target": "contexts/AdventureContext.tsx",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/RegistryDashboard.tsx",
-      "target": "utils/ui.ts",
+      "source": "pages/AdventureGenerator.tsx",
+      "target": "api/adventureApi.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TelemetryDashboard.tsx",
-      "target": "services/telemetryService.ts",
+      "source": "pages/AdventureGenerator.tsx",
+      "target": "api/externalApi.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TelemetryDashboard.tsx",
-      "target": "constants/query.ts",
+      "source": "pages/AdventureGenerator.tsx",
+      "target": "types/common.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TelemetryDashboard.tsx",
-      "target": "utils/ui.ts",
+      "source": "pages/AdventureHistory.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TrussDashboard.tsx",
-      "target": "services/trussService.ts",
+      "source": "pages/AdventureHistory.tsx",
+      "target": "api/adventureApi.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TrussDashboard.tsx",
-      "target": "constants/query.ts",
+      "source": "pages/AgentChat.tsx",
+      "target": "api/externalApi.ts",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TrussDashboard.tsx",
-      "target": "utils/api.ts",
+      "source": "pages/AgentChat.tsx",
+      "target": "components/chat/MessageInput.tsx",
       "type": "imports"
     },
     {
-      "source": "pages/Ops/TrussDashboard.tsx",
-      "target": "utils/date.ts",
+      "source": "pages/AgentChat.tsx",
+      "target": "styles/productivity.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/AnalyticsDashboard.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "services/apiClient.ts",
-      "target": "services/platformClient.ts",
+      "source": "pages/Boosts.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "services/authService.ts",
-      "target": "services/platformClient.ts",
+      "source": "pages/Boosts.tsx",
+      "target": "api/gamificationApi.ts",
       "type": "imports"
     },
     {
-      "source": "services/jobsService.ts",
-      "target": "services/platformClient.ts",
+      "source": "pages/Boosts.tsx",
+      "target": "components/gamification/BoostCard.tsx",
       "type": "imports"
     },
     {
-      "source": "services/registryService.ts",
-      "target": "services/platformClient.ts",
+      "source": "pages/Challenges.tsx",
+      "target": "contexts/AuthContext.tsx",
       "type": "imports"
     },
     {
-      "source": "services/telemetryService.ts",
-      "target": "services/platformClient.ts",
+      "source": "pages/CodebaseGraph.tsx",
+      "target": "styles/codebase-graph.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/ComponentShowcase.tsx",
+      "target": "components/Card.tsx",
       "type": "imports"
     },
     {
-      "source": "services/trussService.ts",
-      "target": "services/platformClient.ts",
+      "source": "pages/ComponentShowcase.tsx",
+      "target": "components/SectionDivider.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/ComponentShowcase.tsx",
+      "target": "styles/ComponentShowcase.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/Contact.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/Contact.tsx",
+      "target": "pages/Contact.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/CreateEvent.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/CreateEvent.tsx",
+      "target": "contexts/AdventureContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/CreateEvent.tsx",
+      "target": "api/eventApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/CreateEvent.tsx",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "contexts/AdventureContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "api/userApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "api/adventureApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "api/externalApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "components/InventoryWidget.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Dashboard.tsx",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Document.tsx",
+      "target": "types/document.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Document.tsx",
+      "target": "services/documentService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/EventDetail.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/EventDetail.tsx",
+      "target": "api/eventApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Events.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Events.tsx",
+      "target": "contexts/AdventureContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Events.tsx",
+      "target": "api/eventApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Events.tsx",
+      "target": "api/externalApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Events.tsx",
+      "target": "types/common.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Friends.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Friends.tsx",
+      "target": "api/userApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/GamificationDashboard.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/GroupChats.tsx",
+      "target": "components/chat/GroupChatItem.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/GroupChats.tsx",
+      "target": "api/groupChatApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/GroupChats.tsx",
+      "target": "types/chat.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Home.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Home.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/Home.tsx",
+      "target": "components/SectionDivider.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/ImmersiveWorkspace.tsx",
+      "target": "components/VirtualEnvironment.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/ImmersiveWorkspace.tsx",
+      "target": "components/MultiplayerCollaboration.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/ImmersiveWorkspace.tsx",
+      "target": "hooks/useVirtualEnvironment.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/ImmersiveWorkspace.tsx",
+      "target": "pages/ImmersiveWorkspace.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/LanguageIntelligence/DocumentDetail.tsx",
+      "target": "types/document.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/LanguageIntelligence/DocumentDetail.tsx",
+      "target": "services/documentService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Leaderboard.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Login.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Notifications.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Notifications.tsx",
+      "target": "api/notificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Objectives.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Objectives.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Odysseys.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Odysseys.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Odysseys.tsx",
+      "target": "components/AccessibleModal.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/OpsHub.tsx",
+      "target": "api/axiosInstance.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/PRImpact.tsx",
+      "target": "utils/graphConstants.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/PRImpact.tsx",
+      "target": "styles/pr-impact.css",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/ProductivityChat.tsx",
+      "target": "components/chat/MessageInput.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/ProductivityChat.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Progress.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Progress.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Progress.tsx",
+      "target": "components/gamification/MomentumBar.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/PythonTools.tsx",
+      "target": "api/pythonApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Register.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Register.tsx",
+      "target": "assets/images/logo_squared.png",
+      "type": "imports-external"
+    },
+    {
+      "source": "pages/Seasons.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Seasons.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Streaks.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Streaks.tsx",
+      "target": "api/gamificationApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "pages/Streaks.tsx",
+      "target": "components/gamification/StreakCard.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "pages/TaskManagement.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "services/documentService.ts",
+      "target": "api/documentApi.ts",
+      "type": "imports"
+    },
+    {
+      "source": "services/documentService.ts",
+      "target": "types/document.ts",
+      "type": "imports"
+    },
+    {
+      "source": "utils/secureLogger.ts",
+      "target": "utils/logger.ts",
+      "type": "imports"
+    },
+    {
+      "source": "utils/testHelpers.tsx",
+      "target": "contexts/AuthContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "utils/testHelpers.tsx",
+      "target": "contexts/SocketContext.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "utils/testHelpers.tsx",
+      "target": "contexts/AdventureContext.tsx",
       "type": "imports"
     }
   ],
   "meta": {
-    "analyzedAt": "2026-08-10T23:06:06.865Z",
-    "fileCount": 60
+    "analyzedAt": "2026-07-26T20:00:40.033Z",
+    "fileCount": 123
   }
 }

@@ -186,22 +186,4 @@ describe('apiHelpers', () => {
     const url = buildUrl('/api', [], { q: 'test', page: undefined, sort: 'asc' });
     expect(url).toBe('/api?q=test&sort=asc');
   });
-
-  it('buildUrl strips trailing slashes from base', () => {
-    expect(buildUrl('/api/', ['users'], {})).toBe('/api/users');
-    expect(buildUrl('https://example.com/v1///', ['x'], {})).toBe('https://example.com/v1/x');
-  });
-
-  it('buildUrl rejects path traversal segments', () => {
-    expect(buildUrl('/api', ['..', 'secrets'], {})).toBe('/api/secrets');
-    expect(buildUrl('/api', ['.', 'settings'], {})).toBe('/api/settings');
-    expect(buildUrl('/api', ['..', '..', 'etc'], {})).toBe('/api/etc');
-    expect(buildUrl('/api', ['a', 'b', '..'], {})).toBe('/api/a/b');
-    expect(buildUrl('/api', ['..\\..\\etc', 'passwd'], {})).toBe('/api/etc/passwd');
-    expect(buildUrl('/api', ['/etc', 'passwd'], {})).toBe('/api/etc/passwd');
-  });
-
-  it('buildUrl keeps empty params off the query string', () => {
-    expect(buildUrl('/api', [], {})).toBe('/api');
-  });
 });

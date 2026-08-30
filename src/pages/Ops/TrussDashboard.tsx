@@ -10,12 +10,9 @@ import {
   type TrussRun,
   type TrussRunStatus,
 } from '../../services/trussService';
-import { OPS_DASHBOARD_STALE_TIME } from '../../constants/query';
-import { getActionErrorMessage } from '../../utils/api';
-import { formatTimestamp } from '../../utils/date';
 import './TrussDashboard.css';
 
-const TRUSS_STALE_TIME = OPS_DASHBOARD_STALE_TIME;
+const TRUSS_STALE_TIME = 30 * 1000;
 
 const RUN_STATUS_STYLES: Record<TrussRunStatus, string> = {
   queued: 'truss-status-queued',
@@ -35,6 +32,26 @@ const DEFAULT_TEMPLATE_INPUT = JSON.stringify(
   null,
   2
 );
+
+function formatTimestamp(value?: string | null): string {
+  if (!value) return 'Not started';
+  return new Intl.DateTimeFormat(undefined, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(value));
+}
+
+function getActionErrorMessage(err: unknown, fallback: string): string {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const message = (err as { response?: { data?: { error?: string } } }).response?.data?.error;
+    if (message) {
+      return message;
+    }
+  }
+  return fallback;
+}
 
 function isActiveRun(run: TrussRun): boolean {
   return run.status === 'queued' || run.status === 'running' || run.status === 'waiting';
