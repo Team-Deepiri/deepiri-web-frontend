@@ -3,12 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./types": "./src/types/index.ts",
-    "./utils/colorMap": "./src/utils/colorMap.ts",
-    "./utils/statusThresholds": "./src/utils/statusThresholds.ts"
+    "./types": "./types/index.ts",
+    "./utils/colorMap": "./utils/colorMap.ts",
+    "./utils/statusThresholds": "./utils/statusThresholds.ts"
   }
 }

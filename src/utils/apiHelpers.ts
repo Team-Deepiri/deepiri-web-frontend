@@ -15,26 +15,10 @@ export function buildUrl(
 ): string {
   const encoded = segments
     .filter((s): s is string | number => s != null)
-    .map(s => String(s).replace(/\\/g, '/'))
-    .map(s => {
-      const parts = s.split('/');
-      const resolved: string[] = [];
-      for (const part of parts) {
-        if (part === '' || part === '.') continue;
-        if (part === '..') {
-          resolved.pop();
-          continue;
-        }
-        resolved.push(part);
-      }
-      return resolved.join('/');
-    })
-    .filter(s => s !== '')
-    .map(s => encodeURIComponent(s))
+    .map(s => encodeURIComponent(String(s)))
     .join('/');
 
-  const pathBase = base.replace(/\/+$/, '');
-  const path = encoded ? `${pathBase}/${encoded}` : pathBase;
+  const path = encoded ? `${base}/${encoded}` : base;
 
   if (!params) return path;
 
