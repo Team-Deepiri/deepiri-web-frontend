@@ -133,6 +133,16 @@ export const TOOLS: DeepiriTool[] = [
     category: 'dev',
   },
   {
+    id: 'boardman',
+    label: 'Boardman',
+    description: 'GitHub ↔ Plaky sync agent — task drafting, PR/QA workflow, repo Q&A',
+    route: 'https://boardman.deepiri.com',
+    icon: Bot,
+    color: '#f97316',
+    roles: ['software_developer', 'qa_support', 'ai_ml', 'it', 'admin', 'leadership', 'owner'],
+    category: 'dev',
+  },
+  {
     id: 'ops-hub',
     label: 'Ops Hub',
     description: 'Truss, telemetry, gateway — admin/owner only',
