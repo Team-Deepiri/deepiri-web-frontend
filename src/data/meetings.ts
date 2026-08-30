@@ -49,10 +49,10 @@ export const TEAM_MEETINGS: TeamMeeting[] = [
     title: 'Infrastructure / Application Team',
     cadence: 'weekly',
     dayLabel: 'Tuesdays',
-    timeEST: '9:30 pm EST',
-    timeCST: '8:30 pm CST',
-    timeMST: '7:30 pm MST',
-    timePST: '6:30 pm PST',
+    timeEST: '9:00 pm EST',
+    timeCST: '8:00 pm CST',
+    timeMST: '7:00 pm MST',
+    timePST: '6:00 pm PST',
     roles: ['software_developer', 'it', 'admin', 'leadership'],
     description: 'Attend if your role is @Cloud/Infra/Security, @Full Stack, @Backend or @Frontend Engineer',
     location: 'Google Meet',
@@ -88,7 +88,7 @@ export const TEAM_MEETINGS: TeamMeeting[] = [
 ];
 
 export function getNextOccurrenceLabel(m: TeamMeeting): string {
-  return `${m.dayLabel} · ${m.timeEST} / ${m.timePST}`;
+  return `${m.dayLabel} · ${m.timeEST} / ${m.timeCST} / ${m.timeMST} / ${m.timePST}`;
 }
 
 export function isIntermittent(m: TeamMeeting): boolean {
