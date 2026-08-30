@@ -216,8 +216,10 @@ const People: React.FC = () => {
             <div className="small text-muted mb-2"><strong>{people.length}</strong> {people.length === 1 ? 'member' : 'members'}</div>
             <div className="border rounded-3 bg-white p-3" style={{ maxHeight: '70vh', overflowY: 'auto', overflowX: 'hidden' }}>
             <div className="row g-3">
-            {people.map(p => {
-              const uid = p._id || p.id || Math.random().toString(36);
+            {people.map((p, i) => {
+              const realId = p._id || p.id || '';
+              // Stable key: a random fallback would remount the card every render.
+              const uid = realId || ghLogin(p) || p.email || `row-${i}`;
               const role: DeepiriRole | null = (p.deepiriRole || p.role || p.metadata?.deepiriRole || null) as any;
               const meta = role ? ROLES[role] : null;
               const title = p.specializedTitle || p.metadata?.specializedTitle || '';
@@ -248,8 +250,8 @@ const People: React.FC = () => {
                     {summaries[String(p._id || p.id)] && <div className="small p-2 rounded-3 border bg-light text-break"><strong>Summary (OpenRouter):</strong> {summaries[String(p._id || p.id)]}</div>}
 
                     <div className="d-flex flex-wrap gap-2 mt-2">
-                      <button className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 flex-shrink-0" onClick={() => generateTitle(p)} disabled={generating === String(uid)}>
-                        <Sparkles size={14} /> {generating === String(uid) ? 'Generating…' : 'Generate Title'}
+                      <button className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 flex-shrink-0" onClick={() => generateTitle(p)} disabled={!realId || generating === realId}>
+                        <Sparkles size={14} /> {generating === realId ? 'Generating…' : 'Generate Title'}
                       </button>
                       {login && (
                         <a href={`https://github.com/${login}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1" style={{ maxWidth: '100%' }} title={`@${login}`}>
