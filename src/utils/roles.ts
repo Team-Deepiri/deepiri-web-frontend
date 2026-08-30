@@ -28,17 +28,23 @@ export function setStoredRole(role: DeepiriRole): void {
   } catch {}
 }
 
-export function getUserRole(user: any): DeepiriRole | null {
-  if (!user) return getStoredRole();
-  // The server `role` column is authoritative — check it first so a stale
-  // localStorage `metadata.deepiriRole` can never present a higher role than
-  // the backend actually granted. Fall back to the legacy metadata fields for
-  // users the backend hasn't migrated, then to the stored team role.
+// Read an explicit role off any user-like object (a session user or a People
+// directory row). The server `role` column is authoritative — checked first so
+// a stale localStorage `metadata.deepiriRole` can't present a higher role than
+// the backend granted — then the legacy metadata fields. Returns null when none
+// is a known role; no fallback to the stored role, so it's safe for directory
+// rows that aren't the current user.
+export function roleFromUser(user: any): DeepiriRole | null {
+  if (!user) return null;
   const candidates = [user.role, user.deepiriRole, user.metadata?.deepiriRole, user.metadata?.role];
   for (const c of candidates) {
     if (c && (Object.keys(ROLES) as string[]).includes(c)) return c as DeepiriRole;
   }
-  return getStoredRole();
+  return null;
+}
+
+export function getUserRole(user: any): DeepiriRole | null {
+  return roleFromUser(user) ?? getStoredRole();
 }
 
 export function hasRole(user: any, role: DeepiriRole): boolean {

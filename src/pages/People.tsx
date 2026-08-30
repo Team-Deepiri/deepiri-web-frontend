@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import { userApi } from '../api/userApi';
 import { useAuth } from '../contexts/AuthContext';
+import { roleFromUser } from '../utils/roles';
 import { ROLES, rolesGrantableBy } from '../types/roles';
 import type { DeepiriRole } from '../types/roles';
 import { Users, Sparkles, Github, ExternalLink, ShieldCheck } from 'lucide-react';
@@ -30,10 +31,6 @@ function roleRank(r?: string): number {
   return idx === -1 ? 99 : idx;
 }
 
-function personRole(p: Person): DeepiriRole | null {
-  return (p.role || p.deepiriRole || p.metadata?.deepiriRole || null) as DeepiriRole | null;
-}
-
 function personId(p: Person): string {
   return String(p._id || p.id || '');
 }
@@ -57,12 +54,14 @@ const People: React.FC = () => {
         setLoading(true);
         let list: Person[] = [];
         try {
-          const res: any = await userApi.listUsers().catch(() => null);
-          const data = res?.users || res?.data || res;
+          const res = await userApi.listUsers();
+          const data = (res?.users || res?.data || res) as Person[] | undefined;
           if (Array.isArray(data)) list = data;
-        } catch {}
+        } catch {
+          toast.error('Could not load the directory');
+        }
         // sort by authority
-        list.sort((a, b) => roleRank(personRole(a) || '') - roleRank(personRole(b) || ''));
+        list.sort((a, b) => roleRank(roleFromUser(a) || '') - roleRank(roleFromUser(b) || ''));
         setPeople(list);
         // lazy fetch activity/summaries best-effort
         list.forEach(p => {
@@ -87,12 +86,12 @@ const People: React.FC = () => {
     setGenerating(uid);
     try {
       const res = await axiosInstance.post('/integrations/openrouter/generate-title', { userId: uid, name: p.name, bio: p.bio }).then(r => r.data).catch(() => null);
-      const title = res?.title || res?.data?.title || 'Deepiri Specialist — ' + (personRole(p) || 'Member');
+      const title = res?.title || res?.data?.title || 'Deepiri Specialist — ' + (roleFromUser(p) || 'Member');
       toast.success(`Generated: ${title}`);
       setPeople(prev => prev.map(x => personId(x) === uid ? { ...x, specializedTitle: title } : x));
     } catch {
       toast.error('OpenRouter proxy not configured — using local generation.');
-      const fallback = `Deepiri Specialist — ${ROLES[(personRole(p) || 'software_developer') as DeepiriRole]?.label || 'Member'}`;
+      const fallback = `Deepiri Specialist — ${ROLES[(roleFromUser(p) || 'software_developer') as DeepiriRole]?.label || 'Member'}`;
       setPeople(prev => prev.map(x => personId(x) === uid ? { ...x, specializedTitle: fallback } : x));
     } finally { setGenerating(null); }
   };
@@ -102,7 +101,7 @@ const People: React.FC = () => {
     if (grantableRoles.length === 0) return false;      // not owner/admin
     const uid = personId(p);
     if (!uid || uid === myId) return false;             // never your own role
-    const targetRole = personRole(p);
+    const targetRole = roleFromUser(p);
     if (targetRole === 'owner') return false;           // an owner is never reassigned in-app
     if (targetRole === 'admin' && myRole !== 'owner') return false; // only an owner touches an admin
     return true;
@@ -110,7 +109,7 @@ const People: React.FC = () => {
 
   const changeRole = async (p: Person, nextRole: DeepiriRole) => {
     const uid = personId(p);
-    const prevRole = personRole(p);
+    const prevRole = roleFromUser(p);
     if (!uid || nextRole === prevRole) return;
     setSavingRole(uid);
     setPeople(prev => prev.map(x => personId(x) === uid ? { ...x, role: nextRole, deepiriRole: nextRole } : x));
@@ -153,7 +152,7 @@ const People: React.FC = () => {
           <div className="row g-3">
             {people.map(p => {
               const uid = personId(p) || Math.random().toString(36);
-              const role = personRole(p);
+              const role = roleFromUser(p);
               const meta = role ? ROLES[role] : null;
               const title = p.specializedTitle || p.metadata?.specializedTitle || '';
               const gh = p.githubUsername || p.metadata?.githubUsername;
