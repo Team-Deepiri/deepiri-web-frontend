@@ -5,6 +5,41 @@ import toast from 'react-hot-toast';
 import type { DeepiriRole } from '../types/roles';
 import { getStoredRole, getUserRole, setStoredRole } from '../utils/roles';
 
+// authApi rejects with the response body (see api/authApi.ts), so a failed login
+// arrives here as the auth-service payload rather than an AxiosError.
+//
+// The auth-service runs express-validator on /auth/login and returns
+// { message: "Validation failed", errors: [{ field, message }] }. Surface the
+// specific rule messages instead of the unhelpful "Validation failed" lump.
+const loginErrorMessage = (error: any): string => {
+  const errors = error?.errors ?? error?.response?.data?.errors;
+  const validationDetail = Array.isArray(errors)
+    ? errors
+        .map((e: any) => (typeof e?.message === 'string' ? e.message : ''))
+        .filter(Boolean)
+        .join(' ')
+    : '';
+
+  const data = error?.response?.data ?? error;
+  const message = typeof data?.message === 'string' ? data.message : '';
+  const errorField = typeof data?.error === 'string' ? data.error : '';
+  const status = error?.status ?? error?.response?.status;
+
+  const raw =
+    validationDetail ||
+    (message && message !== 'Validation failed' ? message : '') ||
+    errorField ||
+    (status === 401 || status === 403
+      ? 'Invalid credentials'
+      : status === 400
+        ? 'Invalid login request'
+        : 'Login failed. Please try again.');
+
+  // Cap length as defense-in-depth against an oversized upstream string;
+  // the value is rendered verbatim in a toast.
+  return raw.length > 300 ? `${raw.slice(0, 300)}…` : raw;
+};
+
 // --- Interfaces ---
 
 interface User {
@@ -157,8 +192,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      toast.error('Login failed. Please try again.');
-      return { success: false, message: 'Login failed.' };
+      const message = loginErrorMessage(error);
+      toast.error(message);
+      return { success: false, message };
     } finally {
       setLoading(false);
     }
