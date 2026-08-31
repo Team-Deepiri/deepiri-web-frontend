@@ -180,6 +180,10 @@ const People: React.FC = () => {
     const targetRole = roleFromUser(p);
     if (targetRole === 'owner') return false;            // an owner is never reassigned in-app
     if (targetRole === 'admin' && myRole !== 'owner') return false; // only an owner touches an admin
+    // IT and leadership may hand out team roles, but must not be able to
+    // reassign a leadership user — otherwise the lower privilege level can
+    // edit the higher one. Only admin/owner may.
+    if (targetRole === 'leadership' && myRole !== 'owner' && myRole !== 'admin') return false;
     return true;
   };
 
