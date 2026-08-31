@@ -32,6 +32,7 @@ export const TOOLS: DeepiriTool[] = [
     icon: Megaphone,
     color: '#7c3aed',
     roles: ['admin', 'owner'],
+    restricted: true, // documented admin/owner only — without this, leadership/it bypass it
     category: 'comms',
   },
   {
@@ -144,6 +145,7 @@ export const TOOLS: DeepiriTool[] = [
     icon: Wrench,
     color: '#dc2626',
     roles: ['admin', 'owner'],
+    restricted: true, // documented admin/owner only — without this, leadership/it bypass it
     category: 'ops',
   },
   {
@@ -154,6 +156,7 @@ export const TOOLS: DeepiriTool[] = [
     icon: BarChart3,
     color: '#dc2626',
     roles: ['admin', 'owner'],
+    restricted: true, // documented admin/owner only — without this, leadership/it bypass it
     category: 'ops',
   },
   {
