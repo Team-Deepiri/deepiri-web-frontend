@@ -181,6 +181,29 @@ export const userApi = {
     }
   },
 
+  // Org directory for the People page. Returns { users: [...] }.
+  listUsers: async (): Promise<UserResponse> => {
+    try {
+      const response = await api.get('/users');
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      throw axiosError.response?.data || error;
+    }
+  },
+
+  // Grant/change another user's role. Server enforces who may assign what
+  // (owner → admin, admin → leadership/team; owner never assignable).
+  setUserRole: async (userId: string, role: string): Promise<UserResponse> => {
+    try {
+      const response = await api.put(`/users/${userId}/role`, { role });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      throw axiosError.response?.data || error;
+    }
+  },
+
   deleteAccount: async (password: string): Promise<UserResponse> => {
     try {
       const response = await api.delete('/users/account', { data: { password } });

@@ -14,6 +14,10 @@ export interface DeepiriTool {
   icon: LucideIcon;
   color: string;
   roles: DeepiriRole[]; // who can see it; admin/leadership/it see all anyway via hasRole
+  // When true, the blanket admin/leadership/it/owner override does NOT apply and
+  // `roles` is enforced exactly. Use for tools that grant real privilege, where
+  // "leadership can see everything" is the wrong default.
+  restricted?: boolean;
   category: 'comms' | 'catalog' | 'ops' | 'dev';
 }
 
@@ -232,16 +236,33 @@ export const TOOLS: DeepiriTool[] = [
     roles: ['ai_ml', 'qa_support', 'software_developer', 'it', 'admin', 'leadership', 'owner'],
     category: 'comms',
   },
+  // Boardman: admin/owner only. `restricted` is what actually enforces that —
+  // without it, leadership and it would still see this via the privilege override.
+  {
+    id: 'boardman',
+    label: 'Boardman',
+    description: 'GitHub ↔ Plaky sync agent — task drafting, PR/QA workflow, repo Q&A (admin/owner only)',
+    route: 'https://boardman.deepiri.com',
+    icon: Bot,
+    color: '#f97316',
+    roles: ['admin', 'owner'],
+    restricted: true,
+    category: 'dev',
+  },
 ];
 
 export function canAccessTool(userRole: DeepiriRole | null, tool: DeepiriTool): boolean {
   if (!userRole) return false;
+  // Checked first: a restricted tool ignores the privilege override entirely.
+  if (tool.restricted) return tool.roles.includes(userRole);
   if (userRole === 'admin' || userRole === 'leadership' || userRole === 'it' || userRole === 'owner') return true;
   return tool.roles.includes(userRole);
 }
 
 export function getToolsForRole(role: DeepiriRole | null): DeepiriTool[] {
   if (!role) return [];
-  if (role === 'admin' || role === 'leadership' || role === 'it' || role === 'owner') return TOOLS;
-  return TOOLS.filter(t => t.roles.includes(role));
+  const privileged = role === 'admin' || role === 'leadership' || role === 'it' || role === 'owner';
+  // Must mirror canAccessTool exactly — if the grid and the access check ever
+  // disagree, a tool shows up that the user cannot actually open.
+  return TOOLS.filter(t => (t.restricted ? t.roles.includes(role) : privileged || t.roles.includes(role)));
 }

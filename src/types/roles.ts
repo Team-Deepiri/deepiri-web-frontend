@@ -83,12 +83,36 @@ export const ROLES: Record<DeepiriRole, RoleMeta> = {
   },
 };
 
+// Roles a user is allowed to pick for themselves (onboarding + Profile).
+// 'it' is deliberately NOT here: IT grants roles to other people, so allowing
+// anyone to self-select it would let a member hand themselves that authority.
+// admin / leadership / owner are likewise granted, never self-selected.
+export const SELF_ASSIGNABLE_ROLES: DeepiriRole[] = ['ai_ml', 'qa_support', 'software_developer'];
+
+// The team roles IT and leadership may assign to other people. Includes 'it'
+// itself — it is grant-only, so someone has to be able to hand it out.
+export const TEAM_GRANTABLE_ROLES: DeepiriRole[] = [...SELF_ASSIGNABLE_ROLES, 'it'];
+
+// Extra roles an admin may grant to other people.
+export const ADMIN_GRANTABLE_ROLES: DeepiriRole[] = [...TEAM_GRANTABLE_ROLES, 'leadership'];
+
+// Extra roles an owner may grant to other people. 'owner' is never grantable in-app.
+export const OWNER_GRANTABLE_ROLES: DeepiriRole[] = [...ADMIN_GRANTABLE_ROLES, 'admin'];
+
+// The set of roles `actorRole` is allowed to assign to someone else.
+// owner      -> everything except owner itself
+// admin      -> team roles + leadership
+// it/leadership -> team roles only; they cannot mint leadership or admin
+// below that -> nothing, and the People-page role control stays hidden
+export function rolesGrantableBy(actorRole: DeepiriRole | null | undefined): DeepiriRole[] {
+  if (actorRole === 'owner') return OWNER_GRANTABLE_ROLES;
+  if (actorRole === 'admin') return ADMIN_GRANTABLE_ROLES;
+  if (actorRole === 'it' || actorRole === 'leadership') return TEAM_GRANTABLE_ROLES;
+  return [];
+}
+
 export const ROLE_OPTIONS: { value: DeepiriRole; label: string; hint: string }[] = [
   { value: 'ai_ml', label: 'AI / ML', hint: 'AI Systems, ML, MLOps, Data Eng' },
   { value: 'qa_support', label: 'QA / Support Engineer', hint: 'QA, DevOps, Support' },
   { value: 'software_developer', label: 'Software Developer', hint: 'Full Stack, Backend, Frontend, Infra' },
-  { value: 'it', label: 'IT / Security & Operations', hint: 'Can attend any meeting' },
-  { value: 'admin', label: 'Admin', hint: 'Full platform access' },
-  { value: 'leadership', label: 'Leadership', hint: 'Management + all meetings' },
-  { value: 'owner', label: 'Owner', hint: 'Superset of admin + secrets' },
 ];
