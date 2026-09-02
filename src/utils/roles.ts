@@ -25,7 +25,7 @@ export function setStoredRole(role: DeepiriRole): void {
       u.metadata = { ...(u.metadata || {}), deepiriRole: role };
       localStorage.setItem('user', JSON.stringify(u));
     }
-  } catch {}
+  } catch { /* ignore */ }
 }
 
 // Read an explicit role off any user-like object (a session user or a People

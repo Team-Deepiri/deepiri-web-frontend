@@ -26,7 +26,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const raw = localStorage.getItem('deepiri_theme') as Theme | null;
       if (raw === 'Dark' || raw === 'Light' || raw === 'System') return raw;
-    } catch {}
+    } catch { /* ignore */ }
     return 'Light';
   });
 
@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setTheme = (t: Theme) => {
     setThemeState(t);
-    try { localStorage.setItem('deepiri_theme', t); } catch {}
+    try { localStorage.setItem('deepiri_theme', t); } catch { /* ignore */ }
     // persist to backend if logged in — fire and forget
     try {
       const token = localStorage.getItem('token');
@@ -45,7 +45,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           body: JSON.stringify({ theme: t }),
         }).catch(() => {});
       }
-    } catch {}
+    } catch { /* ignore */ }
   };
 
   useEffect(() => {
