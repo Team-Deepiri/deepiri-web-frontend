@@ -8,7 +8,13 @@ type Announcement = {
   body: string;
   authorName?: string;
   createdAt: string;
+  color?: string;
 };
+
+// Only trust a strict "#rrggbb" shape as a literal style value -- this comes from
+// the API (ultimately a Discord embed color relayed through Norozo), never render
+// anything else as CSS.
+const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 
 const Announcements: React.FC = () => {
   const { user } = useAuth();
@@ -90,7 +96,13 @@ const Announcements: React.FC = () => {
         </div>
       )}
       {items?.map((a) => (
-        <div key={a.id} className="card-modern p-4 mb-3">
+        <div
+          key={a.id}
+          className="card-modern p-4 mb-3"
+          style={
+            a.color && HEX_COLOR_RE.test(a.color) ? { borderLeft: `4px solid ${a.color}` } : undefined
+          }
+        >
           <div style={{ fontWeight: 700 }}>{a.title}</div>
           <div style={{ color: "#616a77", margin: "6px 0" }}>{a.body}</div>
           <div style={{ fontSize: 12, color: "#9aa4ae" }}>
