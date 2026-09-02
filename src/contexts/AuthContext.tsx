@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (user) {
       const updated = { ...user, metadata: { ...(user.metadata || {}), deepiriRole: r } };
       setUser(updated);
-      try { localStorage.setItem('user', JSON.stringify(updated)); } catch {}
+      try { localStorage.setItem('user', JSON.stringify(updated)); } catch { /* ignore */ }
     }
   };
 
@@ -117,7 +117,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const r = getUserRole(userData);
       if (r) {
         setDeepiriRoleState(r);
-        try { localStorage.setItem('deepiri_role', r); } catch {}
+        try { localStorage.setItem('deepiri_role', r); } catch { /* ignore */ }
       }
     } else {
       localStorage.removeItem('user');
