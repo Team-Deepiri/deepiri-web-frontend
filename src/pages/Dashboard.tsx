@@ -12,7 +12,7 @@ import { getUserRole } from '../utils/roles';
 import type { DeepiriRole } from '../types/roles';
 import { ROLES } from '../types/roles';
 import { getToolsForRole } from '../data/tools';
-import { TEAM_MEETINGS } from '../data/meetings';
+import { TEAM_MEETINGS, getNextMeetingDate } from '../data/meetings';
 import axiosInstance from '../api/axiosInstance';
 import { Calendar, Megaphone, Users, Clock, Video, Wrench, ArrowRight, Activity, Rocket } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
             _id: `meeting-${m.id}`,
             name: m.title,
             description: m.description,
-            startTime: new Date(Date.now() + 24*60*60*1000).toISOString(),
+            startTime: getNextMeetingDate(m).toISOString(),
             location: { address: m.location },
             type: 'team-meeting',
           }));
