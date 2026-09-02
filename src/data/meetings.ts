@@ -94,3 +94,57 @@ export function getNextOccurrenceLabel(m: TeamMeeting): string {
 export function isIntermittent(m: TeamMeeting): boolean {
   return m.cadence !== 'weekly';
 }
+
+const WEEKDAY_INDEX: Record<string, number> = {
+  sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+};
+
+function extractWeekday(dayLabel: string): number | null {
+  const lower = dayLabel.toLowerCase();
+  for (const [name, idx] of Object.entries(WEEKDAY_INDEX)) {
+    if (lower.includes(name)) return idx;
+  }
+  return null;
+}
+
+// EST label here is a fixed UTC-5 offset, matching how this file already labels
+// EST/CST/MST/PST as static strings rather than DST-adjusting them.
+function parseEstTimeToUtcHourMinute(timeEST: string): { hour: number; minute: number } {
+  const match = timeEST.match(/(\d{1,2}):(\d{2})\s*(am|pm)/i);
+  if (!match) return { hour: 21, minute: 0 };
+  let hour = parseInt(match[1], 10) % 12;
+  if (match[3].toLowerCase() === 'pm') hour += 12;
+  const minute = parseInt(match[2], 10);
+  return { hour: (hour + 5) % 24, minute };
+}
+
+// The dashboard's "Next Events" card needs a real Date per meeting, not a
+// generic placeholder -- previously every synthetic event used `now + 24h`
+// regardless of the meeting's actual day/time, so every card showed the same
+// time (whatever hour the page happened to load at). This computes the next
+// real occurrence of the meeting's weekday + EST time, in UTC.
+export function getNextMeetingDate(m: TeamMeeting, now: Date = new Date()): Date {
+  const { hour, minute } = parseEstTimeToUtcHourMinute(m.timeEST);
+  const weekday = extractWeekday(m.dayLabel);
+
+  if (weekday === null) {
+    // No parseable weekday (shouldn't happen for current data) -- fall back to
+    // "next occurrence of this UTC time", which is still per-meeting-accurate
+    // rather than a flat +24h for every card.
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, minute));
+    if (d.getTime() <= now.getTime()) d.setUTCDate(d.getUTCDate() + 1);
+    return d;
+  }
+
+  const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, minute));
+  let daysAhead = (weekday - d.getUTCDay() + 7) % 7;
+  if (daysAhead === 0 && d.getTime() <= now.getTime()) daysAhead = 7;
+  d.setUTCDate(d.getUTCDate() + daysAhead);
+  return d;
+}
