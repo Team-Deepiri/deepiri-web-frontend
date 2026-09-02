@@ -298,7 +298,7 @@ const Profile: React.FC = () => {
     if (activeSection === 'preferences') {
       setSavedPreferences(draftPreferences);
       setTheme(draftPreferences.theme as any);
-      try { await userApi.updateProfile({ metadata: { theme: draftPreferences.theme } } as any); } catch {}
+      try { await userApi.updateProfile({ metadata: { theme: draftPreferences.theme } } as any); } catch { /* ignore */ }
       toast.success('Preferences saved — theme applied');
     }
     if (activeSection === 'notifications') setSavedNotifications(draftNotifications);

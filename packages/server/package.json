@@ -10,7 +10,7 @@
     "@deepiri/shared": "*",
     "@fastify/cors": "^10.0.0",
     "@fastify/websocket": "^11.0.0",
-    "fastify": "^5.0.0"
+    "fastify": "^5.12.1"
   },
   "devDependencies": {
     "@types/node": "^20.19.25",

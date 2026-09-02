@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
             const loc: AppLocation = { latitude: lat, longitude: lng };
             const ext = await externalApi.getNearbyEvents(loc, 5000).catch(() => ({ success: false, data: [] }));
             if ((ext as any)?.success && Array.isArray((ext as any).data)) ev = [...ev, ...(ext as any).data];
-          } catch {}
+          } catch { /* ignore */ }
         }
         // Next Events: always show something — if empty, use TEAM_MEETINGS as synthetic events
         if (ev.length === 0) {
